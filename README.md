@@ -1,6 +1,14 @@
 # Issue-to-PR Skills
 
+[![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
+[![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![43 skills](https://img.shields.io/badge/skills-43-blue)](skills/)
+[![18 agents](https://img.shields.io/badge/agents-18-purple)](agents/)
+
 **An end-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase.**
+
+> **Website → https://AI-Degen-69.github.io/issue-to-pr-skills** — interactive pipeline, skill catalog, and guides (like [skills.addy.ie](https://skills.addy.ie)).
 
 Ten station skills carry one GitHub issue from intake through planning, building, review, merge, cleanup, and presentation — with 33 supporting skills and 18 specialist reviewer agents packed in, so the pipeline works out of the box.
 
@@ -60,7 +68,16 @@ Or grab one station:
 npx skills add AI-Degen-69/issue-to-pr-skills --skill iv-review-build-and-pr
 ```
 
-**Manual install:** copy `skills/<name>/` into your project's skills directory (e.g. `.agents/skills/`, `.claude/skills/`, `~/.config/opencode/skills/`) and `agents/*.md` into your agent personas directory. See [docs/getting-started.md](docs/getting-started.md).
+**Claude Code — plugin (auto-updates):**
+
+```
+/plugin marketplace add AI-Degen-69/issue-to-pr-skills
+/plugin install issue-to-pr-skills@ai-degen-marketplace
+```
+
+**Other hosts:** see [docs/claude-setup.md](docs/claude-setup.md) · [docs/opencode-setup.md](docs/opencode-setup.md) · [docs/cursor-setup.md](docs/cursor-setup.md) · [docs/getting-started.md](docs/getting-started.md).
+
+**Manual install:** copy `skills/<name>/` into your project's skills directory (e.g. `.agents/skills/`, `.claude/skills/`, `~/.config/opencode/skills/`) and `agents/*.md` into your agent personas directory.
 
 **Requirements:** `gh` (GitHub CLI, authenticated) for issue/PR stations; `git`; a CodeRabbit account for the Station IV/V review loop (optional — the pipeline degrades to agent fallback reviews without it).
 
@@ -93,6 +110,8 @@ Grouped by role. Each activates automatically when its station needs it — or i
 **Frontend:** `frontend-ui-engineering`, `tailwind-design-system`, `web-design-guidelines`, `vercel-react-best-practices`, `vercel-composition-patterns`
 **API:** `api-and-interface-design`
 
+Browse all 43: see [the website](https://AI-Degen-69.github.io/issue-to-pr-skills#catalog) or run `npx skills add AI-Degen-69/issue-to-pr-skills --list`.
+
 ## Reviewer agents (18)
 
 Specialist personas dispatched by Stations II–V based on the diff. A persona missing from disk is skipped and recorded — never simulated.
@@ -117,6 +136,22 @@ Specialist personas dispatched by Stations II–V based on the diff. A persona m
 | `type-design-analyzer` | Interface/domain-model design |
 | `code-explorer` | Execution-path tracing in unfamiliar code |
 | `doc-updater` | Docs drift after behavior changes |
+
+See [docs/agents.md](docs/agents.md) for dispatch rules.
+
+## Project structure
+
+| Layer | Paths | Purpose |
+|---|---|---|
+| Shared core | `skills/` (43) | Portable `SKILL.md` workflows |
+| Reviewers | `agents/` (18) | Specialist personas |
+| References | `references/` (4) | Checklists loaded on demand |
+| Docs | `docs/` | Getting started, pipeline, skill anatomy |
+| Adapters | `.claude-plugin/`, `.claude/commands`, `plugin.json` | Claude Code, Codex marketplace |
+| Tooling | `scripts/`, `.github/workflows/` | Validation + CI |
+| Site | `site/` | Visual showcase (like skills.addy.ie) |
+
+See [docs/skill-anatomy.md](docs/skill-anatomy.md) for the format spec.
 
 ## How skills work
 

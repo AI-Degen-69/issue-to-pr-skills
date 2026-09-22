@@ -1,0 +1,23 @@
+name: Bug report
+description: Report a bug in a skill or agent
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Which skill / station, what you ran, what you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction
+      description: Commands or repo to reproduce (with `gh` / `git` versions)
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Logs, screenshots, or `npx skills` output

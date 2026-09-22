@@ -1,0 +1,35 @@
+{
+  "name": "issue-to-pr-skills",
+  "version": "0.1.0",
+  "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 33 supporting skills + 18 reviewer agents.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AI-Degen-69/issue-to-pr-skills"
+  },
+  "homepage": "https://github.com/AI-Degen-69/issue-to-pr-skills",
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "agent-skills",
+    "opencode",
+    "codex",
+    "cursor",
+    "ai-agents",
+    "github",
+    "pipeline",
+    "tdd",
+    "code-review"
+  ],
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "validate:skills": "node scripts/validate.js skills",
+    "validate:links": "node scripts/validate-links.js",
+    "test": "node --test scripts/**/*.test.js",
+    "check": "npm run validate"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.9.4"
+}

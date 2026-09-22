@@ -1,0 +1,13 @@
+{
+  "name": "issue-to-pr-skills",
+  "version": "0.1.0",
+  "description": "End-to-end delivery pipeline: 10 stations from raw idea to merged PR to visual showcase. 33 supporting skills + 18 reviewer agents.",
+  "author": {
+    "name": "AI Degen"
+  },
+  "homepage": "https://github.com/AI-Degen-69/issue-to-pr-skills",
+  "repository": "https://github.com/AI-Degen-69/issue-to-pr-skills",
+  "license": "MIT",
+  "skills": "./skills",
+  "commands": "./.claude/commands"
+}

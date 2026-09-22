@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "ai-degen-marketplace",
+  "description": "Pipeline skills from AI-Degen-69 — issue to PR to showcase.",
+  "owner": {
+    "name": "AI Degen",
+    "url": "https://github.com/AI-Degen-69"
+  },
+  "plugins": [
+    {
+      "name": "issue-to-pr-skills",
+      "source": "./",
+      "description": "End-to-end delivery pipeline: 10 stations (X, I-VII + triage) from raw idea to merged PR to visual showcase. With 33 supporting skills and 18 reviewer agents.",
+      "category": "engineering",
+      "keywords": [
+        "pipeline",
+        "issue-to-pr",
+        "tdd",
+        "code-review",
+        "agent-skills",
+        "opencode",
+        "github"
+      ]
+    }
+  ]
+}

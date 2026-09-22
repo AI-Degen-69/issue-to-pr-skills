@@ -1,0 +1,174 @@
+[
+  {
+    "name": "api-and-interface-design",
+    "desc": "Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend a"
+  },
+  {
+    "name": "browser-testing-with-devtools",
+    "desc": "Tests in real browsers via Chrome DevTools MCP. Use when building or debugging anything that runs in a browser. Use when you need to inspect the DOM, capture console errors, analyze network requests, profile performance, or verify visual ou"
+  },
+  {
+    "name": "ci-cd-and-automation",
+    "desc": "Automates CI/CD pipeline setup. Use when setting up or modifying build and deployment pipelines. Use when you need to automate quality gates, configure test runners in CI, or establish deployment strategies."
+  },
+  {
+    "name": "click-path-audit",
+    "desc": "Trace every user-facing button/touchpoint through its full state change sequence to find bugs where functions individually work but cancel each other out, produce wrong final state, or leave the UI in an inconsistent state. Use when: system"
+  },
+  {
+    "name": "code-review-and-quality",
+    "desc": "Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch."
+  },
+  {
+    "name": "code-simplification",
+    "desc": "Simplifies code for clarity. Use when refactoring code for clarity without changing behavior. Use when code works but is harder to read, maintain, or extend than it should be. Use when reviewing code that has accumulated unnecessary complex"
+  },
+  {
+    "name": "constraint-driven-development",
+    "desc": "Establishes a project's quality bar as a written contract and stops agents quietly lowering it. Interviews the user on which dimensions matter, supplies sane default thresholds when they have no number in mind, records everything in CONSTRA"
+  },
+  {
+    "name": "context-engineering",
+    "desc": "Optimizes agent context setup. Use when starting a new session, when agent output quality degrades, when switching between tasks, or when you need to configure rules files and context for a project."
+  },
+  {
+    "name": "debugging-and-error-recovery",
+    "desc": "Guides systematic root-cause debugging. Use when tests fail, builds break, behavior doesn't match expectations, or you encounter any unexpected error. Use when you need a systematic approach to finding and fixing the root cause rather than "
+  },
+  {
+    "name": "deprecation-and-migration",
+    "desc": "Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when migrating a database schema in production, such as renaming or dropping a column with"
+  },
+  {
+    "name": "diagnosing-bugs",
+    "desc": "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something broken/throwing/failing/slow."
+  },
+  {
+    "name": "documentation-and-adrs",
+    "desc": "Records decisions and documentation. Use when making architectural decisions, changing public APIs, shipping features, or when you need to record context that future engineers and agents will need to understand the codebase."
+  },
+  {
+    "name": "doubt-driven-development",
+    "desc": "Subjects every non-trivial decision to a fresh-context adversarial review before it stands. Use when correctness matters more than speed, when working in unfamiliar code, when stakes are high (production, security-sensitive logic, irreversi"
+  },
+  {
+    "name": "extract-design-system",
+    "desc": "Extract design primitives from a public website and generate starter token files for your project."
+  },
+  {
+    "name": "frontend-ui-engineering",
+    "desc": "Builds production-quality, accessible, responsive user-facing UIs. Use when building or modifying interfaces and pages, creating components, implementing layouts, meeting WCAG accessibility requirements, managing state, or when the output n"
+  },
+  {
+    "name": "git-workflow-and-versioning",
+    "desc": "Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, opening or reviewing a pull request (PR), pushing to a remote, or when you need to organize work across multiple parall"
+  },
+  {
+    "name": "i-create-issue",
+    "desc": "Station I (Intake) — Turn a raw operator idea, thought, or request into a researched, structured, publishable GitHub issue labeled `ready-for-agent`."
+  },
+  {
+    "name": "idea-refine",
+    "desc": "Refines raw ideas into sharp, actionable concepts through structured divergent and convergent thinking. Use when an idea is still vague, when you need to stress-test assumptions before committing to a plan, or when you want to expand option"
+  },
+  {
+    "name": "ii-plan-issue",
+    "desc": "Station II (Define & Plan) of the 8-station pipeline. Use when a GitHub issue needs to become an executable plan — fetches the issue via gh, right-sizes it, locks CONSTRAINTS.md, maps interfaces, writes tasks/plan.md, and hands off to /iii-"
+  },
+  {
+    "name": "iii-build-plan",
+    "desc": "Station III (Build) — Universal execution orchestrator. Implements tasks from tasks/plan.md using type-aware execution (frontend-ui-engineering, TDD, debug), official docs grounding, atomic commits, and code simplification."
+  },
+  {
+    "name": "iiib-iterate-after-build",
+    "desc": "Station III-B (Iterate After Build) — human feedback fix loop between build and review. Use after iii-build-plan when the operator reports bugs, dead buttons, UI changes, slowness, or security concerns in freshly built code. Classifies each"
+  },
+  {
+    "name": "incremental-implementation",
+    "desc": "Delivers changes incrementally. Use when implementing any feature or change that touches more than one file. Use when you're about to write a large amount of code at once, or when a task feels too big to land in one step."
+  },
+  {
+    "name": "interview-me",
+    "desc": "Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified (\"build me X\" wit"
+  },
+  {
+    "name": "iv-review-build-and-pr",
+    "desc": "Station IV (Review, Verify & Ship) — Universal shipping flow. Runs OCR delegation (deterministic file scope + rules, host-agent review, no LLM key), then specialist language/framework reviewers, applies fixes, executes full post-review veri"
+  },
+  {
+    "name": "observability-and-instrumentation",
+    "desc": "Instruments code so production behavior is visible and diagnosable. Use when adding logging, metrics, tracing, or alerting. Use when shipping any feature that runs in production and you need evidence it works. Use when production issues are"
+  },
+  {
+    "name": "performance-optimization",
+    "desc": "Optimizes application performance across frontend, backend, queries, and databases. Use when performance requirements exist, when you suspect performance regressions, when Core Web Vitals or load times need improvement, when N+1 query patte"
+  },
+  {
+    "name": "pipeline-triage",
+    "desc": "Session-start triage and dirty-repo router. Use at the start of any session when intent is unclear, the request continues existing work, or the operator says \"where were we\". Also use whenever the user asks what to do next with uncommitted "
+  },
+  {
+    "name": "planning-and-task-breakdown",
+    "desc": "Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible."
+  },
+  {
+    "name": "security-and-hardening",
+    "desc": "Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party serv"
+  },
+  {
+    "name": "shipping-and-launch",
+    "desc": "Prepares production launches. Use when preparing to deploy to production. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy."
+  },
+  {
+    "name": "source-driven-development",
+    "desc": "Grounds every implementation decision in official documentation. Use when you want authoritative, source-cited code free from outdated patterns. Use when building with any framework or library where correctness matters."
+  },
+  {
+    "name": "spec-driven-development",
+    "desc": "Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when requirements are unclear, ambiguous, or only exist as a vague idea. Use when a single requirement spans s"
+  },
+  {
+    "name": "tailwind-design-system",
+    "desc": "Build scalable design systems with Tailwind CSS v4, design tokens, component libraries, and responsive patterns. Use when creating component libraries, implementing design systems, or standardizing UI patterns."
+  },
+  {
+    "name": "test-driven-development",
+    "desc": "Drives development with tests. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality."
+  },
+  {
+    "name": "using-agent-skills",
+    "desc": "Discovers and invokes agent skills. Use when starting a session or when you need to discover which skill applies to the current task. This is the meta-skill that governs how all other skills are discovered and invoked."
+  },
+  {
+    "name": "v-babysit-pr-and-merge",
+    "desc": "Station V (Babysit PR & Merge) — Sits on PR through one focused CodeRabbit review round (or fallback), resolves comments, squash-merges on green CI, and fast-forwards local base branch."
+  },
+  {
+    "name": "vercel-composition-patterns",
+    "desc": "React composition patterns that scale. Use when refactoring components with boolean prop proliferation, building flexible component libraries, or designing reusable APIs. Triggers on tasks involving compound components, render props, contex"
+  },
+  {
+    "name": "vercel-react-best-practices",
+    "desc": "React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patterns. Triggers on tasks involving React co"
+  },
+  {
+    "name": "verification-before-completion",
+    "desc": "Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always"
+  },
+  {
+    "name": "vi-prune-artifacts",
+    "desc": "Station VI (Prune Artifacts) — Post-merge sweep that safely removes stale per-issue scratch, temporary task lists, and closed plans while strictly preserving permanent showcases, research papers, and live knowledge."
+  },
+  {
+    "name": "vii-present-pr",
+    "desc": "Station VII (Present PR & Visual Showcase) — Builds a dynamic, customer-simple HTML page that explains what was done. Picks the best visual for the job (flow, timeline, before/after, map, numbers, demo) based on session context. No fixed te"
+  },
+  {
+    "name": "web-design-guidelines",
+    "desc": "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\"."
+  },
+  {
+    "name": "x-workflow-issue",
+    "desc": "Station X (Pipeline Orchestrator & Discovery) — Discovers open issues, categorizes dependencies, recommends execution order, and orchestrates Stations II through VII through to shipping and PR presentation."
+  }
+]
