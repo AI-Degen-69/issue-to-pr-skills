@@ -23,25 +23,43 @@
 </style>
 </head>
 <body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-violet-500/30">
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-full focus:bg-white focus:text-slate-900 focus:font-semibold">Skip to content</a>
+<div id="toast" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 <!-- NAV -->
-<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
   <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
-    <a href="#" class="flex items-center gap-3">
+    <a href="#" class="flex items-center gap-3" aria-label="Home">
       <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
       <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
       <span class="hidden sm:inline-flex ml-2 text-[11px] tracking-widest uppercase px-2 py-1 rounded-full bg-white/10 border border-white/10">43 skills · 18 agents · MIT</span>
     </a>
     <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
-      <a href="#lifecycle" class="hover:text-white">Lifecycle</a>
-      <a href="#catalog" class="hover:text-white">Skills</a>
-      <a href="#agents" class="hover:text-white">Agents</a>
-      <a href="#install" class="hover:text-white">Docs</a>
-      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+      <a href="#lifecycle" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Lifecycle</a>
+      <a href="#catalog" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Skills</a>
+      <a href="#agents" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Agents</a>
+      <a href="#install" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">GitHub ↗</a>
     </div>
-    <a href="#install" class="hidden sm:inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-4 py-1.5 text-sm font-semibold hover:bg-white/90">Get started</a>
+    <div class="flex items-center gap-2">
+      <a href="#install" class="hidden sm:inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-4 py-1.5 text-sm font-semibold hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Get started</a>
+      <button id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer" class="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/10 border border-white/15 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">
+        <span aria-hidden="true" class="text-lg">☰</span>
+      </button>
+    </div>
+  </div>
+  <div id="mobileDrawer" hidden class="md:hidden border-t border-white/10 bg-[#020617] px-5 py-4">
+    <div class="flex flex-col gap-1 text-sm">
+      <a href="#lifecycle" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Lifecycle</a>
+      <a href="#catalog" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Skills</a>
+      <a href="#agents" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Agents</a>
+      <a href="#install" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="py-2 px-2 rounded hover:bg-white/5">GitHub ↗</a>
+      <a href="#install" class="mt-2 inline-flex justify-center rounded-full bg-white text-slate-900 px-4 py-2 text-sm font-semibold">Get started</a>
+    </div>
   </div>
 </nav>
 
+<main id="main">
 <!-- HERO -->
 <section class="relative overflow-hidden">
   <div class="absolute inset-0 hero-grid"></div>
@@ -64,8 +82,9 @@
       <div class="flex items-center gap-2 rounded-full bg-black/40 border border-white/10 px-2 py-2">
         <span class="hidden sm:inline text-xs text-white/50 px-2">$</span>
         <code id="installCmd" class="text-sm font-mono">npx skills add AI-Degen-69/issue-to-pr-skills</code>
-        <button onclick="copyCmd()" class="ml-2 rounded-full bg-white text-slate-900 px-4 py-1.5 text-sm font-semibold hover:bg-white/90">Copy</button>
+        <button onclick="copyCmd()" aria-label="Copy install command" class="ml-2 rounded-full bg-white text-slate-900 px-4 py-1.5 text-sm font-semibold hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Copy</button>
       </div>
+      <div id="copyLive" aria-live="polite" class="sr-only"></div>
       <a href="#catalog" class="inline-flex items-center gap-2 rounded-full bg-violet-600 px-5 py-2.5 text-sm font-semibold hover:bg-violet-500">Browse 43 skills →</a>
       <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-5 py-2.5 text-sm font-semibold hover:bg-white/15">Star on GitHub</a>
     </div>
@@ -246,6 +265,7 @@
   </div>
 </section>
 
+</main>
 <footer class="border-t border-white/10 mt-8">
   <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 flex flex-wrap gap-6 justify-between text-sm text-white/50">
     <div>© 2026 issue-to-pr-skills · MIT · Built for AI coding agents.</div>

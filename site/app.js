@@ -31,7 +31,19 @@ function copyCmd(){
   const t=document.getElementById('installCmd').textContent;
   navigator.clipboard.writeText(t);
   const b=document.querySelector('button[onclick="copyCmd()"]');
-  const old=b.textContent; b.textContent='Copied!'; setTimeout(()=>b.textContent=old,1400);
+  const live=document.getElementById('copyLive');
+  const old=b.textContent; b.textContent='Copied!'; if(live) live.textContent='Copied to clipboard'; setTimeout(()=>{b.textContent=old; if(live) live.textContent='';},1400);
+}
+function setupMobileNav(){
+  const btn=document.getElementById('menuBtn');
+  const drawer=document.getElementById('mobileDrawer');
+  if(!btn||!drawer) return;
+  btn.addEventListener('click',()=>{
+    const open=drawer.hasAttribute('hidden');
+    if(open){ drawer.removeAttribute('hidden'); btn.setAttribute('aria-expanded','true'); btn.setAttribute('aria-label','Close menu');}
+    else { drawer.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-label','Open menu');}
+  });
+  drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{drawer.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false');}));
 }
 
 // mini pipeline top
@@ -55,7 +67,7 @@ function renderDiagram(){
     const x=start + i*step;
     const y=105;
     html+=`
-      <g class="cursor-pointer" data-idx="${i}" onmouseenter="showStation(${i})" onclick="showStation(${i})">
+      <g class="cursor-pointer" tabindex="0" role="button" aria-label="Station ${s.label}: ${s.id}" data-idx="${i}" onmouseenter="showStation(${i})" onclick="showStation(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showStation(${i})}" onfocus="showStation(${i})">
         <circle cx="${x}" cy="${y}" r="18" fill="#0b0f1e" stroke="rgba(124,58,237,.6)" stroke-width="2"/>
         <circle cx="${x}" cy="${y}" r="9" fill="url(#g1)" class="station-dot"/>
         <text x="${x}" y="${y+4}" text-anchor="middle" font-size="8" font-weight="700" fill="white">${s.label}</text>
@@ -156,6 +168,7 @@ function renderAgents(){
 document.addEventListener('DOMContentLoaded',()=>{
   renderMini(); renderDiagram(); renderStations(); renderAgents(); loadSkills();
   showStation(1);
+  setupMobileNav();
   document.getElementById('search').addEventListener('input', renderSkills);
   document.getElementById('filter').addEventListener('change', renderSkills);
 });
