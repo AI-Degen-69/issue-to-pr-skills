@@ -188,6 +188,10 @@ function renderMobileDiagram(){
     </button>
   `).join('');
 }
+function setupReveal(){
+  const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); obs.unobserve(e.target);}})}, {threshold:0.15});
+  document.querySelectorAll('#stationCards > div, #skillGrid > a, #agentGrid > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
+}
 document.addEventListener('DOMContentLoaded',()=>{
   renderMini(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
   showStation(1);
@@ -195,4 +199,5 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('search').addEventListener('input', debouncedRender);
   document.getElementById('clearSearch')?.addEventListener('click',()=>{document.getElementById('search').value=''; renderSkills(); document.getElementById('search').focus();});
   document.getElementById('filter').addEventListener('change', renderSkills);
+  setTimeout(setupReveal,300);
 });
