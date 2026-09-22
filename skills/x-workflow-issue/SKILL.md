@@ -1,0 +1,119 @@
+---
+name: x-workflow-issue
+description: Station X (Pipeline Orchestrator & Discovery) — Discovers open issues, categorizes dependencies, recommends execution order, and orchestrates Stations II through VII through to shipping and PR presentation.
+---
+
+# Station X: Pipeline Orchestrator & Discovery (`x-workflow-issue`)
+
+This workflow defines the end-to-end lifecycle orchestrator for discovering open issues, prioritizing them, and driving them through the 7-station delivery pipeline (Stations I–VII).
+
+## Router Gate & Boundary (read first)
+
+**Gate:** before any work, check repo state. If the branch is dirty, commits are unpushed, or a PR is open — run `pipeline-triage` first and follow its decision. Never start new Issue work on top of unfinished work.
+
+**Boundary:** this skill owns Issue work — anything that starts from (or will end as) a GitHub issue with a PR. Ad-hoc requests (quick questions, small fixes, exploration, "where is X") are not Issue work: say so in one line, route to `using-agent-skills`, and stop. Ambiguous? If it will end in a PR on code, it is Issue work. Still ambiguous? Ask one question.
+
+## Pipeline Position
+- **Station:** Station X (Standalone Pipeline Orchestrator & Discovery)
+- **Next Station:** `ii-plan-issue <issue-id>` (Plan)
+
+---
+
+## 1. Always Start With Discovery (`/x-workflow-issue` — with or without arguments)
+
+Every invocation of this skill begins with the **Discovery Station**, regardless of arguments. Never skip discovery to jump straight into orchestration:
+
+1. **List all open issues:**
+   Run:
+   ```bash
+   gh issue list --state open --limit 50
+   ```
+   (and inspect details with `gh issue view <n> --comments` as needed). Present every open issue clearly: number, title, labels, and a concise summary.
+2. **Categorize and group:**
+   Group them logically by domain area, risk, architectural component, or dependency chain.
+3. **Recommend an execution sequence:**
+   Propose a concrete order of work (unblockers and core infrastructure before dependent features, quick wins vs. deep changes), and explicitly highlight the single recommended issue to start.
+4. **Halt for user selection:**
+   Stop and ask the operator which issue to proceed with. Do NOT pick silently.
+5. **Route non-issue states:** no open issues and the operator has a brand-new idea → `i-create-issue`. No open issues and nothing new → say so and route to `pipeline-triage`.
+
+### 1b. Execution Mode Gate (mandatory, after issue selection)
+
+Once the operator picks an issue, STOP and present exactly two options:
+
+1. **Step-by-step mode (default recommendation):** run one station at a time. After each station completes, report its summary and **halt — wait for explicit operator approval before starting the next station.** The operator reviews the plan (II), the build (III), the PR (IV/V), etc., one gate at a time.
+2. **Full orchestration mode:** run Stations II → VII end-to-end without halting, reporting a summary after each station, finishing only after Station V merge + Station VI prune + Station VII presentation.
+
+Do NOT infer the mode from how the request was phrased, and do NOT start Station II until the operator has explicitly chosen a mode.
+
+---
+
+## 2. Orchestration Mode — After Issue and Mode Are Confirmed
+
+Only after the operator selected an issue (step 4) AND an execution mode (step 1b), orchestrate the pipeline stations. In step-by-step mode, insert a mandatory approval halt after every station; in full orchestration mode, run sequentially with per-station reports:
+
+### Step 1: Assignment & Setup
+- Read the issue details: `gh issue view <number> --comments`
+- Claim the issue: `gh issue edit <number> --add-assignee @me`
+- Apply `context-engineering` principles to lock session scope before opening files.
+
+### Step 2: Station II — Plan (`ii-plan-issue <number>`)
+- Hand off to `ii-plan-issue` to perform scope right-sizing (Trivial/Small/Standard/Large), auto-detect stack, lock `CONSTRAINTS.md`, specify interfaces, and write `tasks/plan.md`.
+- Report plan summary in plain English to the user.
+
+### Step 3: Station III — Build (`iii-build-plan auto`)
+- Hand off to `iii-build-plan auto` to implement all tasks in `tasks/plan.md` using TDD, atomic commits per task, and automated build error resolution.
+
+### Step 3B: Station IIIB — Iterate After Build (`iiib-iterate-after-build`)
+- After Station III completes, present the operator the two paths (already in III's report): corrections on the fresh build → `iiib-iterate-after-build` (routes to the right specialist, fixes locally, no push); all good → straight to Station IV.
+- Loop IIIB until the operator reports the build clean, then continue to Station IV.
+
+### Step 4: Station IV — Review & Ship (`iv-review-build-and-pr`)
+- Hand off to `iv-review-build-and-pr` to run: the proof-before-review gate (Step 0: live browser check or targeted tests — failure returns to `iiib-iterate-after-build`), the OCR delegation scan, dynamic specialist reviewers plus the Spec axis (diff vs issue and `tasks/plan.md`: missing / added-not-asked / implemented-wrong), local fix commits, the final verification gate, then push the feature branch and open the PR with `@coderabbitai summary` and review trigger.
+
+### Step 5: Station V — Babysit PR & Merge (`v-babysit-pr-and-merge`)
+- Hand off to `v-babysit-pr-and-merge` to track CodeRabbit review (5m-4m-3m-2m-1m countdown or agent fallback on quota limit), resolve comments, squash merge on green CI, and fast-forward the local base branch (`git pull --ff-only`).
+
+### Step 6: Station VI — Prune Artifacts (`vi-prune-artifacts`)
+- Run `vi-prune-artifacts` to safely clean up closed per-issue plans and scratch files.
+
+### Step 7: Station VII — Present PR (`vii-present-pr <number>`)
+- Run `vii-present-pr` to generate the interactive standalone HTML showcase and provide direct browser and folder links.
+
+---
+
+## Chat Output Contract
+
+### In Discovery mode (no arguments):
+```markdown
+# 🗺️ Backlog Mapping & Prioritization:
+
+## 📋 Open issues grouped by domain:
+* **[Domain / group 1]:**
+  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
+* **[Domain / group 2]:**
+  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
+
+## 🎯 Recommended execution order (Dependencies & Impact):
+1. **#<id>** — [reason: base/infra task blocking other tasks]
+2. **#<id>** — [reason: direct follow-up task]
+3. **#<id>** — [reason: independent and secondary]
+
+---
+
+## 📊 Next task picked to start:
+* **Leading issue:** [#<id> - <title>](<link>)
+* **Why this one:** unblocks others and enables smooth progress on the rest of the backlog.
+
+## 🧠 Summary:
+A few lines in plain English: the overall picture of open tasks, and why this execution order saves broken code and duplicate builds.
+
+👉 **Next step:** pick the issue to start with, then pick an execution mode:
+* **🚶 Step-by-step mode (recommended):** one station at a time — stop for your approval between stations.
+* **🚀 Full orchestration mode:** continuous run from planning (II) to merge, cleanup and PR presentation (VII) — with a report per station.
+
+Only after issue + mode are picked, continue to `/ii-plan-issue <id>`.
+```
+
+### In orchestration mode (End-to-End Orchestration):
+Report concisely in English on each completed station per its reporting contract, showing current state and the next station in line.
