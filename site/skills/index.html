@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
-<style>*{scroll-behavior:smooth}.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}.card{transition:200ms}.card:hover{transform:translateY(-2px);box-shadow:0 20px 40px -12px rgba(124,58,237,.3)}</style>
+<style>*{scroll-behavior:smooth}.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}.card{transition:200ms}.card:hover{transform:translateY(-2px);box-shadow:0 20px 40px -12px rgba(124,58,237,.3)}select{color-scheme:dark}select option{background:#0f172a;color:#f1f5f9}select:focus{outline:none;border-color:#8b5cf6}</style>
 </head>
 <body class="bg-[#020617] text-slate-100 font-sans antialiased">
 <nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
@@ -66,7 +66,7 @@
     <div><h2 class="text-[24px] font-bold">All 43 skills</h2><p class="text-white/60 text-sm">Search or filter by job. Click to open the skill on GitHub.</p></div>
     <div class="flex items-center gap-2">
       <div class="relative"><input id="search" placeholder="Search skills…" aria-label="Search skills" class="w-[200px] rounded-full bg-white/5 border border-white/10 pl-4 pr-8 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-violet-400"/><button id="clearSearch" aria-label="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 hidden h-6 w-6 rounded-full bg-white/10 grid place-items-center text-xs">×</button></div>
-      <select id="filter" aria-label="Filter by group" class="rounded-full bg-white/5 border border-white/10 px-3 py-2 text-sm"><option value="all">All groups</option><option value="pipeline">Pipeline (10)</option><option value="build">Build</option><option value="define">Define</option><option value="verify">Verify</option><option value="review">Review</option><option value="ship">Ship</option><option value="frontend">Frontend</option><option value="api">API</option></select>
+      <select id="filter" aria-label="Filter by group" class="rounded-full bg-slate-800 border border-white/20 px-3 py-2 text-sm text-white focus:border-violet-400"><option value="all">All groups</option><option value="pipeline">Pipeline (10)</option><option value="build">Build</option><option value="define">Define</option><option value="verify">Verify</option><option value="review">Review</option><option value="ship">Ship</option><option value="frontend">Frontend</option><option value="api">API</option></select>
     </div>
   </div>
   <div id="skillGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
