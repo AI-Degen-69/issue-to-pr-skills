@@ -165,8 +165,19 @@ function renderAgents(){
   `).join('');
 }
 
+function renderMobileDiagram(){
+  const el=document.getElementById('diagramMobile');
+  if(!el) return;
+  el.innerHTML=STATIONS.map((s,i)=>`
+    <button onclick="showStation(${i});document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3 hover:bg-white/[.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">
+      <span class="h-8 w-8 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold shrink-0">${s.label}</span>
+      <span class="font-mono text-sm">${s.id}</span>
+      <span class="ml-auto text-violet-300 text-xs">→</span>
+    </button>
+  `).join('');
+}
 document.addEventListener('DOMContentLoaded',()=>{
-  renderMini(); renderDiagram(); renderStations(); renderAgents(); loadSkills();
+  renderMini(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
   showStation(1);
   setupMobileNav();
   document.getElementById('search').addEventListener('input', renderSkills);

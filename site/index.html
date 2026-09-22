@@ -122,19 +122,20 @@
   </div>
 
   <!-- diagram -->
-  <div class="mt-8 rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[.05] to-transparent p-4 lg:p-6 overflow-x-auto">
-    <div class="min-w-[900px]">
-      <svg viewBox="0 0 1100 210" class="w-full h-[210px]">
-        <defs>
-          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
-        </defs>
-        <!-- line -->
-        <path id="pline" d="M 60 105 H 1040" class="pipeline-line" fill="none"/>
-        <!-- stations -->
-        <g id="diagramStations"></g>
-      </svg>
-      <div id="stationDetail" class="mt-3 rounded-2xl bg-black/30 border border-white/10 p-4 text-sm leading-6 text-white/80">Hover or tap a station dot for its simple explanation. The issue is always the star — machinery stays in <code class="px-1.5 py-0.5 rounded bg-white/10">tasks/plan.md</code>.</div>
+  <div class="mt-8 rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[.05] to-transparent p-4 lg:p-6">
+    <div class="hidden md:block overflow-x-auto">
+      <div class="min-w-[900px]">
+        <svg viewBox="0 0 1100 210" class="w-full h-[210px]" role="img" aria-label="Pipeline from Entry to VII">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+          </defs>
+          <path id="pline" d="M 60 105 H 1040" class="pipeline-line" fill="none"/>
+          <g id="diagramStations"></g>
+        </svg>
+      </div>
     </div>
+    <div id="diagramMobile" class="md:hidden space-y-2" aria-label="Pipeline — vertical on mobile"></div>
+    <div id="stationDetail" class="mt-3 rounded-2xl bg-black/30 border border-white/10 p-4 text-sm leading-6 text-white/80">Hover or tap a station dot for its simple explanation. The issue is always the star — machinery stays in <code class="px-1.5 py-0.5 rounded bg-white/10">tasks/plan.md</code>.</div>
   </div>
 
   <!-- station cards grid -->
