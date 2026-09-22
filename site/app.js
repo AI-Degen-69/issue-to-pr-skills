@@ -55,6 +55,7 @@ function setupMobileNav(){
 // mini pipeline top
 function renderMini(){
   const el=document.getElementById('miniPipeline');
+  if(!el) return;
   el.innerHTML=STATIONS.map(s=>`
     <a href="#${s.id}" class="snap-start shrink-0 rounded-2xl border border-white/10 bg-white/[.04] px-3 py-2 text-xs hover:bg-white/10 flex items-center gap-2">
       <span class="h-6 w-6 rounded-full bg-violet-600 grid place-items-center text-[10px] font-bold">${s.label}</span>
@@ -66,6 +67,7 @@ function renderMini(){
 // diagram dots
 function renderDiagram(){
   const g=document.getElementById('diagramStations');
+  if(!g) return;
   const count=STATIONS.length;
   const start=60, end=1040, step=(end-start)/(count-1);
   let html='';
@@ -86,12 +88,15 @@ function renderDiagram(){
 }
 function showStation(i){
   const s=STATIONS[i];
-  document.getElementById('stationDetail').innerHTML=`<span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400">Open skill ↗</a>`;
+  const d=document.getElementById('stationDetail');
+  if(!d) return;
+  d.innerHTML=`<span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400">Open skill ↗</a>`;
 }
 
 // station cards
 function renderStations(){
   const el=document.getElementById('stationCards');
+  if(!el) return;
   el.innerHTML=STATIONS.map(s=>`
     <div id="${s.id}" class="card rounded-2xl border border-white/10 bg-white/[.04] p-5 transition">
       <div class="flex items-center gap-2">
@@ -115,14 +120,18 @@ async function loadSkills(){
 }
 let _debounceT=null;
 function renderSkills(){
-  const q=(document.getElementById('search').value||'').toLowerCase();
-  const f=document.getElementById('filter').value;
+  const searchEl=document.getElementById('search');
+  const filterEl=document.getElementById('filter');
+  if(!searchEl || !filterEl) return;
+  const q=(searchEl.value||'').toLowerCase();
+  const f=filterEl.value;
   let list=allSkills;
   if(f!=='all') list=list.filter(s=> (GROUP[s.name]||'other')===f);
   if(q) list=list.filter(s=> s.name.includes(q) || s.desc.toLowerCase().includes(q));
   const el=document.getElementById('skillGrid');
   const clearBtn=document.getElementById('clearSearch');
   if(clearBtn){ if(q) clearBtn.classList.remove('hidden'); else clearBtn.classList.add('hidden'); }
+  if(!el) return;
   if(list.length===0){
     const qRaw=document.getElementById('search').value;
     el.innerHTML=`<div class="col-span-full rounded-2xl border border-white/10 bg-white/[.04] p-6 text-center">
