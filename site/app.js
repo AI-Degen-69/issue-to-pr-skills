@@ -182,15 +182,11 @@ const AGENTS=[
   ['doc-updater','Docs','Docs drift after changes'],
 ];
 function renderAgents(){
-  const el=document.getElementById('agentGrid');
-  el.innerHTML=AGENTS.map(([id,role,desc])=>`
-    <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/agents/${id}.md" target="_blank" class="rounded-2xl border border-white/10 bg-white/[.04] p-5 hover:bg-white/[.06] transition block">
-      <div class="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold">${role.slice(0,2).toUpperCase()}</div>
-      <div class="mt-3 font-mono text-sm font-semibold">${id}</div>
-      <div class="text-xs text-white/50">${role}</div>
-      <div class="mt-1 text-sm text-white/60 leading-5">${desc}</div>
-    </a>
-  `).join('');
+  const mk=(id,role,desc)=>`<a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/agents/${id}.md" target="_blank" class="rounded-2xl border border-white/10 bg-white/[.04] p-5 hover:bg-white/[.06] transition block"><div class="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold">${role.slice(0,2).toUpperCase()}</div><div class="mt-3 font-mono text-sm font-semibold">${id}</div><div class="text-xs text-white/50">${role}</div><div class="mt-1 text-sm text-white/60 leading-5">${desc}</div></a>`;
+  const g=document.getElementById('agentGrid');
+  if(g) g.innerHTML=AGENTS.map(a=>mk(...a)).join('');
+  const gp=document.getElementById('agentGridPreview');
+  if(gp) gp.innerHTML=AGENTS.slice(0,4).map(a=>mk(...a)).join('');
 }
 
 function renderMobileDiagram(){
@@ -206,14 +202,14 @@ function renderMobileDiagram(){
 }
 function setupReveal(){
   const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); obs.unobserve(e.target);}})}, {threshold:0.15});
-  document.querySelectorAll('#stationCards > div, #skillGrid > a, #agentGrid > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
+  document.querySelectorAll('#stationCards > div, #skillGrid > a, #skillGridPreview > a, #agentGrid > a, #agentGridPreview > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
 }
 document.addEventListener('DOMContentLoaded',()=>{
   renderMini(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
   showStation(1);
   setupMobileNav();
-  document.getElementById('search').addEventListener('input', debouncedRender);
+  document.getElementById('search')?.addEventListener('input', debouncedRender);
   document.getElementById('clearSearch')?.addEventListener('click',()=>{document.getElementById('search').value=''; renderSkills(); document.getElementById('search').focus();});
-  document.getElementById('filter').addEventListener('change', renderSkills);
+  document.getElementById('filter')?.addEventListener('change', renderSkills);
   setTimeout(setupReveal,300);
 });
