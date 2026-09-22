@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Silent Failure Hunter Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Reliability specialist with zero tolerance for silent failures, swallowed errors, dangerous fallbacks, and missing stack traces."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-purple-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(168,85,247,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-purple-300 font-mono">silent-failure-hunter</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-purple-500/15 border border-purple-400/20 px-2.5 py-0.5 text-xs text-purple-200">
+          Zero-Tolerance Reliability
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        silent-failure-hunter
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Ruthless reliability specialist with zero tolerance for swallowed exceptions, empty catch blocks, masking fallbacks, and lost stack traces that obscure production incidents.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-purple-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Error & Catch Paths</div>
+          <div class="text-xs text-white/60">Async error handlers & fallbacks</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Read-Only Persona</div>
+          <div class="text-xs text-white/60">Claude 3.5 Sonnet analyzer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The dedicated predator of hidden bugs and swallowed errors</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      When code silently catches an error and returns an empty list (<code class="text-white font-mono text-xs">.catch(() =&gt; [])</code>) or logs a vague string without the cause, bugs become invisible until data is corrupted. The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">silent-failure-hunter</code> hunts down these deceptive patterns.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-purple-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Control Flow Analysis</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads the entire catch block, tracing whether errors are properly logged, wrapped with cause, or propagated.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-purple-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Empty Catch Scanner</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Discovers regex signatures of empty catches: <code class="text-white font-mono text-[11px]">catch {}</code>, <code class="text-white font-mono text-[11px]">catch (e) {}</code>, and silent fallback returns.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-purple-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">I/O Surface Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Identifies all network calls, database queries, file system accesses, and external integration points.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-purple-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Linter Inspection</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Runs project linters checking for no-empty rules and unhandled promise rejections.</p>
+      </div>
+    </div>
+
+    <!-- Jargon glossary -->
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Swallowed Error:</strong> when software experiences a failure but wraps it in code that pretends nothing went wrong, hiding real crashes.</span> ·
+      <span class="ml-2"><strong class="text-white">Lost Stack Trace:</strong> re-throwing a new error without passing the original error, making it impossible to see where the code failed.</span> ·
+      <span class="ml-2"><strong class="text-white">Dangerous Fallback:</strong> returning an empty array or fake default when a service is completely down.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during Station IV before pull requests merge</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Ensures changes don't just "pass tests" by swallowing critical failures. Verifies that failure paths are as robust and informative as happy paths.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">I/O Detection</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Detects Error Boundaries</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Scans modified files for try/catch blocks and promise handlers.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-purple-500/20 text-purple-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-purple-300">Fallback Audit</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Inspects Fallback Semantics</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Checks if returned defaults mask upstream database or API outages.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-purple-500 bg-purple-950/40 p-4 shadow-lg shadow-purple-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-purple-500 text-white font-bold text-xs grid place-items-center">SF</span>
+            <span class="text-xs font-mono font-semibold text-purple-200">silent-failure-hunter</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Full Stack Trace Audit</div>
+          <div class="mt-1 text-xs text-purple-200/80 leading-5">Audits cause propagation, log levels, and transaction rollback guarantees.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Observability Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Debug-Ready Code</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Guarantees that when production errors occur, root causes are immediately obvious.</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+        <span>Flow: Error Path Scan → Fallback Audit → Full Stack Trace Audit → Observability Gate</span>
+        <span class="text-purple-300 font-medium">True system reliability</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CHECKLIST -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">03 — Hunt Targets & Checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 5 core hunt targets</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/silent-failure-hunter.md</code>, focused on eliminating deceptive error suppression.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — Empty Catch Blocks
+        </div>
+        <p class="mt-1 text-xs text-red-200/70">Completely swallowing errors and leaving no diagnostic trail whatsoever.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Empty catch blocks:</strong> <code class="font-mono text-red-300">catch {}</code> or <code class="font-mono text-red-300">catch (err) {}</code> with zero handling or logging.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Converting errors to null:</strong> Returning <code class="font-mono text-red-300">null</code> without logging or letting callers distinguish empty vs failure.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Empty arrays on fetch fail:</strong> Returning <code class="font-mono text-red-300">[]</code> when backend services fail, masking complete outages.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Error Propagation & Stack Loss
+        </div>
+        <p class="mt-1 text-xs text-amber-200/70">Destroying diagnostic context and obscuring the original site of failure.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Lost stack traces:</strong> Throwing <code class="font-mono text-amber-300">new Error("query failed")</code> without passing <code class="font-mono text-amber-300">{ cause: originalError }</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Generic rethrows:</strong> Catching a specialized database error and converting it to generic 500 error.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing async rejection handling:</strong> Failure to handle Promise errors in background cron jobs or loops.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Dangerous Fallbacks & Rollbacks
+        </div>
+        <p class="mt-1 text-xs text-cyan-200/70">Graceful-looking fallback values that make downstream bugs harder to diagnose.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Blind fallbacks:</strong> Using <code class="font-mono text-cyan-300">.catch(() =&gt; false)</code> where consumers treat false as a valid domain status.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Missing transaction rollback:</strong> Failing to abort or rollback database transactions on exception paths.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Missing I/O timeouts:</strong> Network or database fetch calls without abort signals or connection timeouts.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Inadequate Logging Metadata
+        </div>
+        <p class="mt-1 text-xs text-slate-300/70">Log quality and telemetry hygiene.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Log-and-forget:</strong> Logging an error and then continuing execution as if nothing happened.</span></li>
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Wrong log severity:</strong> Logging critical database connection drops with <code class="font-mono">console.log</code> or info level.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DECISION FLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">04 — Decision process</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 5-step silent failure hunting cycle</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-purple-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">Grep & AST Scan</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Locates all catch blocks, promise rejections, and fallback assignments in modified code.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Catch discovery</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-purple-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Payload Audit</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Inspects whether the caught error parameter is actually used or ignored.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Zero dropped errors</div>
+      </li>
+      <li class="rounded-2xl border-2 border-purple-500/80 bg-purple-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-purple-300">Step 3: Stack Cause</span>
+          <div class="mt-1 font-semibold text-white text-sm">Stack Trace Chain</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Confirms newly thrown errors preserve original stack trace using ES2022 cause.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-purple-300/80 border-t border-purple-500/30 pt-2">Root cause preservation</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-purple-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">Concrete Remediation</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Outputs location, severity, issue, impact, and drop-in fix recommendation.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Direct fix snippet</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-purple-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">Verdict</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">BLOCK on empty catches; WARN on missing cause metadata; APPROVE when transparent.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Observability standard</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: CONCRETE CASES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">05 — When it runs</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where silent-failure-hunter saves production</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-purple-400"></span> 1. Third-party payment webhooks
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          A webhook handler catches an error when crediting user balance, logs "error handled", and returns HTTP 200. The user never gets credited, but Stripe thinks the webhook succeeded. The hunter blocks this immediately.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> 2. Cache fallbacks hiding DB outages
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          Code catches database errors and returns empty cache data. Sentry never receives an alert while the database is on fire because the errors are swallowed in silence.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> 3. Lost file upload failures
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          S3 upload fails with 403 Forbidden, but catch block transforms the response into <code class="text-white font-mono">{ avatarUrl: null }</code> without an exception, causing user profiles to save blank photos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">06 — Output format</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Standard 5-point finding format</h2>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-red-400 font-bold">[CRITICAL] Swallowed database error with dangerous empty fallback</div>
+      <div class="text-white/60 mt-1">Location: <span class="text-white">src/services/billing.ts:42</span></div>
+      <div class="text-white/80 mt-1">Severity: CRITICAL</div>
+      <div class="text-white/80 mt-1">Issue: Catch block catches error during invoice calculation and returns [] without logging or re-throwing.</div>
+      <div class="text-white/80 mt-1">Impact: Invoices will be calculated as $0.00 during transient DB hiccups with zero alerts in logging pipelines.</div>
+      <div class="text-white/80 mt-1">Fix recommendation: Re-throw custom BillingError with original error attached via { cause: error }.</div>
+      <div class="mt-3 p-3 rounded-lg bg-black/80 border border-white/5 text-[11px] leading-5">
+        <span class="text-red-400">// BAD: Swallows failure and returns misleading empty list</span><br/>
+        <span class="text-red-400">try {</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;return await db.invoices.findMany();</span><br/>
+        <span class="text-red-400">} catch (err) {</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;return []; // Silent failure</span><br/>
+        <span class="text-red-400">}</span><br/><br/>
+        <span class="text-emerald-400">// GOOD: Propagates error with context and preserved stack trace</span><br/>
+        <span class="text-emerald-400">try {</span><br/>
+        <span class="text-emerald-400">&nbsp;&nbsp;return await db.invoices.findMany();</span><br/>
+        <span class="text-emerald-400">} catch (err) {</span><br/>
+        <span class="text-emerald-400">&nbsp;&nbsp;throw new InvoiceFetchError('Failed to fetch invoices', { cause: err });</span><br/>
+        <span class="text-emerald-400">}</span>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">Silent Failure Hunter Summary Table</div>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-xs font-mono">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="text-left pb-2 font-medium">Severity</th>
+              <th class="text-left pb-2 font-medium">Count</th>
+              <th class="text-left pb-2 font-medium">Status</th>
+              <th class="text-left pb-2 font-medium">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr><td class="py-2.5 text-red-400 font-bold">CRITICAL</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-red-400">FAIL</td><td class="py-2.5 text-white/60">Swallowed error must be propagated or handled</td></tr>
+            <tr><td class="py-2.5 text-amber-400 font-bold">HIGH</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-emerald-400">pass</td><td class="py-2.5 text-white/60">No lost stack traces</td></tr>
+            <tr><td class="py-2.5 text-cyan-400 font-bold">MEDIUM</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-emerald-400">pass</td><td class="py-2.5 text-white/60">No blind fallbacks found</td></tr>
+            <tr><td class="py-2.5 text-slate-400 font-bold">LOW</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-slate-400">note</td><td class="py-2.5 text-white/60">Upgrade log severity from info to warn</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="font-mono text-red-400 font-semibold">
+          Verdict: BLOCK — Swallowed invoice calculation error must be fixed.
+        </div>
+        <div class="text-white/50">
+          * Transparent error handling enables fast incident recovery.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">07 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What silent-failure-hunter does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Does not rewrite code</div>
+        <p class="mt-2 text-white/60">
+          The hunter reports violations and provides exact code recommendations, but never edits project files directly.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Ignores valid fallbacks</div>
+        <p class="mt-2 text-white/60">
+          Intentional, documented offline caches or circuit breakers with full telemetry are recognized as valid architecture.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Does not manage APM servers</div>
+        <p class="mt-2 text-white/60">
+          It audits application code error paths, not external monitoring SaaS infrastructure (Datadog/Sentry) setup.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-purple-300">08 — The Reviewer Panel</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
+        <p class="mt-1 text-sm text-white/60">Other expert personas invoked in parallel during review.</p>
+      </div>
+      <a href="../" class="text-sm text-purple-300 hover:text-white transition">All 18 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../security-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-rose-500/15 border border-rose-400/40 text-rose-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(244,63,94,0.25)]" title="Security">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">security-reviewer</div>
+        <div class="text-xs text-white/50">Security</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Looks for auth, secrets, injection — OWASP.</div>
+      </a>
+      <a href="../database-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.25)]" title="Database">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">database-reviewer</div>
+        <div class="text-xs text-white/50">Data</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Slow queries, missing indexes, RLS security.</div>
+      </a>
+      <a href="../react-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(6,182,212,0.25)]" title="React">
+          <svg class="w-5 h-5" viewBox="-11.5 -10.23 23 20.46" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true"><circle cx="0" cy="0" r="2.05" fill="currentColor"/><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">react-reviewer</div>
+        <div class="text-xs text-white/50">React</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Hooks, rendering cycles, accessibility.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 9: LINKS & FOOTER CTA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-purple-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Silent Failure Hunter definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete Markdown instructions and zero-tolerance hunt targets live in <code class="text-white font-mono text-xs">agents/silent-failure-hunter.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 18 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/silent-failure-hunter.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View silent-failure-hunter.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

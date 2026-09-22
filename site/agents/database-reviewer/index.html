@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Database Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="PostgreSQL and database specialist for query optimization, schema design, migrations, indexing, and Row Level Security (RLS)."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-amber-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(245,158,11,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-amber-300 font-mono">database-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 border border-amber-400/20 px-2.5 py-0.5 text-xs text-amber-200">
+          Postgres & Query Optimization
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        database-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        PostgreSQL database specialist auditing schema designs, migration safety, index efficiency, Row Level Security (RLS), and query performance before deployment.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-amber-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">SQL, Migrations, Schemas</div>
+          <div class="text-xs text-white/60">Drizzle, Prisma, Supabase</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Read-Only Persona</div>
+          <div class="text-xs text-white/60">Claude 3.5 Sonnet analyzer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Guardian of data integrity, indexing, and transactional scale</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">database-reviewer</code> incorporates battle-tested Postgres patterns (including Supabase best practices) to ensure queries execute in milliseconds and migrations do not cause table locks or service downtime.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-amber-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Schema Context</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads migration files, ORM schema definitions (Prisma/Drizzle), and existing table constraints.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-amber-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Query Pattern Hunter</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Searches for unindexed foreign keys, raw SQL interpolations, and loops generating N+1 queries.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-amber-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Migration Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Discovers migration sequences, SQL seed scripts, and database configuration manifests.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-amber-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Diagnostic Command</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes non-destructive SQL diagnostics like <code class="text-white font-mono text-[11px]">EXPLAIN ANALYZE</code> or migration linting tools.</p>
+      </div>
+    </div>
+
+    <!-- Jargon glossary -->
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">N+1 Query Problem:</strong> fetching a list of 100 items, and then issuing 100 separate database queries in a loop to get each item's details.</span> ·
+      <span class="ml-2"><strong class="text-white">Sequential Scan:</strong> Postgres reading every single row on disk because an index is missing, grinding performance to a halt.</span> ·
+      <span class="ml-2"><strong class="text-white">RLS (Row Level Security):</strong> fine-grained database rules ensuring User A can never read User B's rows.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during Station IV when data schemas change</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Whenever the diff contains changes to SQL migration directories, database schemas, or ORM models, Station IV triggers this persona before anything can be merged.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Migration Delta</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Detects Data Layer</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Finds new SQL migrations, altered tables, or changed ORM schema files.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-amber-300">Locking & Reversibility</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Migration Safety</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Ensures no table-locking DDL statements run without safe defaults and timeouts.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-amber-500 bg-amber-950/40 p-4 shadow-lg shadow-amber-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-amber-500 text-white font-bold text-xs grid place-items-center">DR</span>
+            <span class="text-xs font-mono font-semibold text-amber-200">database-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Deep Query & Index Audit</div>
+          <div class="mt-1 text-xs text-amber-200/80 leading-5">Audits foreign key indexes, composite index order, RLS policies, and query complexity.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">High-Scale Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Zero Downtime Approval</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Guarantees safe rollouts that handle millions of rows without degraded throughput.</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+        <span>Flow: Migration Delta → Lock Safety → Deep Query Audit → High-Scale Clearance</span>
+        <span class="text-amber-300 font-medium">Protect production database health</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CHECKLIST -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">03 — Review checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 4-tier Database quality checklist</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/database-reviewer.md</code>, focused on eliminating data corruption, slow queries, and locking traps.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — Performance & Security Traps
+        </div>
+        <p class="mt-1 text-xs text-red-200/70">Flaws that cause immediate production database lockouts or data breaches.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Unindexed foreign keys:</strong> Foreign keys without indexes cause full table scans on parent table updates/deletes.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Missing RLS on tenant tables:</strong> Multi-tenant tables created without Row Level Security enabled.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Exclusive table locking migrations:</strong> Adding columns with non-null defaults without <code class="font-mono text-red-300">CONCURRENTLY</code> or statement timeouts.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Overly permissive grants:</strong> Granting ALL privileges to the application database user role.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Query Architecture & Schema Hygiene
+        </div>
+        <p class="mt-1 text-xs text-amber-200/70">Sub-optimal schemas that silently degrade throughput as data volume expands.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>N+1 queries:</strong> Querying related records in application loops instead of SQL joins or eager includes.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Wrong composite index order:</strong> Ordering index columns by range before equality (must be equality first).</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing ON DELETE clauses:</strong> Creating foreign keys without explicit CASCADE, RESTRICT, or SET NULL rules.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Inappropriate types:</strong> Using integer instead of <code class="font-mono text-amber-300">bigint</code> for IDs, or timestamp without timezone.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Concurrency & Pooling
+        </div>
+        <p class="mt-1 text-xs text-cyan-200/70">Connection exhaustion and deadlocking risks.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Long-running transactions:</strong> Keeping database transactions open across external HTTP API calls.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Connection pool leaks:</strong> Not releasing clients back to the connection pool on exception paths.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Unindexed RLS policy columns:</strong> Writing RLS filter rules on columns lacking dedicated indexes.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Naming & Migration Reversibility
+        </div>
+        <p class="mt-1 text-xs text-slate-300/70">Operational conventions and documentation.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Non-snake-case identifiers:</strong> Quoted mixed-case table or column names like <code class="font-mono">"createdAt"</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Missing down migrations:</strong> Schema changes that cannot be safely rolled back if deployment aborts.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DECISION FLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">04 — Decision process</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">How database-reviewer evaluates migration pull requests</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">DDL Inspection</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Analyzes every CREATE, ALTER, and DROP command in the migration delta.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Detect schema changes</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Foreign Key Audit</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Confirms every newly introduced foreign key column has a supporting index.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">FK indexing rule</div>
+      </li>
+      <li class="rounded-2xl border-2 border-amber-500/80 bg-amber-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-300">Step 3: RLS</span>
+          <div class="mt-1 font-semibold text-white text-sm">Security & Multi-Tenancy</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Ensures multi-tenant tables enforce Row Level Security with optimized auth.uid() checks.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-amber-300/80 border-t border-amber-500/30 pt-2">Zero cross-tenant leaks</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">Query Profiling</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Checks application queries (ORM or SQL) for N+1 loops and missing filters.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">N+1 prevention</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-amber-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">Verdict</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">APPROVE on safe DDL and indexed FKs; BLOCK on unindexed foreign keys or missing RLS.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Production protection</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: CONCRETE CASES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">05 — When it runs</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where database-reviewer engages</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> 1. Adding a new relational table
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When adding an <code class="text-white font-mono">orders</code> table referencing <code class="text-white font-mono">users(id)</code>, it ensures an index exists on <code class="text-white font-mono">orders.user_id</code> and validates cascade delete rules.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> 2. Adding a NOT NULL column in prod
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          Warns against running <code class="text-white font-mono">ALTER TABLE users ADD COLUMN status text NOT NULL;</code> without a default value, which would lock the table and fail if existing rows exist.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> 3. Supabase Row Level Security policy
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          Audits RLS policies like <code class="text-white font-mono">USING (auth.uid() = user_id)</code> to ensure <code class="text-white font-mono">(SELECT auth.uid())</code> subquery optimization is used to prevent per-row evaluation overhead.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">06 — Output format</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured database finding & SQL remediation</h2>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-red-400 font-bold">[CRITICAL] Missing index on foreign key column</div>
+      <div class="text-white/60 mt-1">File: <span class="text-white">supabase/migrations/20260920000000_add_comments.sql:12</span></div>
+      <div class="text-white/80 mt-1">Issue: Table `comments` references `posts(id)` via foreign key `post_id`, but has no index on `post_id`. Any delete on `posts` will trigger a sequential scan of `comments`.</div>
+      <div class="text-white/80 mt-1">Fix: Create an index on `comments(post_id)`.</div>
+      <div class="mt-3 p-3 rounded-lg bg-black/80 border border-white/5 text-[11px] leading-5">
+        <span class="text-red-400">-- BAD: Foreign key declared without matching index</span><br/>
+        <span class="text-red-400">CREATE TABLE comments (</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;post_id bigint REFERENCES posts(id) ON DELETE CASCADE</span><br/>
+        <span class="text-red-400">);</span><br/><br/>
+        <span class="text-emerald-400">-- GOOD: Supporting index prevents sequential table scan</span><br/>
+        <span class="text-emerald-400">CREATE INDEX idx_comments_post_id ON comments(post_id);</span>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">Database Review Summary Table</div>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-xs font-mono">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="text-left pb-2 font-medium">Severity</th>
+              <th class="text-left pb-2 font-medium">Count</th>
+              <th class="text-left pb-2 font-medium">Status</th>
+              <th class="text-left pb-2 font-medium">Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr><td class="py-2.5 text-red-400 font-bold">CRITICAL</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-red-400">FAIL</td><td class="py-2.5 text-white/60">Foreign key index required before migration merge</td></tr>
+            <tr><td class="py-2.5 text-amber-400 font-bold">HIGH</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-emerald-400">pass</td><td class="py-2.5 text-white/60">No N+1 patterns found</td></tr>
+            <tr><td class="py-2.5 text-cyan-400 font-bold">MEDIUM</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-cyan-400">warn</td><td class="py-2.5 text-white/60">Wrap auth.uid() in subquery for RLS performance</td></tr>
+            <tr><td class="py-2.5 text-slate-400 font-bold">LOW</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-slate-400">pass</td><td class="py-2.5 text-white/60">Identifier naming matches conventions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="font-mono text-red-400 font-semibold">
+          Verdict: BLOCK — Add missing index to prevent sequential scans on delete.
+        </div>
+        <div class="text-white/50">
+          * Fast database access safeguards user responsiveness.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">07 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What database-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No live database mutations</div>
+        <p class="mt-2 text-white/60">
+          The reviewer never runs destructive DDL on your production database. It inspects local SQL and code changes statically.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">UI & API handlers</div>
+        <p class="mt-2 text-white/60">
+          Component styling and HTTP routing logic are outside scope; those are inspected by <code class="text-amber-300">react-reviewer</code> and <code class="text-amber-300">typescript-reviewer</code>.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Secret provisioning</div>
+        <p class="mt-2 text-white/60">
+          Managing database credentials, environment variables, and vault secrets belongs to <code class="text-amber-300">security-reviewer</code>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">08 — The Reviewer Panel</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
+        <p class="mt-1 text-sm text-white/60">Other expert personas invoked in parallel during review.</p>
+      </div>
+      <a href="../" class="text-sm text-amber-300 hover:text-white transition">All 18 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../security-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-rose-500/15 border border-rose-400/40 text-rose-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(244,63,94,0.25)]" title="Security">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">security-reviewer</div>
+        <div class="text-xs text-white/50">Security</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Looks for auth, secrets, injection — OWASP.</div>
+      </a>
+      <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">typescript-reviewer</div>
+        <div class="text-xs text-white/50">TypeScript</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Types and async done right.</div>
+      </a>
+      <a href="../python-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)]" title="Python">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.006 2.753h5.814v.826H3.9S0 5.78 0 11.966c0 6.183 3.407 5.96 3.407 5.96h2.036v-2.863s-.11-3.414 3.355-3.414h5.786s3.243.054 3.243-3.14V3.14S18.358 0 11.914 0zm-3.21 1.84a1.07 1.07 0 1 1 0 2.14 1.07 1.07 0 0 1 0-2.14zm3.382 22.16c6.095 0 5.714-2.656 5.714-2.656l-.006-2.753H11.98v-.826h8.12s3.9.455 3.9-5.731c0-6.183-3.407-5.96-3.407-5.96h-2.036v2.863s.11 3.414-3.355 3.414H9.416s-3.243-.054-3.243 3.14v5.367s-.532 3.14 5.913 3.14zm3.21-1.84a1.07 1.07 0 1 1 0-2.14 1.07 1.07 0 0 1 0 2.14z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">python-reviewer</div>
+        <div class="text-xs text-white/50">Python</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Async, types, and clean PEP 8 style.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 9: LINKS & FOOTER CTA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-amber-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Database persona definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete Markdown instructions, Postgres index rules, and Supabase RLS guidelines live in <code class="text-white font-mono text-xs">agents/database-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 18 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/database-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View database-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

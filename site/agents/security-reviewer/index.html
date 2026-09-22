@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Security Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Security vulnerability detection and remediation specialist: flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10 vulnerabilities."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-rose-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(225,29,72,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-rose-300 font-mono">security-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-rose-500/15 border border-rose-400/20 px-2.5 py-0.5 text-xs text-rose-200">
+          OWASP & Vulnerability Defense
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        security-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        A dedicated security engineering specialist focused on vulnerability prevention, credential leak detection, and threat modeling — ensuring code never reaches production with exploitable vulnerabilities.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-rose-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Auth, Input, Secrets</div>
+          <div class="text-xs text-white/60">When diff touches sensitive lanes</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Read-Only Persona</div>
+          <div class="text-xs text-white/60">Claude 3.5 Sonnet analyzer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Proactive vulnerability scanner and attack surface auditor</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">security-reviewer</code> persona operates with an adversary mindset. It inspects diffs for entry points, data flows, and configuration changes that could compromise application confidentiality, integrity, or availability.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-rose-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Source Analysis</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Inspects entire authentication flows, token handling, and authorization middleware surrounding changes.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-rose-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Secret & API Hunter</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Scans the repository for regex patterns matching leaked tokens, API keys, private certs, and un-hashed passwords.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-rose-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Config Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Locates environment templates, CORS policies, security headers, Dockerfiles, and package manifests.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-rose-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Audit Command</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes non-destructive auditing tools such as <code class="text-white font-mono text-[11px]">npm audit --audit-level=high</code> to surface CVEs.</p>
+      </div>
+    </div>
+
+    <!-- Jargon glossary -->
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">OWASP Top 10:</strong> the industry-standard list of the 10 most critical security risks facing web applications.</span> ·
+      <span class="ml-2"><strong class="text-white">SSRF:</strong> Server-Side Request Forgery, an attack where a server is tricked into requesting internal network data.</span> ·
+      <span class="ml-2"><strong class="text-white">CVE:</strong> Common Vulnerabilities and Exposures, a public database of known software security flaws.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Triggered whenever sensitive boundaries are modified</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      When Station IV inspects the commit delta and spots changes to auth modules, database queries, environment variables, or HTTP endpoints, it automatically dispatches the security reviewer.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">II</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Station II: Triage</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Detects Risk Surface</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Flags auth, input handling, and secrets touched in the task plan.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">III</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Station III: Build</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Functional Proof</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Implementation completes with passing tests and verified proofs.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-rose-500 bg-rose-950/40 p-4 shadow-lg shadow-rose-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-rose-500 text-white font-bold text-xs grid place-items-center">SR</span>
+            <span class="text-xs font-mono font-semibold text-rose-200">security-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Deep Threat Audit</div>
+          <div class="mt-1 text-xs text-rose-200/80 leading-5">Audits input validation, auth gates, secrets, and sanitization before PR.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-cyan-300">Strict Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Zero Criticals Allowed</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Any security issue rated Critical immediately blocks the pull request.</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+        <span>Flow: Plan Risk Detection → Verified Build → Deep Threat Audit → Strict Zero-Critical Gate</span>
+        <span class="text-rose-300 font-medium">Non-negotiable security baseline</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CHECKLIST -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">03 — Review checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Core vulnerability vectors inspected</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/security-reviewer.md</code>, checks evaluate both user input defense and infrastructural boundaries.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — Secrets & Access Bypass
+        </div>
+        <p class="mt-1 text-xs text-red-200/70">Flaws that instantly compromise infrastructure or allow unauthorized data exfiltration.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Hardcoded secrets:</strong> Tokens, AWS keys, Stripe secret keys, or database credentials in code.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Broken access controls:</strong> Routes lacking middleware checks or client-side-only permissions.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>SQL / NoSQL injection:</strong> Unescaped string interpolation in database query builders.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>SSRF vulnerabilities:</strong> Fetching arbitrary user-supplied URLs without protocol and IP allowlisting.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Cryptography & Input Hygiene
+        </div>
+        <p class="mt-1 text-xs text-amber-200/70">Subtle flaws that allow session hijacking, weak hashing, or data corruption.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Insecure token storage:</strong> Storing JWTs or sensitive sessions in <code class="font-mono text-amber-200">localStorage</code> instead of httpOnly cookies.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Weak password hashing:</strong> Using MD5 or plain SHA-256 instead of bcrypt or argon2.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing schema validation:</strong> Accepting raw request bodies without Zod/Joi runtime validation.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Overly permissive CORS:</strong> Setting <code class="font-mono text-amber-200">Access-Control-Allow-Origin: *</code> alongside credentials.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Headers & Misconfiguration
+        </div>
+        <p class="mt-1 text-xs text-cyan-200/70">Missing defense-in-depth protective layers.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Missing security headers:</strong> Absence of Content-Security-Policy, HSTS, or X-Content-Type-Options.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Verbose error disclosure:</strong> Returning raw database stack traces directly in client responses.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Outdated dependencies:</strong> Unpinned packages with known high-severity vulnerabilities in package.json.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Audit Trails & Defense
+        </div>
+        <p class="mt-1 text-xs text-slate-300/70">Audit logging gaps and hygiene standards.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Missing auth logs:</strong> Failing to log failed authentication attempts or password reset requests.</span></li>
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Unsanitized debug logs:</strong> Logging full user request payloads containing email addresses or PII.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DECISION FLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">04 — Decision process</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured vulnerability assessment procedure</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-rose-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">Surface Map</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Maps routes, data inputs, query interfaces, and headers touched by changes.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Identify attack surface</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-rose-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Automated Scan</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Runs npm audit and secret scanning heuristics across all modified files.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Automated checks</div>
+      </li>
+      <li class="rounded-xl border-2 border-rose-500/80 bg-rose-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-rose-300">Step 3: Exploit Test</span>
+          <div class="mt-1 font-semibold text-white text-sm">Exploitability Check</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Proves whether an untrusted actor could actually trigger the exploit path.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-rose-300/80 border-t border-rose-500/30 pt-2">Eliminates false alarms</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-rose-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">Remediation Guide</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Provides drop-in secure code replacements rather than just abstract complaints.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Concrete fixes</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-rose-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">Strict Verdict</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">BLOCK on any Critical vulnerability; WARNING on High; APPROVE when clear.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Zero-tolerance gate</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: CONCRETE CASES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">05 — When it runs</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where security-reviewer engages</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-rose-400"></span> 1. Adding user authentication
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When creating login or signup routes, the reviewer verifies password hashing algorithms, session expiration limits, rate limiting, and secure cookie attributes.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> 2. Integrating external webhooks
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When handling Stripe, GitHub, or third-party webhooks, it ensures cryptographic signature verification is performed prior to parsing or storing payloads.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> 3. File upload & asset handling
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When allowing users to upload avatars or documents, it checks MIME-type validation, filename sanitization, size limits, and storage segregation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">06 — Output format</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured finding anatomy & verdict</h2>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-red-400 font-bold">[CRITICAL] Potential SQL Injection in user search query</div>
+      <div class="text-white/60 mt-1">File: <span class="text-white">src/db/users.ts:88</span></div>
+      <div class="text-white/80 mt-1">Issue: User input is directly interpolated into a raw SQL query string via template literal.</div>
+      <div class="text-white/80 mt-1">Fix: Replace string interpolation with parameterized SQL query arguments ($1, $2).</div>
+      <div class="mt-3 p-3 rounded-lg bg-black/80 border border-white/5 text-[11px] leading-5">
+        <span class="text-red-400">// BAD: Interpolated string allows query escape</span><br/>
+        <span class="text-red-400">const query = `SELECT * FROM users WHERE name = '${userInput}'`;</span><br/><br/>
+        <span class="text-emerald-400">// GOOD: Parameterized query safely escaped by driver</span><br/>
+        <span class="text-emerald-400">const query = 'SELECT * FROM users WHERE name = $1';</span><br/>
+        <span class="text-emerald-400">await db.query(query, [userInput]);</span>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">Security Review Summary Table</div>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-xs font-mono">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="text-left pb-2 font-medium">Severity</th>
+              <th class="text-left pb-2 font-medium">Count</th>
+              <th class="text-left pb-2 font-medium">Status</th>
+              <th class="text-left pb-2 font-medium">Action required</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr><td class="py-2.5 text-red-400 font-bold">CRITICAL</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-red-400">FAIL</td><td class="py-2.5 text-white/60">Hard merge block — fix vulnerability immediately</td></tr>
+            <tr><td class="py-2.5 text-amber-400 font-bold">HIGH</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-emerald-400">pass</td><td class="py-2.5 text-white/60">No high-severity issues</td></tr>
+            <tr><td class="py-2.5 text-cyan-400 font-bold">MEDIUM</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-cyan-400">warn</td><td class="py-2.5 text-white/60">Review headers before release</td></tr>
+            <tr><td class="py-2.5 text-slate-400 font-bold">LOW</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-slate-400">pass</td><td class="py-2.5 text-white/60">Audit log clean</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="font-mono text-red-400 font-semibold">
+          Verdict: BLOCK — 1 Critical vulnerability must be remediated.
+        </div>
+        <div class="text-white/50">
+          * Pull request cannot advance to Station V until verdict is clean.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">07 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What security-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No automated patching</div>
+        <p class="mt-2 text-white/60">
+          The reviewer reports vulnerabilities and provides suggested remediation snippets, but never directly modifies your source files or credentials.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Skips stylistic nits</div>
+        <p class="mt-2 text-white/60">
+          Formatting, variable naming conventions, and cosmetic issues belong to <code class="text-violet-300">code-reviewer</code> or standard linters, not security.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Language-specific types</div>
+        <p class="mt-2 text-white/60">
+          Deep TypeScript typing nuances and hook re-render mechanics are delegated to <code class="text-violet-300">typescript-reviewer</code> and <code class="text-violet-300">react-reviewer</code>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-rose-300">08 — The Reviewer Panel</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
+        <p class="mt-1 text-sm text-white/60">Other expert personas invoked in parallel during review.</p>
+      </div>
+      <a href="../" class="text-sm text-rose-300 hover:text-white transition">All 18 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../database-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.25)]" title="Database">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">database-reviewer</div>
+        <div class="text-xs text-white/50">Data</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Slow queries, missing indexes, RLS security.</div>
+      </a>
+      <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">typescript-reviewer</div>
+        <div class="text-xs text-white/50">TypeScript</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Types and async done right.</div>
+      </a>
+      <a href="../silent-failure-hunter/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-red-500/15 border border-red-400/40 text-red-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(239,68,68,0.25)]" title="Reliability">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">silent-failure-hunter</div>
+        <div class="text-xs text-white/50">Reliability</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Finds swallowed errors that hide bugs.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 9: LINKS & FOOTER CTA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-rose-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw security persona</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete system prompts, defensive rules, and OWASP review guidelines are located in <code class="text-white font-mono text-xs">agents/security-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 18 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/security-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View security-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

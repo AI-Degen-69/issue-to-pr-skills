@@ -3,5 +3,13 @@
   <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/</loc><priority>1.0</priority></url>
   <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/skills/</loc><priority>0.9</priority></url>
   <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/</loc><priority>0.9</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/code-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/security-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/typescript-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/python-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/react-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/type-design-analyzer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/database-reviewer/</loc><priority>0.8</priority></url>
+  <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/agents/silent-failure-hunter/</loc><priority>0.8</priority></url>
   <url><loc>https://ai-degen-69.github.io/issue-to-pr-skills/docs/</loc><priority>0.9</priority></url>
 </urlset>

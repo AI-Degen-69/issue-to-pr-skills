@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Python Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Senior Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and framework best practices."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+figure{margin:0}
+figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-emerald-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(16,185,129,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-emerald-300 font-mono">python-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-400/20 px-2.5 py-0.5 text-xs text-emerald-200">
+          PEP 8 & Pythonic Quality
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        python-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Senior Python code reviewer enforcing PEP 8 conventions, idiomatic Python patterns, type hint precision, async hygiene, and security across all <code class="font-mono text-white text-sm">*.py</code> modifications.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-emerald-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">*.py</div>
+          <div class="text-xs text-white/60">All Python file modifications</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Read-Only Persona</div>
+          <div class="text-xs text-white/60">Claude 3.5 Sonnet analyzer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Static audit and Pythonic idiomatic guard</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">python-reviewer</code> establishes scope with <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">git diff -- '*.py'</code>, coordinates static linters, and checks for subtle language traps like mutable default arguments, bare except blocks, and un-awaited coroutines.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-emerald-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Module Context</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads the surrounding module hierarchy, type declarations, imports, and docstrings.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-emerald-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Anti-pattern Scanner</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Detects bare <code class="text-white font-mono text-[11px]">except:</code>, <code class="text-white font-mono text-[11px]">def f(x=[])</code> mutable defaults, and unparameterized SQL f-strings.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-emerald-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Package Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Locates pyproject.toml, setup.cfg, requirements.txt, and framework settings modules.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-emerald-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Linter Suite</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes non-destructive checks: <code class="text-white font-mono text-[11px]">ruff</code>, <code class="text-white font-mono text-[11px]">mypy</code>, <code class="text-white font-mono text-[11px]">black --check</code>, and <code class="text-white font-mono text-[11px]">bandit</code>.</p>
+      </div>
+    </div>
+
+    <!-- Jargon glossary -->
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">PEP 8:</strong> the official style guide for Python code readability and formatting.</span> ·
+      <span class="ml-2"><strong class="text-white">Mutable Default:</strong> setting a default parameter to <code class="font-mono text-white">[]</code> or <code class="font-mono text-white">{}</code>, which shares state across all function calls and causes silent bugs.</span> ·
+      <span class="ml-2"><strong class="text-white">Bare Except:</strong> catching all errors without specifying an exception class, which accidentally swallows keyboard interrupts and system exits.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT & DIAGRAM -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">From diff to static toolchain to severity verdict</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Dispatched in Station IV whenever Python changes are detected. Follows a deterministic inspection chain before emitting an Approve, Warning, or Block verdict.
+    </p>
+
+    <!-- DIAGRAM: Python Diff -> Checks -> Severity -> Verdict -->
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Diff Scope</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">git diff -- '*.py'</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Isolates modified Python files against merge base; halts if diff is empty.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Static Checks</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">ruff → mypy → bandit</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Executes linting, type validation, and security scanning in order.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-emerald-500 bg-emerald-950/40 p-4 shadow-lg shadow-emerald-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500 text-white font-bold text-xs grid place-items-center">PR</span>
+            <span class="text-xs font-mono font-semibold text-emerald-200">python-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Severity Classification</div>
+          <div class="mt-1 text-xs text-emerald-200/80 leading-5">Classifies findings into CRITICAL, HIGH, and MEDIUM categories.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-cyan-300">Verdict</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Approve / Warn / Block</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Approve (clean), Warning (Medium only), Block (Critical or High).</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+        <span>Diagram: Python Diff Scope → Toolchain Verification → Severity Classification → Final Verdict</span>
+        <span class="text-emerald-300 font-medium">Traceable to agents/python-reviewer.md:19-94</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CHECKLIST & FRAMEWORK CHECKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">03 — Review checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Core review priorities & framework hygiene</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/python-reviewer.md:27-100</code>, ensuring type safety, security, and clean architecture.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — Security & Bare Excepts
+        </div>
+        <p class="mt-1 text-xs text-red-200/70">Flaws that breach security or completely swallow errors.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>SQL injection via f-strings:</strong> <code class="font-mono text-red-300">f"SELECT * FROM users WHERE id = {user_id}"</code> instead of query parameters.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Command injection:</strong> Passing untrusted strings to <code class="font-mono text-red-300">os.system</code> or <code class="font-mono text-red-300">subprocess(shell=True)</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Bare except:</strong> Using <code class="font-mono text-red-300">except: pass</code> which silently traps KeyboardInterrupt and memory errors.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Unsafe deserialization:</strong> Loading untrusted payloads with <code class="font-mono text-red-300">pickle.loads</code> or <code class="font-mono text-red-300">yaml.load</code> without SafeLoader.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Types, Idioms & Concurrency
+        </div>
+        <p class="mt-1 text-xs text-amber-200/70">Violations of Pythonic design that degrade maintainability or cause race conditions.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Mutable default arguments:</strong> <code class="font-mono text-amber-300">def add_item(item, items=[])</code> — use <code class="font-mono text-emerald-300">items=None</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing type hints:</strong> Public exported functions lacking type annotations or using <code class="font-mono text-amber-300">Any</code> lazily.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Mixing sync and async:</strong> Calling blocking synchronous I/O inside async functions without thread offloading.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing context managers:</strong> Opening files or network sockets without <code class="font-mono text-emerald-300">with</code> blocks.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — PEP 8 & Code Style
+        </div>
+        <p class="mt-1 text-xs text-cyan-200/70">Standard library conventions and clean code hygiene.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Wildcard imports:</strong> <code class="font-mono text-cyan-300">from module import *</code> which pollutes the module namespace.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Print statements in production:</strong> Using <code class="font-mono">print()</code> instead of standard <code class="font-mono">logging</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>None comparison:</strong> Writing <code class="font-mono">val == None</code> instead of identity check <code class="font-mono">val is None</code>.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-emerald-400">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> Framework Specifics
+        </div>
+        <p class="mt-1 text-xs text-emerald-200/70">Dedicated checks for Django, FastAPI, and Flask.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span> <span><strong>FastAPI:</strong> Validates Pydantic response models and ensures non-blocking async endpoint handlers.</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span> <span><strong>Django:</strong> Enforces <code class="font-mono text-emerald-300">select_related</code> / <code class="font-mono text-emerald-300">prefetch_related</code> to prevent N+1 query cascades.</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 font-bold">✓</span> <span><strong>Flask:</strong> Verifies CSRF protection and centralized error handling middleware.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: CONCRETE CASES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">04 — When it runs</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Concrete real-world scenarios</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> 1. Adding a FastAPI route
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When adding an endpoint handling request bodies, the reviewer ensures Pydantic models validate input, type annotations are explicit, and CORS settings are restricted.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> 2. Async database querying
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          Flags accidental synchronous ORM calls inside an <code class="text-white font-mono">async def</code> coroutine that would block Python's event loop for all concurrent requests.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> 3. Django model relationship query
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          Identifies loops iterating over foreign keys without <code class="text-white font-mono">select_related</code>, replacing an N+1 query explosion with a single batch fetch.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: WHAT YOU GET BACK (OUTPUTS) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">05 — Output format & verdict</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Standardized output finding</h2>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-red-400 font-bold">[CRITICAL] SQL Injection via formatted string</div>
+      <div class="text-white/60 mt-1">File: <span class="text-white">app/routers/users.py:45</span></div>
+      <div class="text-white/80 mt-1">Issue: User input `username` is directly interpolated into raw SQL query via f-string.</div>
+      <div class="text-white/80 mt-1">Fix: Replace f-string with parameterized query tuple to prevent SQL escape.</div>
+      <div class="mt-3 p-3 rounded-lg bg-black/80 border border-white/5 text-[11px] leading-5">
+        <span class="text-red-400"># BAD: User input interpolated into SQL query string</span><br/>
+        <span class="text-red-400">cursor.execute(f"SELECT * FROM users WHERE username = '{username}'")</span><br/><br/>
+        <span class="text-emerald-400"># GOOD: Parameterized query safely handled by DB driver</span><br/>
+        <span class="text-emerald-400">cursor.execute("SELECT * FROM users WHERE username = %s", (username,))</span>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">Approval Criteria (agents/python-reviewer.md:89-93)</div>
+      <div class="mt-3 grid sm:grid-cols-3 gap-3 text-xs">
+        <div class="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3">
+          <div class="font-bold text-emerald-400 uppercase">Approve</div>
+          <div class="mt-1 text-white/70">No CRITICAL or HIGH issues found in the diff.</div>
+        </div>
+        <div class="rounded-xl border border-amber-500/30 bg-amber-950/20 p-3">
+          <div class="font-bold text-amber-400 uppercase">Warning</div>
+          <div class="mt-1 text-white/70">MEDIUM issues only (PEP 8, docstrings) — mergeable with caution.</div>
+        </div>
+        <div class="rounded-xl border border-red-500/30 bg-red-950/20 p-3">
+          <div class="font-bold text-red-400 uppercase">Block</div>
+          <div class="mt-1 text-white/70">Any CRITICAL or HIGH issue immediately halts PR progression.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">06 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What python-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Does not rewrite code</div>
+        <p class="mt-2 text-white/60">
+          The agent provides precise diagnosis and remediation code snippets, but never writes files or auto-applies commits.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No imaginary commands</div>
+        <p class="mt-2 text-white/60">
+          Triggered via pipeline Station IV (<code class="text-emerald-300">iv-review-build-and-pr</code>). There are no ad-hoc slash commands like <code class="text-white/40">/python-review</code> in this repository.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Skipped if missing</div>
+        <p class="mt-2 text-white/60">
+          If a persona file is not present on disk, Station IV logs its absence and skips it cleanly rather than simulating fake output.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7B: EXPLORE OTHER REVIEWERS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-emerald-300">07 — The Reviewer Panel</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
+        <p class="mt-1 text-sm text-white/60">Other expert personas invoked in parallel during review.</p>
+      </div>
+      <a href="../" class="text-sm text-emerald-300 hover:text-white transition">All 18 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../security-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-rose-500/15 border border-rose-400/40 text-rose-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(244,63,94,0.25)]" title="Security">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">security-reviewer</div>
+        <div class="text-xs text-white/50">Security</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Looks for auth, secrets, injection — OWASP.</div>
+      </a>
+      <a href="../database-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.25)]" title="Database">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">database-reviewer</div>
+        <div class="text-xs text-white/50">Data</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Slow queries, missing indexes, RLS security.</div>
+      </a>
+      <a href="../silent-failure-hunter/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-red-500/15 border border-red-400/40 text-red-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(239,68,68,0.25)]" title="Reliability">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">silent-failure-hunter</div>
+        <div class="text-xs text-white/50">Reliability</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Finds swallowed errors that hide bugs.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: LINKS & FOOTER CTA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-emerald-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Python persona definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete Markdown instructions, linting commands, and severity rules live in <code class="text-white font-mono text-xs">agents/python-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 18 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/python-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View python-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

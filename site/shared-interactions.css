@@ -1,0 +1,991 @@
+/* ==========================================================================
+   issue-to-pr-skills — Global Interaction & Motion Design System
+   ========================================================================== */
+
+/* 1. Base & Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 72px; /* Offset for sticky nav headers */
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+  border: 2px solid #020617;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* 2. Scroll Progress Indicator Bar */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 2.5px;
+  background: linear-gradient(90deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
+  z-index: 9999;
+  pointer-events: none;
+  transition: width 0.08s ease-out;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+}
+
+/* 3. Reveal on Scroll Animation Elements */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay helpers if needed */
+.delay-100 { transition-delay: 100ms; }
+.delay-150 { transition-delay: 150ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+
+/* 4. Interactive Hover & Click Physics */
+/* Cards & Containers */
+.card,
+.interactive-card,
+[data-interactive="true"],
+main .rounded-2xl.border:not(.agent-card),
+main .rounded-xl.border:not(.agent-card) {
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.24s ease,
+              box-shadow 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.24s ease;
+  will-change: transform, box-shadow;
+}
+
+.card:hover,
+.interactive-card:hover,
+[data-interactive="true"]:hover,
+main .rounded-2xl.border:not(.agent-card):hover,
+main .rounded-xl.border:not(.agent-card):hover {
+  transform: translateY(-3px) scale(1.008);
+  box-shadow: 0 16px 36px -10px rgba(124, 58, 237, 0.28),
+              0 0 0 1px rgba(168, 85, 247, 0.35);
+  border-color: rgba(168, 85, 247, 0.4) !important;
+}
+
+.card:active,
+.interactive-card:active,
+[data-interactive="true"]:active {
+  transform: translateY(-1px) scale(0.992) !important;
+  box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.2) !important;
+  transition-duration: 0.08s;
+}
+
+/* Buttons, Chips, Badges & Interactive Links */
+button:not([disabled]),
+a.btn,
+.interactive-btn,
+.interactive-chip,
+.rounded-full[class*="bg-white"],
+.rounded-full[class*="bg-violet"],
+.rounded-full[class*="bg-emerald"],
+.rounded-full[class*="bg-cyan"] {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              filter 0.2s ease;
+  will-change: transform;
+}
+
+button:not([disabled]):hover,
+a.btn:hover,
+.interactive-btn:hover,
+.rounded-full[class*="bg-white"]:hover,
+.rounded-full[class*="bg-violet"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -4px rgba(124, 58, 237, 0.35);
+}
+
+button:not([disabled]):active,
+a.btn:active,
+.interactive-btn:active,
+.rounded-full[class*="bg-white"]:active,
+.rounded-full[class*="bg-violet"]:active {
+  transform: translateY(0px) scale(0.96) !important;
+  transition-duration: 0.06s;
+}
+
+/* Subtle Click Ripple Effect */
+.ripple-surface {
+  position: relative;
+  overflow: hidden;
+}
+
+.click-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(236, 72, 153, 0.15) 60%, transparent 80%);
+  transform: scale(0);
+  animation: ripple-spread 0.55s ease-out forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes ripple-spread {
+  0% {
+    transform: scale(0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+/* Back to Top Floating Button */
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 40;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, visibility 0.28s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  background: rgba(124, 58, 237, 0.9);
+  border-color: rgba(192, 132, 252, 0.5);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -4px rgba(124, 58, 237, 0.45);
+}
+
+.back-to-top:active {
+  transform: translateY(0px) scale(0.92);
+}
+
+/* ==========================================================================
+   Agent Cards: Smooth Fade-In Animation on Initial Load and Filter
+   ========================================================================== */
+
+@keyframes agentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.975);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.agent-card,
+#agentGrid > a,
+#agentGrid > div,
+#agentGridPreview > a,
+#agentGridPreview > div,
+.agent-grid-card,
+.agent-showcase-card {
+  animation: agentFadeIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s ease,
+              background-color 0.28s ease !important;
+  will-change: transform, opacity, box-shadow;
+  transform-origin: center bottom;
+  position: relative;
+  backface-visibility: hidden;
+}
+
+/* Stagger entrance delays across grid cards so they cascade gracefully on page load */
+#agentGrid > *:nth-child(1), #agentGridPreview > *:nth-child(1), .agent-showcase-card:nth-child(1) { animation-delay: 25ms; }
+#agentGrid > *:nth-child(2), #agentGridPreview > *:nth-child(2), .agent-showcase-card:nth-child(2) { animation-delay: 50ms; }
+#agentGrid > *:nth-child(3), #agentGridPreview > *:nth-child(3), .agent-showcase-card:nth-child(3) { animation-delay: 75ms; }
+#agentGrid > *:nth-child(4), #agentGridPreview > *:nth-child(4), .agent-showcase-card:nth-child(4) { animation-delay: 100ms; }
+#agentGrid > *:nth-child(5), .agent-showcase-card:nth-child(5) { animation-delay: 125ms; }
+#agentGrid > *:nth-child(6), .agent-showcase-card:nth-child(6) { animation-delay: 150ms; }
+#agentGrid > *:nth-child(7) { animation-delay: 175ms; }
+#agentGrid > *:nth-child(8) { animation-delay: 200ms; }
+#agentGrid > *:nth-child(9) { animation-delay: 225ms; }
+#agentGrid > *:nth-child(10) { animation-delay: 250ms; }
+#agentGrid > *:nth-child(11) { animation-delay: 275ms; }
+#agentGrid > *:nth-child(12) { animation-delay: 300ms; }
+#agentGrid > *:nth-child(13) { animation-delay: 325ms; }
+#agentGrid > *:nth-child(14) { animation-delay: 350ms; }
+#agentGrid > *:nth-child(15) { animation-delay: 375ms; }
+#agentGrid > *:nth-child(16) { animation-delay: 400ms; }
+#agentGrid > *:nth-child(17) { animation-delay: 425ms; }
+#agentGrid > *:nth-child(18) { animation-delay: 450ms; }
+
+/* Smooth hover transition that lifts the card on hover */
+.agent-card:hover,
+#agentGrid > a:hover,
+#agentGrid > div:hover,
+#agentGridPreview > a:hover,
+#agentGridPreview > div:hover,
+.agent-grid-card:hover,
+.agent-showcase-card:hover {
+  transform: translateY(-8px) scale(1.025) !important;
+  box-shadow: 0 22px 45px -12px rgba(124, 58, 237, 0.45),
+              0 0 24px -2px rgba(34, 211, 238, 0.25),
+              0 0 0 1px rgba(168, 85, 247, 0.55) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  z-index: 10;
+}
+
+/* Hover icon pop inside agent cards */
+.agent-card:hover .h-8.w-8,
+#agentGrid > a:hover .h-8.w-8,
+#agentGridPreview > a:hover .h-8.w-8,
+.agent-showcase-card:hover .h-8.w-8 {
+  transform: scale(1.12) rotate(-2deg);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.6);
+}
+
+/* ==========================================================================
+   Agent Icon Tooltip: Hover-Based Quick Role Summary
+   ========================================================================== */
+
+.agent-icon-trigger {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  z-index: 20;
+}
+
+/* Ensure the hovered card sits highest in the stacking order */
+.agent-card:has(.agent-icon-trigger:hover),
+.agent-card:has(.agent-icon-trigger:focus-within),
+#agentGrid > a:has(.agent-icon-trigger:hover),
+#agentGridPreview > a:has(.agent-icon-trigger:hover) {
+  z-index: 50 !important;
+}
+
+.agent-icon-tooltip {
+  position: absolute;
+  bottom: calc(100% + 11px);
+  left: 0;
+  width: 260px;
+  max-width: calc(100vw - 48px);
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(10, 15, 29, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.85),
+              0 0 20px -2px rgba(139, 92, 246, 0.3);
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px) scale(0.98);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.2s;
+  pointer-events: none;
+  z-index: 100;
+  text-align: left;
+}
+
+/* Tooltip Downward Arrow */
+.agent-icon-tooltip .agent-tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 11px;
+  width: 10px;
+  height: 6px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.agent-icon-tooltip .agent-tooltip-arrow::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  background: rgba(10, 15, 29, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transform: rotate(45deg);
+}
+
+/* Show on hover or keyboard/touch focus */
+.agent-icon-trigger:hover .agent-icon-tooltip,
+.agent-icon-trigger:focus-within .agent-icon-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Subtle pulse glow around icon on hover trigger */
+.agent-icon-trigger:hover .h-8.w-8 {
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.8) !important;
+}
+
+@media (max-width: 640px) {
+  .agent-icon-tooltip {
+    width: 240px;
+    max-width: calc(100vw - 40px);
+    padding: 10px 12px;
+  }
+}
+
+/* Active click state for agent cards */
+.agent-card:active,
+#agentGrid > a:active,
+#agentGrid > div:active,
+#agentGridPreview > a:active,
+#agentGridPreview > div:active,
+.agent-grid-card:active,
+.agent-showcase-card:active {
+  transform: translateY(-2px) scale(0.995) !important;
+  box-shadow: 0 10px 20px -6px rgba(124, 58, 237, 0.25) !important;
+  transition-duration: 0.1s;
+}
+
+/* ==========================================================================
+   Centered Hero Component (Inspired by skills.addy.ie)
+   ========================================================================== */
+
+.hero-glow {
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  width: 960px;
+  height: 580px;
+  transform: translateX(-50%);
+  background: radial-gradient(50% 50% at 50% 50%, rgba(124, 58, 237, 0.22) 0%, rgba(34, 211, 238, 0.09) 50%, transparent 75%);
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding-inline: 16px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.hero-badge:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.2);
+}
+
+.hero-badge .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
+  animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.hero-title {
+  margin-top: 24px;
+  font-size: clamp(2.4rem, 6.2vw, 4.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  font-weight: 800;
+  color: #ffffff;
+  text-align: center;
+  max-width: 900px;
+}
+
+.hero-sub {
+  margin-top: 20px;
+  max-width: 660px;
+  font-size: clamp(1.02rem, 1.8vw, 1.2rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: center;
+}
+
+.hero-cmd {
+  margin-top: 32px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* Terminal Command Box */
+.cmd {
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cmd-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 0 8px 0 18px;
+  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.cmd-body:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.25), 0 0 0 1px rgba(168, 85, 247, 0.3);
+}
+
+.cmd-prompt {
+  color: #a78bfa;
+  user-select: none;
+  flex: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.cmd-text {
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+  padding-block: 14px;
+  font-size: 0.92rem;
+  letter-spacing: -0.01em;
+}
+
+.cmd-text::-webkit-scrollbar {
+  display: none;
+}
+
+.cmd-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+
+.cmd-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: scale(1.04);
+}
+
+.cmd-btn:active {
+  transform: scale(0.96);
+}
+
+.cmd-btn .i-check {
+  display: none;
+  color: #34d399;
+}
+
+.cmd-btn.copied .i-copy {
+  display: none;
+}
+
+.cmd-btn.copied .i-check {
+  display: block;
+}
+
+.cmd-btn.copied {
+  border-color: rgba(52, 211, 153, 0.5);
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+/* Hero CTA buttons */
+.hero-cta {
+  margin-top: 22px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Compatibility Bar */
+.hero-compat {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.hero-compat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.hero-compat-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 20px;
+  max-width: 760px;
+}
+
+.hero-compat-item {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-compat-item:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.hero-compat-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(168, 85, 247, 0.7);
+}
+
+/* ==========================================================================
+   THEME PROTOTYPES SYSTEM (Tiger Orange, Cyber Cyan, Emerald Mint, Cobalt Blue)
+   ========================================================================== */
+
+:root {
+  --theme-accent: #c2410c;
+  --theme-accent-strong: #9a3412;
+  --theme-accent-hover: #ea580c;
+  --theme-accent-light: #fbbf24;
+  --theme-accent-subtle: rgba(194, 65, 12, 0.14);
+  --theme-accent-border: rgba(194, 65, 12, 0.36);
+  --theme-accent-glow: rgba(194, 65, 12, 0.30);
+  --theme-gradient: linear-gradient(135deg, #9a3412 0%, #c2410c 45%, #b45309 100%);
+  --theme-progress: linear-gradient(90deg, #9a3412 0%, #c2410c 50%, #d97706 100%);
+}
+
+/* Prototype: Tiger Flame (Dark Burnt Tiger Orange & Warm Ochre Amber) */
+:root[data-theme="tiger"],
+[data-theme="tiger"] {
+  --theme-accent: #c2410c;
+  --theme-accent-strong: #9a3412;
+  --theme-accent-hover: #ea580c;
+  --theme-accent-light: #fbbf24;
+  --theme-accent-subtle: rgba(194, 65, 12, 0.14);
+  --theme-accent-border: rgba(194, 65, 12, 0.36);
+  --theme-accent-glow: rgba(194, 65, 12, 0.30);
+  --theme-gradient: linear-gradient(135deg, #9a3412 0%, #c2410c 45%, #b45309 100%);
+  --theme-progress: linear-gradient(90deg, #9a3412 0%, #c2410c 50%, #d97706 100%);
+}
+
+/* Prototype: Cyber Cyan (Linear & High-Tech Dev) */
+:root[data-theme="cyan"],
+[data-theme="cyan"] {
+  --theme-accent: #06b6d4;
+  --theme-accent-strong: #0891b2;
+  --theme-accent-hover: #22d3ee;
+  --theme-accent-light: #67e8f9;
+  --theme-accent-subtle: rgba(6, 182, 212, 0.15);
+  --theme-accent-border: rgba(6, 182, 212, 0.35);
+  --theme-accent-glow: rgba(6, 182, 212, 0.45);
+  --theme-gradient: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #38bdf8 100%);
+  --theme-progress: linear-gradient(90deg, #0891b2 0%, #06b6d4 50%, #38bdf8 100%);
+}
+
+/* Prototype 2: Emerald Mint (Terminal CI/CD & Pipeline Green) */
+:root[data-theme="emerald"],
+[data-theme="emerald"] {
+  --theme-accent: #10b981;
+  --theme-accent-strong: #059669;
+  --theme-accent-hover: #34d399;
+  --theme-accent-light: #6ee7b7;
+  --theme-accent-subtle: rgba(16, 185, 129, 0.15);
+  --theme-accent-border: rgba(16, 185, 129, 0.35);
+  --theme-accent-glow: rgba(16, 185, 129, 0.45);
+  --theme-gradient: linear-gradient(135deg, #059669 0%, #10b981 50%, #2dd4bf 100%);
+  --theme-progress: linear-gradient(90deg, #059669 0%, #10b981 50%, #2dd4bf 100%);
+}
+
+/* Prototype 3: Cobalt Blue (GitHub & Enterprise Authority) */
+:root[data-theme="cobalt"],
+[data-theme="cobalt"] {
+  --theme-accent: #3b82f6;
+  --theme-accent-strong: #2563eb;
+  --theme-accent-hover: #60a5fa;
+  --theme-accent-light: #93c5fd;
+  --theme-accent-subtle: rgba(37, 99, 235, 0.15);
+  --theme-accent-border: rgba(59, 130, 246, 0.35);
+  --theme-accent-glow: rgba(37, 99, 235, 0.45);
+  --theme-gradient: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #38bdf8 100%);
+  --theme-progress: linear-gradient(90deg, #1d4ed8 0%, #2563eb 50%, #38bdf8 100%);
+}
+
+/* Original Violet (Reference) */
+:root[data-theme="violet"],
+[data-theme="violet"] {
+  --theme-accent: #8b5cf6;
+  --theme-accent-strong: #7c3aed;
+  --theme-accent-hover: #a78bfa;
+  --theme-accent-light: #c4b5fd;
+  --theme-accent-subtle: rgba(124, 58, 237, 0.15);
+  --theme-accent-border: rgba(168, 85, 247, 0.35);
+  --theme-accent-glow: rgba(124, 58, 237, 0.45);
+  --theme-gradient: linear-gradient(135deg, #7c3aed 0%, #9333ea 50%, #ec4899 100%);
+  --theme-progress: linear-gradient(90deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
+}
+
+/* Dynamic Scroll Progress Bar */
+.scroll-progress-bar {
+  background: var(--theme-progress) !important;
+  box-shadow: 0 0 12px var(--theme-accent-glow) !important;
+}
+
+/* Primary Action Buttons & Active Chips */
+[data-theme]:not([data-theme="violet"]) .bg-violet-600,
+[data-theme]:not([data-theme="violet"]) button.bg-violet-600,
+[data-theme]:not([data-theme="violet"]) a.bg-violet-600,
+[data-theme]:not([data-theme="violet"]) .agent-chip.bg-violet-600,
+[data-theme]:not([data-theme="violet"]) .station-filter-btn.bg-violet-600,
+[data-theme]:not([data-theme="violet"]) #btnOrgAz.bg-violet-600,
+[data-theme]:not([data-theme="violet"]) .bg-gradient-to-br.from-violet-600 {
+  background-color: var(--theme-accent-strong) !important;
+  border-color: var(--theme-accent) !important;
+  color: #ffffff !important;
+}
+
+[data-theme]:not([data-theme="violet"]) .hover\:bg-violet-500:hover,
+[data-theme]:not([data-theme="violet"]) .bg-violet-600:hover,
+[data-theme]:not([data-theme="violet"]) button.bg-violet-600:hover,
+[data-theme]:not([data-theme="violet"]) a.bg-violet-600:hover,
+[data-theme]:not([data-theme="violet"]) .agent-chip.bg-violet-600:hover {
+  background-color: var(--theme-accent) !important;
+}
+
+/* Active Borders */
+[data-theme]:not([data-theme="violet"]) .border-violet-500,
+[data-theme]:not([data-theme="violet"]) .border-violet-400,
+[data-theme]:not([data-theme="violet"]) .border-violet-500\/40,
+[data-theme]:not([data-theme="violet"]) .border-violet-400\/20,
+[data-theme]:not([data-theme="violet"]) .border-violet-400\/25,
+[data-theme]:not([data-theme="violet"]) .focus\:border-violet-400:focus {
+  border-color: var(--theme-accent-border) !important;
+}
+
+/* Text Highlights & Badges */
+[data-theme]:not([data-theme="violet"]) .text-violet-200,
+[data-theme]:not([data-theme="violet"]) .text-violet-300,
+[data-theme]:not([data-theme="violet"]) .text-violet-400,
+[data-theme]:not([data-theme="violet"]) .text-violet-500 {
+  color: var(--theme-accent-light) !important;
+}
+
+[data-theme]:not([data-theme="violet"]) .hover\:text-violet-200:hover,
+[data-theme]:not([data-theme="violet"]) .hover\:text-violet-300:hover,
+[data-theme]:not([data-theme="violet"]) a:hover .group-hover\:text-violet-200 {
+  color: #ffffff !important;
+}
+
+/* Subtle Translucent Backgrounds */
+[data-theme]:not([data-theme="violet"]) .bg-violet-500\/15,
+[data-theme]:not([data-theme="violet"]) .bg-violet-600\/15,
+[data-theme]:not([data-theme="violet"]) .bg-violet-600\/20 {
+  background-color: var(--theme-accent-subtle) !important;
+}
+
+/* Hero Background Glow and Ambient Lights */
+[data-theme]:not([data-theme="violet"]) .hero-glow {
+  background: radial-gradient(50% 50% at 50% 50%, var(--theme-accent-glow) 0%, rgba(255, 255, 255, 0.03) 50%, transparent 75%) !important;
+}
+
+/* Terminal Command Prompt Symbol */
+[data-theme]:not([data-theme="violet"]) .cmd-prompt {
+  color: var(--theme-accent-light) !important;
+}
+
+[data-theme]:not([data-theme="violet"]) .cmd-body:hover {
+  border-color: var(--theme-accent-border) !important;
+  box-shadow: 0 20px 40px -10px var(--theme-accent-glow), 0 0 0 1px var(--theme-accent-border) !important;
+}
+
+/* Compatibility bar separator dots */
+[data-theme]:not([data-theme="violet"]) .hero-compat-dot {
+  background: var(--theme-accent) !important;
+}
+
+/* Hover Shadows for Cards and Elements */
+[data-theme]:not([data-theme="violet"]) .card:hover,
+[data-theme]:not([data-theme="violet"]) main .rounded-2xl.border:not(.agent-card):hover,
+[data-theme]:not([data-theme="violet"]) main .rounded-xl.border:not(.agent-card):hover {
+  box-shadow: 0 16px 36px -10px var(--theme-accent-glow), 0 0 0 1px var(--theme-accent-border) !important;
+  border-color: var(--theme-accent-border) !important;
+}
+
+[data-theme]:not([data-theme="violet"]) .agent-card:hover,
+[data-theme]:not([data-theme="violet"]) #agentGrid > a:hover,
+[data-theme]:not([data-theme="violet"]) #agentGridPreview > a:hover {
+  box-shadow: 0 22px 45px -12px var(--theme-accent-glow), 0 0 0 1px var(--theme-accent-border) !important;
+  border-color: var(--theme-accent-border) !important;
+}
+
+[data-theme]:not([data-theme="violet"]) button:not([disabled]):hover,
+[data-theme]:not([data-theme="violet"]) a.btn:hover,
+[data-theme]:not([data-theme="violet"]) .hero-badge:hover {
+  box-shadow: 0 6px 20px -4px var(--theme-accent-glow) !important;
+  border-color: var(--theme-accent-border) !important;
+}
+
+/* Focus Rings */
+[data-theme]:not([data-theme="violet"]) input:focus,
+[data-theme]:not([data-theme="violet"]) select:focus {
+  border-color: var(--theme-accent) !important;
+  box-shadow: 0 0 0 2px var(--theme-accent-subtle) !important;
+}
+
+/* Gradient Hero / CTA Banner Replacements */
+[data-theme]:not([data-theme="violet"]) .from-violet-600 {
+  --tw-gradient-from: var(--theme-accent-strong) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(0 0 0 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+[data-theme]:not([data-theme="violet"]) .to-fuchsia-500,
+[data-theme]:not([data-theme="violet"]) .to-fuchsia-600 {
+  --tw-gradient-to: var(--theme-accent-hover) var(--tw-gradient-to-position) !important;
+}
+
+/* ==========================================================================
+   Pipeline Carousel & Scroll Unroll Animation
+   ========================================================================== */
+
+#pipelineCarouselViewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 0 14px 0;
+  touch-action: pan-y pinch-zoom;
+}
+
+#pipelineTrack {
+  display: flex;
+  gap: 16px;
+  will-change: transform;
+  transition: transform 0.38s cubic-bezier(0.18, 0.89, 0.32, 1.15);
+  padding: 0 20px;
+}
+
+.pipeline-card {
+  flex-shrink: 0;
+  width: 215px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.5;
+  transform: scale(0.92);
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+.pipeline-card:hover {
+  opacity: 0.85;
+  transform: scale(0.96);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.pipeline-card.active-station {
+  opacity: 1;
+  transform: scale(1.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border-color: var(--theme-accent, #c2410c);
+  box-shadow: 0 0 28px var(--theme-accent-glow, rgba(194, 65, 12, 0.42)), 0 16px 32px -10px rgba(0, 0, 0, 0.8);
+  z-index: 10;
+}
+
+/* Chat bubble speech pointer */
+.chat-bubble-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 11px solid transparent;
+  border-right: 11px solid transparent;
+  border-bottom: 11px solid rgba(255, 255, 255, 0.2);
+  z-index: 20;
+}
+
+.chat-bubble-pointer-inner {
+  position: absolute;
+  top: 2px;
+  left: -9px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid #0e162e;
+}
+
+/* Scroll unroll/closing keyframes */
+@keyframes scrollUnroll {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.12) translateY(-14px);
+    clip-path: inset(0 15% 85% 15% round 20px);
+    filter: blur(6px);
+  }
+  65% {
+    opacity: 0.95;
+    transform: scaleY(1.02) translateY(2px);
+    clip-path: inset(0 0% 0% 0% round 20px);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    clip-path: inset(0 0% 0% 0% round 20px);
+    filter: blur(0px);
+  }
+}
+
+@keyframes scrollRollUp {
+  0% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    clip-path: inset(0 0% 0% 0% round 20px);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.15) translateY(-12px);
+    clip-path: inset(0 15% 85% 15% round 20px);
+    filter: blur(4px);
+  }
+}
+
+.scroll-unrolling {
+  animation: scrollUnroll 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+.scroll-rolling-up {
+  animation: scrollRollUp 0.18s cubic-bezier(0.4, 0, 1, 1) forwards;
+  transform-origin: top center;
+}
+
+/* Carousel pagination dot */
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+
+.carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
+
+.carousel-dot.active {
+  width: 24px;
+  background: var(--theme-accent, #c2410c);
+  box-shadow: 0 0 10px var(--theme-accent-glow, rgba(194, 65, 12, 0.5));
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .card, .interactive-card, button, a {
+    transition: none !important;
+    transform: none !important;
+  }
+  .click-ripple {
+    display: none !important;
+  }
+}

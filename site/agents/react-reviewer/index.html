@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>React Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Expert React and JSX code reviewer specializing in hook correctness, render performance, RSC boundaries, and accessibility."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+figure{margin:0}
+figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-cyan-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(6,182,212,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-cyan-300 font-mono">react-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/20 px-2.5 py-0.5 text-xs text-cyan-200">
+          Component Architecture & Hooks
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        react-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Senior frontend engineer specializing in React hook correctness, re-render budgeting, Server/Client component boundaries, and accessible user interfaces.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-cyan-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">*.tsx, *.jsx</div>
+          <div class="text-xs text-white/60">When UI components change</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Read-Only Persona</div>
+          <div class="text-xs text-white/60">Claude 3.5 Sonnet analyzer</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Dedicated inspector for React lifecycle, hooks, and UI safety</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">react-reviewer</code> inspects component rendering loops, ensures accessibility compliance, and audits React-specific security flaws like server action leaks or dangerous HTML injection.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Component Scope</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads full component tree, provider wrappers, and parent context to understand re-render chains.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Hook & Prop Patterns</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Scans for anti-patterns: <code class="text-white font-mono text-[11px]">dangerouslySetInnerHTML</code>, missing <code class="text-white font-mono text-[11px]">key</code> attributes, and inline arrow handlers in loops.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Asset Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Discovers component design system files, CSS modules, Tailwind configs, and shared UI primitives.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Lint & Hook Audit</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes ESLint with <code class="text-white font-mono text-[11px]">eslint-plugin-react-hooks</code> to catch dependency omissions.</p>
+      </div>
+    </div>
+
+    <!-- Jargon glossary -->
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Stale Closure:</strong> when a React hook remembers an old value of a state variable instead of the current one, causing subtle bugs.</span> ·
+      <span class="ml-2"><strong class="text-white">RSC:</strong> React Server Components, which run only on the server and must never leak client interactivity or secrets.</span> ·
+      <span class="ml-2"><strong class="text-white">a11y (Accessibility):</strong> designing user interfaces so people with screen readers and keyboards can navigate effortlessly.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Co-dispatched alongside typescript-reviewer on UI changes</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      When a PR touches <code class="text-white font-mono text-xs">.tsx</code> or <code class="text-white font-mono text-xs">.jsx</code> files, both agents run in parallel: typescript-reviewer validates the types and async logic, while react-reviewer audits the component tree.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Station IV Diff</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Detects JSX / TSX</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Diff matches front-end files, pages, or components.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-blue-500/20 text-blue-300 font-bold text-xs grid place-items-center">TR</span>
+            <span class="text-xs font-mono font-semibold text-blue-300">typescript-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Type & Async Layer</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Validates prop interfaces, strict typing, and Promise resolution.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-cyan-500 bg-cyan-950/40 p-4 shadow-lg shadow-cyan-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500 text-white font-bold text-xs grid place-items-center">RR</span>
+            <span class="text-xs font-mono font-semibold text-cyan-200">react-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Component Architecture</div>
+          <div class="mt-1 text-xs text-cyan-200/80 leading-5">Audits hook dependencies, state mutations, accessibility, and bundle leaks.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Polished UI Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Reliable User Experience</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">No infinite re-render loops or broken tab order shipped to users.</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+        <span>Flow: Diff Inspection → Parallel Specialist Execution → Combined Quality Clearance</span>
+        <span class="text-cyan-300 font-medium">Complete frontend confidence</span>
+      </div>
+    </div>
+
+    <!-- Explicit Scope Split Table (agents/react-reviewer.md:19-34) -->
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">Scope Division: react-reviewer vs typescript-reviewer on .tsx/.jsx files</div>
+      <p class="mt-1 text-xs text-white/60">Both reviewers activate whenever front-end component files are modified, dividing responsibilities without overlap.</p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="w-full text-xs font-mono">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="text-left pb-2 font-medium">Domain Responsibility</th>
+              <th class="text-left pb-2 font-medium text-cyan-300">react-reviewer (Owns)</th>
+              <th class="text-left pb-2 font-medium text-blue-300">typescript-reviewer (Owns)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5 text-white/80">
+            <tr>
+              <td class="py-2.5 font-sans font-medium text-white">Component Lifecycle & State</td>
+              <td class="py-2.5 text-cyan-200">Hook dependency arrays, stale closures, infinite re-renders</td>
+              <td class="py-2.5 text-white/50">Ignored (deferred to React specialist)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-sans font-medium text-white">Type Strictness & Interfaces</td>
+              <td class="py-2.5 text-white/50">Assumes types are verified</td>
+              <td class="py-2.5 text-blue-200">Generic types, tsconfig flags, any/unknown casting</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-sans font-medium text-white">Async & Promises</td>
+              <td class="py-2.5 text-white/50">Async cleanup in useEffect</td>
+              <td class="py-2.5 text-blue-200">Floating promises, try/catch chains, await in loops</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-sans font-medium text-white">Architecture & Boundaries</td>
+              <td class="py-2.5 text-cyan-200">Server Component vs 'use client' boundaries, prop drilling</td>
+              <td class="py-2.5 text-white/50">Ignored (framework agnostic)</td>
+            </tr>
+            <tr>
+              <td class="py-2.5 font-sans font-medium text-white">Accessibility & UX</td>
+              <td class="py-2.5 text-cyan-200">ARIA roles, keyboard handlers on clickables, alt text</td>
+              <td class="py-2.5 text-white/50">Ignored</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CHECKLIST -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">03 — Review checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 4-tier React checklist</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/react-reviewer.md</code>, focused strictly on React-specific vulnerabilities, performance bottlenecks, and accessibility.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — React Security
+        </div>
+        <p class="mt-1 text-xs text-red-200/70">Flaws allowing code execution in client browsers or secret exposure.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Unsanitized <code class="font-mono text-red-300">dangerouslySetInnerHTML</code>:</strong> Rendering untrusted content without DOMPurify sanitization.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Unvalidated URL schemes:</strong> Allowing <code class="font-mono text-red-300">javascript:</code> or <code class="font-mono text-red-300">data:</code> URLs in <code class="font-mono text-red-300">href</code> or <code class="font-mono text-red-300">src</code> props.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Server Action without input schema:</strong> `"use server"` functions accepting raw parameters without Zod validation.</span></li>
+          <li class="flex items-start gap-2"><span class="text-red-400 font-bold">✕</span> <span><strong>Secret in client bundle:</strong> Exposing backend API keys or database strings via <code class="font-mono text-red-300">NEXT_PUBLIC_*</code> or <code class="font-mono text-red-300">VITE_*</code>.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Hook Correctness & Lifecycle
+        </div>
+        <p class="mt-1 text-xs text-amber-200/70">Violating React invariants that cause infinite loops, desynchronized state, or memory leaks.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Conditional hook calls:</strong> Placing <code class="font-mono text-amber-300">useState</code> or <code class="font-mono text-amber-300">useEffect</code> inside if-statements or loops.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Missing hook dependencies:</strong> Omitting functions or variables from <code class="font-mono text-amber-300">useEffect</code> / <code class="font-mono text-amber-300">useCallback</code> dependency arrays.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>State mutation during render:</strong> Calling <code class="font-mono text-amber-300">setState</code> directly in the component body instead of an effect or handler.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">✕</span> <span><strong>Array index as key:</strong> Using list indices as React keys on items that can be sorted, added, or removed.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Render Performance & Boundaries
+        </div>
+        <p class="mt-1 text-xs text-cyan-200/70">Wasted render cycles and jarring layout shifts.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Derived state in useEffect:</strong> Computing state in an effect that could be calculated directly during render.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Missing Suspense boundaries:</strong> Data-fetching components that block the entire page without fallback skeletons.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">✕</span> <span><strong>Unmemoized heavy transforms:</strong> Re-filtering 10,000 items on every render without <code class="font-mono text-cyan-300">useMemo</code>.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Accessibility (a11y) & Clean HTML
+        </div>
+        <p class="mt-1 text-xs text-slate-300/70">Keyboard navigation and assistive technology compatibility.</p>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Non-interactive clickables:</strong> <code class="font-mono">&lt;div onClick&gt;</code> without <code class="font-mono">role="button"</code> or keyboard event listeners.</span></li>
+          <li class="flex items-start gap-2"><span class="text-slate-400 font-bold">✕</span> <span><strong>Missing form labels:</strong> Input fields lacking associated <code class="font-mono">&lt;label&gt;</code> elements or <code class="font-mono">aria-label</code> tags.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: DECISION FLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">04 — Decision process</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured component lifecycle evaluation</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">JSX Diff</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Isolates newly added or modified React components, hooks, and pages.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Scope established</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Hook Check</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Verifies hooks follow rules of hooks and have exhaustive dependency arrays.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Rules of hooks</div>
+      </li>
+      <li class="rounded-xl border-2 border-cyan-500/80 bg-cyan-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-300">Step 3: Boundary</span>
+          <div class="mt-1 font-semibold text-white text-sm">RSC & Secrets</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Audits server-vs-client boundaries; prevents server secrets from entering client bundles.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-cyan-300/80 border-t border-cyan-500/30 pt-2">Data security audit</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">a11y & Keys</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Checks keyboard navigation, screen reader accessibility, and stable key props.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">UX & Accessibility</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">Verdict</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">APPROVE when component lifecycle is sound; BLOCK on leaks or infinite loops.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Reliable shipping</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: CONCRETE CASES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">05 — When it runs</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where react-reviewer engages</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> 1. Infinite re-render prevention
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When an effect triggers a state update that immediately triggers the same effect again, the reviewer catches the missing dependency or condition before it crashes user browsers.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-violet-400"></span> 2. Next.js Server Action audit
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When someone adds a `"use server"` function, the reviewer confirms that permissions and authentication are checked on the server side, rather than trusting client-passed credentials.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
+        <div class="font-semibold text-white flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-emerald-400"></span> 3. Accessible interactive modal
+        </div>
+        <p class="mt-2 text-xs text-white/70">
+          When a new modal dialog is created, it verifies focus trapping, escape key listeners, and aria-modal attributes so keyboard users aren't locked out.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">06 — Output format</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured finding format & actionable remediation</h2>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-amber-400 font-bold">[HIGH] Stale closure in useEffect interval</div>
+      <div class="text-white/60 mt-1">File: <span class="text-white">src/components/Timer.tsx:18</span></div>
+      <div class="text-white/80 mt-1">Issue: setInterval reads `count` from closure without count in dependency array, causing timer to freeze after first tick.</div>
+      <div class="text-white/80 mt-1">Fix: Use functional state updater `setCount(prev => prev + 1)` or add count to dependencies.</div>
+      <div class="mt-3 p-3 rounded-lg bg-black/80 border border-white/5 text-[11px] leading-5">
+        <span class="text-red-400">// BAD: Stale closure captures initial value 0</span><br/>
+        <span class="text-red-400">useEffect(() => {</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;const id = setInterval(() => setCount(count + 1), 1000);</span><br/>
+        <span class="text-red-400">&nbsp;&nbsp;return () => clearInterval(id);</span><br/>
+        <span class="text-red-400">}, []);</span><br/><br/>
+        <span class="text-emerald-400">// GOOD: Functional update accesses latest state cleanly</span><br/>
+        <span class="text-emerald-400">useEffect(() => {</span><br/>
+        <span class="text-emerald-400">&nbsp;&nbsp;const id = setInterval(() => setCount(prev => prev + 1), 1000);</span><br/>
+        <span class="text-emerald-400">&nbsp;&nbsp;return () => clearInterval(id);</span><br/>
+        <span class="text-emerald-400">}, []);</span>
+      </div>
+    </div>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <div class="font-semibold text-sm text-white">React Review Summary Table</div>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full text-xs font-mono">
+          <thead class="text-white/50 border-b border-white/10">
+            <tr>
+              <th class="text-left pb-2 font-medium">Severity</th>
+              <th class="text-left pb-2 font-medium">Count</th>
+              <th class="text-left pb-2 font-medium">Status</th>
+              <th class="text-left pb-2 font-medium">Resolution</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/5">
+            <tr><td class="py-2.5 text-red-400 font-bold">CRITICAL</td><td class="py-2.5 text-white">0</td><td class="py-2.5 text-emerald-400">pass</td><td class="py-2.5 text-white/60">No client secret leaks or XSS</td></tr>
+            <tr><td class="py-2.5 text-amber-400 font-bold">HIGH</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-amber-400">warn</td><td class="py-2.5 text-white/60">Functional state updater recommended</td></tr>
+            <tr><td class="py-2.5 text-cyan-400 font-bold">MEDIUM</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-cyan-400">info</td><td class="py-2.5 text-white/60">Add fallback Suspense skeleton</td></tr>
+            <tr><td class="py-2.5 text-slate-400 font-bold">LOW</td><td class="py-2.5 text-white">1</td><td class="py-2.5 text-slate-400">note</td><td class="py-2.5 text-white/60">Add aria-label to close icon button</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="font-mono text-cyan-300 font-semibold">
+          Verdict: WARNING — Fix stale closure before merging to production.
+        </div>
+        <div class="text-white/50">
+          * Clean components protect UX stability.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">07 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What react-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Generic TypeScript rules</div>
+        <p class="mt-2 text-white/60">
+          Non-React TypeScript questions (union discrimination, Node async loops, TS compiler flags) are owned by <code class="text-cyan-300">typescript-reviewer</code>.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Does not rewrite components</div>
+        <p class="mt-2 text-white/60">
+          The reviewer reports findings with code examples, but never touches source files or auto-applies diffs.
+        </p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">Visual graphic design</div>
+        <p class="mt-2 text-white/60">
+          Subjective aesthetic decisions (color palettes, font choices) are outside scope — focus remains strictly on accessibility, rendering bugs, and security.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">08 — The Reviewer Panel</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
+        <p class="mt-1 text-sm text-white/60">Other expert personas invoked in parallel during review.</p>
+      </div>
+      <a href="../" class="text-sm text-cyan-300 hover:text-white transition">All 18 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">typescript-reviewer</div>
+        <div class="text-xs text-white/50">TypeScript</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Types and async done right.</div>
+      </a>
+      <a href="../type-design-analyzer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-fuchsia-500/15 border border-fuchsia-400/40 text-fuchsia-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(217,70,239,0.25)]" title="Design">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.12 6.4-6.05-4.06a4.95 4.95 0 0 0-5.14 0L3.88 6.4a4.95 4.95 0 0 0-2.38 4.25v7.7a4.95 4.95 0 0 0 2.38 4.25l6.05 4.06a4.95 4.95 0 0 0 5.14 0l6.05-4.06a4.95 4.95 0 0 0 2.38-4.25v-7.7a4.95 4.95 0 0 0-2.38-4.25Z"/><path d="M12 22V12"/><path d="m3.29 7 8.71 5 8.71-5"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">type-design-analyzer</div>
+        <div class="text-xs text-white/50">Design</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks interfaces are simple and clear.</div>
+      </a>
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../silent-failure-hunter/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-red-500/15 border border-red-400/40 text-red-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(239,68,68,0.25)]" title="Reliability">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="m5 19 3-2"/><path d="M20 13h-4"/><path d="M4 13h4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">silent-failure-hunter</div>
+        <div class="text-xs text-white/50">Reliability</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Finds swallowed errors that hide bugs.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 9: LINKS & FOOTER CTA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-cyan-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw React persona definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete Markdown instructions, hook review criteria, and RSC security rules live in <code class="text-white font-mono text-xs">agents/react-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 18 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/react-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View react-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>
