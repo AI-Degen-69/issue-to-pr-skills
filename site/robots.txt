@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://AI-Degen-69.github.io/issue-to-pr-skills/sitemap.xml
