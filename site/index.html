@@ -179,8 +179,11 @@
       <p class="mt-1 text-white/60">Not prompts — structured workflows with steps, checkpoints, and exit criteria. Filter or search.</p>
     </div>
     <div class="flex items-center gap-2">
-      <input id="search" placeholder="Search skills…" class="w-[200px] rounded-full bg-white/5 border border-white/10 px-4 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-violet-400"/>
-      <select id="filter" class="rounded-full bg-white/5 border border-white/10 px-3 py-2 text-sm">
+      <div class="relative">
+        <input id="search" placeholder="Search skills…" aria-label="Search skills" class="w-[200px] rounded-full bg-white/5 border border-white/10 pl-4 pr-8 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-violet-400"/>
+        <button id="clearSearch" aria-label="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 hidden h-6 w-6 rounded-full bg-white/10 hover:bg-white/20 grid place-items-center text-xs">×</button>
+      </div>
+      <select id="filter" aria-label="Filter by group" class="rounded-full bg-white/5 border border-white/10 px-3 py-2 text-sm">
         <option value="all">All groups</option>
         <option value="pipeline">Pipeline (10)</option>
         <option value="build">Build</option>
@@ -194,7 +197,7 @@
     </div>
   </div>
   <div id="skillGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  <div class="mt-4 text-center text-sm text-white/50" id="skillCount"></div>
+  <div class="mt-4 text-center text-sm text-white/50" id="skillCount" aria-live="polite" aria-atomic="true"></div>
 </section>
 
 <!-- AGENTS -->

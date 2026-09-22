@@ -107,6 +107,7 @@ async function loadSkills(){
   }catch{ allSkills=[]; }
   renderSkills();
 }
+let _debounceT=null;
 function renderSkills(){
   const q=(document.getElementById('search').value||'').toLowerCase();
   const f=document.getElementById('filter').value;
@@ -114,23 +115,34 @@ function renderSkills(){
   if(f!=='all') list=list.filter(s=> (GROUP[s.name]||'other')===f);
   if(q) list=list.filter(s=> s.name.includes(q) || s.desc.toLowerCase().includes(q));
   const el=document.getElementById('skillGrid');
-  el.innerHTML=list.map(s=>{
-    const g=GROUP[s.name]||'other';
-    const label=GROUP_LABEL[g]||g;
-    const isPipeline=STATIONS.some(x=>x.id===s.name);
-    return `
-    <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.name}" target="_blank" class="card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.06] transition block">
-      <div class="flex items-center gap-2">
-        <span class="text-[11px] uppercase tracking-widest px-2 py-1 rounded-full ${isPipeline?'bg-violet-500/20 text-violet-200 border border-violet-400/20':'bg-white/10 text-white/60 border border-white/10'}">${label}</span>
-        ${isPipeline?'<span class="text-[11px] px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/20">Station</span>':''}
-      </div>
-      <div class="mt-3 font-mono text-[13px] font-semibold">${s.name}</div>
-      <div class="mt-1 text-sm leading-6 text-white/60 line-clamp-3">${s.desc}</div>
-      <div class="mt-3 text-xs font-semibold text-violet-300">Open →</div>
-    </a>`;
-  }).join('');
+  const clearBtn=document.getElementById('clearSearch');
+  if(clearBtn){ if(q) clearBtn.classList.remove('hidden'); else clearBtn.classList.add('hidden'); }
+  if(list.length===0){
+    const qRaw=document.getElementById('search').value;
+    el.innerHTML=`<div class="col-span-full rounded-2xl border border-white/10 bg-white/[.04] p-6 text-center">
+      <div class="text-sm font-semibold">No skills match “${qRaw}”</div>
+      <div class="mt-1 text-sm text-white/60">Try <button onclick="document.getElementById('search').value='';renderSkills()" class="underline decoration-violet-400">clear</button> or pills: <span class="inline-flex gap-1 flex-wrap justify-center"><button onclick="document.getElementById('filter').value='pipeline';renderSkills()" class="px-2 py-1 rounded-full bg-violet-500/20 text-xs">Pipeline</button><button onclick="document.getElementById('filter').value='build';renderSkills()" class="px-2 py-1 rounded-full bg-white/10 text-xs">Build</button></span></div>
+    </div>`;
+  } else {
+    el.innerHTML=list.map(s=>{
+      const g=GROUP[s.name]||'other';
+      const label=GROUP_LABEL[g]||g;
+      const isPipeline=STATIONS.some(x=>x.id===s.name);
+      return `
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.name}" target="_blank" class="card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.06] transition block">
+        <div class="flex items-center gap-2">
+          <span class="text-[11px] uppercase tracking-widest px-2 py-1 rounded-full ${isPipeline?'bg-violet-500/20 text-violet-200 border border-violet-400/20':'bg-white/10 text-white/60 border border-white/10'}">${label}</span>
+          ${isPipeline?'<span class="text-[11px] px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-400/20">Station</span>':''}
+        </div>
+        <div class="mt-3 font-mono text-[13px] font-semibold">${s.name}</div>
+        <div class="mt-1 text-sm leading-6 text-white/60 line-clamp-3">${s.desc}</div>
+        <div class="mt-3 text-xs font-semibold text-violet-300">Open →</div>
+      </a>`;
+    }).join('');
+  }
   document.getElementById('skillCount').textContent=`Showing ${list.length} of ${allSkills.length} skills`;
 }
+function debouncedRender(){ clearTimeout(_debounceT); _debounceT=setTimeout(renderSkills,180); }
 
 // agents
 const AGENTS=[
@@ -180,6 +192,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderMini(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
   showStation(1);
   setupMobileNav();
-  document.getElementById('search').addEventListener('input', renderSkills);
+  document.getElementById('search').addEventListener('input', debouncedRender);
+  document.getElementById('clearSearch')?.addEventListener('click',()=>{document.getElementById('search').value=''; renderSkills(); document.getElementById('search').focus();});
   document.getElementById('filter').addEventListener('change', renderSkills);
 });
