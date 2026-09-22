@@ -41,9 +41,9 @@
     </a>
     <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
       <a href="#lifecycle" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Lifecycle</a>
-      <a href="#catalog" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Skills</a>
-      <a href="#agents" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Agents</a>
-      <a href="#install" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Docs</a>
+      <a href="./skills/" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Skills</a>
+      <a href="./agents/" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Agents</a>
+      <a href="./docs/" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">Docs</a>
       <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 rounded">GitHub ↗</a>
     </div>
     <div class="flex items-center gap-2">
@@ -56,9 +56,9 @@
   <div id="mobileDrawer" hidden class="md:hidden border-t border-white/10 bg-[#020617] px-5 py-4">
     <div class="flex flex-col gap-1 text-sm">
       <a href="#lifecycle" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Lifecycle</a>
-      <a href="#catalog" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Skills</a>
-      <a href="#agents" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Agents</a>
-      <a href="#install" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Docs</a>
+      <a href="./skills/" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Skills</a>
+      <a href="./agents/" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Agents</a>
+      <a href="./docs/" class="py-2 px-2 rounded hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">Docs</a>
       <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="py-2 px-2 rounded hover:bg-white/5">GitHub ↗</a>
       <a href="#install" class="mt-2 inline-flex justify-center rounded-full bg-white text-slate-900 px-4 py-2 text-sm font-semibold">Get started</a>
     </div>
@@ -176,34 +176,18 @@
   </div>
 </section>
 
-<!-- CATALOG -->
+<!-- CATALOG PREVIEW → full page at /skills/ -->
 <section id="catalog" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
   <div class="flex flex-wrap items-end justify-between gap-4">
     <div>
       <div class="text-xs uppercase tracking-[.14em] text-violet-300">03 — The catalog</div>
       <h2 class="mt-2 text-[28px] lg:text-[32px] font-bold">43 skills spanning the whole delivery</h2>
-      <p class="mt-1 text-white/60">Not prompts — structured workflows with steps, checkpoints, and exit criteria. Filter or search.</p>
+      <p class="mt-1 text-white/60 max-w-[640px]">On this page a taste of the recipes. The full searchable catalog with plain-language explainers lives on its own page — built for non-coders too.</p>
     </div>
-    <div class="flex items-center gap-2">
-      <div class="relative">
-        <input id="search" placeholder="Search skills…" aria-label="Search skills" class="w-[200px] rounded-full bg-white/5 border border-white/10 pl-4 pr-8 py-2 text-sm placeholder:text-white/40 focus:outline-none focus:border-violet-400"/>
-        <button id="clearSearch" aria-label="Clear search" class="absolute right-2 top-1/2 -translate-y-1/2 hidden h-6 w-6 rounded-full bg-white/10 hover:bg-white/20 grid place-items-center text-xs">×</button>
-      </div>
-      <select id="filter" aria-label="Filter by group" class="rounded-full bg-white/5 border border-white/10 px-3 py-2 text-sm">
-        <option value="all">All groups</option>
-        <option value="pipeline">Pipeline (10)</option>
-        <option value="build">Build</option>
-        <option value="define">Define</option>
-        <option value="verify">Verify</option>
-        <option value="review">Review</option>
-        <option value="ship">Ship</option>
-        <option value="frontend">Frontend</option>
-        <option value="api">API</option>
-      </select>
-    </div>
+    <a href="./skills/" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">Browse all 43 →</a>
   </div>
-  <div id="skillGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  <div class="mt-4 text-center text-sm text-white/50" id="skillCount" aria-live="polite" aria-atomic="true"></div>
+  <div id="skillGridPreview" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  <div class="mt-6 text-center"><a href="./skills/" class="inline-flex items-center gap-2 rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold hover:bg-violet-500">Open skills page with search & filters →</a></div>
 </section>
 
 <!-- AGENTS -->

@@ -27,6 +27,12 @@ const GROUP_LABEL = {pipeline:'Pipeline (10)', build:'Build', define:'Define', v
 
 let allSkills=[];
 
+function fetchSkillsJson(){
+  // works from / and /skills/ etc
+  const tries=['./skills.json','../skills.json','skills.json'];
+  return tries.reduce((p,url)=>p.catch(()=>fetch(url).then(r=>{if(!r.ok) throw new Error(url); return r.json()})), Promise.reject());
+}
+
 function copyCmd(){
   const t=document.getElementById('installCmd').textContent;
   navigator.clipboard.writeText(t);
@@ -102,10 +108,10 @@ function renderStations(){
 // catalog
 async function loadSkills(){
   try{
-    const res=await fetch('./skills.json');
-    allSkills=await res.json();
+    allSkills=await fetchSkillsJson();
   }catch{ allSkills=[]; }
   renderSkills();
+  renderPreview();
 }
 let _debounceT=null;
 function renderSkills(){
@@ -140,9 +146,19 @@ function renderSkills(){
       </a>`;
     }).join('');
   }
-  document.getElementById('skillCount').textContent=`Showing ${list.length} of ${allSkills.length} skills`;
+  const sc2=document.getElementById('skillCount');
+  if(sc2) sc2.textContent=`Showing ${list.length} of ${allSkills.length} skills`;
 }
 function debouncedRender(){ clearTimeout(_debounceT); _debounceT=setTimeout(renderSkills,180); }
+function renderPreview(){
+  const el=document.getElementById('skillGridPreview');
+  if(!el || !allSkills.length) return;
+  const preview=allSkills.slice(0,6);
+  el.innerHTML=preview.map(s=>{
+    const g=GROUP[s.name]||'other'; const label=GROUP_LABEL[g]||g;
+    return `<a href="./skills/" class="card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.06]"><div class="text-[11px] uppercase tracking-widest px-2 py-1 rounded-full bg-white/10 inline-block">${label}</div><div class="mt-2 font-mono text-sm font-semibold">${s.name}</div><div class="mt-1 text-sm text-white/60 line-clamp-2">${s.desc}</div></a>`;
+  }).join('');
+}
 
 // agents
 const AGENTS=[
