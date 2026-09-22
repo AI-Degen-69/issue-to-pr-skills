@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Agents — Issue-to-PR Skills</title>
+<meta name="description" content="18 reviewer personas in plain words: who checks what, why a panel beats a stamp."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased">
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../" class="flex items-center gap-3"><div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div><span class="font-semibold">issue-to-pr<span class="text-white/50">.skills</span></span></a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../skills/" class="hover:text-white">Skills</a>
+      <a href="./" class="text-white font-semibold">Agents</a>
+      <a href="../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white">← Home</a>
+  </div>
+</nav>
+<section class="relative overflow-hidden border-b border-white/5">
+  <div class="absolute inset-0" style="background:radial-gradient(600px 300px at 70% 0%, rgba(34,211,238,.14), transparent)"></div>
+  <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-12">
+    <div class="inline-flex items-center gap-2 rounded-full bg-cyan-500/15 border border-cyan-400/20 px-3 py-1 text-xs text-cyan-200">Plain words — you don't need to code</div>
+    <h1 class="mt-4 text-[30px] lg:text-[40px] font-extrabold tracking-tight leading-none">Reviewers are specialists. The AI asks the right ones.</h1>
+    <p class="mt-3 max-w-[720px] text-[16px] leading-7 text-white/70">
+      No single reviewer catches everything. So we keep <span class="text-white">18 narrow experts</span> — one for security, one for React, one for data mistakes, one for chasing silent failures. The AI picks only the ones that match your change. If a specialist isn't installed, it's skipped — never faked.
+    </p>
+    <div class="mt-4 flex gap-2 text-sm"><a href="#agents" class="rounded-full bg-white text-slate-900 px-5 py-2 font-semibold">Meet the 18 ↓</a><a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 font-semibold hover:bg-white/15">Back to lifecycle</a></div>
+  </div>
+</section>
+<section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+  <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5 text-sm leading-6">
+    <div class="font-semibold">How it works — in 20 seconds</div>
+    <div class="mt-2 text-white/60">1. You change code → 2. The AI looks at <em class="text-white not-italic">what</em> changed → 3. It calls only the relevant reviewers in parallel → 4. You get one combined go / no-go.</div>
+  </div>
+</section>
+<section id="agents" class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
+  <h2 class="text-[24px] font-bold">All 18 agents</h2>
+  <p class="text-white/60 text-sm">Plain description + when they run. Click to open the persona.</p>
+  <div id="agentGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+</section>
+<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+<script>
+const AGENTS=[['code-reviewer','General','Checks overall quality — would a senior engineer approve?'],['security-reviewer','Security','Looks for auth, secrets, injection — OWASP.'],['typescript-reviewer','TypeScript','Types and async done right.'],['react-reviewer','React','Hooks, accessibility, rendering.'],['python-reviewer','Python','Async, types, clean style.'],['go-reviewer','Go','Go routines and errors.'],['rust-reviewer','Rust','Lifetimes and safe code.'],['database-reviewer','Data','Slow queries, missing indexes.'],['silent-failure-hunter','Reliability','Finds swallowed errors that hide bugs.'],['tdd-guide','Testing','Makes sure tests are written first.'],['build-error-resolver','Build','Fixes build failures.'],['react-build-resolver','React Build','Fixes React builds.'],['go-build-resolver','Go Build','Fixes Go builds.'],['rust-build-resolver','Rust Build','Fixes Rust builds.'],['refactor-cleaner','Cleanup','Removes dead code safely.'],['type-design-analyzer','Design','Checks interfaces are simple and clear.'],['code-explorer','Explorer','Traces code paths in unfamiliar repos.'],['doc-updater','Docs','Keeps docs in sync with code.']];
+document.getElementById('agentGrid').innerHTML=AGENTS.map(([id,role,desc])=>`<a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/agents/${id}.md" target="_blank" class="rounded-2xl border border-white/10 bg-white/[.04] p-5 hover:bg-white/[.06] block"><div class="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold">${role.slice(0,2).toUpperCase()}</div><div class="mt-3 font-mono text-sm font-semibold">${id}</div><div class="text-xs text-white/50">${role}</div><div class="mt-1 text-sm text-white/60 leading-5">${desc}</div></a>`).join('');
+</script>
+</body>
+</html>
