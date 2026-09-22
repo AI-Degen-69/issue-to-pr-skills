@@ -16,9 +16,12 @@
 *{scroll-behavior:smooth}
 .hero-grid{background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:32px 32px}
 .glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
-.card:hover{transform:translateY(-2px);box-shadow:0 20px 40px -12px rgba(124,58,237,.25)}
+.card{transition:transform 200ms, box-shadow 200ms, border-color 200ms}
+.card:hover{transform:translateY(-3px);box-shadow:0 20px 40px -12px rgba(124,58,237,.35);border-color:rgba(124,58,237,.3)!important}
 .pipeline-line{stroke:rgba(124,58,237,.35);stroke-width:2;stroke-dasharray:6 6}
 .station-dot{filter:drop-shadow(0 0 8px rgba(124,58,237,.6))}
+.reveal{opacity:0;transform:translateY(8px);transition:opacity 400ms ease, transform 400ms ease}
+.reveal.in{opacity:1;transform:none}
 ::-webkit-scrollbar{height:8px;width:8px}::-webkit-scrollbar-thumb{background:#334155;border-radius:999px}
 </style>
 </head>
@@ -63,13 +66,13 @@
 <!-- HERO -->
 <section class="relative overflow-hidden">
   <div class="absolute inset-0 hero-grid"></div>
-  <div class="absolute -top-40 left-1/2 -translate-x-1/2 h-[700px] w-[1200px] bg-gradient-to-b from-violet-600/20 via-fuchsia-500/10 to-transparent blur-[80px] rounded-full pointer-events-none"></div>
+  <div class="absolute -top-40 left-1/2 -translate-x-1/2 h-[700px] w-[120vw] max-w-[1200px] bg-gradient-to-b from-violet-600/20 via-fuchsia-500/10 to-transparent blur-[80px] rounded-full pointer-events-none"></div>
   <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 pt-14 pb-10 lg:pt-20 lg:pb-12">
     <div class="inline-flex items-center gap-2 rounded-full bg-white/5 border border-white/10 px-3 py-1 text-xs text-white/80">
       <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
       Trending on GitHub · Works with 70+ agents — Claude · Codex · Cursor · OpenCode · Copilot · Windsurf
     </div>
-    <h1 class="mt-6 text-[36px] lg:text-[56px] font-extrabold tracking-tight leading-[.95] max-w-[760px]">
+    <h1 class="mt-6 text-[32px] sm:text-[42px] lg:text-[56px] font-extrabold tracking-tight leading-[1.0] lg:leading-[.95] max-w-[760px]">
       One issue.<br/>
       <span class="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-cyan-300 bg-clip-text text-transparent">From raw idea</span><br/>
       to merged PR to showcase.
