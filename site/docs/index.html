@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Docs — Issue-to-PR Skills</title>
+<meta name="description" content="Install in 30 seconds, plain steps for non-coders: copy one command, pick an issue, follow the stations."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased">
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../" class="flex items-center gap-3"><div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div><span class="font-semibold">issue-to-pr<span class="text-white/50">.skills</span></span></a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../skills/" class="hover:text-white">Skills</a>
+      <a href="../agents/" class="hover:text-white">Agents</a>
+      <a href="./" class="text-white font-semibold">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white">← Home</a>
+  </div>
+</nav>
+<section class="relative overflow-hidden border-b border-white/5">
+  <div class="absolute inset-0" style="background:radial-gradient(600px 300px at 20% 0%, rgba(16,185,129,.14), transparent)"></div>
+  <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-12">
+    <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/15 border border-emerald-400/20 px-3 py-1 text-xs text-emerald-200">No scary code — 1 command, 3 clicks</div>
+    <h1 class="mt-4 text-[30px] lg:text-[40px] font-extrabold tracking-tight leading-none">Get your AI to follow a real process.</h1>
+    <p class="mt-3 max-w-[720px] text-[16px] leading-7 text-white/70">
+      You don't need to understand the code. Pick how you install (one line), open any repo with issues, and let the stations guide the AI — step by step, with proof at every gate.
+    </p>
+    <div class="mt-5 flex gap-2"><a href="#install" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold">Install in 30s ↓</a><a href="https://github.com/AI-Degen-69/issue-to-pr-skills#readme" target="_blank" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">Full README ↗</a></div>
+  </div>
+</section>
+<section id="install" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+  <h2 class="text-[24px] font-bold">3 ways in — pick one</h2>
+  <div class="mt-4 grid lg:grid-cols-3 gap-4">
+    <div class="rounded-2xl bg-black/40 border border-white/10 p-5"><div class="text-xs uppercase tracking-widest text-white/50">Any agent — easiest</div><code class="mt-2 block font-mono text-sm">npx skills add AI-Degen-69/issue-to-pr-skills</code><div class="mt-2 text-sm text-white/60">Works with Claude, Cursor, Copilot, OpenCode and 70 more. Try <code class="px-1 py-0.5 rounded bg-white/10">--list</code> to browse first.</div></div>
+    <div class="rounded-2xl bg-black/40 border border-white/10 p-5"><div class="text-xs uppercase tracking-widest text-white/50">Claude Code — plugin</div><code class="mt-2 block font-mono text-sm">/plugin marketplace add AI-Degen-69/issue-to-pr-skills</code><code class="mt-1 block font-mono text-sm">/plugin install issue-to-pr-skills@ai-degen-marketplace</code><div class="mt-2 text-sm text-white/60">Auto-updates.</div></div>
+    <div class="rounded-2xl bg-black/40 border border-white/10 p-5"><div class="text-xs uppercase tracking-widest text-white/50">Manual</div><code class="mt-2 block font-mono text-sm">copy skills/ → .agents/skills/</code><div class="mt-2 text-sm text-white/60">Copy folders yourself. See getting-started guide.</div></div>
+  </div>
+  <div class="mt-6 grid lg:grid-cols-3 gap-4 text-sm">
+    <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">What you need</div><div class="mt-1 text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">git</code> + <code class="px-1 py-0.5 rounded bg-white/10">gh</code> (GitHub CLI). CodeRabbit is optional — without it, the AI does the review.</div></div>
+    <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">First run — 1-2-3</div><div class="mt-1 text-white/60">1. Open a repo with issues → 2. Type <code class="px-1 py-0.5 rounded bg-white/10">/x-workflow-issue</code> → 3. Pick an issue and follow the stations.</div></div>
+    <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">How to know it worked</div><div class="mt-1 text-white/60">Each station ends with a short report: what was done, proof it works, and the single next step. Run <code class="px-1 py-0.5 rounded bg-white/10">npm run validate</code> to check locally.</div></div>
+  </div>
+</section>
+<section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
+  <h3 class="font-semibold">Project structure — where things live</h3>
+  <div class="mt-4 overflow-x-auto">
+    <table class="w-full text-sm"><thead class="text-white/50"><tr><th class="text-left font-medium pb-2">Layer</th><th class="text-left font-medium pb-2">Paths</th><th class="text-left font-medium pb-2">Purpose</th></tr></thead><tbody class="divide-y divide-white/5"><tr><td class="py-2 font-mono">Shared core</td><td class="py-2 font-mono">skills/ (43)</td><td class="py-2 text-white/60">Workflows</td></tr><tr><td class="py-2 font-mono">Reviewers</td><td class="py-2 font-mono">agents/ (18)</td><td class="py-2 text-white/60">Specialists</td></tr><tr><td class="py-2 font-mono">Docs</td><td class="py-2 font-mono">docs/</td><td class="py-2 text-white/60">Guides</td></tr><tr><td class="py-2 font-mono">Site</td><td class="py-2 font-mono">site/</td><td class="py-2 text-white/60">This website</td></tr></tbody></table>
+  </div>
+</section>
+<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+</body>
+</html>
