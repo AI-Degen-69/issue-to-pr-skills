@@ -203,10 +203,10 @@ const AGENT_GRADIENTS = {
   'rust-reviewer': 'from-orange-500 to-amber-800',
   'database-reviewer': 'from-emerald-500 to-teal-700',
   'security-reviewer': 'from-rose-500 to-red-700',
-  'silent-failure-hunter': 'from-slate-500 to-amber-700',
+  'silent-failure-hunter': 'from-red-500 to-red-800',
   'tdd-guide': 'from-green-500 to-emerald-700',
-  'build-error-resolver': 'from-red-500 to-red-800',
-  'react-build-resolver': 'from-cyan-600 to-slate-800',
+  'build-error-resolver': 'from-amber-500 to-amber-800',
+  'react-build-resolver': 'from-cyan-400 to-cyan-700',
   'go-build-resolver': 'from-sky-600 to-slate-800',
   'rust-build-resolver': 'from-orange-600 to-stone-800',
   'doc-updater': 'from-indigo-500 to-violet-700',
@@ -222,13 +222,13 @@ function getPersonaIconSvg(agentId) {
       e = '<path d="M20 34l-3 2 3 2M28 34l3 2-3 2" stroke="white" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
       break;
     case 'typescript-reviewer':
-      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">TS</text>';
+      e = '<g transform="translate(18,27) scale(0.5)" fill="white"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></g>';
       break;
     case 'react-reviewer':
       e = '<ellipse cx="24" cy="36" rx="5" ry="2" stroke="white" stroke-width="1" fill="none"/><ellipse cx="24" cy="36" rx="5" ry="2" transform="rotate(60 24 36)" stroke="white" stroke-width="0.8" fill="none"/><ellipse cx="24" cy="36" rx="5" ry="2" transform="rotate(120 24 36)" stroke="white" stroke-width="0.8" fill="none"/><circle cx="24" cy="36" r="1" fill="white"/>';
       break;
     case 'python-reviewer':
-      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">Py</text>';
+      e = '<g transform="translate(18,27) scale(0.5)" fill="white"><path d="M11.914 0C5.82 0 6.2 2.656 6.2 2.656l.006 2.753h5.814v.826H3.9S0 5.78 0 11.966c0 6.183 3.407 5.96 3.407 5.96h2.036v-2.863s-.11-3.414 3.355-3.414h5.786s3.243.054 3.243-3.14V3.14S18.358 0 11.914 0zm-3.21 1.84a1.07 1.07 0 1 1 0 2.14 1.07 1.07 0 0 1 0-2.14zm3.382 22.16c6.095 0 5.714-2.656 5.714-2.656l-.006-2.753H11.98v-.826h8.12s3.9.455 3.9-5.731c0-6.183-3.407-5.96-3.407-5.96h-2.036v2.863s.11 3.414-3.355 3.414H9.416s-3.243-.054-3.243 3.14v5.367s-.532 3.14 5.913 3.14zm3.21-1.84a1.07 1.07 0 1 1 0-2.14 1.07 1.07 0 0 1 0 2.14z"/></g>';
       break;
     case 'go-reviewer':
       e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">Go</text>';
@@ -243,13 +243,13 @@ function getPersonaIconSvg(agentId) {
       e = '<path d="M24 32l3 1.2v2c0 2-1.3 3.2-3 3.8-1.7-0.6-3-1.8-3-3.8v-2z" stroke="white" stroke-width="1.1" fill="none"/><circle cx="24" cy="36" r="0.9" fill="white"/>';
       break;
     case 'silent-failure-hunter':
-      e = '<circle cx="22.5" cy="35" r="2.8" stroke="white" stroke-width="1.2" fill="none"/><path d="M24.5 37l3 3" stroke="white" stroke-width="1.4" stroke-linecap="round"/>';
+      e = '<g transform="translate(18,27) scale(0.5)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="14" x="8" y="6" rx="4"/><path d="m19 7-3 2"/><path d="m5 7 3 2"/><path d="m19 19-3-2"/><path d="M4 13h4"/><path d="M20 13h-4"/><path d="m10 4 1 2"/><path d="m14 4-1 2"/></g>';
       break;
     case 'tdd-guide':
-      e = '<polyline points="20,36 23,39 28.5,33.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+      e = '<g transform="translate(18,27) scale(0.5)" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V2"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="m5.52 16 12.96 0"/></g>';
       break;
     case 'build-error-resolver':
-      e = '<circle cx="24" cy="36" r="4" stroke="white" stroke-width="1.2" fill="none"/><path d="M22 34l4 4M26 34l-4 4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>';
+      e = '<g transform="translate(18,27) scale(0.5)" fill="white"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></g>';
       break;
     case 'react-build-resolver':
       e = '<ellipse cx="24" cy="36" rx="4" ry="1.6" stroke="white" stroke-width="1" fill="none"/><ellipse cx="24" cy="36" rx="4" ry="1.6" transform="rotate(60 24 36)" stroke="white" stroke-width="0.8" fill="none"/><circle cx="24" cy="36" r="0.9" fill="white"/>';
