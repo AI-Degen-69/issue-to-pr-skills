@@ -145,6 +145,131 @@ const STATIONS_FLOW = [
 ];
 
 
+const HUMAN_TITLES = {
+  'context-engineering': 'Engineering Context',
+  'spec-driven-development': 'Spec-Driven Development',
+  'constraint-driven-development': 'Constraint-Driven Development',
+  'planning-and-task-breakdown': 'Planning & Task Breakdown',
+  'interview-me': 'Operator Interview',
+  'idea-refine': 'Idea Refining',
+  'doubt-driven-development': 'Doubt-Driven Development',
+  'test-driven-development': 'Test-Driven Development',
+  'source-driven-development': 'Source-Driven Development',
+  'api-and-interface-design': 'API & Interface Design',
+  'code-simplification': 'Code Simplification',
+  'debugging-and-error-recovery': 'Diagnosing Bugs',
+  'diagnosing-bugs': 'Root-Cause Analysis',
+  'incremental-implementation': 'Incremental Implementation',
+  'click-path-audit': 'Click-Path Audit',
+  'browser-testing-with-devtools': 'Browser Testing',
+  'frontend-ui-engineering': 'Frontend UI Engineering',
+  'verification-before-completion': 'Final Verification',
+  'code-review-and-quality': 'Code Review & Quality',
+  'security-and-hardening': 'Security Hardening',
+  'performance-optimization': 'Performance Tuning',
+  'web-design-guidelines': 'Web Design Guidelines',
+  'git-workflow-and-versioning': 'Git Workflow & Versioning',
+  'documentation-and-adrs': 'Documentation & ADRs',
+  'deprecation-and-migration': 'Deprecation & Migration',
+  'pipeline-triage': 'Pipeline Triage',
+  'create-issue': 'Create Issue',
+  'iii-build-plan': 'Build Plan',
+  'tailwind-design-system': 'Tailwind Design System',
+  'code-reviewer': 'Code Reviewer',
+  'typescript-reviewer': 'TypeScript Reviewer',
+  'react-reviewer': 'React Reviewer',
+  'python-reviewer': 'Python Reviewer',
+  'go-reviewer': 'Go Reviewer',
+  'rust-reviewer': 'Rust Reviewer',
+  'database-reviewer': 'Database Reviewer',
+  'security-reviewer': 'Security Reviewer',
+  'silent-failure-hunter': 'Silent Failure Hunter',
+  'tdd-guide': 'TDD Guide',
+  'build-error-resolver': 'Build Error Resolver',
+  'react-build-resolver': 'React Build Resolver',
+  'go-build-resolver': 'Go Build Resolver',
+  'rust-build-resolver': 'Rust Build Resolver',
+  'doc-updater': 'Documentation Updater',
+  'code-explorer': 'Code Explorer'
+};
+
+// Role-color gradients for agent icon boxes (overrides data gradient: red for build-error-resolver, darker for build resolvers, etc.)
+const AGENT_GRADIENTS = {
+  'code-reviewer': 'from-violet-600 to-purple-700',
+  'typescript-reviewer': 'from-[#3178C6] to-blue-800',
+  'react-reviewer': 'from-cyan-400 to-cyan-700',
+  'python-reviewer': 'from-amber-400 to-yellow-600',
+  'go-reviewer': 'from-sky-400 to-sky-700',
+  'rust-reviewer': 'from-orange-500 to-amber-800',
+  'database-reviewer': 'from-emerald-500 to-teal-700',
+  'security-reviewer': 'from-rose-500 to-red-700',
+  'silent-failure-hunter': 'from-slate-500 to-amber-700',
+  'tdd-guide': 'from-green-500 to-emerald-700',
+  'build-error-resolver': 'from-red-500 to-red-800',
+  'react-build-resolver': 'from-cyan-600 to-slate-800',
+  'go-build-resolver': 'from-sky-600 to-slate-800',
+  'rust-build-resolver': 'from-orange-600 to-stone-800',
+  'doc-updater': 'from-indigo-500 to-violet-700',
+  'code-explorer': 'from-slate-500 to-slate-700'
+};
+
+// Persona bust icons for agents: currentColor figure + white emblem on chest
+function getPersonaIconSvg(agentId) {
+  const base = '<circle cx="24" cy="14" r="8" fill="rgba(0,0,0,.45)"/><path d="M8 43 C8 31 15 27 24 27 C33 27 40 31 40 43 Z" fill="rgba(0,0,0,.45)"/>';
+  let e = '';
+  switch (agentId) {
+    case 'code-reviewer':
+      e = '<path d="M20 34l-3 2 3 2M28 34l3 2-3 2" stroke="white" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+      break;
+    case 'typescript-reviewer':
+      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">TS</text>';
+      break;
+    case 'react-reviewer':
+      e = '<ellipse cx="24" cy="36" rx="5" ry="2" stroke="white" stroke-width="1" fill="none"/><ellipse cx="24" cy="36" rx="5" ry="2" transform="rotate(60 24 36)" stroke="white" stroke-width="0.8" fill="none"/><ellipse cx="24" cy="36" rx="5" ry="2" transform="rotate(120 24 36)" stroke="white" stroke-width="0.8" fill="none"/><circle cx="24" cy="36" r="1" fill="white"/>';
+      break;
+    case 'python-reviewer':
+      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">Py</text>';
+      break;
+    case 'go-reviewer':
+      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">Go</text>';
+      break;
+    case 'rust-reviewer':
+      e = '<circle cx="24" cy="36" r="2.6" stroke="white" stroke-width="1.2" fill="none"/><path d="M24 31v2M24 39v-2M19 36h2M29 36h-2M20.5 32.5l1.4 1.4M27.5 39.5l-1.4-1.4M27.5 32.5l-1.4 1.4M20.5 39.5l1.4-1.4" stroke="white" stroke-width="1"/>';
+      break;
+    case 'database-reviewer':
+      e = '<ellipse cx="24" cy="33.5" rx="3.5" ry="1.4" stroke="white" stroke-width="1.1" fill="none"/><path d="M20.5 33.5v4c0 0.8 1.6 1.4 3.5 1.4s3.5-0.6 3.5-1.4v-4" stroke="white" stroke-width="1.1" fill="none"/>';
+      break;
+    case 'security-reviewer':
+      e = '<path d="M24 32l3 1.2v2c0 2-1.3 3.2-3 3.8-1.7-0.6-3-1.8-3-3.8v-2z" stroke="white" stroke-width="1.1" fill="none"/><circle cx="24" cy="36" r="0.9" fill="white"/>';
+      break;
+    case 'silent-failure-hunter':
+      e = '<circle cx="22.5" cy="35" r="2.8" stroke="white" stroke-width="1.2" fill="none"/><path d="M24.5 37l3 3" stroke="white" stroke-width="1.4" stroke-linecap="round"/>';
+      break;
+    case 'tdd-guide':
+      e = '<polyline points="20,36 23,39 28.5,33.5" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+      break;
+    case 'build-error-resolver':
+      e = '<circle cx="24" cy="36" r="4" stroke="white" stroke-width="1.2" fill="none"/><path d="M22 34l4 4M26 34l-4 4" stroke="white" stroke-width="1.4" stroke-linecap="round"/>';
+      break;
+    case 'react-build-resolver':
+      e = '<ellipse cx="24" cy="36" rx="4" ry="1.6" stroke="white" stroke-width="1" fill="none"/><ellipse cx="24" cy="36" rx="4" ry="1.6" transform="rotate(60 24 36)" stroke="white" stroke-width="0.8" fill="none"/><circle cx="24" cy="36" r="0.9" fill="white"/>';
+      break;
+    case 'go-build-resolver':
+      e = '<text x="24" y="39" text-anchor="middle" font-size="9" font-weight="bold" font-family="monospace" fill="white">Go</text>';
+      break;
+    case 'rust-build-resolver':
+      e = '<circle cx="24" cy="36" r="2.4" stroke="white" stroke-width="1.1" fill="none"/><path d="M24 32v1.6M24 38.4V40M20 36h1.6M28 36h-1.6" stroke="white" stroke-width="0.9"/>';
+      break;
+    case 'doc-updater':
+      e = '<rect x="21" y="32.5" width="6" height="7" rx="0.8" stroke="white" stroke-width="1.1" fill="none"/><path d="M22.5 35h3M22.5 36.8h3" stroke="white" stroke-width="0.9" stroke-linecap="round"/>';
+      break;
+    case 'code-explorer':
+    default:
+      e = '<circle cx="24" cy="36" r="3.6" stroke="white" stroke-width="1.1" fill="none"/><polygon points="24,33.2 25.2,36 24,38.8 22.8,36" fill="white"/>';
+      break;
+  }
+  return `<svg viewBox="0 0 48 48" class="w-9 h-9 text-white" fill="none">${base}${e}</svg>`;
+}
 // Helper to render SVG icons
 function getSkillIconSvg(iconType) {
   switch (iconType) {
@@ -263,16 +388,15 @@ function renderStationsFlow() {
         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSkillModal('${skill.id}', '${station.id}')}"
       >
         <div class="flex items-start sm:items-center gap-3.5 sm:gap-4 flex-1 min-w-0">
-          <div class="h-11 w-11 rounded-xl bg-gradient-to-br ${skill.gradient} flex items-center justify-center shrink-0 border border-white/15 shadow-md group-hover:scale-105 group-hover:shadow-violet-500/20 transition-transform">
-            ${getSkillIconSvg(skill.icon)}
+          <div class="h-11 w-11 rounded-xl bg-gradient-to-br ${isAgent ? (AGENT_GRADIENTS[skill.id] || skill.gradient) : skill.gradient} flex items-center justify-center shrink-0 border border-white/15 shadow-md group-hover:scale-105 group-hover:shadow-violet-500/20 transition-transform text-white">
+            ${isAgent ? getPersonaIconSvg(skill.id) : getSkillIconSvg(skill.icon)}
           </div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-white text-[15px] sm:text-[16px] leading-snug group-hover:text-violet-200 transition-colors">${skill.title}${isAgent ? ' <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40">AGENT</span>' : ''}</div>
+            <div class="font-bold text-white text-[15px] sm:text-[16px] leading-snug group-hover:text-violet-200 transition-colors">${HUMAN_TITLES[skill.id] || HUMAN_TITLES[skill.name] || skill.title}</div>
             <div class="text-xs sm:text-sm text-white/60 mt-1 line-clamp-2 leading-relaxed">${skill.desc}</div>
           </div>
         </div>
-        <div class="text-white/40 group-hover:text-white group-hover:translate-x-1 transition shrink-0 font-bold text-lg">
-          →
+        <div class="shrink-0">${isAgent ? '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#fcd34d;background:rgba(245,158,11,.15);border:1px solid rgba(251,191,36,.45)">AGENT →</span>' : '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#67e8f9;background:rgba(6,182,212,.12);border:1px solid rgba(34,211,238,.4)">SKILL →</span>'}
         </div>
       </div>
     `}).join('');
@@ -378,12 +502,12 @@ function openSkillModal(skillId, stationId) {
   modalContent.innerHTML = `
     <div class="flex items-start justify-between gap-4">
       <div class="flex items-center gap-3">
-        <div class="h-12 w-12 rounded-xl bg-gradient-to-br ${foundSkill.gradient} flex items-center justify-center shrink-0 border border-white/15 shadow-lg">
-          ${getSkillIconSvg(foundSkill.icon)}
+        <div class="h-12 w-12 rounded-xl bg-gradient-to-br ${foundSkill.kind === 'agent' ? (AGENT_GRADIENTS[foundSkill.id] || foundSkill.gradient) : foundSkill.gradient} flex items-center justify-center shrink-0 border border-white/15 shadow-lg text-white">
+          ${foundSkill.kind === 'agent' ? getPersonaIconSvg(foundSkill.id) : getSkillIconSvg(foundSkill.icon)}
         </div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
-            <h3 class="text-xl font-bold text-white tracking-tight">${foundSkill.title}</h3>
+            <h3 class="text-xl font-bold text-white tracking-tight">${HUMAN_TITLES[foundSkill.id] || HUMAN_TITLES[foundSkill.name] || foundSkill.title}</h3>
             ${tagBadgeHtml}
           </div>
         </div>
