@@ -1,11 +1,11 @@
-{
+﻿{
   "skill_name": "v-babysit-pr-and-merge",
   "note": "Eval set in the agentskills.io evals/evals.json format. Assertions are checkable, not vibes. Case 4 is the negative case.",
   "evals": [
     {
       "id": "condensed-triage-list",
       "prompt": "Babysit PR #128: CodeRabbit posted 3 inline comments (one real nil-pointer bug, one wrong constant suggestion, one cosmetic nit). Triage them and report.",
-      "expected_output": "English Report 1: one concise line per comment with ACCEPT/REJECT and a one-phrase reason, most critical first, no full quotes of bot text. Inline ACCEPT/REJECT replies still posted per thread on GitHub.",
+      "expected_output": "Hebrew Report 1: one concise line per comment with ACCEPT/REJECT and a one-phrase reason, most critical first, no full quotes of bot text. Inline ACCEPT/REJECT replies still posted per thread on GitHub.",
       "files": [],
       "assertions": [
         "The triage report has one line per review comment, not a full quote of any comment",
@@ -29,14 +29,14 @@
     {
       "id": "final-summary-after-merge",
       "prompt": "Work on PR #130 is done and merged. Give me the final summary.",
-      "expected_output": "English Report 2: PR title and number as a link with MERGED status, back-to-base note, fixes ordered critical to minor, workspace sweep note, and vii-present-pr as the next step. No local-branch dump, no prune-artifacts suggestion.",
+      "expected_output": "Hebrew Report 2: PR title and number as a link with MERGED status, back-to-base note, fixes ordered critical to minor, no cleanup section (cleanup moved to Station VI), and vi-close-pipeline as the next step.",
       "files": [],
       "assertions": [
         "The title is the PR name and number as a link with merged status",
         "The summary states the return to origin base and the merge after fixes",
         "Fixes are ordered from most impactful/critical to minor",
-        "The summary reports the workspace sweep and a clean folder",
-        "The next step points to vii-present-pr, not vi-prune-artifacts",
+        "The summary contains no workspace-sweep section (cleanup belongs to vi-close-pipeline)",
+        "The next step points to vi-close-pipeline",
         "No raw CodeRabbit comment text appears in the summary"
       ]
     },

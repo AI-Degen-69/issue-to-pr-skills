@@ -13,7 +13,7 @@ Files land in `~/.config/opencode/skills/` (global) or `.opencode/skills/` (proj
 
 Agents discover skills via the `skill` tool. Stations are slash-like prompts:
 
-- `/x-workflow-issue` → discovery and orchestration
+- `/i-pick-issue` → map the backlog and pick an issue
 - `/ii-plan-issue 123` → plan issue #123
 - `/iii-build-plan auto` → build all tasks
 

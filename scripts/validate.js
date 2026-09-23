@@ -52,7 +52,7 @@ function ok(msg) {
 }
 
 let errors = 0;
-const target = process.argv[2]; // e.g. "skills/x-workflow-issue" or "skills"
+const target = process.argv[2]; // e.g. "skills/i-pick-issue" or "skills"
 
 let skillDirs = [];
 if (target && target !== "skills") {

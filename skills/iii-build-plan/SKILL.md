@@ -5,12 +5,10 @@ description: Station III (Build) — Universal execution orchestrator. Implement
 
 # Station III: Build Plan (`iii-build-plan`)
 
-This skill implements **Station III (Build)** of the 8-station pipeline (stations `i`–`vii` plus orchestrator `x-workflow-issue`). It works across **any project, language, or repository**, consuming the task plan from `tasks/plan.md` (created in Station II by `ii-plan-issue`) and executing implementation through disciplined type-aware builds, official documentation grounding, incremental commits, and code simplification.
-
-> **Note on Verification:** Final pre-push verification (browser DevTools check for UI or complete test suite run for code) is executed systematically in **Station IV (`iv-review-build-and-pr`)** after multi-axis review and fixes are complete.
+This skill implements **Station III (Build)** of the 6-station pipeline (numbered stations `i`–`vi`). It works across **any project, language, or repository**, consuming the task plan from `tasks/plan.md` (created in Station II by `ii-plan-issue`) and executing implementation through disciplined type-aware builds, official documentation grounding, incremental commits, and code simplification.
 
 ## Pipeline Position
-- **Station:** Station III of VII (`vii` = stations `i`–`vii`; plus `x-workflow-issue` = 8 total)
+- **Station:** Station III of VI (numbered stations `i`–`vi`)
 - **Previous Station:** `ii-plan-issue` (Plan)
 - **Next Station:** `iv-review-build-and-pr` (Review & Verify)
 
@@ -42,7 +40,7 @@ For every task executed, follow these phases:
 4. **Risk-first order:** follow the plan's task order (risk-first from Station II); when the plan leaves freedom, take the riskiest, most-uncertain task first — while being wrong is still cheap.
 5. **Route & Invoke Domain Skill:** Inspect the task's domain tag in `tasks/plan.md` and invoke the matching specialized skill (full matrix in `references/routing.md`):
    - **UI / Frontend / Design:** Activate `frontend-ui-engineering` (and `tailwind-design-system` if applicable). Identify what visual components, styling, or layouts are missing or broken, and implement them across the project according to modern standards.
-   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from this repo's `agents/` directory): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent).
+   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from `~/.agents/agents/`): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent — אין להמציא).
    - **Debug / Defect:** Activate `debugging-and-error-recovery` (investigate root cause before writing fixes).
    - **Performance:** Activate `performance-optimization`.
    - **Security:** Activate `security-and-hardening`.
@@ -52,7 +50,7 @@ For every task executed, follow these phases:
 - **Code Tasks:** Follow TDD — write minimal clean code to fulfill the requirement.
 - **Design & UI Tasks:** Ground styles in existing project tokens and components; implement accessible, responsive UI structure.
 - **Official Docs Grounding:** When using modern or external libraries, consult official documentation (`source-driven-development`) to ensure correct API usage.
-- **Build Error Resolution:** If compiler, syntax, or import failures occur, deploy the matching `<stack>-build-resolver` agent persona from this repo's `agents/` directory (`build-error-resolver` generic; `react-build-resolver` / `go-build-resolver` / `rust-build-resolver` when the diff touches React / Go / Rust): minimal diffs only — no architectural edits — get the build green, then resume the task. Persona not found on disk → apply the generic surgical-fix loop and record the skip.
+- **Build Error Resolution (ECC resolvers):** If compiler, syntax, or import failures occur, deploy the matching `<stack>-build-resolver` agent persona from `~/.agents/agents/` (`build-error-resolver` generic; `react-build-resolver` / `go-build-resolver` / `rust-build-resolver` when the diff touches React / Go / Rust): minimal diffs only — no architectural edits — get the build green, then resume the task. Persona not found on disk → apply the generic surgical-fix loop and record the skip.
 - **NOTICED-BUT-NOT-TOUCHING:** anything spotted mid-build that is out of scope — a bug in adjacent code, a tempting refactor, a quick win — is never touched. Capture it as a one-line future Issue candidate and surface it in the closing report; the operator decides whether it becomes an Issue.
 - **Feature flags / safe defaults / rollback:** for risky behavior changes, prefer a feature flag or a safe default that keeps the old behavior reachable; keep every task rollback-friendly (atomic commits, no destructive data changes without a path back). `git-workflow-and-versioning` governs commit discipline: atomic commits, ~100-line change sizing, commit-as-save-point.
 - **Observability touchpoint:** when a task changes production-facing behavior (API responses, background jobs, integrations), add — or note in the report as a follow-up — the instrumentation it needs (structured log, metric) per `observability-and-instrumentation`.
@@ -69,40 +67,40 @@ For every task executed, follow these phases:
 
 ---
 
-## Chat Output Contract
+## Hebrew Chat Output Contract (חובת דיווח בעברית)
 
-At the conclusion of Station III, you MUST report to the user in clean, everyday English using this exact structured format.
+At the conclusion of Station III, you MUST report to the user in clean, everyday Hebrew using this exact structured format.
 Part A (what to check yourself) adapts to what was actually built — pick 2-3 checks, never a fixed list.
 Part B (the two paths + router) is always shown in full, with every skill in backticks except the dead-button row, which is routed automatically inside the router skill.
 
 ```markdown
-# 🔨 Build Summary:
+# 🔨 III - בנייה (סיכום ביצוע):
 
-## 🎨 What was built — visual look:
-[Show visually in the chat what was built — table / diagram / flow chart / shapes, whatever fits and helps the explanation. Examples: before → after table, flow chart of the change, screen or component structure. The visual must fit the content — never force-fill]
+## 🎨 מה נבנה — מבט ויזואלי:
+[הצג כאן ויזואלית מה נבנה בצ'אט — טבלה / דיאגרמה / תרשים זרימה / צורות, כל דבר שמתאים ויעזור להסבר. דוגמאות: טבלת לפני ← אחרי, תרשים זרימה של המהלך, מבנה המסך או הרכיבים. חובה להתאים את הויזואל לתוכן — לא למלא בכוח]
 
-## 🛠️ Skills used and what was actually done:
-* **`[first skill name, e.g.: frontend-ui-engineering]`:** [concrete explanation: what was missing or broken, and what the skill fixed or built across the project]
-* **`[second skill name, e.g.: test-driven-development / api-and-interface-design]`:** [what was done with it: backend logic implementation and test writing]
-* **`code-simplification`:** [what was cleaned and how the code stayed lean and simple]
-
----
-
-## 🧠 Concise summary:
-* **The problem:** [one plain sentence: what was broken or missing]
-* **How the build solved it:** [one plain sentence: what was built and how it solves it]
+## 🛠️ סקילים שהופעלו ומה בוצע בפועל:
+* **`[שם הסקיל הראשון, למשל: frontend-ui-engineering]`:** [הסבר קונקרטי: מה היה חסר או שבור, ומה הסקיל תיקן או בנה על פני הפרויקט]
+* **`[שם הסקיל השני, למשל: test-driven-development / api-and-interface-design]`:** [מה בוצע באמצעותו: מימוש לוגיקת ה-Backend וכתיבת בדיקות]
+* **`code-simplification`:** [מה נוקה ואיך הקוד נשמר רזה ופשוט]
 
 ---
 
-## 👀 What to check yourself:
-[2-3 checks per what was actually built — button/form built: click and verify result. Screen built: mobile and large screen. Logic built: correct result with no error. Existing code changed: what worked before still works]
+## 🧠 סיכום תמציתי:
+* **הבעיה:** [משפט אחד פשוט: מה היה שבור או חסר]
+* **איך הבנייה פתרה אותה:** [משפט אחד פשוט: מה נבנה ואיך זה פותר]
 
-## 👉 Where next — two paths:
-* **All good, no comments** -> `/iv-review-build-and-pr` — review, final verification, branch push and PR opening.
-* **Have a comment / bug / change** -> `/iiib-iterate-after-build` + free-text description in your words. It routes on its own and fixes locally with no push:
-  - Bug / error -> `diagnosing-bugs` + `debugging-and-error-recovery`
-  - Dead button with no error -> `click-path-audit`
-  - Design / mobile -> `frontend-ui-engineering`
-  - Slow -> `performance-optimization`
-  - Security -> `security-and-hardening`
+---
+
+## 👀 מה לבדוק בעצמך:
+[2-3 בדיקות לפי מה שנבנה בפועל — נבנה כפתור/טופס: ללחוץ ולוודא תוצאה. נבנה מסך: מובייל ומסך גדול. נבנתה לוגיקה: תוצאה נכונה ובלי שגיאה. שונה קוד קיים: מה שעבד קודם עדיין עובד]
+
+## 👉 לאן ממשיכים — שני נתיבים:
+* **הכל טוב, אין הערות** -> `/iv-review-build-and-pr` — סקירה, אימות סופי, דחיפת ענף ופתיחת PR.
+* **יש הערה / באג / שינוי** -> `/iiib-iterate-after-build` + תיאור חופשי במילים שלך. הוא מנתב לבד ומתקן מקומית בלי push:
+  - באג / שגיאה -> `diagnosing-bugs` + `debugging-and-error-recovery`
+  - כפתור מת בלי שגיאה -> `click-path-audit`
+  - עיצוב / מובייל -> `frontend-ui-engineering`
+  - איטי -> `performance-optimization`
+  - אבטחה -> `security-and-hardening`
 ```

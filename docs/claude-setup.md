@@ -23,4 +23,4 @@ Copy `skills/<name>/` to `.claude/skills/` and `agents/*.md` to your personas di
 
 ## Verify
 
-Inside Claude Code, type `/x-workflow-issue` — you should see the discovery prompt. Or run `npm run validate` in the repo.
+Inside Claude Code, type `/i-pick-issue` — you should see the backlog map. Or run `npm run validate` in the repo.

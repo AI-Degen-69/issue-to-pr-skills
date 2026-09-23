@@ -81,7 +81,7 @@ function audit(skillPath) {
 }
 
 function extractTemplate(text) {
-  // The report template = first fenced ```markdown block.
+  // The Hebrew report template = first fenced ```markdown block.
   const m = text.match(/```markdown\r?\n([\s\S]*?)\r?\n```/);
   if (!m) return null;
   return m[1];

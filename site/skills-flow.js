@@ -12,10 +12,10 @@ const STATIONS_FLOW = [
     accent: 'from-violet-600 to-indigo-600',
     invoked: [
       {
-        id: 'x-workflow-issue',
-        name: 'x-workflow-issue',
-        title: 'The /x-workflow-issue Skill',
-        desc: 'Discovers open issues, categorizes dependencies, recommends execution order, and drives the delivery pipeline.',
+        id: 'i-pick-issue',
+        name: 'i-pick-issue',
+        title: 'The /i-pick-issue Skill',
+        desc: 'Maps the open-issue backlog grouped by domain, recommends execution order, and highlights one pick for the operator.',
         gradient: 'from-violet-600 to-purple-600',
         icon: 'workflow'
       },
@@ -28,9 +28,9 @@ const STATIONS_FLOW = [
         icon: 'terminal'
       },
       {
-        id: 'i-create-issue',
-        name: 'i-create-issue',
-        title: 'The /i-create-issue Skill',
+        id: 'create-issue',
+        name: 'create-issue',
+        title: 'The /create-issue Skill',
         desc: 'Turns a raw operator idea into a researched, structured, publishable GitHub issue labeled ready-for-agent.',
         gradient: 'from-fuchsia-600 to-pink-600',
         icon: 'issue'
@@ -76,17 +76,17 @@ const STATIONS_FLOW = [
         icon: 'merge'
       },
       {
-        id: 'vi-prune-artifacts',
-        name: 'vi-prune-artifacts',
-        title: 'The /vi-prune-artifacts Skill',
+        id: 'vi-close-pipeline',
+        name: 'vi-close-pipeline',
+        title: 'The /vi-close-pipeline Skill',
         desc: 'Safely removes stale per-issue scratch and temporary task lists while strictly protecting permanent knowledge.',
         gradient: 'from-slate-600 to-zinc-600',
         icon: 'prune'
       },
       {
-        id: 'vii-present-pr',
-        name: 'vii-present-pr',
-        title: 'The /vii-present-pr Skill',
+        id: 'present-pr',
+        name: 'present-pr',
+        title: 'The /present-pr Skill',
         desc: 'Generates a customer-simple standalone HTML showcase explaining what changed with interactive visuals.',
         gradient: 'from-cyan-600 to-teal-600',
         icon: 'present'
@@ -94,12 +94,12 @@ const STATIONS_FLOW = [
     ]
   },
   {
-    id: 'x-workflow-issue',
+    id: 'i-pick-issue',
     num: '02',
-    title: 'Station X — Workflow & Discovery',
-    desc: 'Backlog discovery and end-to-end delivery orchestrator. Maps dependencies and coordinates Stations II through VII.',
+    title: 'Station I — Map & Pick',
+    desc: 'Issue work only. Runs the triage gate itself, maps the open-issue backlog by domain with a recommended order, and highlights one pick. Routes into Station II.',
     startWithLabel: 'Start with',
-    startWithCommand: '/x-workflow-issue',
+    startWithCommand: '/i-pick-issue',
     accent: 'from-purple-600 to-fuchsia-600',
     invoked: [
       {
@@ -119,9 +119,9 @@ const STATIONS_FLOW = [
         icon: 'terminal'
       },
       {
-        id: 'i-create-issue',
-        name: 'i-create-issue',
-        title: 'The /i-create-issue Skill',
+        id: 'create-issue',
+        name: 'create-issue',
+        title: 'The /create-issue Skill',
         desc: 'Captures operator ideas into structured issues when no backlog items are open.',
         gradient: 'from-fuchsia-600 to-pink-600',
         icon: 'issue'
@@ -167,18 +167,18 @@ const STATIONS_FLOW = [
         icon: 'merge'
       },
       {
-        id: 'vi-prune-artifacts',
-        name: 'vi-prune-artifacts',
-        title: 'The /vi-prune-artifacts Skill',
-        desc: 'Station VI: Post-merge sweep of temporary tasks, closed plans, and scratch files.',
+        id: 'vi-close-pipeline',
+        name: 'vi-close-pipeline',
+        title: 'The /vi-close-pipeline Skill',
+        desc: 'Station VI: Confirms the merge, prunes closed per-issue scratch, and updates PROGRESS.md + handoff.',
         gradient: 'from-slate-600 to-zinc-600',
         icon: 'prune'
       },
       {
-        id: 'vii-present-pr',
-        name: 'vii-present-pr',
-        title: 'The /vii-present-pr Skill',
-        desc: 'Station VII: Builds an interactive standalone HTML showcase for the finished feature.',
+        id: 'present-pr',
+        name: 'present-pr',
+        title: 'The /present-pr Skill',
+        desc: 'Ad-hoc: Builds an interactive standalone HTML showcase for the finished feature, on request after merge.',
         gradient: 'from-cyan-600 to-teal-600',
         icon: 'present'
       }
@@ -568,12 +568,12 @@ const STATIONS_FLOW = [
     ]
   },
   {
-    id: 'vi-prune-artifacts',
+    id: 'vi-close-pipeline',
     num: '08',
-    title: 'Station VI — Prune Artifacts',
-    desc: 'Post-merge sweep that safely removes stale scratch files while strictly protecting permanent knowledge.',
+    title: 'Station VI — Close Pipeline',
+    desc: 'Post-merge close: confirms the PR is merged, safely removes stale scratch files while strictly protecting permanent knowledge, and updates PROGRESS.md + handoff.',
     startWithLabel: 'Start with',
-    startWithCommand: '/vi-prune-artifacts',
+    startWithCommand: '/vi-close-pipeline',
     accent: 'from-slate-500 to-zinc-600',
     invoked: [
       {
@@ -603,12 +603,12 @@ const STATIONS_FLOW = [
     ]
   },
   {
-    id: 'vii-present-pr',
+    id: 'present-pr',
     num: '09',
-    title: 'Station VII — Present PR',
-    desc: 'Customer-simple visual showcase explaining what was built with dynamic charts, flow cards, and demos.',
+    title: 'Present PR (Ad-hoc)',
+    desc: 'Runs on request after a merge — not part of the automatic chain. Customer-simple visual showcase explaining what was built with dynamic charts, flow cards, and demos.',
     startWithLabel: 'Start with',
-    startWithCommand: '/vii-present-pr',
+    startWithCommand: '/present-pr',
     accent: 'from-cyan-500 to-teal-600',
     invoked: [
       {
@@ -816,7 +816,7 @@ function renderStationsFlow() {
     if (query) {
       counterEl.textContent = `Found ${totalCardsCount} skill connections across ${renderedStationsCount} stations`;
     } else {
-      counterEl.textContent = `Showing 9 stations · 66 invocations across 43 specialized skills`;
+      counterEl.textContent = `Showing ${renderedStationsCount} stations · ${totalCardsCount} invocations across 43 specialized skills`;
     }
   }
 }

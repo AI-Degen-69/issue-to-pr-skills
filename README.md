@@ -10,35 +10,33 @@
 
 > **Website → https://AI-Degen-69.github.io/issue-to-pr-skills** — interactive pipeline, skill catalog, and guides (like [skills.addy.ie](https://skills.addy.ie)).
 
-Ten station skills carry one GitHub issue from intake through planning, building, review, merge, cleanup, and presentation — with 33 supporting skills and 18 specialist reviewer agents packed in, so the pipeline works out of the box.
+Seven station skills carry one GitHub issue from mapping through planning, building, review, merge, and close — with an entry triage gate, an intake skill, an ad-hoc showcase skill, 33 supporting skills, and 18 specialist reviewer agents packed in, so the pipeline works out of the box.
 
 ```
-[Station X]    x-workflow-issue        Discovery & Orchestrator (lists, prioritizes, drives II–VII)
-      │
-      ▼
-[Station I]    i-create-issue          Raw idea → researched GitHub issue (ready-for-agent)
-      │
-      ▼
+[Entry]        pipeline-triage        State gate: dirty repo / open PR / unclear intent → routes once
+[Intake]       create-issue           Raw idea → researched GitHub issue (ready-for-agent)
+[Station I]    i-pick-issue           Map & Pick (backlog by domain, recommended order, one pick)
+       │
+       ▼
 [Station II]   ii-plan-issue           Define & Plan (right-sizing, spec, constraints, tasks/plan.md)
-      │
-      ▼
+       │
+       ▼
 [Station III]  iii-build-plan          Build (TDD per task, atomic commits, auto-resolvers)
-      │
-      ├── corrections on fresh build ──► [Station IIIB] iiib-iterate-after-build
-      │        (human feedback fix loop, no push)
-      ▼
+       │
+       ├── corrections on fresh build ──► [Station IIIB] iiib-iterate-after-build
+       │        (human feedback fix loop, no push)
+       ▼
 [Station IV]   iv-review-build-and-pr  Review & Ship (proof gate, OCR scan, specialist
-      │        reviewers + Spec axis, verification gate, push, PR + @coderabbitai trigger)
-      │  trigger handoff: waits for the trigger ack, classifies it
-      │  (triggered / rate-limited / other / no ack), passes status to V
-      ▼
+       │        reviewers + Spec axis, verification gate, push, PR + @coderabbitai trigger)
+       │  trigger handoff: waits for the trigger ack, classifies it
+       │  (triggered / rate-limited / other / no ack), passes status to V
+       ▼
 [Station V]    v-babysit-pr-and-merge  Babysit & Merge (1-round review tracking,
-      │        reuse-first fallback on rate limit, squash merge, pull base)
-      ▼
-[Station VI]   vi-prune-artifacts      Prune (sweep stale per-issue plans & scratch)
-      │
-      ▼
-[Station VII]  vii-present-pr          Present (standalone visual HTML showcase + verification guide)
+       │        reuse-first fallback on rate limit, squash merge, pull base)
+       ▼
+[Station VI]   vi-close-pipeline       Close (confirm merge, prune scratch, PROGRESS.md + handoff)
+
+(ad-hoc)       present-pr              Standalone visual HTML showcase — on request, after merge
 ```
 
 `pipeline-triage` sits at the entry: dirty repo, open PR, or unclear intent — it inspects git state and routes to the right station.
@@ -86,15 +84,15 @@ npx skills add AI-Degen-69/issue-to-pr-skills --skill iv-review-build-and-pr
 | Station | Skill | Slash command | Purpose |
 |---|---|---|---|
 | Entry | `pipeline-triage` | n/a (auto) | Dirty-repo triage: inspects git state, routes to the right station |
-| X | `x-workflow-issue` | `/x-workflow-issue` | Discovery (backlog map + order) and orchestrator driving II–VII |
-| I | `i-create-issue` | `/i-create-issue <idea>` | Raw thought → researched `ready-for-agent` issue |
+| Intake | `create-issue` | `/create-issue <idea>` | Raw thought → researched `ready-for-agent` issue |
+| I | `i-pick-issue` | `/i-pick-issue` (or `<id>`) | Backlog map by domain, recommended order, one highlighted pick |
 | II | `ii-plan-issue` | `/ii-plan-issue` (or `<id>`) | Right-sizing, stack detection, `CONSTRAINTS.md`, `tasks/plan.md` |
 | III | `iii-build-plan` | `/iii-build-plan auto` | TDD build per task, atomic commits, error resolvers |
 | IIIB | `iiib-iterate-after-build` | `/iiib-iterate-after-build` | Human-feedback fix loop, local only, no push |
 | IV | `iv-review-build-and-pr` | `/iv-review-build-and-pr` | Review, verify, push, open PR, trigger + classify review ack |
 | V | `v-babysit-pr-and-merge` | `/v-babysit-pr-and-merge` | Track review, triage comments, squash merge, sync base |
-| VI | `vi-prune-artifacts` | `/vi-prune-artifacts` | Sweep stale per-issue scratch, preserve knowledge |
-| VII | `vii-present-pr` | `/vii-present-pr <id>` | Visual HTML showcase + manual verification guide |
+| VI | `vi-close-pipeline` | `/vi-close-pipeline` | Confirm merge, prune stale scratch, PROGRESS.md + handoff |
+| Ad-hoc | `present-pr` | `/present-pr <id>` | Visual HTML showcase + manual verification guide, on request |
 
 Full station contracts: [docs/pipeline.md](docs/pipeline.md).
 

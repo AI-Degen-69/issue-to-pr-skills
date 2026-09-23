@@ -30,7 +30,7 @@ Skills are plain Markdown. Copy `skills/<name>/` into your tool's skills directo
 ## First run
 
 1. Open any repo with GitHub issues.
-2. Run `/x-workflow-issue` — pick an issue and an execution mode (step-by-step recommended first).
+2. Run `/i-pick-issue` — review the backlog map and pick an issue.
 3. Follow the stations. Each report tells you the single next step.
 
 ## Adapting to your team

@@ -9,7 +9,7 @@ The router for Path B. The operator describes corrections in free text after a b
 
 ## Pipeline Position
 
-- **Station:** Station III-B of VII (human feedback loop)
+- **Station:** Station III-B of VI (human feedback loop)
 - **Previous Station:** `iii-build-plan` (Build)
 - **Next Station:** `iv-review-build-and-pr` (Review & Verify)
 
@@ -48,23 +48,23 @@ For every item, in order:
 
 Respect `CONSTRAINTS.md` (no skipped tests, no new external dependencies without approval, zero regressions in touched modules). Never touch code outside the reported items. Never push to origin — `iv-review-build-and-pr` is the only station that pushes.
 
-## Chat Output Contract
+## Hebrew Chat Output Contract
 
-Report in clean, everyday English. Write for the customer who ordered the product, never for a developer:
+Report in clean, everyday Hebrew. Write for the customer who ordered the product, never for a developer:
 
 - No code words: never handler, state, side effect, function, commit, test names, or file paths. Say what the person gets now.
 - Never use the word console. Say "checked in the browser, no errors" instead.
 - One line per comment: what was wrong in plain words, then what works now. One sentence each.
 
 ```markdown
-# 🔁 Fix Summary (III-B):
+# 🔁 IIIB - תיקונים אחרי בנייה (סיכום איטרציה):
 
-## 🧭 Routing:
-* **[The comment in your words]** -> `diagnosing-bugs` + `debugging-and-error-recovery`: [Before: what didn't work for the person. Now: what works]
-* **[Comment 2]** -> [lane]: [Before / now in the same style]
+## 🧭 ניתוב:
+* **[ההערה במילים שלך]** -> `diagnosing-bugs` + `debugging-and-error-recovery`: [לפני: מה לא עבד לאדם. עכשיו: מה עובד]
+* **[הערה 2]** -> [נתיב]: [לפני / עכשיו באותו סגנון]
 
-## ✅ Verification:
-* [Checked in the browser: what was clicked and what was seen. No console jargon. Logic: verified that what worked before still works]
+## ✅ אימות:
+* [נבדק בדפדפן: מה נלחץ ומה נראה. בלי המילה console. לוגיקה: נבדק שמה שעבד קודם עדיין עובד]
 
-👉 **Next step:** `/iv-review-build-and-pr` — everything works, ready for review and shipping.
+👉 **שלב הבא:** `/iv-review-build-and-pr` — הכל עובד, מוכן לסקירה ושליחה.
 ```

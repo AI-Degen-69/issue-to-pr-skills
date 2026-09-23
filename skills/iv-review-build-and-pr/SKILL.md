@@ -1,14 +1,14 @@
 ---
 name: iv-review-build-and-pr
-description: Station IV (Review, Verify & Ship) — Universal shipping flow. Runs OCR delegation (deterministic file scope + rules, host-agent review, no LLM key), then specialist language/framework reviewers, applies fixes, executes full post-review verification (browser or test suite), pushes branch, and opens GitHub PR with @coderabbitai summary.
+description: Station IV (Review, Verify & Ship) — Universal shipping flow. Runs OCR delegation (deterministic file scope + rules, host-agent review, no LLM key), then ECC language/framework reviewers, applies fixes, executes the post-review Browser Gate (UI, fast-first, playwright-cli preferred; DevTools MCP for profiling only) or targeted test gate (backend), pushes branch, and opens GitHub PR with @coderabbitai summary.
 ---
 
 # Station IV: Review, Verify & PR (`iv-review-build-and-pr`)
 
-This skill implements **Station IV (Review, Verify & Ship)** of the 8-station pipeline. It works across **any project, language, or repository**, taking code completed in Station III (`iii-build-plan`), dynamically discovering and deploying language/framework specialist reviewers, applying fixes, enforcing the **Final Pre-Push Verification Gate** (live browser verification for UI or full regression test suite for backend), pushing to origin, opening a Pull Request linked to the issue, and recommending `v-babysit-pr-and-merge`.
+This skill implements **Station IV (Review, Verify & Ship)** of the 6-station pipeline (I–VI). It works across **any project, language, or repository**, taking code completed in Station III (`iii-build-plan`), dynamically discovering and deploying language/framework specialist reviewers, applying fixes, enforcing the **Final Pre-Push Verification Gate** (live browser verification for UI or full regression test suite for backend), pushing to origin, opening a Pull Request linked to the issue, and recommending `v-babysit-pr-and-merge`.
 
 ## Pipeline Position
-- **Station:** Station IV of VII
+- **Station:** Station IV of VI
 - **Previous Station:** `iii-build-plan` (Build)
 - **Next Station:** `v-babysit-pr-and-merge` (Babysit & Merge)
 
@@ -26,9 +26,13 @@ This skill implements **Station IV (Review, Verify & Ship)** of the 8-station pi
 
 ### Step 0: Proof-Before-Review Gate (MANDATORY, FIRST)
 
-**No review runs on unproven code.** Before Step 1, prove the build actually works:
+**No review runs on unproven code.** Before Step 1, prove the build actually works. This station is the **single owner of browser-based verification** in the whole pipeline — no other station runs browser checks. This ownership applies whenever any UI change ships, regardless of which station built it.
 
-1. **For Frontend / Web / UI changes:** run the live browser check via `browser-testing-with-devtools` — key screens load, the flows built in Station III work, zero uncaught console errors and zero failed network requests.
+1. **For Frontend / Web / UI changes — Browser Gate (fast-first, `playwright-cli` preferred):** start the project's preview server, then verify in this order with the **`playwright-cli`** skill (headless by default, compact snapshots, no MCP round-trips). Reach for `browser-testing-with-devtools` (chrome-devtools-mcp) **only** when the gate needs performance traces or profiling — never for routine render/DOM checks:
+   - **API/HTTP smoke (no browser):** every key page and endpoint the change touches answers 200 with sane content (`curl` or equivalent).
+   - **Programmatic DOM checks — one batched call (no screenshot):** `playwright-cli open <url>`, then a single `playwright-cli eval "<one function>"` that performs all DOM/layout checks and returns one small JSON verdict (required elements exist, table rows/columns render, layout has no overflow). Never one call per check.
+   - **Console + network — one call each:** `playwright-cli console` → zero uncaught errors; `playwright-cli requests` → zero failed network requests (pull both once after the page settles — do not eyeball a screenshot for this).
+   - **Screenshot — once, last:** a single `playwright-cli screenshot` as final visual proof, only after everything above is green, then `playwright-cli close`. Never per-iteration.
 2. **For Backend / Logic changes:** run the targeted test suites for modified files — all green.
 3. **On failure:** stop. Route the failure list to `iiib-iterate-after-build` as correction items, and re-enter this station only after IIIB is clean. Do not review broken code.
 4. **On success:** record one gate line for the report (what was run, what passed), then continue to Step 1.
@@ -38,9 +42,9 @@ This skill implements **Station IV (Review, Verify & Ship)** of the 8-station pi
 Use OCR only for fixed work (file pick + rules). The thinking stays with you. No LLM key needed on OCR side. Source: `https://github.com/alibaba/open-code-review` (Apache-2.0). The full delegation procedure (preview, rules, diffs, per-file review, finding shape, coverage counts) lives in `references/ocr-delegation.md` — follow it exactly; no external skill file is required.
 
 ### Step 1B: Dynamic Reviewer Discovery & Multi-Axis Review (uses OCR output as input)
-Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no file left out, line numbers from OCR win on conflicts). Inspect the diff (`git diff --name-only origin/<base>...HEAD`) and discover matching specialized reviewers from the repo's `agents/` directory or builtins):
+Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no file left out, line numbers from OCR win on conflicts). Inspect the diff (`git diff --name-only origin/<base>...HEAD`) and discover matching specialized reviewers from the project's agent repository (`.agents/agents/`, `~/.agents/agents/`, or builtins):
 
-**Reviewer honesty rule:** a reviewer persona that is not found on disk is skipped — record the skip and the reason in the report. Never invent or simulate a missing reviewer.
+**Reviewer honesty rule:** a reviewer persona that is not found on disk is skipped — record the skip and the reason in the report. Never invent or simulate a missing reviewer (אין להמציא).
 
 1. **General Code Quality (`code-review-and-quality`):**
    - Check diff clarity, clean naming, absence of dead code, and adherence to project patterns.
@@ -59,9 +63,9 @@ Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no fi
    - Deploy whenever the diff touches catch/except blocks, fallback defaults, async paths, or logging. Hunt swallowed errors, empty catch blocks, dangerous fallbacks (`.catch(() => [])`), lost stack traces, and missing error propagation.
 5. **Test Engineering Audit (`test-driven-development`):**
    - Verify that test assertions test real domain behavior and edge cases, not hollow mocks.
-   - Map each changed behavior to the test that covers it; rate uncovered paths by impact (critical / important / nice-to-have).
+   - Map each changed behavior to the test that covers it; rate uncovered paths by impact (critical / important / nice-to-have). (Absorbed from ECC `pr-test-analyzer`.)
 6. **Docs Drift (`doc-updater`, diff-triggered):**
-   - Deploy when the diff touches `*.md` files, docstrings, or README/docs adjacent to changed behavior. Verify that documentation touched by the diff still matches the code — no stale examples, no outdated API references. Persona from this repo's `agents/` directory; not found on disk → skip and record the skip (never invent).
+   - Deploy when the diff touches `*.md` files, docstrings, or README/docs adjacent to changed behavior. Verify that documentation touched by the diff still matches the code — no stale examples, no outdated API references. Persona from `~/.agents/agents/`; not found on disk → skip and record the skip (אין להמציא).
 
 ### Step 1C: Spec Axis — Diff vs Issue & Plan (from Matt Pocock's two-axis review)
 Before applying fixes, run the Spec axis in full:
@@ -81,13 +85,11 @@ Before applying fixes, run the Spec axis in full:
 ### Step 3: Final Post-Review Verification Gate (MANDATORY)
 **Before any code is pushed or a PR is opened, the entire change must be verified post-fixes:**
 
-**Approval standard:** approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — never block a review on taste or on "how I would have written it".
+**Approval standard (from Addy):** approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — never block a review on taste or on "how I would have written it".
 
 **Citing gate:** every finding carries its motivating evidence — the verbatim quoted line(s) that triggered it. A finding without a quotable line goes to the appendix as unverified; it never enters the main report.
 
-1. **For Frontend / Web / UI Changes:**
-   - **Browser Verification:** Spin up preview server if needed and inspect via Chrome DevTools MCP or browser testing tools.
-   - Verify visual layout, responsive behavior, and confirm the browser console has **zero uncaught errors, warnings, or failed network requests**.
+1. **For Frontend / Web / UI Changes — re-run the Step 0 Browser Gate (fast-first) on the fixed code:** same order, same bar — zero uncaught console errors, zero failed network requests.
 2. **For Backend / API / Logic Changes:**
    - Run targeted test suites matching modified files (e.g. `pytest tests/test_<module>.py`) to confirm zero regressions in touched modules. Avoid running the full repository test suite locally (>10s); GitHub CI runs the full regression suite on push as the merge gate.
    - Run `verification-before-completion` to guarantee all acceptance criteria from the issue remain 100% satisfied.
@@ -109,18 +111,26 @@ Before applying fixes, run the Spec axis in full:
   ```bash
   gh pr create --title "<type>(<scope>): <summary>" --body "## Summary`n...`n`nCloses #<issue>`n`n@coderabbitai summary"
   ```
-- Immediately post the review trigger comment:
+- Immediately post the review trigger comment (**post exactly once** — pick ONE of the two forms below, never both):
   ```bash
   gh pr comment <pr_number> --body "@coderabbitai review"
   ```
-- **Wait for the trigger acknowledgement (MANDATORY before handoff):** Do not conclude the station on a blind post. Wait for CodeRabbit's reply to the trigger comment (typically within ~1 minute; check up to ~3 minutes, non-blocking wait), then classify it:
+  Fresh-run one-liner alternative (post + 60s wait + poll in one — use INSTEAD of the snippet above):
+  ```powershell
+  gh pr comment <pr_number> --body "@coderabbitai review" 2>&1 | Select-Object -Last 1; Start-Sleep -Seconds 60; gh pr view <pr_number> --comments 2>&1 | Select-String "Action performed|Review triggered|Review limit reached|Next included review available|rate limited by coderabbit" | Select-Object -Last 6
+  ```
+- **Wait for the trigger acknowledgement (MANDATORY before handoff):** Do not conclude the station on a blind post. Post the trigger, wait **60s**, then read CodeRabbit's reply to the trigger comment once, then classify it:
   - `Review triggered.` ("Action performed" reply) — review started. Proceed to handoff.
-  - Rate-limit reply with a wait time (e.g. "come back in N minutes" / quota exceeded) — review NOT started. Record the reported minutes and carry them into the handoff report so the operator (and Station V) know the quota window.
+  - Rate-limit reply (`## Review limit reached` / `rate limited by coderabbit.ai` / `Next included review available in N minutes`) — review NOT started. Record the reported minutes and carry them into the handoff report so the operator (and Station V) know the quota window.
   - Any other refusal/skip notice (e.g. "does not re-review already reviewed commits") — record verbatim; it may mean incremental review found nothing new, which is itself a signal Station V must read (not a silent pass).
-  - No reply within ~3 minutes — report `trigger acknowledgement not received` honestly; do not claim the review started.
-  - **Ack polling command:**
+  - No reply within ~60s — report `trigger acknowledgement not received` honestly; do not claim the review started.
+  - **Ack polling (PowerShell, 60s wait, matches the real rate-limit header):** only when the trigger was already posted via the snippet above — do NOT re-post:
+  ```powershell
+  Start-Sleep -Seconds 60; gh pr view <pr_number> --comments 2>&1 | Select-String "Action performed|Review triggered|Review limit reached|Next included review available|rate limited by coderabbit" | Select-Object -Last 6
+  ```
+  - **Ack polling (bash fallback, same 60s wait, same markers):**
   ```bash
-  gh pr view <pr_number> --json comments --jq '.comments[-3:] | .[] | {author: .author.login, body: .body[0:300]}'
+  sleep 60; gh pr view <pr_number> --comments 2>&1 | grep -iE "Action performed|Review triggered|Review limit reached|Next included review available|rate limited by coderabbit" | tail -6
   ```
 - **Comment links (mandatory whenever the ack is anything other than `Review triggered.`):** post direct jump links in the handoff report so the operator can reach the exchange in one click — both the trigger comment and CodeRabbit's reply. Pull the `html_url` of each comment via the API:
     ```bash
@@ -132,39 +142,42 @@ Before applying fixes, run the Spec axis in full:
 
 ---
 
-## Chat Output Contract
+## Hebrew Chat Output Contract (חובת דיווח בעברית)
 
-At the conclusion of Station IV, you MUST report to the user in clean, everyday English using this exact structured format:
+At the conclusion of Station IV, you MUST report to the user in clean, everyday Hebrew using this exact structured format. Output rules: tests run as an internal gate but are **never mentioned in the report** (no test counts, no suite names); a reviewer that came back clean gets exactly one line (`✅ נקי.`); fixes are explained in plain client language, ordered easy → hard.
 
 ```markdown
-# 🚢 Review & PR Summary:
+# 🚢 IV - סקירת קוד ויצירת PR
 
-## 🔍 Who reviewed and what was found:
-* **OCR delegation (preview + rules):** [how many files scanned and coverage — e.g. 12/12, what the rules caught]
-* **[First reviewer name]:** [one sentence — what it checked and what it found]
-* **[Second reviewer name]:** [one sentence — what it checked and what it found]
-(List only reviewers actually run — no empty sections and no security section)
-* **Fixes applied from the review:**
-  - [what was fixed and why — only what actually changed in code]
-
----
-
-## 📊 PR details and final verification:
-* **Branch:** `[pushed branch name]`
-* **Direct Pull Request link:** [direct link to the GitHub PR]
-* **CodeRabbit status:** [one line: review triggered / rate-limited — back in N minutes / other bot reply (quoted) / no trigger acknowledgement]
-* **Comment links:** [if status is not "review triggered": direct links to the trigger comment and CodeRabbit's reply for quick jumping]
-* **Final verification:**
-  - [If UI/Web: what exactly was verified and how (browser/console/render)]
-  - [If Code: what exactly was verified and how (tests passed, clean run)]
+## 🔍 סיכום סוקרים מומחים:
+* **OCR delegation (preview + rules):** ✅ בלי ממצאים חוסמים. *(אם היו ממצאים — מפורטים כמו כל סוקר אחר)*
+* **[שם סוקר שיצא נקי]:** ✅ נקי.
+* **[שם סוקר שמצא הערות]:** ⚠️ מצא הערות (קל: N | בינוני: N | קריטי: N)
+  * **תיקונים שבוצעו** *(רשימה מסודרת מהקל לקשה):*
+    1. [הסבר קצר בשפה פשוטה — כמו שמסבירים ללקוח, בלי אוצר מילים של מתכנת ובלי תיאור של מה היה בקוד]
+    2. ...
+(לרשום רק סוקרים שבאמת הופעלו — בלי סעיפים ריקים ובלי סעיף אבטחה. סוקר נקי מקבל שורה אחת בלבד; רק מי שמצא הערות מקבל פירוט ותיקונים.)
 
 ---
 
-## 🗺️ What it looks like:
-[One visualization of what was built — pick the fit: small flow chart, before/after table, or list of screens and files created. Must show something visual, not text only.]
+## 📊 פרטי ה-PR ואימות סופי:
+* **ענף:** `[שם הענף שנשלח]`
+* **קישור ישיר ל-Pull Request:** [לינק ישיר ל-PR ב-GitHub]
+* **סטטוס CodeRabbit** *(שורה אחת כנה שמבדילה בבירור בין "ראינו שהסקירה התחילה" לבין "רק שלחנו בקשה"):*
+  - ✅ `CodeRabbit אישר שהסקירה התחילה` — ראינו את תגובת הבוט ("Review triggered")
+  - ⏳ `המכסה מלאה — הסקירה תתחיל בעוד N דקות` — לפי תגובת הבוט, עם קישור
+  - ❓ `נשלחה בקשת הפעלה אבל לא התקבל אישור תוך 60 שניות` — לא יודעים אם הסקירה התחילה
+  - ❗ `תגובה אחרת של הבוט` — מצוטטת כמות שהיא, עם קישור
+* **קישורים לתגובות:** [חובה אם הסטטוס אינו ✅: קישור ישיר לתגובת הטריגר ולתגובת הבוט, לקפיצה מהירה]
+* **אימות סופי:** [שורה אחת בשפה פשוטה של אדם רגיל — מה ראינו שעובד בשטח. למשל: "הדף חי על :8803 — הפיד מתמלא בנתונים אמיתיים ובלי שגיאות". אל תזכיר טסטים בכלל ובלי מונחי מתכנתים.]
 
-## 🧠 Summary from the start to here:
-[From planning through now: what the user asked, what was planned, what was built and what was sent to PR — in plain everyday words, no code terms. The reader must understand what happened and get into the loop.]
+---
 
-👉 **Next step:** `/v-babysit-pr-and-merge` sits on the PR waiting for CodeRabbit comments, picks what to fix, and merges.
+## 🗺️ איך זה נראה:
+[הדמיה אחת של מה שנבנה — לבחור את המתאימה: תרשים זרימה קטן, טבלת לפני/אחרי, או רשימת מסכים וקבצים שנוצרו. חובה להציג משהו חזותי ולא רק טקסט.]
+
+## 🧠 סיכום מההתחלה עד כאן:
+[מהתכנון (שלב א') ועד עכשיו: מה המשתמש ביקש, מה תוכנן, מה נבנה ומה נשלח ל-PR — במילים פשוטות של אדם רגיל, בלי מושגי קוד. הקורא צריך להבין מה קרה ולהיכנס ללופ.]
+
+👉 **שלב הבא:** `/v-babysit-pr-and-merge` יושב על ה-PR ומחכה לתגובות של CodeRabbit, בוחר מה לתקן, וממזג.
 ```

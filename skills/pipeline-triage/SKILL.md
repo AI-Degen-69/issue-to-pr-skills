@@ -7,16 +7,20 @@ description: Session-start triage and dirty-repo router. Use at the start of any
 
 Decide the single next path for existing changes so the repo lands clean on a synced master.
 
+## Pipeline Position
+- **Position:** State gate — **not a numbered station.** Runs before Station I when the repo carries unfinished work, or when the next step is unclear.
+- **Next:** the one station named in the routing table below.
+
 ## Step 0 — Classify the operator's message (session start)
 
 Before any git checks, classify what the operator asked for:
 
 - **Continuation / unclear intent / "where were we" / open work mentioned** → continue with the checks and routing table below.
-- **New Issue work and the repo is clean** → route to `x-workflow-issue` (backlog discovery), done.
+- **New Issue work and the repo is clean** → route to `i-pick-issue` (Station I, backlog discovery), done.
 - **Ad-hoc request** (quick question, small fix, exploration, "where is X" — not Issue work) → say so in one line and route to `using-agent-skills`, done.
 - **Ambiguous between Issue work and ad-hoc?** If it will end in a PR on code, treat as Issue work and run the table below; else ad-hoc. Still ambiguous → ask one question.
 
-Never run this skill and `x-workflow-issue` or `using-agent-skills` on the same request — this skill hands off at most once.
+Never run this skill and `i-pick-issue` or `using-agent-skills` on the same request — this skill hands off at most once.
 
 ## Checks first read only
 
@@ -32,44 +36,44 @@ Run these read-only checks before deciding anything. Never change files in this 
 
 Pick exactly one row. First matching row wins.
 
-1. Clean tree, on master, synced with remote, no open PR -> work is done. Route to `x-workflow-issue` to discover the next issue.
+1. Clean tree, on master, synced with remote, no open PR -> work is done. Route to `i-pick-issue` (Station I) to pick the next issue.
 2. Clean tree, on a feature branch, commits unpushed, no PR yet -> needs review and shipping. Route to `iv-review-build-and-pr` — unless the operator just reported corrections on a fresh build, then route to `iiib-iterate-after-build` first.
 3. Open PR with no `coderabbit` review and no `@coderabbitai review` comment from you -> start the review now so it runs while the next station starts. With operator approval, post `@coderabbitai review` as a PR comment, then route to `v-babysit-pr-and-merge` knowing the review is already running. This saves waiting time.
 4. Open PR with change requests or failing checks -> needs babysitting. Route to `v-babysit-pr-and-merge`.
 5. Open PR with green checks, no change requests, still waiting on reviews -> babysit until approval. Route to `v-babysit-pr-and-merge`.
 6. Open PR approved and green -> merge it, then clean up. Route to `v-babysit-pr-and-merge` for the merge step.
-7. Branch merged already, leftover branch or worktree exists -> prune and sync. Route to `vi-prune-artifacts`, then sync master.
+7. Branch merged already, leftover branch or worktree exists -> prune and sync. Route to `vi-close-pipeline` (its Clean Exit Gate syncs master).
 8. `tasks/plan.md` (or `tasks/todo.md`) with an incomplete checklist and the linked issue still open -> work started but unfinished. Resume it. Route to `iii-build-plan`.
-9. `tasks/plan.md` (or `tasks/todo.md`) with an incomplete checklist and the linked issue closed -> stale work. When a PR was merged the work landed, otherwise it was abandoned. Either way sweep the leftovers. Route to `vi-prune-artifacts`.
+9. `tasks/plan.md` (or `tasks/todo.md`) with an incomplete checklist and the linked issue closed -> stale work. When a PR was merged the work landed, otherwise it was abandoned. Either way sweep the leftovers. Route to `vi-close-pipeline`.
 10. Dirty tree with a clear small task and no PR -> finish the work first. Route to `iii-build-plan`.
 11. Dirty tree with an unclear or large task -> needs scoping first. Route to `ii-plan-issue`.
-12. Brand new idea with no code yet -> capture it. Route to `i-create-issue`.
-13. Work presented and merged, needs a summary -> route to `vii-present-pr`.
+12. Brand new idea with no code yet -> capture it. Route to `create-issue` (intake branch), then back to `i-pick-issue`.
+13. Work merged and the operator wants a visual summary -> route to `present-pr` (ad-hoc visual presentation, not a pipeline station).
 14. The request is ad-hoc (not Issue work at all) -> say so in one line and route to `using-agent-skills`.
 
 ## Output format
 
-Answer in English in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
+Answer in Hebrew in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
 
 After the status line, always list every changed file by category with a one-line classification of what it is (which issue/PR it belongs to, or "unknown origin"). Omit a category only when its count is 0. Also list each stash with its number, age, branch, and a one-line classification of its contents.
 
-## 📊 Status
-**Branch:** `name` | **Ahead/Behind:** X/Y | **Staged:** X | **Unstaged:** X | **Untracked:** X | **PR:** state | **Stashes:** X
+## 📊 מצב
+**ענף:** `name` | **קדימה/אחורה:** X/Y | **מבוימים:** X | **לא מבוימים:** X | **לא נעקבים:** X | **PR:** state | **סטאשים:** X
 
-**Staged (X):**
+**מבוימים (X):**
 - `path/to/file` — classification
 
-**Unstaged (X):**
+**לא מבוימים (X):**
 - `path/to/file` — classification
 
-**Untracked (X):**
+**לא נעקבים (X):**
 - `path/to/file` — classification
 
-**Stashes (X):**
+**סטאשים (X):**
 - `stash@{0}` — date, branch, what it holds in one line
 
-## 🎯 Decision
-Routed to **`<station>`** — next action in one short line.
+## 🎯 החלטה
+מנותב ל־**`<station>`** — next action in one short line.
 
 ## Safety rules
 

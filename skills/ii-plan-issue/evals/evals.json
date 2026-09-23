@@ -27,33 +27,33 @@
         { "id": "tiny-tier-exists", "type": "regex", "pattern": "(Tiny|Trivial)", "must_match": true, "why": "a one-file docs fix must be classifiable below Standard" },
         { "id": "docs-type-exists", "type": "regex", "pattern": "\\*\\*Docs\\*\\*", "must_match": true, "why": "docs issues need a Docs classification path" },
         { "id": "small-task-embedded-spec", "type": "regex", "pattern": "(Small\\s*/\\s*(Tiny|Trivial)|\\bTiny\\b)", "must_match": true, "why": "small tasks must skip SPEC.md and embed the spec (Tiny/Trivial vocabulary)" },
-        { "id": "report-opens-with-issue", "type": "regex", "pattern": "(What the issue demands|Issue #)", "must_match": true, "why": "user: the issue is the star of the show — template must open with the issue before skill/classification talk" },
-        { "id": "report-type-branches", "type": "regex", "pattern": "(adapts by task type|different emphasis)", "must_match": true, "why": "same fixed report shape for every issue type is the flagged failure mode" },
-        { "id": "report-bullet-requirements", "type": "regex", "pattern": "What the issue demands[\\s\\S]{0,400}?Point", "must_match": true, "why": "user: the requirements section must be short bullets, not prose paragraphs" },
-        { "id": "report-verification-section", "type": "regex", "pattern": "How do we verify", "must_match": true, "why": "user: quality-guardrail talk is replaced by a plain 'how do we verify' section tied to the issue's problem" },
-        { "id": "report-plan-links-to-issue", "type": "regex", "pattern": "answers the relevant point", "must_match": true, "why": "user: each plan task must state how it answers the issue's requirement — not standalone machinery talk" },
-        { "id": "proposal-evidence-based", "type": "regex", "pattern": "(Ground it in evidence|No evidence.{0,12}no proposal|evidence-based)", "must_match": true, "why": "user: improvement proposals must cite issue text or code location — no proposals in the air" },
-        { "id": "proposal-adopt-by-default", "type": "regex", "pattern": "(accepted|adopt.{0,30}default|adopted by default)", "must_match": true, "why": "user: the proposal is accepted by default and dropped only on explicit operator rejection" },
+        { "id": "report-opens-with-issue", "type": "regex", "pattern": "(כותרת ה-Issue|מה ה-Issue דורש)", "must_match": true, "why": "user: the issue is the star of the show — template must open with the issue before skill/classification talk" },
+        { "id": "report-type-branches", "type": "regex", "pattern": "(לפי סוג המשימה|מסתגל לפי סוג)", "must_match": true, "why": "same fixed report shape for every issue type is the flagged failure mode" },
+        { "id": "report-bullet-requirements", "type": "regex", "pattern": "מה ה-Issue דורש[\\s\\S]{0,400}?נקודה", "must_match": true, "why": "user: the requirements section must be short bullets, not prose paragraphs" },
+        { "id": "report-verification-section", "type": "regex", "pattern": "איך מוודאים", "must_match": true, "why": "user: quality-guardrail talk is replaced by a plain 'how do we verify' section tied to the issue's problem" },
+        { "id": "report-plan-links-to-issue", "type": "regex", "pattern": "עונה לנקודה", "must_match": true, "why": "user: each plan task must state how it answers the issue's requirement — not standalone machinery talk" },
+        { "id": "proposal-evidence-based", "type": "regex", "pattern": "(Ground it in evidence|No evidence.{0,12}no proposal|מבוססת ראיות)", "must_match": true, "why": "user: improvement proposals must cite issue text or code location — no proposals in the air" },
+        { "id": "proposal-adopt-by-default", "type": "regex", "pattern": "(accepted|adopt.{0,30}default|מאומצת כברירת מחדל)", "must_match": true, "why": "user: the proposal is accepted by default and dropped only on explicit operator rejection" },
         { "id": "report-template-lean", "type": "max_template_lines", "limit": 40, "why": "v0 template is ~60 lines of boilerplate; delivery must be tight" }
       ],
       "live_assertions": [
         "Size tier stated is Tiny/Trivial with rationale",
         "No SPEC.md created for a Trivial task; spec embedded in plan",
-        "Report opens with the issue title and what it demands, in everyday English",
+        "Report opens with the issue title and what it demands, in everyday Hebrew",
         "Report does not enumerate planning machinery (skill lists) ahead of the issue content"
       ]
     },
     {
       "id": "negative-unrelated-request",
       "prompt": "\"Find and fix the flaky login test\" (no station invocation)",
-      "expected_output": "The agent just fixes the bug normally. The station-II skill must not trigger: no station report, no CONSTRAINTS.md/plan.md ceremony, no issue claiming.",
+      "expected_output": "The agent just fixes the bug normally. The station-II skill must not trigger: no Hebrew station report, no CONSTRAINTS.md/plan.md ceremony, no issue claiming.",
       "mode_coverage": ["negative"],
       "static_assertions": [
         { "id": "description-scoped-to-pipeline", "type": "regex", "pattern": "(Station II|GitHub issue|issue)", "must_match": true, "why": "L1 description must scope the skill to issue-planning so it does not hijack ordinary coding requests" },
         { "id": "no-catchall-trigger", "type": "not_regex", "pattern": "(any (coding|bug|debug|fix) request|whenever the user asks to (fix|debug))", "must_match": true, "why": "a catch-all trigger wording would make the skill fire on unrelated work" }
       ],
       "live_assertions": [
-        "No station report (English template) is produced",
+        "No station report (Hebrew template) is produced",
         "No CONSTRAINTS.md / tasks/plan.md artifacts are created",
         "No gh issue claim is attempted"
       ]
@@ -65,7 +65,7 @@
       "mode_coverage": ["edge"],
       "static_assertions": [
         { "id": "gh-failure-guard", "type": "regex", "pattern": "gh.{0,16}(fails?|failed|unavailable)", "must_match": true, "why": "edge case must be covered in the spec, not left to improvisation" },
-        { "id": "no-fabrication-rule", "type": "regex", "pattern": "(never fabricate|do not fabricate|Never fabricate)", "must_match": true, "why": "fabricating issue content from a failed fetch is the worst-case outcome and must be forbidden explicitly" }
+        { "id": "no-fabrication-rule", "type": "regex", "pattern": "(never fabricate|do not fabricate|אין להמציא|Never fabricate)", "must_match": true, "why": "fabricating issue content from a failed fetch is the worst-case outcome and must be forbidden explicitly" }
       ],
       "live_assertions": [
         "Output names the gh failure instead of pretending the issue was read",

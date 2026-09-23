@@ -15,9 +15,9 @@
       ]
     },
     {
-      "id": "auto-visual-english-report",
+      "id": "auto-visual-hebrew-report",
       "prompt": "Run /iii-build-plan auto on a tasks/plan.md with one UI task and one backend task. Report at the end.",
-      "expected_output": "All tasks executed sequentially with domain routing, final report in English with a visual section (table/diagram/flow), per-skill breakdown, and a two-line concise summary of problem and fix plus next step /iv-review-build-and-pr. No files-changed section.",
+      "expected_output": "All tasks executed sequentially with domain routing, final report in Hebrew with a visual section (table/diagram/flow), per-skill breakdown, and a two-line concise summary of problem and fix plus next step /iv-review-build-and-pr. No files-changed section.",
       "files": [],
       "assertions": [
         "All open tasks in tasks/plan.md are executed sequentially",
@@ -55,9 +55,9 @@
       ]
     },
     {
-      "id": "auto-visual-english-report",
+      "id": "auto-visual-hebrew-report",
       "prompt": "Run /iii-build-plan auto on a tasks/plan.md with one UI task and one backend task. Report at the end.",
-      "expected_output": "All tasks executed sequentially with domain routing, final report in English with a visual section (table/diagram/flow), per-skill breakdown, and a two-line concise summary of problem and fix plus next step /iv-review-build-and-pr. No files-changed section.",
+      "expected_output": "All tasks executed sequentially with domain routing, final report in Hebrew with a visual section (table/diagram/flow), per-skill breakdown, and a two-line concise summary of problem and fix plus next step /iv-review-build-and-pr. No files-changed section.",
       "files": [],
       "assertions": [
         "All open tasks in tasks/plan.md are executed sequentially",

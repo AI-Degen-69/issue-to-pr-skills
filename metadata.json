@@ -1,6 +1,6 @@
 {
   "name": "Issue-to-PR Skills",
-  "description": "10 station pipeline + 33 supporting skills + 18 reviewer agents. One GitHub issue from intake to merged PR to visual showcase — with proof, never vibes.",
+  "description": "7 station pipeline + entry triage + intake + ad-hoc showcase + 33 supporting skills + 18 reviewer agents. One GitHub issue from raw idea to merged PR — with proof, never vibes.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

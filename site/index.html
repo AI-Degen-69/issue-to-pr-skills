@@ -4,15 +4,15 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Issue-to-PR Skills — From raw idea to merged PR to showcase</title>
-<meta name="description" content="10 station pipeline + 33 supporting skills + 18 reviewer agents. One GitHub issue from intake to merged PR to visual showcase — with proof, never vibes."/>
+<meta name="description" content="7 station pipeline + entry triage + intake + 33 supporting skills + 18 reviewer agents. One GitHub issue from raw idea to merged PR to visual showcase — with proof, never vibes."/>
 <meta property="og:title" content="Issue-to-PR Skills"/>
-<meta property="og:description" content="An end-to-end delivery pipeline for AI coding agents: 10 stations, 43 skills, 18 agents."/>
+<meta property="og:description" content="An end-to-end delivery pipeline for AI coding agents: 7 stations, 43 skills, 18 agents."/>
 <meta name="theme-color" content="#020617"/>
 <meta property="og:image" content="https://AI-Degen-69.github.io/issue-to-pr-skills/og.png"/>
 <link rel="icon" href="./favicon.svg" type="image/svg+xml"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"issue-to-pr-skills","description":"End-to-end delivery pipeline for AI coding agents: 10 stations, 43 skills, 18 agents","codeRepository":"https://github.com/AI-Degen-69/issue-to-pr-skills","license":"https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/LICENSE","programmingLanguage":"Markdown"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"issue-to-pr-skills","description":"End-to-end delivery pipeline for AI coding agents: 7 stations, 43 skills, 18 agents","codeRepository":"https://github.com/AI-Degen-69/issue-to-pr-skills","license":"https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/LICENSE","programmingLanguage":"Markdown"}</script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']},colors:{slate:{950:'#020617'}}}}}</script>
 <link rel="stylesheet" href="./shared-interactions.css"/>
@@ -118,7 +118,7 @@
 
     <!-- Quick Stats Bento -->
     <div class="mt-10 grid grid-cols-3 gap-3 w-full max-w-[520px]">
-      <div class="rounded-2xl glass p-3 text-center"><div class="text-[11px] uppercase tracking-widest text-white/50">Stations</div><div class="text-xl font-bold mt-0.5">10</div></div>
+      <div class="rounded-2xl glass p-3 text-center"><div class="text-[11px] uppercase tracking-widest text-white/50">Stations</div><div class="text-xl font-bold mt-0.5">7</div></div>
       <div class="rounded-2xl glass p-3 text-center"><div class="text-[11px] uppercase tracking-widest text-white/50">Skills</div><div class="text-xl font-bold mt-0.5">43</div></div>
       <div class="rounded-2xl glass p-3 text-center"><div class="text-[11px] uppercase tracking-widest text-white/50">Agents</div><div class="text-xl font-bold mt-0.5">18</div></div>
     </div>
@@ -129,7 +129,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 px-1 pb-3.5 border-b border-white/10">
         <div class="flex items-center gap-2.5">
           <span class="h-2.5 w-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,0.8)] animate-pulse"></span>
-          <span class="text-xs uppercase tracking-widest text-white/90 font-bold font-mono">10-Station Pipeline Carousel</span>
+          <span class="text-xs uppercase tracking-widest text-white/90 font-bold font-mono">Pipeline Carousel — Entry to Close</span>
           <span id="carouselCounterBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/10 text-white/80 border border-white/10">Station 1 of 10</span>
         </div>
 
@@ -330,7 +330,7 @@
     </div>
     <div class="mt-6 grid lg:grid-cols-3 gap-4 text-sm">
       <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Prerequisites</div><div class="mt-1 text-white/60">`git` + `gh` (authenticated). CodeRabbit optional — pipeline falls back to agent reviews.</div></div>
-      <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">First run</div><div class="mt-1 text-white/60">Open any repo with issues → <code class="px-1 py-0.5 rounded bg-white/10">/x-workflow-issue</code> → pick issue → follow stations.</div></div>
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">First run</div><div class="mt-1 text-white/60">Open any repo with issues → <code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code> → pick issue → follow stations.</div></div>
       <div class="rounded-2xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Verify</div><div class="mt-1 text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">npm run validate</code> — frontmatter + links. CI runs on every PR.</div></div>
     </div>
   </div>
@@ -360,9 +360,9 @@
   <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6">
     <h3 class="font-semibold">How it feels in practice — one issue, start to finish</h3>
     <ol class="mt-3 grid lg:grid-cols-3 gap-4 text-sm leading-6">
-      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">1. You paste an idea</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/i-create-issue add dark mode</code> — the skill researches the repo, uses real paths with line numbers, and publishes a <code>ready-for-agent</code> issue.</span></li>
-      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">2. You pick + plan</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/x-workflow-issue</code> shows backlog grouped by domain. <code class="px-1 py-0.5 rounded bg-white/10">/ii-plan-issue 123</code> sizes it, locks <code>CONSTRAINTS.md</code>, writes <code>tasks/plan.md</code> slices.</span></li>
-      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">3. It builds, reviews, merges</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/iii-build-plan auto</code> TDDs each slice. <code class="px-1 py-0.5 rounded bg-white/10">/iv-review…</code> proves then reviews, opens PR, triggers @coderabbitai. <code class="px-1 py-0.5 rounded bg-white/10">/v-babysit…</code> merges. <code class="px-1 py-0.5 rounded bg-white/10">/vii-present…</code> builds your showcase.</span></li>
+      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">1. You paste an idea</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/create-issue add dark mode</code> — the skill researches the repo, uses real paths with line numbers, and publishes a <code>ready-for-agent</code> issue.</span></li>
+      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">2. You pick + plan</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code> shows backlog grouped by domain. <code class="px-1 py-0.5 rounded bg-white/10">/ii-plan-issue 123</code> sizes it, locks <code>CONSTRAINTS.md</code>, writes <code>tasks/plan.md</code> slices.</span></li>
+      <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">3. It builds, reviews, merges</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/iii-build-plan auto</code> TDDs each slice. <code class="px-1 py-0.5 rounded bg-white/10">/iv-review…</code> proves then reviews, opens PR, triggers @coderabbitai. <code class="px-1 py-0.5 rounded bg-white/10">/v-babysit…</code> merges. <code class="px-1 py-0.5 rounded bg-white/10">/present-pr</code> builds your showcase on request.</span></li>
     </ol>
   </div>
 </section>

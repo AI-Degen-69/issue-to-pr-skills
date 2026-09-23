@@ -1,15 +1,15 @@
 // Site logic — pipeline + catalog
 const STATIONS = [
   {id:'pipeline-triage', label:'Entry', title:'Pipeline Triage', desc:'Dirty repo? Open PR? Unclear intent? Read-only triage inspects git state and routes to the right station. One router, max one handoff.', color:'cyan'},
-  {id:'x-workflow-issue', label:'X', title:'Workflow Discovery', desc:'Discovery & orchestrator. Backlog map grouped by domain with a highlighted pick. Locks execution mode (step-by-step or full II→VII) and drives the stations.', color:'cyan'},
-  {id:'i-create-issue', label:'I', title:'Create Researched Issue', desc:'Raw idea → researched GitHub issue labeled ready-for-agent. Researches repo first (real paths with line numbers), captures open questions with defaults.', color:'cyan'},
+  {id:'create-issue', label:'Intake', title:'Create Researched Issue', desc:'Intake branch when there is nothing to pick. Raw idea → researched GitHub issue labeled ready-for-agent. Researches repo first (real paths with line numbers), captures open questions with defaults.', color:'cyan'},
+  {id:'i-pick-issue', label:'I', title:'Map & Pick', desc:'Issue work only. Runs the triage gate itself, then maps the open-issue backlog grouped by domain with a recommended order and one highlighted pick. With an issue number, goes straight to Station II.', color:'cyan'},
   {id:'ii-plan-issue', label:'II', title:'Plan & Constraints', desc:'Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'cyan'},
   {id:'iii-build-plan', label:'III', title:'Build with TDD', desc:'Build. TDD per task, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
   {id:'iiib-iterate-after-build', label:'IIIB', title:'Iterate Human Feedback', desc:'Human feedback fix loop. Classifies each free-text correction (bug, dead button, UI alignment, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
-  {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Proof-before-review gate (tests or live browser) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
+  {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Proof-before-review gate (live browser pass via playwright-cli, or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
   {id:'v-babysit-pr-and-merge', label:'V', title:'Babysit PR & Merge', desc:'Babysit & merge. Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
-  {id:'vi-prune-artifacts', label:'VI', title:'Prune Scratch Artifacts', desc:'Prune. Deletes only per-issue scratch whose issue is CLOSED and unreferenced. Showcases, research, ADRs, and active plans are untouchable.', color:'rose'},
-  {id:'vii-present-pr', label:'VII', title:'Present Showcase', desc:'Present. Standalone HTML showcase — one centerpiece visual picked for this story, customer-simple words, try-it guide. Never the same twice.', color:'fuchsia'},
+  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Close. Confirms the PR merged, prunes only per-issue scratch that is closed and unreferenced, updates PROGRESS.md and the handoff. Showcases, research, and ADRs are untouchable.', color:'rose'},
+  {id:'present-pr', label:'Ad-hoc', title:'Present Showcase', desc:'Ad-hoc — run on request after a merge, not part of the automatic chain. Standalone HTML showcase: one centerpiece visual picked for this story, customer-simple words, try-it guide. Never the same twice.', color:'fuchsia'},
 ];
 
 const TAG_CONFIG = {
@@ -78,8 +78,8 @@ const GROUP = {
   'interview-me': 'plan',
   'idea-refine': 'plan',
   'pipeline-triage': 'plan',
-  'x-workflow-issue': 'plan',
-  'i-create-issue': 'plan',
+  'create-issue': 'plan',
+  'i-pick-issue': 'plan',
   'doubt-driven-development': 'plan',
   'api-and-interface-design': 'plan',
 
@@ -117,13 +117,13 @@ const GROUP = {
   'shipping-and-launch': 'babysit',
   'observability-and-instrumentation': 'babysit',
 
-  // VI - Prune
-  'vi-prune-artifacts': 'prune',
+  // VI - Close
+  'vi-close-pipeline': 'prune',
   'deprecation-and-migration': 'prune',
   'documentation-and-adrs': 'prune',
 
-  // VII - Present
-  'vii-present-pr': 'present'
+  // Ad-hoc - Present
+  'present-pr': 'present'
 };
 
 const GROUP_LABEL = {
@@ -189,7 +189,7 @@ function setupMobileNav(){
   drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{drawer.setAttribute('hidden',''); btn.setAttribute('aria-expanded','false');}));
 }
 
-// Interactive 10-Station Pipeline Carousel
+// Interactive Pipeline Carousel (entry → intake → 7 stations → ad-hoc)
 let currentStationIndex = 0;
 let isBubbleAnimating = false;
 
@@ -316,15 +316,15 @@ function renderChatBubbleContent(idx) {
   // Specific quality gate descriptions per station
   const GATES = {
     'pipeline-triage': 'Session pre-flight check: read-only analysis of git working tree & status. No code modifications until target station is locked.',
-    'x-workflow-issue': 'Backlog triage gate: categorizes domain dependencies and verifies whether user wants step-by-step guidance or autonomous flow.',
-    'i-create-issue': 'Research-first gate: extracts concrete file paths with line numbers; captures open questions with explicit default assumptions before marking ready-for-agent.',
+    'create-issue': 'Research-first gate: extracts concrete file paths with line numbers; captures open questions with explicit default assumptions before marking ready-for-agent.',
+    'i-pick-issue': 'Mapping gate: maps the backlog by domain with a recommended order and one highlighted pick, then halts for the operator — never auto-selects silently.',
     'ii-plan-issue': 'Constraint gate: locks CONSTRAINTS.md (zero regressions rule) and breaks feature into atomic vertical slices in tasks/plan.md before any coding.',
     'iii-build-plan': 'Proof-before-next gate: strictly runs TDD per slice; requires passing unit tests or interactive browser verification before proceeding.',
     'iiib-iterate-after-build': 'Minimal diff fix gate: classifies human feedback (bug, dead button, CSS, or speed) and verifies against CONSTRAINTS.md.',
     'iv-review-build-and-pr': 'Multi-axis verification gate: automated test suites + visual proof + OCR delegation scan before generating the PR title & description.',
     'v-babysit-pr-and-merge': 'Autonomous CI gate: monitors workflow status with 5m→1m adaptive polling; resolves reviewer feedback & squash-merges on clean green.',
-    'vi-prune-artifacts': 'Two-gate obsolescence test: scratch files are deleted ONLY if the parent issue is verified closed AND zero inbound references remain.',
-    'vii-present-pr': 'Zero-dependency showcase gate: builds a self-contained single-file HTML presentation with live visuals, try-it guide, and zero external CDN scripts.'
+    'vi-close-pipeline': 'Merge-confirmed close gate: prunes scratch ONLY if the parent issue is verified closed AND zero inbound references remain; then updates PROGRESS.md and the handoff.',
+    'present-pr': 'Zero-dependency showcase gate: builds a self-contained single-file HTML presentation with live visuals, try-it guide, and zero external CDN scripts.'
   };
 
   const gateText = GATES[s.id] || 'Narrow contract gate: verification evidence required at every station handoff.';
