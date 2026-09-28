@@ -33,7 +33,10 @@ const STATIONS_FLOW = [
       { id: 'interview-me', name: 'interview-me', title: 'The /interview-me Skill', desc: 'Asks the operator only what is genuinely unresolvable from code.', gradient: 'from-teal-600 to-emerald-600', icon: 'terminal', kind: 'skill' },
       { id: 'idea-refine', name: 'idea-refine', title: 'The /idea-refine Skill', desc: 'Sharpens vague requests before they become tasks.', gradient: 'from-amber-600 to-yellow-600', icon: 'palette', kind: 'skill' },
       { id: 'doubt-driven-development', name: 'doubt-driven-development', title: 'The /doubt-driven-development Skill', desc: 'Questions risky assumptions with evidence.', gradient: 'from-rose-600 to-pink-600', icon: 'verify', kind: 'skill' },
-      { id: 'code-explorer', name: 'code-explorer', title: 'The code-explorer Persona', desc: 'Traces execution paths in large or unfamiliar code.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' }
+      { id: 'frontend-design', name: 'frontend-design', title: 'The /frontend-design Skill', desc: 'Distinctive, intentional visual design direction before implementation.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'palette', kind: 'skill' },
+      { id: 'humanizer', name: 'humanizer', title: 'The /humanizer Skill', desc: 'Rewrites AI-sounding prose so it reads naturally and clearly.', gradient: 'from-amber-600 to-orange-600', icon: 'document', kind: 'skill' },
+      { id: 'code-explorer', name: 'code-explorer', title: 'The code-explorer Persona', desc: 'Traces execution paths in large or unfamiliar code.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
+      { id: 'type-design-analyzer', name: 'type-design-analyzer', title: 'The type-design-analyzer Persona', desc: 'Evaluates type domain models and public interface boundaries.', gradient: 'from-indigo-600 to-blue-800', icon: 'shield', kind: 'agent' }
     ]
   },
 
@@ -90,7 +93,8 @@ const STATIONS_FLOW = [
     startWithCommand: '/iv-review-build-and-pr',
     accent: 'from-violet-600 to-purple-600',
     invoked: [
-      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Live browser proof gate for UI changes.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
+      { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Browser automation and headless browser proof gate for UI changes.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
+      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Live browser proof gate and profiling for UI changes.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
       { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Targeted tests as the proof gate for logic changes.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
       { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Multi-axis review before anything merges.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
       { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Re-verifies fixes before sign-off.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
@@ -132,7 +136,7 @@ const STATIONS_FLOW = [
     id: 'vi-close-pipeline',
     num: '07',
     title: 'Station VI \u2014 Close Pipeline',
-    desc: 'Confirms the PR is merged, prunes only closed and unreferenced per-issue scratch, updates PROGRESS.md and the handoff. Suggests the ad-hoc showcase.',
+    desc: 'Pipeline closeout: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof, Clean Exit Gate.',
     startWithLabel: 'Start with',
     startWithCommand: '/vi-close-pipeline',
     accent: 'from-slate-500 to-zinc-600',
@@ -175,6 +179,9 @@ const HUMAN_TITLES = {
   'create-issue': 'Create Issue',
   'iii-build-plan': 'Build Plan',
   'tailwind-design-system': 'Tailwind Design System',
+  'frontend-design': 'Frontend Design',
+  'humanizer': 'Humanizer',
+  'playwright-cli': 'Playwright CLI',
   'code-reviewer': 'Code Reviewer',
   'typescript-reviewer': 'TypeScript Reviewer',
   'react-reviewer': 'React Reviewer',
@@ -190,7 +197,8 @@ const HUMAN_TITLES = {
   'go-build-resolver': 'Go Build Resolver',
   'rust-build-resolver': 'Rust Build Resolver',
   'doc-updater': 'Documentation Updater',
-  'code-explorer': 'Code Explorer'
+  'code-explorer': 'Code Explorer',
+  'type-design-analyzer': 'Type Design Analyzer'
 };
 
 // Role-color gradients for agent icon boxes (overrides data gradient: red for build-error-resolver, darker for build resolvers, etc.)
@@ -210,7 +218,8 @@ const AGENT_GRADIENTS = {
   'go-build-resolver': 'from-sky-600 to-slate-800',
   'rust-build-resolver': 'from-orange-600 to-stone-800',
   'doc-updater': 'from-indigo-500 to-violet-700',
-  'code-explorer': 'from-slate-500 to-slate-700'
+  'code-explorer': 'from-slate-500 to-slate-700',
+  'type-design-analyzer': 'from-indigo-600 to-blue-800'
 };
 
 // Persona bust icons for agents: currentColor figure + white emblem on chest
@@ -262,6 +271,9 @@ function getPersonaIconSvg(agentId) {
       break;
     case 'doc-updater':
       e = '<rect x="21" y="32.5" width="6" height="7" rx="0.8" stroke="white" stroke-width="1.1" fill="none"/><path d="M22.5 35h3M22.5 36.8h3" stroke="white" stroke-width="0.9" stroke-linecap="round"/>';
+      break;
+    case 'type-design-analyzer':
+      e = '<path d="M21 33h6M24 33v7" stroke="white" stroke-width="1.3" stroke-linecap="round"/><circle cx="24" cy="36.5" r="4.2" stroke="white" stroke-width="1.1" fill="none"/>';
       break;
     case 'code-explorer':
     default:
@@ -450,7 +462,7 @@ function renderStationsFlow() {
     if (query) {
       counterEl.textContent = `Found ${totalCardsCount} skill connections across ${renderedStationsCount} stations`;
     } else {
-      counterEl.textContent = `Showing ${renderedStationsCount} stations · ${totalCardsCount} invocations across 43 specialized skills & agents`;
+      counterEl.textContent = `Showing ${renderedStationsCount} stations · ${totalCardsCount} invocations across 46 specialized skills & 17 reviewer personas`;
     }
   }
 }
