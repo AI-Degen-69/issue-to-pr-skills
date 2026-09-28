@@ -3,17 +3,42 @@
 
 const STATIONS_FLOW = [
   {
+    id: 'pipeline-triage',
+    num: 'Gate',
+    title: 'State Gate — Pipeline Triage',
+    desc: 'Pre-flight check before Station #1: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
+    startWithLabel: 'Start with',
+    startWithCommand: '/pipeline-triage',
+    accent: 'from-cyan-500 to-blue-500',
+    invoked: [
+      { id: 'using-agent-skills', name: 'using-agent-skills', title: 'The /using-agent-skills Skill', desc: 'Ad-hoc handoff: routes non-issue requests and quick questions to the right ad-hoc skill and stops.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' }
+    ]
+  },
+
+  {
+    id: 'create-issue',
+    num: 'Intake',
+    title: 'Intake Branch — Create Issue',
+    desc: 'Intake branch when there is nothing to pick in Station #1: turns a raw operator idea into a researched, structured GitHub issue labeled ready-for-agent.',
+    startWithLabel: 'Start with',
+    startWithCommand: '/create-issue <idea>',
+    accent: 'from-fuchsia-500 to-pink-500',
+    invoked: [
+      { id: 'using-agent-skills', name: 'using-agent-skills', title: 'The /using-agent-skills Skill', desc: 'Ad-hoc handoff: hands a quick question or exploration back to the router instead of opening an issue.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' }
+    ]
+  },
+
+  {
     id: 'i-pick-issue',
     num: '#1',
     title: 'Station #1 — Claim & Pick',
-    desc: 'Maps the open-issue backlog grouped by domain, recommends order, and highlights one pick. Routes into Station #2.',
+    desc: 'Maps the open-issue backlog grouped by domain, recommends execution order, and highlights one pick. Locks session scope before opening files, routes into Station #2.',
     startWithLabel: 'Start with',
     startWithCommand: '/i-pick-issue',
     accent: 'from-purple-600 to-fuchsia-600',
     invoked: [
-      { id: 'pipeline-triage', name: 'pipeline-triage', title: 'The /pipeline-triage Skill', desc: 'State gate: runs first when the tree is dirty, commits are unpushed, or a PR is open — routes to the right station.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' },
-      { id: 'create-issue', name: 'create-issue', title: 'The /create-issue Skill', desc: 'Intake branch: turns a brand-new raw idea into a researched ready-for-agent issue.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'issue', kind: 'skill' },
-      { id: 'context-engineering', name: 'context-engineering', title: 'The /context-engineering Skill', desc: 'Locks session scope before opening repository files.', gradient: 'from-cyan-600 to-blue-600', icon: 'compass', kind: 'skill' }
+      { id: 'context-engineering', name: 'context-engineering', title: 'The /context-engineering Skill', desc: 'Locks session scope after issue selection before opening repository files.', gradient: 'from-cyan-600 to-blue-600', icon: 'compass', kind: 'skill' },
+      { id: 'using-agent-skills', name: 'using-agent-skills', title: 'The /using-agent-skills Skill', desc: 'Ad-hoc handoff: routes non-issue requests and exploratory tasks to the ad-hoc router.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' }
     ]
   },
 
@@ -21,22 +46,30 @@ const STATIONS_FLOW = [
     id: 'ii-plan-issue',
     num: '#2',
     title: 'Station #2 — Plan & Constraints',
-    desc: 'Right-sizes the issue, locks CONSTRAINTS.md, and writes tasks/plan.md as atomic vertical slices before any code.',
+    desc: 'Right-sizes the issue, routes domain specialists, specifies interfaces, locks CONSTRAINTS.md, and writes tasks/plan.md as atomic vertical slices before any code.',
     startWithLabel: 'Start with',
     startWithCommand: '/ii-plan-issue',
     accent: 'from-cyan-500 to-blue-600',
     invoked: [
-      { id: 'context-engineering', name: 'context-engineering', title: 'The /context-engineering Skill', desc: 'Locks session scope and the task classification before planning.', gradient: 'from-cyan-600 to-blue-600', icon: 'compass', kind: 'skill' },
-      { id: 'spec-driven-development', name: 'spec-driven-development', title: 'The /spec-driven-development Skill', desc: 'Turns ambiguous requirements into a clear specification first.', gradient: 'from-blue-600 to-indigo-600', icon: 'document', kind: 'skill' },
-      { id: 'constraint-driven-development', name: 'constraint-driven-development', title: 'The /constraint-driven-development Skill', desc: 'Writes the CONSTRAINTS.md quality bar: zero regressions, no lowering the bar.', gradient: 'from-slate-600 to-slate-700', icon: 'shield', kind: 'skill' },
-      { id: 'planning-and-task-breakdown', name: 'planning-and-task-breakdown', title: 'The /planning-and-task-breakdown Skill', desc: 'Breaks the work into ordered vertical slices in tasks/plan.md.', gradient: 'from-violet-600 to-purple-600', icon: 'plan', kind: 'skill' },
-      { id: 'interview-me', name: 'interview-me', title: 'The /interview-me Skill', desc: 'Asks the operator only what is genuinely unresolvable from code.', gradient: 'from-teal-600 to-emerald-600', icon: 'terminal', kind: 'skill' },
-      { id: 'idea-refine', name: 'idea-refine', title: 'The /idea-refine Skill', desc: 'Sharpens vague requests before they become tasks.', gradient: 'from-amber-600 to-yellow-600', icon: 'palette', kind: 'skill' },
-      { id: 'doubt-driven-development', name: 'doubt-driven-development', title: 'The /doubt-driven-development Skill', desc: 'Questions risky assumptions with evidence.', gradient: 'from-rose-600 to-pink-600', icon: 'verify', kind: 'skill' },
-      { id: 'frontend-design', name: 'frontend-design', title: 'The /frontend-design Skill', desc: 'Distinctive, intentional visual design direction before implementation.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'palette', kind: 'skill' },
-      { id: 'humanizer', name: 'humanizer', title: 'The /humanizer Skill', desc: 'Rewrites AI-sounding prose so it reads naturally and clearly.', gradient: 'from-amber-600 to-orange-600', icon: 'document', kind: 'skill' },
-      { id: 'code-explorer', name: 'code-explorer', title: 'The code-explorer Persona', desc: 'Traces execution paths in large or unfamiliar code.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'type-design-analyzer', name: 'type-design-analyzer', title: 'The type-design-analyzer Persona', desc: 'Evaluates type domain models and public interface boundaries.', gradient: 'from-indigo-600 to-blue-800', icon: 'shield', kind: 'agent' }
+      { id: 'code-explorer', name: 'code-explorer', title: 'The code-explorer Persona', desc: 'Step 0: traces execution paths in large, unfamiliar, or legacy code before planning.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
+      { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Step 1 (Design/UI): accessible, responsive, production-quality UI and WCAG compliance.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
+      { id: 'frontend-design', name: 'frontend-design', title: 'The /frontend-design Skill', desc: 'Step 1 (Design/UI): distinctive, intentional visual design direction before implementation.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'palette', kind: 'skill' },
+      { id: 'tailwind-design-system', name: 'tailwind-design-system', title: 'The /tailwind-design-system Skill', desc: 'Step 1 (Design/UI): design tokens, component libraries, and Tailwind patterns.', gradient: 'from-cyan-600 to-blue-600', icon: 'palette', kind: 'skill' },
+      { id: 'extract-design-system', name: 'extract-design-system', title: 'The /extract-design-system Skill', desc: 'Step 1 (Design/UI): extracts design primitives and starter tokens from public websites.', gradient: 'from-teal-600 to-emerald-600', icon: 'palette', kind: 'skill' },
+      { id: 'api-and-interface-design', name: 'api-and-interface-design', title: 'The /api-and-interface-design Skill', desc: 'Step 1 (API/Backend): designs stable module boundaries and typed interface contracts.', gradient: 'from-indigo-600 to-violet-600', icon: 'layout', kind: 'skill' },
+      { id: 'debugging-and-error-recovery', name: 'debugging-and-error-recovery', title: 'The /debugging-and-error-recovery Skill', desc: 'Step 1 (Debug): systematic root-cause reproduction, localization, fix, and guard.', gradient: 'from-red-600 to-orange-600', icon: 'verify', kind: 'skill' },
+      { id: 'doubt-driven-development', name: 'doubt-driven-development', title: 'The /doubt-driven-development Skill', desc: 'Step 1 (Debug): questions risky assumptions with fresh adversarial review.', gradient: 'from-rose-600 to-pink-600', icon: 'verify', kind: 'skill' },
+      { id: 'performance-optimization', name: 'performance-optimization', title: 'The /performance-optimization Skill', desc: 'Step 1 (Performance): latency, memory, queries, and Core Web Vitals planning.', gradient: 'from-amber-600 to-orange-600', icon: 'build', kind: 'skill' },
+      { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Step 1 (Security): threat modeling, secrets, session boundaries, and input audits.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
+      { id: 'documentation-and-adrs', name: 'documentation-and-adrs', title: 'The /documentation-and-adrs Skill', desc: 'Step 1 (Docs): records architectural decisions and updates durable docs.', gradient: 'from-blue-600 to-indigo-600', icon: 'document', kind: 'skill' },
+      { id: 'humanizer', name: 'humanizer', title: 'The /humanizer Skill', desc: 'Step 1 (UX / Copy): rewrites AI-sounding text so it reads naturally and clearly.', gradient: 'from-amber-600 to-orange-600', icon: 'document', kind: 'skill' },
+      { id: 'idea-refine', name: 'idea-refine', title: 'The /idea-refine Skill', desc: 'Step 1 (Research): sharpens vague concepts through structured divergence/convergence.', gradient: 'from-amber-600 to-yellow-600', icon: 'palette', kind: 'skill' },
+      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Step 1 (Core default): specifies test cases and assertions before coding.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
+      { id: 'incremental-implementation', name: 'incremental-implementation', title: 'The /incremental-implementation Skill', desc: 'Step 1 (Core default): delivers changes in small, safe, ordered vertical increments.', gradient: 'from-lime-600 to-green-600', icon: 'workflow', kind: 'skill' },
+      { id: 'spec-driven-development', name: 'spec-driven-development', title: 'The /spec-driven-development Skill', desc: 'Step 2: turns requirements into SPEC.md with goals, acceptance criteria, and edge cases.', gradient: 'from-blue-600 to-indigo-600', icon: 'document', kind: 'skill' },
+      { id: 'constraint-driven-development', name: 'constraint-driven-development', title: 'The /constraint-driven-development Skill', desc: 'Step 3: locks CONSTRAINTS.md: zero regressions, anti-cheat, performance ceilings.', gradient: 'from-slate-600 to-slate-700', icon: 'shield', kind: 'skill' },
+      { id: 'type-design-analyzer', name: 'type-design-analyzer', title: 'The type-design-analyzer Persona', desc: 'Step 4: evaluates type domain models, encapsulation, and public interface contracts.', gradient: 'from-indigo-600 to-blue-800', icon: 'shield', kind: 'agent' },
+      { id: 'planning-and-task-breakdown', name: 'planning-and-task-breakdown', title: 'The /planning-and-task-breakdown Skill', desc: 'Step 6: maps dependency graph first, then decomposes work into risk-first tasks.', gradient: 'from-violet-600 to-purple-600', icon: 'plan', kind: 'skill' }
     ]
   },
 
@@ -44,23 +77,28 @@ const STATIONS_FLOW = [
     id: 'iii-build-plan',
     num: '#3',
     title: 'Station #3 — Build with TDD',
-    desc: 'Executes tasks/plan.md one task at a time with TDD, atomic local commits, and domain-routed specialists. Never pushes.',
+    desc: 'Executes tasks/plan.md one task at a time with domain-routed specialists, TDD, docs grounding, atomic local commits, and code simplification. Never pushes.',
     startWithLabel: 'Start with',
     startWithCommand: '/iii-build-plan',
     accent: 'from-emerald-600 to-teal-600',
     invoked: [
-      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Writes the failing test first, then the minimal code to pass.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
-      { id: 'source-driven-development', name: 'source-driven-development', title: 'The /source-driven-development Skill', desc: 'Grounds API usage in official documentation.', gradient: 'from-sky-600 to-cyan-600', icon: 'book', kind: 'skill' },
-      { id: 'api-and-interface-design', name: 'api-and-interface-design', title: 'The /api-and-interface-design Skill', desc: 'Designs stable module and API boundaries.', gradient: 'from-indigo-600 to-violet-600', icon: 'layout', kind: 'skill' },
-      { id: 'code-simplification', name: 'code-simplification', title: 'The /code-simplification Skill', desc: 'Simplifies working code without changing behavior.', gradient: 'from-teal-600 to-emerald-600', icon: 'build', kind: 'skill' },
-      { id: 'debugging-and-error-recovery', name: 'debugging-and-error-recovery', title: 'The /debugging-and-error-recovery Skill', desc: 'Fixes runtime failures with evidence.', gradient: 'from-red-600 to-orange-600', icon: 'verify', kind: 'skill' },
-      { id: 'diagnosing-bugs', name: 'diagnosing-bugs', title: 'The /diagnosing-bugs Skill', desc: 'Diagnoses root cause before patching.', gradient: 'from-orange-600 to-amber-600', icon: 'plan', kind: 'skill' },
-      { id: 'incremental-implementation', name: 'incremental-implementation', title: 'The /incremental-implementation Skill', desc: 'Lands the work in small safe increments.', gradient: 'from-lime-600 to-green-600', icon: 'workflow', kind: 'skill' },
-      { id: 'tdd-guide', name: 'tdd-guide', title: 'The tdd-guide Persona', desc: 'Enforces write-the-test-first discipline.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Fixes generic build and compile failures.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Fixes React build failures.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go build failures.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Fixes Rust build failures.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' }
+      { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'UI/Frontend routing: accessible, responsive components and production layouts.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
+      { id: 'tailwind-design-system', name: 'tailwind-design-system', title: 'The /tailwind-design-system Skill', desc: 'UI/Frontend routing: applies project design tokens and utility styling.', gradient: 'from-cyan-600 to-blue-600', icon: 'palette', kind: 'skill' },
+      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Code/Backend routing: writes the failing test first, then minimal code to pass.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
+      { id: 'source-driven-development', name: 'source-driven-development', title: 'The /source-driven-development Skill', desc: 'Code/Backend routing: grounds API usage and patterns in official documentation.', gradient: 'from-sky-600 to-cyan-600', icon: 'book', kind: 'skill' },
+      { id: 'api-and-interface-design', name: 'api-and-interface-design', title: 'The /api-and-interface-design Skill', desc: 'Code/Backend routing: implements clean module boundaries and typed signatures.', gradient: 'from-indigo-600 to-violet-600', icon: 'layout', kind: 'skill' },
+      { id: 'debugging-and-error-recovery', name: 'debugging-and-error-recovery', title: 'The /debugging-and-error-recovery Skill', desc: 'Debug/Defect routing: investigates root cause before writing fixes.', gradient: 'from-red-600 to-orange-600', icon: 'verify', kind: 'skill' },
+      { id: 'performance-optimization', name: 'performance-optimization', title: 'The /performance-optimization Skill', desc: 'Performance routing: optimizes bottlenecks, queries, and rendering.', gradient: 'from-amber-600 to-orange-600', icon: 'build', kind: 'skill' },
+      { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Security routing: validates inputs, manages session boundaries, protects secrets.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
+      { id: 'documentation-and-adrs', name: 'documentation-and-adrs', title: 'The /documentation-and-adrs Skill', desc: 'Docs routing: keeps documentation and docstrings in sync with changed behavior.', gradient: 'from-blue-600 to-indigo-600', icon: 'document', kind: 'skill' },
+      { id: 'code-simplification', name: 'code-simplification', title: 'The /code-simplification Skill', desc: 'Recurring: prunes dead code and unnecessary abstractions at the end of each task.', gradient: 'from-teal-600 to-emerald-600', icon: 'build', kind: 'skill' },
+      { id: 'git-workflow-and-versioning', name: 'git-workflow-and-versioning', title: 'The /git-workflow-and-versioning Skill', desc: 'Recurring: commit discipline, atomic local commits, rollback safety.', gradient: 'from-orange-600 to-red-600', icon: 'git', kind: 'skill' },
+      { id: 'observability-and-instrumentation', name: 'observability-and-instrumentation', title: 'The /observability-and-instrumentation Skill', desc: 'Recurring: structured logging and metric instrumentation for production changes.', gradient: 'from-indigo-600 to-blue-600', icon: 'terminal', kind: 'skill' },
+      { id: 'tdd-guide', name: 'tdd-guide', title: 'The tdd-guide Persona', desc: 'Enforces write-tests-first discipline and ~80%+ test coverage.', gradient: 'from-green-500 to-emerald-700', icon: 'shield', kind: 'agent' },
+      { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Resolves generic syntax, compiler, and import errors with minimal diffs.', gradient: 'from-amber-500 to-amber-800', icon: 'shield', kind: 'agent' },
+      { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Resolves React-specific compilation and JSX/build failures.', gradient: 'from-cyan-400 to-cyan-700', icon: 'shield', kind: 'agent' },
+      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Resolves Go build and compiler errors.', gradient: 'from-sky-600 to-slate-800', icon: 'shield', kind: 'agent' },
+      { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Resolves Rust borrow checker, lifetime, and compilation errors.', gradient: 'from-orange-600 to-stone-800', icon: 'shield', kind: 'agent' }
     ]
   },
 
@@ -68,19 +106,22 @@ const STATIONS_FLOW = [
     id: 'iiib-iterate-after-build',
     num: '#3b',
     title: 'Station #3b — Iterate Human Feedback',
-    desc: 'Fast fix loop for operator corrections on a fresh build. Minimal verified fixes, committed locally. Loops until clean.',
+    desc: 'Fast fix loop for operator corrections on a fresh build. Classifies comments into specialist lanes, applies minimal fixes, simplifies, and verifies until clean.',
     startWithLabel: 'Start with',
     startWithCommand: '/iiib-iterate-after-build',
     accent: 'from-amber-600 to-orange-600',
     invoked: [
-      { id: 'debugging-and-error-recovery', name: 'debugging-and-error-recovery', title: 'The /debugging-and-error-recovery Skill', desc: 'Fixes runtime bugs with a reproduction first.', gradient: 'from-red-600 to-orange-600', icon: 'verify', kind: 'skill' },
-      { id: 'diagnosing-bugs', name: 'diagnosing-bugs', title: 'The /diagnosing-bugs Skill', desc: 'Finds the real root cause of reported corrections.', gradient: 'from-orange-600 to-amber-600', icon: 'plan', kind: 'skill' },
-      { id: 'click-path-audit', name: 'click-path-audit', title: 'The /click-path-audit Skill', desc: 'Traces dead buttons through their full state sequence.', gradient: 'from-amber-600 to-orange-600', icon: 'browser', kind: 'skill' },
-      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Verifies UI fixes in a live browser: DOM, console, network.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
-      { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Fixes component, state, and layout issues.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
-      { id: 'code-simplification', name: 'code-simplification', title: 'The /code-simplification Skill', desc: 'Keeps each fix minimal and clean.', gradient: 'from-teal-600 to-emerald-600', icon: 'build', kind: 'skill' },
-      { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Re-verifies every fix before calling it done.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
-      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Proves logic fixes with targeted tests.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' }
+      { id: 'diagnosing-bugs', name: 'diagnosing-bugs', title: 'The /diagnosing-bugs Skill', desc: 'Lane routing (Bug): structured diagnosis loop for crashes and regressions.', gradient: 'from-orange-600 to-amber-600', icon: 'plan', kind: 'skill' },
+      { id: 'debugging-and-error-recovery', name: 'debugging-and-error-recovery', title: 'The /debugging-and-error-recovery Skill', desc: 'Lane routing (Bug): reproduce, localize, minimal fix, and guard.', gradient: 'from-red-600 to-orange-600', icon: 'verify', kind: 'skill' },
+      { id: 'click-path-audit', name: 'click-path-audit', title: 'The /click-path-audit Skill', desc: 'Lane routing (Dead button): traces handler sequence to find canceling state writes.', gradient: 'from-amber-600 to-orange-600', icon: 'browser', kind: 'skill' },
+      { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Lane routing (UI/Styling): fixes component structure, responsive layout, and styles.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
+      { id: 'tailwind-design-system', name: 'tailwind-design-system', title: 'The /tailwind-design-system Skill', desc: 'Lane routing (UI/Styling): aligns styling corrections with project design tokens.', gradient: 'from-cyan-600 to-blue-600', icon: 'palette', kind: 'skill' },
+      { id: 'performance-optimization', name: 'performance-optimization', title: 'The /performance-optimization Skill', desc: 'Lane routing (Slow): profiles before optimizing slow operations or rendering.', gradient: 'from-amber-600 to-orange-600', icon: 'build', kind: 'skill' },
+      { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Lane routing (Security): fixes auth, secrets exposure, and untrusted inputs.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
+      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Verification: live DOM, console, and network check with zero uncaught errors.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
+      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Verification: targeted regression tests proving logic fixes at the reproduction seam.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
+      { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Verification: confirms every reported operator correction is fixed with evidence.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
+      { id: 'code-simplification', name: 'code-simplification', title: 'The /code-simplification Skill', desc: 'Recurring: keeps each fix minimal, zero dead code or speculative abstractions.', gradient: 'from-teal-600 to-emerald-600', icon: 'build', kind: 'skill' }
     ]
   },
 
@@ -93,25 +134,27 @@ const STATIONS_FLOW = [
     startWithCommand: '/iv-review-build-and-pr',
     accent: 'from-violet-600 to-purple-600',
     invoked: [
-      { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Browser automation and headless browser proof gate for UI changes.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
-      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Live browser proof gate and profiling for UI changes.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
-      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Targeted tests as the proof gate for logic changes.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
-      { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Multi-axis review before anything merges.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
-      { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Re-verifies fixes before sign-off.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
-      { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Vulnerability and secrets review lane.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
-      { id: 'performance-optimization', name: 'performance-optimization', title: 'The /performance-optimization Skill', desc: 'Performance review lane.', gradient: 'from-amber-600 to-orange-600', icon: 'build', kind: 'skill' },
-      { id: 'web-design-guidelines', name: 'web-design-guidelines', title: 'The /web-design-guidelines Skill', desc: 'Accessibility and ARIA review lane for UI.', gradient: 'from-teal-600 to-cyan-600', icon: 'palette', kind: 'skill' },
-      { id: 'git-workflow-and-versioning', name: 'git-workflow-and-versioning', title: 'The /git-workflow-and-versioning Skill', desc: 'Clean push and PR hygiene.', gradient: 'from-orange-600 to-red-600', icon: 'git', kind: 'skill' },
-      { id: 'database-reviewer', name: 'database-reviewer', title: 'The database-reviewer Persona', desc: 'Reviews SQL/ORM changes: N+1, indexes, migrations.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'doc-updater', name: 'doc-updater', title: 'The doc-updater Persona', desc: 'Checks docs still match changed behavior.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'go-reviewer', name: 'go-reviewer', title: 'The go-reviewer Persona', desc: 'Reviews Go: goroutines, errors, interfaces.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'python-reviewer', name: 'python-reviewer', title: 'The python-reviewer Persona', desc: 'Reviews Python: asyncio, typing, PEP 8.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'react-reviewer', name: 'react-reviewer', title: 'The react-reviewer Persona', desc: 'Reviews React: hooks, a11y, render performance.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'rust-reviewer', name: 'rust-reviewer', title: 'The rust-reviewer Persona', desc: 'Reviews Rust: lifetimes, unsafe, borrowing.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'security-reviewer', name: 'security-reviewer', title: 'The security-reviewer Persona', desc: 'Reviews vulnerabilities, auth, and secrets.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'silent-failure-hunter', name: 'silent-failure-hunter', title: 'The silent-failure-hunter Persona', desc: 'Hunts swallowed errors and empty catches.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'typescript-reviewer', name: 'typescript-reviewer', title: 'The typescript-reviewer Persona', desc: 'Reviews TS/JS: types, async, Node security.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'General code quality, five-axis review.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' }
+      { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Step 0 Proof Gate: preferred headless browser automation for fast UI/DOM proof.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
+      { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Step 0 Proof Gate: live browser inspection for performance profiling and traces only.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
+      { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Step 1B: general code quality, naming, lack of dead code, and pattern adherence.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
+      { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Step 1B: audits inputs, secrets exposure, session boundaries, and supply chain.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
+      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Step 1B: test engineering audit — verifies real domain tests, not hollow mocks.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
+      { id: 'web-design-guidelines', name: 'web-design-guidelines', title: 'The /web-design-guidelines Skill', desc: 'Step 1B: reviews UI for accessibility, WCAG contrast, and ARIA attributes.', gradient: 'from-teal-600 to-cyan-600', icon: 'palette', kind: 'skill' },
+      { id: 'api-and-interface-design', name: 'api-and-interface-design', title: 'The /api-and-interface-design Skill', desc: 'Step 1B Advisory: REST contracts and endpoint boundary review when APIs change.', gradient: 'from-indigo-600 to-violet-600', icon: 'layout', kind: 'skill' },
+      { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Step 1B Advisory: reviews UI components, state lifecycles, and layout integrity.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
+      { id: 'vercel-react-best-practices', name: 'vercel-react-best-practices', title: 'The /vercel-react-best-practices Skill', desc: 'Step 1B Advisory: data-fetching, caching, and hydration checklists for React/Next.js.', gradient: 'from-cyan-600 to-blue-700', icon: 'layout', kind: 'skill' },
+      { id: 'vercel-composition-patterns', name: 'vercel-composition-patterns', title: 'The /vercel-composition-patterns Skill', desc: 'Step 1B Advisory: compound components and decoupled state interfaces for React.', gradient: 'from-indigo-600 to-violet-700', icon: 'layout', kind: 'skill' },
+      { id: 'typescript-reviewer', name: 'typescript-reviewer', title: 'The typescript-reviewer Persona', desc: 'Diff-matched reviewer: TS/JS types, async correctness, Node/web security.', gradient: 'from-[#3178C6] to-blue-800', icon: 'shield', kind: 'agent' },
+      { id: 'react-reviewer', name: 'react-reviewer', title: 'The react-reviewer Persona', desc: 'Diff-matched reviewer: React hooks, a11y, RSC boundaries, render performance.', gradient: 'from-cyan-400 to-cyan-700', icon: 'shield', kind: 'agent' },
+      { id: 'python-reviewer', name: 'python-reviewer', title: 'The python-reviewer Persona', desc: 'Diff-matched reviewer: Python asyncio, typing, PEP 8, memory leaks.', gradient: 'from-amber-400 to-yellow-600', icon: 'shield', kind: 'agent' },
+      { id: 'go-reviewer', name: 'go-reviewer', title: 'The go-reviewer Persona', desc: 'Diff-matched reviewer: Go goroutines, error propagation, interface boundaries.', gradient: 'from-sky-400 to-sky-700', icon: 'shield', kind: 'agent' },
+      { id: 'rust-reviewer', name: 'rust-reviewer', title: 'The rust-reviewer Persona', desc: 'Diff-matched reviewer: Rust lifetimes, unsafe blocks, concurrency, borrowing.', gradient: 'from-orange-500 to-amber-800', icon: 'shield', kind: 'agent' },
+      { id: 'database-reviewer', name: 'database-reviewer', title: 'The database-reviewer Persona', desc: 'Diff-matched reviewer: SQL/ORM changes, N+1 queries, indexes, migrations.', gradient: 'from-emerald-500 to-teal-700', icon: 'shield', kind: 'agent' },
+      { id: 'security-reviewer', name: 'security-reviewer', title: 'The security-reviewer Persona', desc: 'Diff-matched reviewer: security vulnerabilities, authentication, and secrets.', gradient: 'from-rose-500 to-red-700', icon: 'shield', kind: 'agent' },
+      { id: 'silent-failure-hunter', name: 'silent-failure-hunter', title: 'The silent-failure-hunter Persona', desc: 'Diff-matched reviewer: hunts swallowed errors, empty catches, dangerous fallbacks.', gradient: 'from-red-500 to-red-800', icon: 'shield', kind: 'agent' },
+      { id: 'doc-updater', name: 'doc-updater', title: 'The doc-updater Persona', desc: 'Diff-matched reviewer: checks documentation still matches changed code behavior.', gradient: 'from-indigo-500 to-violet-700', icon: 'shield', kind: 'agent' },
+      { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Step 3 Post-Review Gate: verifies entire change post-fixes before push.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
+      { id: 'git-workflow-and-versioning', name: 'git-workflow-and-versioning', title: 'The /git-workflow-and-versioning Skill', desc: 'Step 4: git synchronization, clean feature branch push, and PR hygiene.', gradient: 'from-orange-600 to-red-600', icon: 'git', kind: 'skill' }
     ]
   },
 
@@ -119,37 +162,47 @@ const STATIONS_FLOW = [
     id: 'v-babysit-pr-and-merge',
     num: '#5',
     title: 'Station #5 — Babysit PR & Merge',
-    desc: 'Consumes the trigger status from Station #4. One review round, triages every comment, batch-fixes in one commit, squash-merges on green CI.',
+    desc: 'Consumes trigger status from Station #4. Sits on PR through one focused CodeRabbit review round (skills: none — gh API + CodeRabbit only), resolves comments, squash-merges on green CI.',
     startWithLabel: 'Start with',
     startWithCommand: '/v-babysit-pr-and-merge',
     accent: 'from-pink-600 to-rose-600',
     invoked: [
-      { id: 'iii-build-plan', name: 'iii-build-plan', title: 'The /iii-build-plan Skill', desc: 'Re-applies accepted review fixes locally, verified per task.', gradient: 'from-emerald-600 to-teal-600', icon: 'build', kind: 'skill' },
-      { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'Fallback full review only when Station #4 evidence cannot be reused.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Fixes build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Fixes React build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
-      { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Fixes Rust build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' }
+      { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'Full fallback code quality review only when CodeRabbit evidence is unavailable.', gradient: 'from-violet-600 to-purple-700', icon: 'shield', kind: 'agent' },
+      { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Fixes generic build and compile failures found in CI merge checks.', gradient: 'from-amber-500 to-amber-800', icon: 'shield', kind: 'agent' },
+      { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Fixes React compilation failures found in CI merge checks.', gradient: 'from-cyan-400 to-cyan-700', icon: 'shield', kind: 'agent' },
+      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go compilation and package failures found in CI merge checks.', gradient: 'from-sky-600 to-slate-800', icon: 'shield', kind: 'agent' },
+      { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Fixes Rust borrow checker and build failures found in CI merge checks.', gradient: 'from-orange-600 to-stone-800', icon: 'shield', kind: 'agent' }
     ]
   },
+
   {
     id: 'vi-close-pipeline',
     num: '#6',
     title: 'Station #6 — Close Pipeline',
-    desc: 'Pipeline closeout: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof, Clean Exit Gate.',
+    desc: 'Post-merge closeout: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof, Clean Exit Gate.',
     startWithLabel: 'Start with',
     startWithCommand: '/vi-close-pipeline',
     accent: 'from-slate-500 to-zinc-600',
     invoked: [
-      { id: 'verification-before-completion', name: 'verification-before-completion', title: 'The /verification-before-completion Skill', desc: 'Two-gate obsolescence test before any deletion.', gradient: 'from-green-600 to-emerald-600', icon: 'verify', kind: 'skill' },
-      { id: 'documentation-and-adrs', name: 'documentation-and-adrs', title: 'The /documentation-and-adrs Skill', desc: 'Relocates durable records to permanent docs.', gradient: 'from-blue-600 to-indigo-600', icon: 'document', kind: 'skill' },
-      { id: 'deprecation-and-migration', name: 'deprecation-and-migration', title: 'The /deprecation-and-migration Skill', desc: 'Routes dead code to proper migration tracks, not the bin.', gradient: 'from-amber-600 to-orange-600', icon: 'migrate', kind: 'skill' }
+      { id: 'deprecation-and-migration', name: 'deprecation-and-migration', title: 'The /deprecation-and-migration Skill', desc: 'Exception-only: routes dead code to proper migration tracks when renaming live APIs or migrating consumers.', gradient: 'from-amber-600 to-orange-600', icon: 'migrate', kind: 'skill' }
     ]
+  },
+
+  {
+    id: 'present-pr',
+    num: 'Ad-hoc',
+    title: 'Ad-hoc Showcase — Present PR',
+    desc: 'Ad-hoc visual presentation run on request after Station #6 or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
+    startWithLabel: 'Start with',
+    startWithCommand: '/present-pr <id>',
+    accent: 'from-fuchsia-600 to-pink-600',
+    invoked: []
   }
 ];
 
 
 const HUMAN_TITLES = {
+  'using-agent-skills': 'Using Agent Skills',
   'context-engineering': 'Engineering Context',
   'spec-driven-development': 'Spec-Driven Development',
   'constraint-driven-development': 'Constraint-Driven Development',
@@ -161,18 +214,22 @@ const HUMAN_TITLES = {
   'source-driven-development': 'Source-Driven Development',
   'api-and-interface-design': 'API & Interface Design',
   'code-simplification': 'Code Simplification',
-  'debugging-and-error-recovery': 'Diagnosing Bugs',
+  'debugging-and-error-recovery': 'Debugging & Error Recovery',
   'diagnosing-bugs': 'Root-Cause Analysis',
   'incremental-implementation': 'Incremental Implementation',
   'click-path-audit': 'Click-Path Audit',
   'browser-testing-with-devtools': 'Browser Testing',
   'frontend-ui-engineering': 'Frontend UI Engineering',
+  'extract-design-system': 'Extract Design System',
   'verification-before-completion': 'Final Verification',
   'code-review-and-quality': 'Code Review & Quality',
   'security-and-hardening': 'Security Hardening',
-  'performance-optimization': 'Performance Tuning',
+  'performance-optimization': 'Performance Optimization',
   'web-design-guidelines': 'Web Design Guidelines',
   'git-workflow-and-versioning': 'Git Workflow & Versioning',
+  'observability-and-instrumentation': 'Observability & Instrumentation',
+  'vercel-react-best-practices': 'Vercel React Best Practices',
+  'vercel-composition-patterns': 'Vercel Composition Patterns',
   'documentation-and-adrs': 'Documentation & ADRs',
   'deprecation-and-migration': 'Deprecation & Migration',
   'pipeline-triage': 'Pipeline Triage',
@@ -182,6 +239,7 @@ const HUMAN_TITLES = {
   'frontend-design': 'Frontend Design',
   'humanizer': 'Humanizer',
   'playwright-cli': 'Playwright CLI',
+  'present-pr': 'Present PR',
   'code-reviewer': 'Code Reviewer',
   'typescript-reviewer': 'TypeScript Reviewer',
   'react-reviewer': 'React Reviewer',
@@ -391,7 +449,7 @@ function renderStationsFlow() {
     renderedStationsCount++;
     totalCardsCount += filteredInvoked.length;
 
-    const cardsHtml = filteredInvoked.map(skill => {
+    let cardsHtml = filteredInvoked.map(skill => {
       const isAgent = skill.kind === 'agent';
       return `
       <div 
@@ -414,6 +472,23 @@ function renderStationsFlow() {
         </div>
       </div>
     `}).join('');
+
+    if (!cardsHtml) {
+      cardsHtml = `
+        <div class="p-5 rounded-2xl border border-white/10 bg-white/[.02] text-sm text-white/50 font-mono flex items-center gap-2">
+          <span>⚡</span>
+          <span>None — internal zero-dependency component kit only (skills: none)</span>
+        </div>
+      `;
+    } else if (station.id === 'v-babysit-pr-and-merge' && !query) {
+      cardsHtml = `
+        <div class="px-4 py-2.5 rounded-xl border border-white/10 bg-white/[.02] text-xs text-white/50 font-mono flex items-center gap-2 mb-1">
+          <span class="text-amber-400 font-bold">Skills: none</span>
+          <span class="text-white/30">·</span>
+          <span>GitHub API & CodeRabbit only. Fallback & CI build resolvers:</span>
+        </div>
+      ` + cardsHtml;
+    }
 
     return `
       <section id="${station.id}" class="station-row border-t border-white/10 pt-10 pb-12 first:border-t-0 first:pt-4">
@@ -610,15 +685,20 @@ function renderStationPills() {
   const container = document.getElementById('stationPills');
   if (!container) return;
 
-  container.innerHTML = STATIONS_FLOW.map(st => `
+  container.innerHTML = STATIONS_FLOW.map(st => {
+    const cleanTitle = st.title
+      .replace(/^Station /, '')
+      .replace(/^(State Gate|Intake Branch|Ad-hoc Showcase) — /, '')
+      .replace(' — ', ' ');
+    return `
     <a 
       href="#${st.id}" 
       class="shrink-0 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[.04] hover:bg-white/[.1] hover:border-violet-500/40 text-xs text-white/80 hover:text-white transition flex items-center gap-1.5"
     >
       <span class="font-mono text-white/40 text-[11px]">${st.num}</span>
-      <span class="font-medium">${st.title.replace('Station ', '').replace(' — ', ' ')}</span>
+      <span class="font-medium">${cleanTitle}</span>
     </a>
-  `).join('');
+  `}).join('');
 }
 
 // Initialize on DOM ready
