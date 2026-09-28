@@ -18,7 +18,7 @@
     "validate": "node scripts/validate.js",
     "validate:skills": "node scripts/validate.js skills",
     "validate:links": "node scripts/validate-links.js",
-    "validate:mirror": "node scripts/sync-from-canonical.js --check",
+    "validate:mirror": "node scripts/verify-mirror.js && node scripts/sync-from-canonical.js --check",
     "sync": "node scripts/sync-from-canonical.js",
     "test": "node --test scripts/**/*.test.js",
     "check": "npm run validate && npm run validate:mirror",

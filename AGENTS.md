@@ -2,7 +2,9 @@
 
 ## What this repo is
 
-Public skill pack: 10 pipeline station skills (`skills/`), 33 supporting skills, 18 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
+Public skill pack: 10 pipeline station skills (`skills/`), 36 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
+
+Counts are exact and must stay true: `skills/` = 46 directories (10 stations + 36 supporting), `agents/` = 17 personas. `scripts/verify-mirror.js` checks the skill set and is the source of truth for that number.
 
 ## Rules for changes here
 
