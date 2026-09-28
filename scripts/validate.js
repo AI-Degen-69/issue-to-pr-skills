@@ -19,8 +19,8 @@ function readFrontmatter(file) {
     const m = parseLine(lines[i]);
     if (m) {
       let val = m[2].trim().replace(/^["']|["']$/g, "");
-      // YAML folded: description on next indented lines
-      if (!val) {
+      // YAML folded/literal: description on next indented lines
+      if (!val || /^(\||>)[+-]?$/.test(val)) {
         const buf = [];
         for (let j = i + 1; j < lines.length; j++) {
           const nxt = lines[j];

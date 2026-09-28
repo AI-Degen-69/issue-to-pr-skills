@@ -50,21 +50,16 @@ Respect `CONSTRAINTS.md` (no skipped tests, no new external dependencies without
 
 ## Hebrew Chat Output Contract
 
-Report in clean, everyday Hebrew. Write for the customer who ordered the product, never for a developer:
-
-- No code words: never handler, state, side effect, function, commit, test names, or file paths. Say what the person gets now.
-- Never use the word console. Say "checked in the browser, no errors" instead.
-- One line per comment: what was wrong in plain words, then what works now. One sentence each.
+Report in clean, everyday Hebrew. Write for the customer who ordered the product, never for a developer. What's-changed only: one line per fixed item — product location + what was wrong in plain words, then what works now. No skill names, no commits, no tests, no file paths. Never use the word console. Say "checked in the browser, no errors" instead.
 
 ```markdown
 # 🔁 IIIB - תיקונים אחרי בנייה (סיכום איטרציה):
 
-## 🧭 ניתוב:
-* **[ההערה במילים שלך]** -> `diagnosing-bugs` + `debugging-and-error-recovery`: [לפני: מה לא עבד לאדם. עכשיו: מה עובד]
-* **[הערה 2]** -> [נתיב]: [לפני / עכשיו באותו סגנון]
+## 🩹 מה תוקן?
+* **[מיקום מוצרי]** — [לפני: מה לא עבד לאדם. עכשיו: מה עובד]
 
-## ✅ אימות:
-* [נבדק בדפדפן: מה נלחץ ומה נראה. בלי המילה console. לוגיקה: נבדק שמה שעבד קודם עדיין עובד]
+## ➕ מה חדש? / ✏️ מה שונה?
+* [רק אם תיקון הוסיף או שינה משהו מעבר לתיקון עצמו — אחרת הקבוצה לא מופיעה]
 
 👉 **שלב הבא:** `/iv-review-build-and-pr` — הכל עובד, מוכן לסקירה ושליחה.
 ```

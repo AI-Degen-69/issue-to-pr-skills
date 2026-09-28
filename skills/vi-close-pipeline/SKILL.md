@@ -75,7 +75,7 @@ A valuable document sitting in scratch or repo root → propose moving it to `do
 
 Dead or zombie code tied to the merged work (unused modules, superseded APIs, orphaned exports) is handled **on the spot, in this station** — no new issue, no full pipeline. Guardrails compensate for bypassing review:
 
-1. **Mechanical proof of zero references first:** run the ecosystem tool where applicable (`knip` / `depcheck` / `ts-prune` for TS/JS, `vulture` for Python, `deadcode` for Go — whatever the project has), PLUS a repo-wide text search. Both must agree: zero live references.
+1. **Mechanical proof of zero references first:** run the ecosystem tool where applicable (knip / depcheck / ts-prune for TS/JS, vulture for Python, deadcode for Go — whatever the project has), PLUS a repo-wide text search. Both must agree: zero live references.
 2. **Run the targeted tests after deletion.** Any failure → `git checkout` the deletion, report it, stop that item. Never push broken code.
 3. **One focused commit:** `refactor: remove dead code from #<id>`.
 4. **Any ambiguity** (dynamic imports, reflection, string-based references, public API surface) → do NOT touch. List it in the report as "suspected dead code — needs human judgment".
@@ -116,28 +116,17 @@ If any check fails → fix it or escalate with the exact state. **Never declare 
 # 🏁 VI - סגירת צינור — Issue #<id>:
 
 ## ✅ סטטוס Issue ו-PR:
-* **PR:** [#<n>](<url>) 🟢 MERGED
-* **Issue:** [#<id>](<url>) — סגור (או: נסגר עכשיו ע"י התחנה — ה-PR מוזג בלי `Closes`)
+* **PR:** [#<n>](<url>) — [מוזג / סגור]
+* **Issue:** [#<id>](<url>) — [פתוח / סגור]
+* **Current Branch:** [מה המצב ענף עכשיו? Master נקי / מלוכלך, יש ענפים נוספים שקשורים למשימה / שלא קשורים למשימה וכו' וכו'. אם נקי אז לציין פשוט Master נקי. אם יש ענפים נוספים שקשורים לISSUE, לציין את זה כאן. ] 
 
-## 🗑️ שאריות וקבצים זמניים שנוקו:
-* [רשימת קבצים שנמחקו/הועברו, עם שורת נימוק אחת לכל אחד]
-*(אם לא נמצאו: "הריפו נקי לחלוטין — לא נמצאו שאריות למחיקה.")*
+## 💡 סיכום:
+* [תיאור של מה שנעשה החל מהצגת הבעיה / תיאור הISSUE להצגת הפתרון, מה שנעשה בפועל, הסבר טכני ופשוט, ואיך להשתמש במה שנעשה. סדר עניינים כללי. במידה ורלוונטי, אפשר להוסיף קצת מידע כללי על הבעיה עצמה, ולא רק על הפתרון.]
 
-## 🛡️ נכסי ידע קבועים שנשמרו:
-* **מצגות ויזואליות:** כל קובצי `docs/issues/*-presentation-*.html` נשמרו כתיעוד קבוע.
-* **מחקר ותיעוד:** [מה שנשמר]
+## 🎬 פרזנטציה:
+* אם רלוונטי, הרץ `/present-pr <n>` כדי להכין פרזנטציה ויזואלית.
 
-## 🧟 קוד מת:
-* [מה הוסר + הוכחת אפס-הפניות + טסטים שעברו / "לא נמצא" / "חשוד בלבד — דורש שיקול אנושי: ..."]
-
-## 🚪 שער יציאה נקי:
-* **ענף:** `<base>` | **סטטוס:** נקי לחלוטין | **מסונכרן:** up to date עם `origin/<base>` | **אפס שינויים מחכים, אפס branches מתים**
-
-## 🧠 סיכום:
-[שורות בודדות בעברית פשוטה: מה נוקה, מה נשמר, והתיקייה מוכנה לעבודה הבאה.]
-
-🎬 רוצה מצגת ויזואלית של השינוי? הרץ `/present-pr <id>` (אופציונלי — מחוץ לצינור).
-
-👉 **שלב הבא:** אין — הצינור סגור. התיקייה על `<base>` נקי ומסונכרן, מוכן ל-`/i-pick-issue` הבא.
+👉 **שלב הבא:**
+* אין — הצינור סגור, מוכן ל-`/i-pick-issue` הבא.
 ```
 

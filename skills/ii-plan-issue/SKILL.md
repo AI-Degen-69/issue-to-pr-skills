@@ -45,14 +45,24 @@ Stop the issue-dependent steps. Say in plain language exactly what failed, and a
    - **Small** — one file or one function; straightforward once the code is read.
    - **Standard** — 2–5 files, internal module changes, a single architectural decision.
    - **Large** — cross-cutting changes, a new external dependency, public API or database schema change.
-3. **Task type** — classify into one or more primary categories (combinations allowed): **Code** (default), **Design**, **Debug**, **Performance**, **Security**, **Docs**, **Research**. Classify *before* planning: downstream stations (`iii-build-plan`, `iv-review-build-and-pr`) pick reviewers and test suites from this tag.
+3. **Task type** — classify into one or more primary categories (combinations allowed): **Code** (default), **Design**, **Debug**, **Performance**, **Security**, **Docs**, **UX / Copy**, **Research**. Classify *before* planning: downstream stations (`iii-build-plan`, `iv-review-build-and-pr`) pick reviewers and test suites from this tag.
 
-### Step 0A: Resolve Open Questions from Code (needs-answers flag)
-If the issue carries the `needs-answers` label or an **Open questions** section:
-1. For each open question, first try to resolve it **from the code** — read the relevant paths, check how similar cases are handled in the repo.
-2. Fold each resolved answer into the plan as planning input; record the resolved answers in `tasks/plan.md` so the reasoning survives the session.
-3. Ask the operator **only what is genuinely unresolvable from code** — one focused batch, before Step 1. Never re-ask what the issue already answers.
-4. **Large or unfamiliar/legacy code:** before answering, deploy the `code-explorer` agent persona (from `~/.agents/agents/`) to trace the relevant execution paths and map the affected architecture layers; fold its findings into the plan. Persona file not found on disk → skip and record the skip — never simulate a missing reviewer persona (אין להמציא).
+### Step 0A: Resolve Open Questions from Code & Consult CodeRabbit Plan
+1. **Check for CodeRabbit Plan in comments:** Look at the discussion comments fetched via `gh issue view <number> --comments`. If a plan comment from `coderabbitai` exists:
+   - **Read it once, not twice:** the comment carries the plan twice — a rendered copy first, then a byte-identical echo inside an HTML comment (`<!-- <rawResChunk><planningResult> … -->`). Ignore the echo; it only doubles context cost.
+   - **Map CodeRabbit's layout to ours:** it keeps its own template (Summary / Design Choices / Implementation Steps with Phases+Tasks / Ticket Summary / Codebase Summary / File-Level Change Summary / Notes for follow-up agents). Mine those sections; do not wait for our section names to appear.
+   - **Extract skeleton & seams:** treat its task phases, affected files, and seam pointers as scaffolding to save discovery time.
+   - **Resolve assumptions & drift:** read its Assumptions/Risks or Design-Choice rationales. Anything it flagged as uncertain, any reference it left dangling (e.g. "Apply Assumption 1" with no Assumption 1 defined), and any contradiction it found between the issue text and the code is an **open question to resolve from the code — treat it as `[UNVERIFIED]`, never as fact.**
+   - **Borrow test cases:** note the exact test assertions and regression test files it specified for use in Step 3 (`CONSTRAINTS.md`) and Step 6 (`tasks/plan.md`).
+   - **Enforce simplicity (Rule 4):** its suggestions are non-binding. It usually over-splits — merge its task list into 3–4 atomic tasks and drop invented abstractions or new files nothing requires.
+   - **Verify, don't assume (Rule 6):** spot-check every file path, symbol, and line number it cites against the live codebase before adopting any of it.
+   - **Cost the intake once:** record a three-line note in `tasks/plan.md` — what was adopted from its plan, what was rejected and why, and what stayed `[UNVERIFIED]` — so Stations III–V never re-read that comment.
+
+2. **Resolve Open Questions (needs-answers flag):** If the issue carries the `needs-answers` label or an **Open questions** section:
+   - For each open question, first try to resolve it **from the code** (and CodeRabbit's codebase analysis) — read the relevant paths, check how similar cases are handled in the repo.
+   - Fold each resolved answer into the plan as planning input; record the resolved answers in `tasks/plan.md` so the reasoning survives the session.
+   - Ask the operator **only what is genuinely unresolvable from code** — one focused batch, before Step 1. Never re-ask what the issue already answers.
+3. **Large or unfamiliar/legacy code:** before answering, deploy the `code-explorer` agent persona (from `~/.agents/agents/`) to trace the relevant execution paths and map the affected architecture layers; fold its findings into the plan. Persona file not found on disk → skip and record the skip — never simulate a missing reviewer persona (אין להמציא).
 
 ### Step 0B: Confirm Feature Branch (canonical rule for Section 1)
 Branch format is `i<number>/<slug>` from the current HEAD. Derive `<slug>` from the issue title: lowercase, spaces → dashes, keep only `a-z 0-9 -`, max 50 chars, never Hebrew — Hebrew chars are stripped, and an empty result falls back to `issue-<number>`. Example: issue #69 `Increase button size` → `i69/increase-button-size`; a Hebrew-only title for issue #70 → `i70/issue-70`.
@@ -67,15 +77,17 @@ Load specialized skills that match the classified task type (and only skills tha
 
 | Task type | Planning skills |
 |---|---|
-| Design/UI | `frontend-ui-engineering`, `tailwind-design-system`, `extract-design-system` |
+| Design/UI | `frontend-ui-engineering`, `frontend-design`, `tailwind-design-system`, `extract-design-system` |
 | API/Backend | `api-and-interface-design` |
 | Debug | `debugging-and-error-recovery`, `doubt-driven-development` |
 | Performance | `performance-optimization` |
 | Security | `security-and-hardening` |
 | Docs | `documentation-and-adrs` |
+| UX / Copy | `humanizer` |
 | Research | `idea-refine` (spike → recommendation doc) |
 | Core (default) | `test-driven-development`, `incremental-implementation` |
 
+*Design distinction:* `frontend-design` governs aesthetic direction, typography, and non-templated choices; `frontend-ui-engineering` governs accessible, responsive, production-quality UI and WCAG compliance.
 *Execution tagging:* in `tasks/plan.md`, every task declares its domain tag (`[Design/UI]`, `[Backend/Logic]`, `[Debug]`, ...) and the verification mode `iii-build-plan` will run (browser preview for UI, unit/integration runner for logic).
 
 ### Step 2: Specification (`spec-driven-development`)
@@ -119,11 +131,12 @@ Propose **at most one** concrete improvement to the issue's approach — an arch
 
 Rules:
 - **The issue leads.** Open with the issue and its plan; classification and guardrails get one compact line each. Never enumerate skills or planning steps in the chat report — skill names live in `tasks/plan.md` rows.
+- **What's-changed only.** Report the planned changes grouped by tag (new / changed / removed — fixed rarely applies at plan time). No commits, no test commands or counts, no skill names, no file paths. The plan is expectations, not results: each item says what *will* change and where in the product.
 - Everyday Hebrew, short sentences, only claims grounded in the issue and code — never fabricate.
 - The report adapts by task type: Design leads with UI decisions, Debug with the reproduction hypothesis, Docs with the outline, Code with the approach.
-- "מה ה-Issue דורש" is short bullets quoting what the issue describes; the plan bullets say how each task answers it; "איך מוודאים?" replaces quality-guardrail talk with plain verification of the issue's problem.
+- "מה ה-Issue דורש" is short bullets quoting what the issue describes; the plan groups say what will change for each point.
 - The improvement proposal is one plain sentence, evidence-based, adopted by default — dropped only on explicit operator rejection.
-- Drop any section that carries nothing for this issue.
+- Drop any section that carries nothing for this issue. Omit empty change groups entirely.
 
 ```markdown
 # 📐 II - תכנון: Issue #<מספר> — <כותרת ה-Issue>
@@ -133,20 +146,19 @@ Branch: `i<מספר>/<slug-מהכותרת>` — e.g. `i69/increase-button-size`
 ## מה ה-Issue דורש
 - [נקודה 1 במילים פשוטות — מה ה-issue מתאר]
 - [נקודה 2]
-- [נקודה 3 אם יש — קצר, בנקודות]
 
-## התוכנית
-- [משימה 1 בשפה פשוטה — מה נבנה ואיך זה עונה לנקודה הרלוונטית מה-issue] · אימות: [טסט/בדיקת דפדפן]
-- [משימה 2 — ...]
-- [משימה 3 — ...]
-*(התוכנית מסתגלת לפי סוג המשימה — Design/Debug/Docs מקבלים דגשים שונים)*
+## מה ייבנה
 
-## איך מוודאים?
-- [איך התוכנית מוכיחה שמה שנבנה עונה לבעיה שה-issue מתאר — טסטים ממוקדים, בדיקת דפדפן, סף ביצועים]
-- אפס רגרסיות לטסטים קיימים · אין עקיפת טסטים
+### ➕ מה חדש?
+- [מיקום מוצרי + מה ייווצר — רק קבוצות עם תוכן]
 
-## קבצים
-tasks/plan.md · CONSTRAINTS.md · [SPEC.md רק ל-Standard/Large]
+### ✏️ מה שונה?
+- [מיקום מוצרי + מה ישתנה]
+
+### ❌ מה הוסר?
+- [מיקום מוצרי + מה יוסר]
+
+התוכנית המלאה: `tasks/plan.md` · אימות מוגדר לכל משימה בתוכנית.
 
 💡 [הצעת שיפור אחת, משפט אחד בשפה פשוטה — מבוססת ראיות מה-issue ומהקוד; מאומצת כברירת מחדל, יורדת רק אם נדחית]
 
