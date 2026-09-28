@@ -1,16 +1,48 @@
-// Site logic — pipeline + catalog
+// Canonical Pipeline Stations (Sequential I to VI)
 const STATIONS = [
-  {id:'pipeline-triage', label:'Entry', title:'Pipeline Triage', desc:'Dirty repo? Open PR? Unclear intent? Read-only triage inspects git state and routes to the right station. One router, max one handoff.', color:'cyan'},
-  {id:'i-pick-issue', label:'I', title:'Map & Pick', desc:'Issue work only. Runs the triage gate itself, then maps the open-issue backlog grouped by domain with a recommended order and one highlighted pick. With an issue number, goes straight to Station II.', color:'cyan'},
-  {id:'create-issue', label:'Intake', title:'Create Researched Issue', desc:'Intake branch when there is nothing to pick. Raw idea → researched GitHub issue labeled ready-for-agent. Researches repo first (real paths with line numbers), captures open questions with defaults.', color:'cyan'},
-  {id:'ii-plan-issue', label:'II', title:'Plan & Constraints', desc:'Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'cyan'},
-  {id:'iii-build-plan', label:'III', title:'Build with TDD', desc:'Build. TDD per task, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
-  {id:'iiib-iterate-after-build', label:'IIIB', title:'Iterate Human Feedback', desc:'Human feedback fix loop. Classifies each free-text correction (bug, dead button, UI alignment, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
-  {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Proof-before-review gate (live browser pass via playwright-cli, or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
-  {id:'v-babysit-pr-and-merge', label:'V', title:'Babysit PR & Merge', desc:'Babysit & merge. Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
-  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Pipeline closeout: issue closeout, signal-based artifact sweep, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
-  {id:'present-pr', label:'Ad-hoc', title:'Present Showcase', desc:'Ad-hoc — run on request after a merge, not part of the automatic chain. Standalone HTML showcase: one centerpiece visual picked for this story, customer-simple words, try-it guide. Never the same twice.', color:'fuchsia'},
+  {id:'i-pick-issue', label:'I', title:'Map & Pick', desc:'Station I (Pick & Orchestrate): Issue work entry. Runs the triage gate itself, then maps open-issue backlog by domain with recommended order and highlighted pick. With an issue ID, routes straight to Station II.', color:'cyan'},
+  {id:'ii-plan-issue', label:'II', title:'Plan & Constraints', desc:'Station II (Plan): Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'cyan'},
+  {id:'iii-build-plan', label:'III', title:'Build with TDD', desc:'Station III (Build): TDD per slice, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
+  {id:'iiib-iterate-after-build', label:'IIIB', title:'Iterate Human Feedback', desc:'Station IIIB (Iterate): Fast fix loop for operator corrections on fresh build. Classifies each comment (bug, dead button, CSS, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
+  {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Station IV (Review, Verify & Ship): Proof-before-review gate (live browser pass or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
+  {id:'v-babysit-pr-and-merge', label:'V', title:'Babysit PR & Merge', desc:'Station V (Babysit & Merge): Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
+  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Station VI (Close Pipeline): Issue closeout, signal-based artifact sweep in any project layout, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
 ];
+
+// Supporting System & Ad-hoc Skills (Outside linear I→VI pipeline chain)
+const SYSTEM_SKILLS = [
+  {
+    id: 'pipeline-triage',
+    label: 'State Gate',
+    title: 'Pipeline Triage',
+    desc: 'Pre-flight check before Station I: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
+    roleBadge: 'State Gate',
+    roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
+    timing: 'Attached before Station I',
+    command: '/pipeline-triage'
+  },
+  {
+    id: 'create-issue',
+    label: 'Intake Branch',
+    title: 'Create Researched Issue',
+    desc: 'Intake branch when there is nothing to pick in Station I. Turns a raw idea into a researched GitHub issue labeled ready-for-agent with concrete file paths and line numbers.',
+    roleBadge: 'Intake Branch',
+    roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
+    timing: 'Branches off Station I',
+    command: '/create-issue <idea>'
+  },
+  {
+    id: 'present-pr',
+    label: 'Ad-hoc Showcase',
+    title: 'Present Showcase',
+    desc: 'Ad-hoc presentation run on request after Station VI or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
+    roleBadge: 'Ad-hoc Showcase',
+    roleClass: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30',
+    timing: 'Suggested after Station VI · Runnable any time',
+    command: '/present-pr <id>'
+  }
+];
+
 
 const TAG_CONFIG = {
   plan: {
@@ -478,18 +510,18 @@ function renderDiagram(){
   const g=document.getElementById('diagramStations');
   if(!g) return;
   const count=STATIONS.length;
-  const start=60, end=1040, step=(end-start)/(count-1);
+  const start=90, end=1010, step=(end-start)/(count-1);
   let html='';
   STATIONS.forEach((s,i)=>{
-    const x=start + i*step;
+    const x=Math.round(start + i*step);
     const y=105;
     html+=`
       <g class="cursor-pointer" tabindex="0" role="button" aria-label="Station ${s.label}: ${s.id}" data-idx="${i}" onmouseenter="showStation(${i})" onclick="showStation(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showStation(${i})}" onfocus="showStation(${i})">
-        <circle cx="${x}" cy="${y}" r="18" fill="#0b0f1e" stroke="rgba(124,58,237,.6)" stroke-width="2"/>
-        <circle cx="${x}" cy="${y}" r="9" fill="url(#g1)" class="station-dot"/>
-        <text x="${x}" y="${y+4}" text-anchor="middle" font-size="8" font-weight="700" fill="white">${s.label}</text>
-        <text x="${x}" y="155" text-anchor="middle" font-size="10" font-family="JetBrains Mono" fill="rgba(255,255,255,.7)">${s.id.replace('iiib','iiib-').slice(0,18)}</text>
-        <text x="${x}" y="172" text-anchor="middle" font-size="10" fill="rgba(255,255,255,.45)">${s.title===s.id?'':''}</text>
+        <circle cx="${x}" cy="${y}" r="20" fill="#0b0f1e" stroke="rgba(124,58,237,.6)" stroke-width="2"/>
+        <circle cx="${x}" cy="${y}" r="10" fill="url(#g1)" class="station-dot"/>
+        <text x="${x}" y="${y+4}" text-anchor="middle" font-size="9" font-weight="700" fill="white">${s.label}</text>
+        <text x="${x}" y="152" text-anchor="middle" font-size="10" font-family="JetBrains Mono" font-weight="600" fill="rgba(255,255,255,.9)">/${s.id}</text>
+        <text x="${x}" y="170" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.5)">${s.title}</text>
       </g>
     `;
   });
@@ -497,29 +529,60 @@ function renderDiagram(){
 }
 function showStation(i){
   const s=STATIONS[i];
+  if(!s) return;
   const d=document.getElementById('stationDetail');
   if(!d) return;
-  d.innerHTML=`<span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400">Open skill ↗</a>`;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 mr-2">Station ${s.label}</span> <span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400 ml-1">Open skill ↗</a>`;
 }
+
+function showSystemSkill(id){
+  const sys = SYSTEM_SKILLS.find(x => x.id === id);
+  if(!sys) return;
+  const d=document.getElementById('stationDetail');
+  if(!d) return;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold ${sys.roleClass} mr-2">${sys.roleBadge}</span> <span class="font-mono text-cyan-300">/${sys.id}</span> — <span class="font-semibold text-white">${sys.title}</span> — ${sys.desc} <span class="text-white/50 text-xs">(${sys.timing})</span> <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="underline decoration-cyan-400 ml-1">Open skill ↗</a>`;
+}
+window.showStation = showStation;
+window.showSystemSkill = showSystemSkill;
 
 // station cards
 function renderStations(){
   const el=document.getElementById('stationCards');
-  if(!el) return;
-  el.innerHTML=STATIONS.map(s=>{
-    const g = GROUP[s.id] || 'plan';
-    const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
-    return `
-    <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition">
-      <div class="flex items-center gap-2">
-        <span class="min-w-7 h-7 px-1.5 rounded-full ${cfg.stationBadgeClass} grid place-items-center text-xs font-bold">${s.label}</span>
-        <span class="font-mono text-sm font-semibold text-white">${s.id}</span>
-        <span class="ml-auto text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
+  if(el){
+    el.innerHTML=STATIONS.map(s=>{
+      const g = GROUP[s.id] || 'plan';
+      const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
+      return `
+      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition">
+        <div class="flex items-center gap-2">
+          <span class="min-w-7 h-7 px-2 rounded-full ${cfg.stationBadgeClass} grid place-items-center text-xs font-bold font-mono">Station ${s.label}</span>
+          <span class="font-mono text-sm font-semibold text-white">${s.id}</span>
+          <span class="ml-auto text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
+        </div>
+        <div class="mt-2 text-xs font-medium text-white/50">${s.title}</div>
+        <p class="mt-2.5 text-sm leading-relaxed text-white/70">${s.desc}</p>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="mt-3 inline-flex text-xs font-semibold ${cfg.openLinkClass}">View SKILL.md ↗</a>
       </div>
-      <p class="mt-3 text-sm leading-6 text-white/70">${s.desc}</p>
-      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="mt-3 inline-flex text-xs font-semibold ${cfg.openLinkClass}">View SKILL.md ↗</a>
-    </div>
-  `;}).join('');
+    `;}).join('');
+  }
+
+  const sysEl=document.getElementById('systemSkillCards');
+  if(sysEl){
+    sysEl.innerHTML=SYSTEM_SKILLS.map(sys=>`
+      <div id="${sys.id}" class="card rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${sys.roleClass}">${sys.roleBadge}</span>
+            <span class="text-[11px] font-mono text-white/40">${sys.timing}</span>
+          </div>
+          <div class="mt-3 font-mono text-sm font-semibold text-white">/${sys.id}</div>
+          <div class="text-[11px] text-amber-300/80 font-mono mt-0.5">${sys.command}</div>
+          <p class="mt-2.5 text-sm leading-relaxed text-white/70">${sys.desc}</p>
+        </div>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="mt-4 inline-flex text-xs font-semibold text-violet-300 hover:text-violet-200">View SKILL.md ↗</a>
+      </div>
+    `).join('');
+  }
 }
 
 // catalog
@@ -535,9 +598,9 @@ let _debounceT=null;
 let currentOrganizeMode = 'az'; // 'az' or 'pipeline'
 
 const PIPELINE_STATIONS_ORDER = [
-  { key: 'plan', label: 'Plan', stationNum: 'II', desc: 'Define & plan — issue research, stack detection, constraints, vertical task slices' },
-  { key: 'build', label: 'Build', stationNum: 'III', desc: 'Build & iterate — test-driven development, UI engineering, fix loops' },
-  { key: 'review', label: 'Review & PR', stationNum: 'IV', desc: 'Review & ship — verification gate, specialist review panel, PR creation' },
+  { key: 'plan', label: 'Plan', stationNum: 'I–II', desc: 'Define & plan — issue backlog pick, right-sizing, spec, constraints, vertical task slices' },
+  { key: 'build', label: 'Build', stationNum: 'III–IIIB', desc: 'Build & iterate — test-driven development, UI engineering, human feedback fix loops' },
+  { key: 'review', label: 'Review & PR', stationNum: 'IV', desc: 'Review & ship — proof gate, specialist review panel, PR creation & CodeRabbit trigger' },
   { key: 'babysit', label: 'Babysit', stationNum: 'V', desc: 'Babysit & merge — automated reviews, CI status monitoring, squash merge' },
   { key: 'prune', label: 'Close', stationNum: 'VI', desc: 'Close pipeline — verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
   { key: 'present', label: 'Present', stationNum: 'Ad-hoc', desc: 'Present & showcase — interactive visual showcase for completed PRs' }
@@ -569,22 +632,27 @@ function renderSkillCardHtml(s){
   const g = GROUP[s.name] || 'plan';
   const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
   const isPipeline = STATIONS.some(x => x.id === s.name);
+  const sysSkill = SYSTEM_SKILLS.find(x => x.id === s.name);
 
   const cardClasses = isPipeline
     ? `card rounded-2xl border ${cfg.stationCardClass} p-5 text-left transition block relative`
-    : `card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block`;
+    : sysSkill
+      ? `card rounded-2xl border border-cyan-500/30 bg-cyan-950/20 p-5 text-left hover:border-cyan-400/50 hover:bg-cyan-950/30 transition block relative`
+      : `card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block`;
 
-  const stationBadge = isPipeline
+  const badgeHtml = isPipeline
     ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${cfg.stationBadgeClass}">Station</span>`
-    : '';
+    : sysSkill
+      ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${sysSkill.roleClass}">${sysSkill.roleBadge}</span>`
+      : '';
 
-  const linkColor = isPipeline ? cfg.openLinkClass : 'text-violet-300 hover:text-violet-200';
+  const linkColor = isPipeline ? cfg.openLinkClass : sysSkill ? 'text-cyan-300 hover:text-cyan-200' : 'text-violet-300 hover:text-violet-200';
 
   return `
   <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.name}" target="_blank" class="${cardClasses}">
     <div class="flex items-center gap-2 flex-wrap">
       <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
-      ${stationBadge}
+      ${badgeHtml}
     </div>
     <div class="mt-3 font-mono text-[13px] font-semibold text-white">${s.name}</div>
     <div class="mt-1 text-sm leading-6 text-white/60 line-clamp-3">${s.desc}</div>
@@ -1021,21 +1089,36 @@ function renderAgents(){
 function renderMobileDiagram(){
   const el=document.getElementById('diagramMobile');
   if(!el) return;
-  el.innerHTML=STATIONS.map((s,i)=>`
+  const stationsHtml = STATIONS.map((s,i)=>`
     <button onclick="showStation(${i});document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3 hover:bg-white/[.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">
       <span class="h-8 w-8 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold shrink-0">${s.label}</span>
       <span class="font-mono text-sm">${s.id}</span>
       <span class="ml-auto text-violet-300 text-xs">→</span>
     </button>
   `).join('');
+
+  const sysHtml = `
+    <div class="pt-4 pb-1 text-xs font-mono uppercase tracking-wider text-white/50">System &amp; Supporting Skills (Outside Chain)</div>
+    <div class="space-y-2">
+      ${SYSTEM_SKILLS.map(sys=>`
+        <button onclick="showSystemSkill('${sys.id}');document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[.02] px-4 py-2.5 hover:bg-white/[.06] text-xs">
+          <span class="px-2 py-0.5 rounded-full font-mono text-[10px] ${sys.roleClass}">${sys.roleBadge}</span>
+          <span class="font-mono text-white/90">/${sys.id}</span>
+          <span class="ml-auto text-white/40 text-[11px]">${sys.timing}</span>
+        </button>
+      `).join('')}
+    </div>
+  `;
+
+  el.innerHTML = stationsHtml + sysHtml;
 }
 function setupReveal(){
   const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); obs.unobserve(e.target);}})}, {threshold:0.15});
-  document.querySelectorAll('#stationCards > div, #skillGrid a, #skillGridPreview > a, #agentGrid > a, #agentGridPreview > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
+  document.querySelectorAll('#stationCards > div, #systemSkillCards > div, #skillGrid a, #skillGridPreview > a, #agentGrid > a, #agentGridPreview > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
 }
 document.addEventListener('DOMContentLoaded',()=>{
   initPipelineCarousel(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
-  showStation(1);
+  showStation(0);
   setupMobileNav();
   document.getElementById('search')?.addEventListener('input', debouncedRender);
   document.getElementById('clearSearch')?.addEventListener('click',()=>{document.getElementById('search').value=''; renderSkills(); document.getElementById('search').focus();});

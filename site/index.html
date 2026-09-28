@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Issue-to-PR Skills — From raw idea to merged PR to showcase</title>
-<meta name="description" content="10 station skills + 36 supporting skills + 17 reviewer personas. One GitHub issue from raw idea to merged PR to visual showcase — with proof, never vibes."/>
+<meta name="description" content="7 pipeline stations + 3 system skills + 36 supporting skills + 17 reviewer personas. One GitHub issue from raw idea to merged PR to visual showcase — with proof, never vibes."/>
 <meta property="og:title" content="Issue-to-PR Skills"/>
 <meta property="og:description" content="An end-to-end delivery pipeline for AI coding agents: 46 skills, 17 reviewer personas."/>
 <meta name="theme-color" content="#020617"/>
@@ -129,8 +129,8 @@
       <div class="flex flex-wrap items-center justify-between gap-3 px-1 pb-3.5 border-b border-white/10">
         <div class="flex items-center gap-2.5">
           <span class="h-2.5 w-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_rgba(234,88,12,0.8)] animate-pulse"></span>
-          <span class="text-xs uppercase tracking-widest text-white/90 font-bold font-mono">Pipeline Carousel — Entry to Close</span>
-          <span id="carouselCounterBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/10 text-white/80 border border-white/10">Station 1 of 10</span>
+          <span class="text-xs uppercase tracking-widest text-white/90 font-bold font-mono">Pipeline Carousel — Stations I to VI</span>
+          <span id="carouselCounterBadge" class="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white/10 text-white/80 border border-white/10">Station 1 of 7</span>
         </div>
 
         <div class="flex items-center gap-2">
@@ -179,13 +179,35 @@
       <!-- Pagination Dots Bar -->
       <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between gap-2 px-1">
         <div class="flex items-center gap-1.5" id="pipelineCarouselDots" role="tablist" aria-label="Select a pipeline station">
-          <!-- 10 dots injected via JS -->
+          <!-- 7 dots injected via JS -->
         </div>
         <div class="text-[11px] font-mono text-white/40 flex items-center gap-2">
           <span>Click any card to center</span>
           <span class="text-white/20">·</span>
           <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white/60">←</kbd>
           <kbd class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-white/60">→</kbd>
+        </div>
+      </div>
+
+      <!-- Auxiliary System Skills strip -->
+      <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-2.5 px-1 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-white/40 text-[11px] uppercase tracking-wider font-mono">System Skills:</span>
+          <span class="text-white/60 text-xs">Supporting workflows outside the linear chain:</span>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <a href="./skills/#pipeline-triage" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-cyan-400/25 text-cyan-300 text-xs font-mono transition flex items-center gap-1.5" title="State Gate (Runs before Station I)">
+            <span class="text-[10px] uppercase font-bold text-cyan-400 bg-cyan-950/60 px-1 rounded">Gate</span>
+            <span>/pipeline-triage</span>
+          </a>
+          <a href="./skills/#create-issue" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-cyan-500/10 border border-cyan-400/25 text-cyan-300 text-xs font-mono transition flex items-center gap-1.5" title="Intake Branch (Branches off Station I)">
+            <span class="text-[10px] uppercase font-bold text-cyan-400 bg-cyan-950/60 px-1 rounded">Intake</span>
+            <span>/create-issue</span>
+          </a>
+          <a href="./skills/#present-pr" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-fuchsia-500/10 border border-fuchsia-400/25 text-fuchsia-300 text-xs font-mono transition flex items-center gap-1.5" title="Ad-hoc Showcase (Suggested after Station VI · runnable any time)">
+            <span class="text-[10px] uppercase font-bold text-fuchsia-400 bg-fuchsia-950/60 px-1 rounded">Ad-hoc</span>
+            <span>/present-pr</span>
+          </a>
         </div>
       </div>
     </div>
@@ -231,11 +253,11 @@
   <div class="mt-8 rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[.05] to-transparent p-4 lg:p-6">
     <div class="hidden md:block overflow-x-auto">
       <div class="min-w-[900px]">
-        <svg viewBox="0 0 1100 210" class="w-full h-[210px]" role="img" aria-label="Pipeline from Entry to VII">
+        <svg viewBox="0 0 1100 210" class="w-full h-[210px]" role="img" aria-label="Pipeline from Station I to VI">
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
           </defs>
-          <path id="pline" d="M 60 105 H 1040" class="pipeline-line" fill="none"/>
+          <path id="pline" d="M 90 105 H 1010" class="pipeline-line" fill="none"/>
           <g id="diagramStations"></g>
         </svg>
       </div>
@@ -245,7 +267,25 @@
   </div>
 
   <!-- station cards grid -->
-  <div id="stationCards" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  <div class="mt-6">
+    <div class="text-xs uppercase tracking-[.14em] text-violet-300 mb-3 font-semibold">Sequential Pipeline Stations (I–VI)</div>
+    <div id="stationCards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+
+  <!-- System & Ad-hoc Skills Section (Outside Linear Chain) -->
+  <div class="mt-10 pt-8 border-t border-white/10">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-4">
+      <div>
+        <div class="text-xs uppercase tracking-[.14em] text-cyan-300">Supporting Architecture</div>
+        <h3 class="mt-1 text-[22px] lg:text-[26px] font-bold tracking-tight text-white">System &amp; Ad-hoc Skills</h3>
+        <p class="mt-1 max-w-[680px] text-sm text-white/60">
+          These 3 skills support the pipeline without being a numbered station in the sequential I→VI chain: a pre-flight state gate before Station I, an intake branch off Station I, and an ad-hoc visual showcase runnable any time.
+        </p>
+      </div>
+      <a href="./skills/#catalog" class="text-xs font-semibold text-cyan-300 hover:text-cyan-200">Browse all 46 skills →</a>
+    </div>
+    <div id="systemSkillCards" class="grid md:grid-cols-3 gap-4"></div>
+  </div>
 </section>
 
 <!-- WHY -->
