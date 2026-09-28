@@ -1,58 +1,67 @@
-// Canonical Pipeline Stations (Sequential I to VI)
+// Canonical Pipeline Stations (Sequential #1 to #6)
 const STATIONS = [
-  {id:'i-pick-issue', label:'I', title:'Map & Pick', desc:'Station I (Pick & Orchestrate): Issue work entry. Runs the triage gate itself, then maps open-issue backlog by domain with recommended order and highlighted pick. With an issue ID, routes straight to Station II.', color:'cyan'},
-  {id:'ii-plan-issue', label:'II', title:'Plan & Constraints', desc:'Station II (Plan): Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'cyan'},
-  {id:'iii-build-plan', label:'III', title:'Build with TDD', desc:'Station III (Build): TDD per slice, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
-  {id:'iiib-iterate-after-build', label:'IIIB', title:'Iterate Human Feedback', desc:'Station IIIB (Iterate): Fast fix loop for operator corrections on fresh build. Classifies each comment (bug, dead button, CSS, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
-  {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Station IV (Review, Verify & Ship): Proof-before-review gate (live browser pass or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
-  {id:'v-babysit-pr-and-merge', label:'V', title:'Babysit PR & Merge', desc:'Station V (Babysit & Merge): Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
-  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Station VI (Close Pipeline): Issue closeout, signal-based artifact sweep in any project layout, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
+  {id:'i-pick-issue', label:'#1', title:'Map & Pick', desc:'Station #1 (Claim & Pick): Issue work entry. Runs the triage gate itself, then maps open-issue backlog by domain with recommended order and highlighted pick. With an issue ID, routes straight to Station #2.', color:'cyan'},
+  {id:'ii-plan-issue', label:'#2', title:'Plan & Constraints', desc:'Station #2 (Plan): Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'sky'},
+  {id:'iii-build-plan', label:'#3', title:'Build with TDD', desc:'Station #3 (Build): TDD per slice, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
+  {id:'iiib-iterate-after-build', label:'#3b', title:'Iterate Human Feedback', desc:'Station #3b (Iterate): Fast fix loop for operator corrections on fresh build. Classifies each comment (bug, dead button, CSS, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
+  {id:'iv-review-build-and-pr', label:'#4', title:'Review, Ship & PR', desc:'Station #4 (Review, Verify & Ship): Proof-before-review gate (live browser pass or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
+  {id:'v-babysit-pr-and-merge', label:'#5', title:'Babysit PR & Merge', desc:'Station #5 (Babysit & Merge): Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
+  {id:'vi-close-pipeline', label:'#6', title:'Close Pipeline', desc:'Station #6 (Close Pipeline): Issue closeout, signal-based artifact sweep in any project layout, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
 ];
 
-// Supporting System & Ad-hoc Skills (Outside linear I→VI pipeline chain)
+// Supporting System & Ad-hoc Skills (Outside linear #1→#6 pipeline chain)
 const SYSTEM_SKILLS = [
   {
     id: 'pipeline-triage',
     label: 'State Gate',
     title: 'Pipeline Triage',
-    desc: 'Pre-flight check before Station I: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
+    desc: 'Pre-flight check before Station #1: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
     roleBadge: 'State Gate',
     roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
-    timing: 'Attached before Station I',
+    timing: 'Attached before Station #1',
     command: '/pipeline-triage'
   },
   {
     id: 'create-issue',
     label: 'Intake Branch',
     title: 'Create Researched Issue',
-    desc: 'Intake branch when there is nothing to pick in Station I. Turns a raw idea into a researched GitHub issue labeled ready-for-agent with concrete file paths and line numbers.',
+    desc: 'Intake branch when there is nothing to pick in Station #1. Turns a raw idea into a researched GitHub issue labeled ready-for-agent with concrete file paths and line numbers.',
     roleBadge: 'Intake Branch',
     roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
-    timing: 'Branches off Station I',
+    timing: 'Branches off Station #1',
     command: '/create-issue <idea>'
   },
   {
     id: 'present-pr',
     label: 'Ad-hoc Showcase',
     title: 'Present Showcase',
-    desc: 'Ad-hoc presentation run on request after Station VI or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
+    desc: 'Ad-hoc presentation run on request after Station #6 or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
     roleBadge: 'Ad-hoc Showcase',
     roleClass: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30',
-    timing: 'Suggested after Station VI · Runnable any time',
+    timing: 'Suggested after Station #6 · Runnable any time',
     command: '/present-pr <id>'
   }
 ];
 
 
 const TAG_CONFIG = {
-  plan: {
-    tag: 'Plan',
-    label: 'Plan',
+  claim: {
+    tag: 'Claim',
+    label: 'Claim',
     color: 'cyan',
     tagClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
     stationCardClass: 'border-cyan-500/50 bg-gradient-to-b from-cyan-950/40 to-cyan-950/10 shadow-[0_0_24px_rgba(6,182,212,0.14)] hover:border-cyan-400 hover:bg-cyan-950/50 hover:shadow-[0_0_32px_rgba(6,182,212,0.25)]',
     stationBadgeClass: 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]',
     openLinkClass: 'text-cyan-300 hover:text-cyan-200'
+  },
+  plan: {
+    tag: 'Plan',
+    label: 'Plan',
+    color: 'sky',
+    tagClass: 'bg-sky-500/15 text-sky-300 border-sky-400/30',
+    stationCardClass: 'border-sky-500/50 bg-gradient-to-b from-sky-950/40 to-sky-950/10 shadow-[0_0_24px_rgba(14,165,233,0.14)] hover:border-sky-400 hover:bg-sky-950/50 hover:shadow-[0_0_32px_rgba(14,165,233,0.25)]',
+    stationBadgeClass: 'bg-sky-500/25 text-sky-200 border border-sky-400/50 shadow-[0_0_10px_rgba(14,165,233,0.3)]',
+    openLinkClass: 'text-sky-300 hover:text-sky-200'
   },
   build: {
     tag: 'Build',
@@ -81,9 +90,18 @@ const TAG_CONFIG = {
     stationBadgeClass: 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_10px_rgba(245,158,11,0.3)]',
     openLinkClass: 'text-amber-300 hover:text-amber-200'
   },
+  close: {
+    tag: 'Close',
+    label: 'Close',
+    color: 'rose',
+    tagClass: 'bg-rose-500/15 text-rose-300 border-rose-400/30',
+    stationCardClass: 'border-rose-500/50 bg-gradient-to-b from-rose-950/40 to-rose-950/10 shadow-[0_0_24px_rgba(244,63,94,0.14)] hover:border-rose-400 hover:bg-rose-950/50 hover:shadow-[0_0_32px_rgba(244,63,94,0.25)]',
+    stationBadgeClass: 'bg-rose-500/25 text-rose-200 border border-rose-400/50 shadow-[0_0_10px_rgba(244,63,94,0.3)]',
+    openLinkClass: 'text-rose-300 hover:text-rose-200'
+  },
   prune: {
-    tag: 'Prune',
-    label: 'Prune',
+    tag: 'Close',
+    label: 'Close',
     color: 'rose',
     tagClass: 'bg-rose-500/15 text-rose-300 border-rose-400/30',
     stationCardClass: 'border-rose-500/50 bg-gradient-to-b from-rose-950/40 to-rose-950/10 shadow-[0_0_24px_rgba(244,63,94,0.14)] hover:border-rose-400 hover:bg-rose-950/50 hover:shadow-[0_0_32px_rgba(244,63,94,0.25)]',
@@ -102,7 +120,10 @@ const TAG_CONFIG = {
 };
 
 const GROUP = {
-  // II  - Plan
+  // #1  - Claim
+  'i-pick-issue': 'claim',
+
+  // #2  - Plan
   'ii-plan-issue': 'plan',
   'planning-and-task-breakdown': 'plan',
   'spec-driven-development': 'plan',
@@ -112,11 +133,10 @@ const GROUP = {
   'humanizer': 'plan',
   'pipeline-triage': 'plan',
   'create-issue': 'plan',
-  'i-pick-issue': 'plan',
   'doubt-driven-development': 'plan',
   'api-and-interface-design': 'plan',
 
-  // III - Build
+  // #3 & #3b - Build & Iterate
   'iii-build-plan': 'build',
   'iiib-iterate-after-build': 'build',
   'test-driven-development': 'build',
@@ -132,7 +152,7 @@ const GROUP = {
   'debugging-and-error-recovery': 'build',
   'diagnosing-bugs': 'build',
 
-  // IV - Review & PR
+  // #4 - Review & PR
   'iv-review-build-and-pr': 'review',
   'code-review-and-quality': 'review',
   'security-and-hardening': 'review',
@@ -145,28 +165,30 @@ const GROUP = {
   'vercel-react-best-practices': 'review',
   'vercel-composition-patterns': 'review',
 
-  // V - Babysit
+  // #5 - Babysit
   'v-babysit-pr-and-merge': 'babysit',
   'ci-cd-and-automation': 'babysit',
   'git-workflow-and-versioning': 'babysit',
   'shipping-and-launch': 'babysit',
   'observability-and-instrumentation': 'babysit',
 
-  // VI - Close
-  'vi-close-pipeline': 'prune',
-  'deprecation-and-migration': 'prune',
-  'documentation-and-adrs': 'prune',
+  // #6 - Close
+  'vi-close-pipeline': 'close',
+  'deprecation-and-migration': 'close',
+  'documentation-and-adrs': 'close',
 
   // Ad-hoc - Present
   'present-pr': 'present'
 };
 
 const GROUP_LABEL = {
+  claim: 'Claim',
   plan: 'Plan',
   build: 'Build',
   review: 'Review & PR',
   babysit: 'Babysit',
-  prune: 'Prune',
+  close: 'Close',
+  prune: 'Close',
   present: 'Present'
 };
 
@@ -249,7 +271,7 @@ function initPipelineCarousel() {
         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setStation(${idx});}"
       >
         <div class="flex items-center justify-between gap-2 mb-2">
-          <span class="h-6 w-6 rounded-full bg-white/10 text-white border border-white/20 grid place-items-center text-[10px] font-bold font-mono">
+          <span class="min-w-6 h-6 px-1.5 rounded-full bg-white/10 text-white border border-white/20 inline-flex items-center justify-center text-[10px] font-bold font-mono whitespace-nowrap">
             ${s.label}
           </span>
           <span class="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full border ${cfg.tagClass}">
@@ -330,7 +352,7 @@ function updateCarouselPosition(activeIndex) {
 
   // Update counter badge
   const counter = document.getElementById('carouselCounterBadge');
-  if (counter) counter.textContent = `Station ${activeIndex + 1} of ${STATIONS.length}`;
+  if (counter) counter.textContent = `Station ${STATIONS[activeIndex].label} of ${STATIONS.length}`;
 
   // Update dots
   const dots = document.querySelectorAll('#pipelineCarouselDots .carousel-dot');
@@ -346,7 +368,6 @@ function renderChatBubbleContent(idx) {
   const s = STATIONS[idx];
   const g = GROUP[s.id] || 'plan';
   const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
-  const numStr = String(idx + 1).padStart(2, '0');
 
   // Specific quality gate descriptions per station
   const GATES = {
@@ -367,8 +388,8 @@ function renderChatBubbleContent(idx) {
   bubble.innerHTML = `
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-white/10">
       <div class="flex items-center flex-wrap gap-2">
-        <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-orange-600/20 text-orange-400 border border-orange-500/30">
-          Station ${numStr} · ${s.label}
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-orange-600/20 text-orange-400 border border-orange-500/30 whitespace-nowrap">
+          Station ${s.label}
         </span>
         <span class="px-2.5 py-0.5 rounded-md text-xs font-medium border ${cfg.tagClass}">
           ${cfg.tag}
@@ -532,7 +553,7 @@ function showStation(i){
   if(!s) return;
   const d=document.getElementById('stationDetail');
   if(!d) return;
-  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 mr-2">Station ${s.label}</span> <span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400 ml-1">Open skill ↗</a>`;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 mr-2 whitespace-nowrap">Station ${s.label}</span> <span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400 ml-1">Open skill ↗</a>`;
 }
 
 function showSystemSkill(id){
@@ -540,7 +561,7 @@ function showSystemSkill(id){
   if(!sys) return;
   const d=document.getElementById('stationDetail');
   if(!d) return;
-  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold ${sys.roleClass} mr-2">${sys.roleBadge}</span> <span class="font-mono text-cyan-300">/${sys.id}</span> — <span class="font-semibold text-white">${sys.title}</span> — ${sys.desc} <span class="text-white/50 text-xs">(${sys.timing})</span> <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="underline decoration-cyan-400 ml-1">Open skill ↗</a>`;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold ${sys.roleClass} mr-2 whitespace-nowrap">${sys.roleBadge}</span> <span class="font-mono text-cyan-300">/${sys.id}</span> — <span class="font-semibold text-white">${sys.title}</span> — ${sys.desc} <span class="text-white/50 text-xs">(${sys.timing})</span> <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="underline decoration-cyan-400 ml-1">Open skill ↗</a>`;
 }
 window.showStation = showStation;
 window.showSystemSkill = showSystemSkill;
@@ -553,15 +574,17 @@ function renderStations(){
       const g = GROUP[s.id] || 'plan';
       const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
       return `
-      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition">
-        <div class="flex items-center gap-2">
-          <span class="min-w-7 h-7 px-2 rounded-full ${cfg.stationBadgeClass} grid place-items-center text-xs font-bold font-mono">Station ${s.label}</span>
-          <span class="font-mono text-sm font-semibold text-white">${s.id}</span>
-          <span class="ml-auto text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
+      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-2.5">
+            <span class="whitespace-nowrap inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold font-mono shrink-0 ${cfg.stationBadgeClass}">${s.label}</span>
+            <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border shrink-0 ${cfg.tagClass}">${cfg.tag}</span>
+          </div>
+          <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${s.id}</div>
+          <div class="mt-1 text-xs font-medium text-white/50">${s.title}</div>
+          <p class="mt-2.5 text-sm leading-relaxed text-white/70">${s.desc}</p>
         </div>
-        <div class="mt-2 text-xs font-medium text-white/50">${s.title}</div>
-        <p class="mt-2.5 text-sm leading-relaxed text-white/70">${s.desc}</p>
-        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="mt-3 inline-flex text-xs font-semibold ${cfg.openLinkClass}">View SKILL.md ↗</a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="mt-3.5 inline-flex text-xs font-semibold ${cfg.openLinkClass}">View SKILL.md ↗</a>
       </div>
     `;}).join('');
   }
@@ -571,11 +594,11 @@ function renderStations(){
     sysEl.innerHTML=SYSTEM_SKILLS.map(sys=>`
       <div id="${sys.id}" class="card rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between gap-2">
-            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border ${sys.roleClass}">${sys.roleBadge}</span>
-            <span class="text-[11px] font-mono text-white/40">${sys.timing}</span>
+          <div class="flex items-center justify-between gap-2 mb-2.5">
+            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0 ${sys.roleClass}">${sys.roleBadge}</span>
+            <span class="text-[11px] font-mono text-white/40 shrink-0">${sys.timing}</span>
           </div>
-          <div class="mt-3 font-mono text-sm font-semibold text-white">/${sys.id}</div>
+          <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${sys.id}</div>
           <div class="text-[11px] text-amber-300/80 font-mono mt-0.5">${sys.command}</div>
           <p class="mt-2.5 text-sm leading-relaxed text-white/70">${sys.desc}</p>
         </div>
@@ -598,11 +621,12 @@ let _debounceT=null;
 let currentOrganizeMode = 'az'; // 'az' or 'pipeline'
 
 const PIPELINE_STATIONS_ORDER = [
-  { key: 'plan', label: 'Plan', stationNum: 'I–II', desc: 'Define & plan — issue backlog pick, right-sizing, spec, constraints, vertical task slices' },
-  { key: 'build', label: 'Build', stationNum: 'III–IIIB', desc: 'Build & iterate — test-driven development, UI engineering, human feedback fix loops' },
-  { key: 'review', label: 'Review & PR', stationNum: 'IV', desc: 'Review & ship — proof gate, specialist review panel, PR creation & CodeRabbit trigger' },
-  { key: 'babysit', label: 'Babysit', stationNum: 'V', desc: 'Babysit & merge — automated reviews, CI status monitoring, squash merge' },
-  { key: 'prune', label: 'Close', stationNum: 'VI', desc: 'Close pipeline — verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
+  { key: 'claim', label: 'Claim', stationNum: '#1', desc: 'Claim & pick — issue work entry, triage gate, domain backlog mapping and recommended pick' },
+  { key: 'plan', label: 'Plan', stationNum: '#2', desc: 'Define & plan — right-sizing, spec, constraints, vertical task slices' },
+  { key: 'build', label: 'Build', stationNum: '#3–#3b', desc: 'Build & iterate — test-driven development, UI engineering, human feedback fix loops' },
+  { key: 'review', label: 'Review & PR', stationNum: '#4', desc: 'Review & ship — proof gate, specialist review panel, PR creation & CodeRabbit trigger' },
+  { key: 'babysit', label: 'Babysit', stationNum: '#5', desc: 'Babysit & merge — automated reviews, CI status monitoring, squash merge' },
+  { key: 'close', label: 'Close', stationNum: '#6', desc: 'Close pipeline — verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
   { key: 'present', label: 'Present', stationNum: 'Ad-hoc', desc: 'Present & showcase — interactive visual showcase for completed PRs' }
 ];
 
@@ -633,6 +657,7 @@ function renderSkillCardHtml(s){
   const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
   const isPipeline = STATIONS.some(x => x.id === s.name);
   const sysSkill = SYSTEM_SKILLS.find(x => x.id === s.name);
+  const st = STATIONS.find(x => x.id === s.name);
 
   const cardClasses = isPipeline
     ? `card rounded-2xl border ${cfg.stationCardClass} p-5 text-left transition block relative`
@@ -641,9 +666,9 @@ function renderSkillCardHtml(s){
       : `card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block`;
 
   const badgeHtml = isPipeline
-    ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${cfg.stationBadgeClass}">Station</span>`
+    ? `<span class="text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${cfg.stationBadgeClass}">Station ${st ? st.label : ''}</span>`
     : sysSkill
-      ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${sysSkill.roleClass}">${sysSkill.roleBadge}</span>`
+      ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${sysSkill.roleClass}">${sysSkill.roleBadge}</span>`
       : '';
 
   const linkColor = isPipeline ? cfg.openLinkClass : sysSkill ? 'text-cyan-300 hover:text-cyan-200' : 'text-violet-300 hover:text-violet-200';
@@ -719,11 +744,12 @@ function renderSkills(){
       <div class="mt-3 text-base font-semibold text-white">No skills match “${qRaw}”</div>
       <div class="mt-2 text-sm text-white/60">Try <button onclick="document.getElementById('search').value='';renderSkills()" class="underline decoration-violet-400 text-white">clear search</button> or filter by station:</div>
       <div class="inline-flex gap-2 flex-wrap justify-center mt-3">
-        <button onclick="setStationFilter('plan')" class="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-medium">Plan</button>
+        <button onclick="setStationFilter('claim')" class="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-medium">Claim</button>
+        <button onclick="setStationFilter('plan')" class="px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 text-xs font-medium">Plan</button>
         <button onclick="setStationFilter('build')" class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-medium">Build</button>
         <button onclick="setStationFilter('review')" class="px-3 py-1 rounded-full bg-violet-500/15 border border-violet-400/30 text-violet-300 text-xs font-medium">Review & PR</button>
         <button onclick="setStationFilter('babysit')" class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-medium">Babysit</button>
-        <button onclick="setStationFilter('prune')" class="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-300 text-xs font-medium">Prune</button>
+        <button onclick="setStationFilter('close')" class="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-300 text-xs font-medium">Close</button>
         <button onclick="setStationFilter('present')" class="px-3 py-1 rounded-full bg-fuchsia-500/15 border border-fuchsia-400/30 text-fuchsia-300 text-xs font-medium">Present</button>
       </div>
     </div>`;
@@ -744,7 +770,7 @@ function renderSkills(){
       <section class="space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/10">
           <div class="flex items-center gap-3">
-            <span class="min-w-7 h-7 px-2 rounded-full ${cfg.stationBadgeClass} grid place-items-center text-xs font-bold">${p.stationNum}</span>
+            <span class="min-w-7 px-2 py-1 rounded-full ${cfg.stationBadgeClass} inline-flex items-center justify-center text-xs font-bold whitespace-nowrap">${p.stationNum}</span>
             <div>
               <div class="flex items-center gap-2.5">
                 <h3 class="text-lg font-bold text-white tracking-tight">${p.label}</h3>

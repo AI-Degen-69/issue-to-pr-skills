@@ -92,7 +92,7 @@
     <div class="flex flex-wrap items-end justify-between gap-4 pb-6 border-b border-white/10">
       <div>
         <h2 class="text-[26px] font-bold text-white tracking-tight">All 46 Skills Catalog</h2>
-        <p class="text-white/60 text-sm mt-1">Organized across the 7 pipeline stations (I to VI) with unique station tag styling.</p>
+        <p class="text-white/60 text-sm mt-1">Organized across the 7 pipeline stations (#1 to #6) with unique station tag styling.</p>
       </div>
       <div class="flex flex-wrap items-center gap-2">
         <div class="relative">
@@ -102,11 +102,12 @@
         <select id="filter" aria-label="Filter by station" onchange="updateStationFilterChips(this.value); renderSkills();" class="rounded-full bg-slate-800 border border-white/20 px-3.5 py-2 text-sm text-white focus:border-violet-400">
           <option value="all">All skills (46)</option>
           <option value="stations">Station skills only (7)</option>
+          <option value="claim">Claim (1)</option>
           <option value="plan">Plan (11)</option>
-          <option value="build">Build (13)</option>
-          <option value="review">Review & PR (10)</option>
+          <option value="build">Build (14)</option>
+          <option value="review">Review & PR (11)</option>
           <option value="babysit">Babysit (5)</option>
-          <option value="prune">Prune (3)</option>
+          <option value="close">Close (3)</option>
           <option value="present">Present (1)</option>
         </select>
         <!-- Organize Mode: A-Z vs Pipeline Groups (A-Z inside) -->
@@ -122,11 +123,12 @@
       <span class="text-white/40 mr-1 hidden sm:inline text-xs font-medium">Filter:</span>
       <button type="button" onclick="setStationFilter('all')" class="station-filter-btn px-3 py-1.5 rounded-full bg-violet-600 border border-violet-500 text-white font-medium transition shadow-sm whitespace-nowrap" data-filter="all">All (46)</button>
       <button type="button" onclick="setStationFilter('stations')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white transition whitespace-nowrap" data-filter="stations">⚡ Station Skills (7)</button>
-      <button type="button" onclick="setStationFilter('plan')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-cyan-400/25 text-cyan-300 hover:bg-cyan-500/15 transition whitespace-nowrap" data-filter="plan">Plan (11)</button>
-      <button type="button" onclick="setStationFilter('build')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-emerald-400/25 text-emerald-300 hover:bg-emerald-500/15 transition whitespace-nowrap" data-filter="build">Build (13)</button>
-      <button type="button" onclick="setStationFilter('review')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-violet-400/25 text-violet-300 hover:bg-violet-500/15 transition whitespace-nowrap" data-filter="review">Review & PR (10)</button>
+      <button type="button" onclick="setStationFilter('claim')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-cyan-400/25 text-cyan-300 hover:bg-cyan-500/15 transition whitespace-nowrap" data-filter="claim">Claim (1)</button>
+      <button type="button" onclick="setStationFilter('plan')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-sky-400/25 text-sky-300 hover:bg-sky-500/15 transition whitespace-nowrap" data-filter="plan">Plan (11)</button>
+      <button type="button" onclick="setStationFilter('build')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-emerald-400/25 text-emerald-300 hover:bg-emerald-500/15 transition whitespace-nowrap" data-filter="build">Build (14)</button>
+      <button type="button" onclick="setStationFilter('review')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-violet-400/25 text-violet-300 hover:bg-violet-500/15 transition whitespace-nowrap" data-filter="review">Review & PR (11)</button>
       <button type="button" onclick="setStationFilter('babysit')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-amber-400/25 text-amber-300 hover:bg-amber-500/15 transition whitespace-nowrap" data-filter="babysit">Babysit (5)</button>
-      <button type="button" onclick="setStationFilter('prune')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-rose-400/25 text-rose-300 hover:bg-rose-500/15 transition whitespace-nowrap" data-filter="prune">Prune (3)</button>
+      <button type="button" onclick="setStationFilter('close')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-rose-400/25 text-rose-300 hover:bg-rose-500/15 transition whitespace-nowrap" data-filter="close">Close (3)</button>
       <button type="button" onclick="setStationFilter('present')" class="station-filter-btn px-3 py-1.5 rounded-full bg-white/5 border border-fuchsia-400/25 text-fuchsia-300 hover:bg-fuchsia-500/15 transition whitespace-nowrap" data-filter="present">Present (1)</button>
     </div>
     <div id="skillGrid" class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
