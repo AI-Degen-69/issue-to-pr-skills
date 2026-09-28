@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rust Build Resolver Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Rust build, compilation, and dependency error resolution specialist: fixes cargo build errors, borrow checker issues, and Cargo.toml problems with minimal, surgical changes."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-orange-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(249,115,22,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-orange-300 font-mono">rust-build-resolver</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-orange-500/15 border border-orange-400/20 px-2.5 py-0.5 text-xs text-orange-200">
+          Rust & Cargo Toolchain
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        rust-build-resolver
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Rust compilation, borrow checker, and dependency resolution specialist. Fixes <code class="font-mono text-orange-300 text-sm">cargo check</code> errors, lifetime mismatches, and Cargo.toml issues with minimal, surgical changes — never using unsafe workarounds.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-orange-300 font-semibold">Station III</div>
+          <div class="text-xs text-white/60">iii-build-plan & cargo check gate</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Rust Compilation Failures</div>
+          <div class="text-xs text-white/60">Borrow checker, trait bounds, Cargo.toml</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Surgical Fixer</div>
+          <div class="text-xs text-white/60">Safe, minimal patches only</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Precision borrow checker and compiler diagnostic agent</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">rust-build-resolver</code> solves complex Rust ownership, lifetime, and trait implementation errors. It understands the strict requirements of <code class="font-mono text-orange-300 text-xs">rustc</code>, restructuring borrow scopes, moving ownership cleanly, or adjusting Cargo dependencies without suppressing warnings or compromising safety.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Read & Edit</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Context & Patching</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads ownership contexts, lifetime annotations, and applies surgical syntax patches.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Cargo Toolchain</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes <code class="text-white font-mono text-[11px]">cargo check</code>, <code class="text-white font-mono text-[11px]">cargo clippy</code>, and <code class="text-white font-mono text-[11px]">cargo test</code>.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Symbol & Trait Search</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Locates trait definitions, derive macros, and feature flags throughout the crates.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Workspace Navigation</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Discovers Cargo workspaces, crate members, and module directory hierarchies.</p>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Borrow Checker:</strong> The Rust compiler component ensuring memory safety by verifying that references do not outlive the data they point to.</span> ·
+      <span class="ml-2"><strong class="text-white">Lifetimes:</strong> Explicit annotations telling the compiler how long different pieces of memory remain valid.</span> ·
+      <span class="ml-2"><strong class="text-white">Trait Bounds:</strong> Requirements specifying that generic types must support particular behaviors.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during Rust task builds and pre-review gates</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Whenever Station III edits Rust code, <code class="text-white font-mono text-xs">cargo check</code> is run. If any compilation or borrow checker error is reported, this resolver takes over immediately.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">cargo check Fails</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Compiler Error Emitted</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Borrow checker or type inference halts the build.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-orange-500 bg-orange-950/40 p-4 shadow-lg shadow-orange-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-orange-500 text-slate-900 font-bold text-xs grid place-items-center">RBR</span>
+            <span class="text-xs font-mono font-semibold text-orange-200">rust-build-resolver</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Surgical Repair</div>
+          <div class="mt-1 text-xs text-orange-200/80 leading-5">Restructures borrow scopes or adjusts types cleanly.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Re-verify</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">cargo check Passes</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Runs clippy and tests to confirm zero regressions.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-cyan-300">Green Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Hand Off to Review</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Station proceeds to rust-reviewer in Station IV.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: COMMON FIX PATTERNS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">03 — Repair playbook</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Primary Rust failure modes and surgical solutions</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/rust-build-resolver.md</code>, each pattern resolves the cause without modifying logic flow.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-orange-500/30 bg-orange-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-orange-300">Borrow Checker & Lifetimes</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-orange-400 font-bold">→</span> <span><strong>cannot borrow as mutable:</strong> End immutable borrow before mutable borrow begins, or clone prior to insertion.</span></li>
+          <li class="flex items-start gap-2"><span class="text-orange-400 font-bold">→</span> <span><strong>does not live long enough:</strong> Return owned <code class="font-mono text-orange-200">String</code> instead of reference to dropped local value.</span></li>
+          <li class="flex items-start gap-2"><span class="text-orange-400 font-bold">→</span> <span><strong>cannot move out of index:</strong> Use <code class="font-mono text-orange-200">swap_remove</code>, <code class="font-mono text-orange-200">clone</code>, or restructure to take ownership.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-amber-300">Traits, Types & Cargo.toml</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">→</span> <span><strong>trait not implemented:</strong> Add <code class="font-mono text-amber-200">#[derive(...)]</code> or implement trait methods manually.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">→</span> <span><strong>async fn is not Send:</strong> Restructure code so non-Send types are dropped prior to <code class="font-mono text-amber-200">.await</code> calls.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">→</span> <span><strong>duplicate dependencies:</strong> Run <code class="font-mono text-amber-200">cargo tree -d</code> and run <code class="font-mono text-amber-200">cargo update -p &lt;crate&gt;</code> to harmonize versions.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: RESOLUTION WORKFLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">04 — Procedure</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Step-by-step Rust error elimination cadence</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-orange-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">cargo check</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Parses compiler error message and specific E-code.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Full diagnostics</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-orange-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Read Context</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Understands ownership, lifetimes, and data flow in file.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Borrow analysis</div>
+      </li>
+      <li class="rounded-xl border-2 border-orange-500/80 bg-orange-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-orange-300">Step 3</span>
+          <div class="mt-1 font-semibold text-white text-sm">Minimal Patch</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Applies simplest change that satisfies rustc borrow checker.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-orange-300/80 border-t border-orange-500/30 pt-2">Surgical safe edits</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-orange-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">cargo clippy</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Checks for linter warnings and idiomatic recommendations.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Clippy verification</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-orange-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">cargo test</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Verifies all test suites pass without regressions.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Green handoff</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">05 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What rust-build-resolver does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No unsafe shortcuts</div>
+        <p class="mt-2 text-white/60">Never introduces <code class="font-mono text-white text-[11px]">unsafe</code> blocks to work around borrow checker or lifetime constraints.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No unwrap() patching</div>
+        <p class="mt-2 text-white/60">Never adds panicking <code class="font-mono text-white text-[11px]">.unwrap()</code> to silence type errors; propagates errors cleanly using <code class="font-mono text-white text-[11px]">?</code>.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No #[allow(unused)]</div>
+        <p class="mt-2 text-white/60">Fixes dead code and unused imports directly rather than silencing the compiler with suppression attributes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CROSS-LINKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">06 — Related Personas</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>
+        <p class="mt-1 text-sm text-white/60">Specialists dispatched across the delivery stations.</p>
+      </div>
+      <a href="../" class="text-sm text-orange-300 hover:text-white transition">All 17 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../rust-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-orange-500/15 border border-orange-400/40 text-orange-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(249,115,22,0.25)]" title="Rust Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-orange-200 transition-colors">rust-reviewer</div>
+        <div class="text-xs text-white/50">Rust Safety</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Reviews lifetimes, ownership, and unsafe usage.</div>
+      </a>
+      <a href="../go-build-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-sky-500/15 border border-sky-400/40 text-sky-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(14,165,233,0.25)]" title="Go Build Resolver">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A8.006 8.006 0 0 1 4.07 10H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 0 11 18.93V18a1 1 0 0 1 2 0v.93A8.006 8.006 0 0 0 19.93 12H19a1 1 0 0 1 0-2h.93A8.006 8.006 0 0 1 13 4.07V5a1 1 0 0 1-2 0v-.93A8.006 8.006 0 0 0 4.07 11H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 1 11 19.93z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-sky-200 transition-colors">go-build-resolver</div>
+        <div class="text-xs text-white/50">Go Build</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes Go compilation and go vet errors.</div>
+      </a>
+      <a href="../build-error-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)]" title="Build Error Resolver">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-amber-200 transition-colors">build-error-resolver</div>
+        <div class="text-xs text-white/50">TypeScript & General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes general compiler and type issues.</div>
+      </a>
+      <a href="../tdd-guide/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.25)]" title="TDD Guide">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"/><path d="M14 9.3V2"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="m5.52 16 12.96 0"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-emerald-200 transition-colors">tdd-guide</div>
+        <div class="text-xs text-white/50">Testing</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Enforces test-first development and coverage.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: RAW DEFINITION -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-orange-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Rust Build Resolver definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete system prompts, diagnostic commands, and borrow checker repair rules live in <code class="text-white font-mono text-xs">agents/rust-build-resolver.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 17 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/rust-build-resolver.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View rust-build-resolver.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

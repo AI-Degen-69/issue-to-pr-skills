@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Go Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance. Mandatory for all Go code changes."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-sky-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(14,165,233,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-sky-300 font-mono">go-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-sky-500/15 border border-sky-400/20 px-2.5 py-0.5 text-xs text-sky-200">
+          Go Language Specialist
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        go-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Senior Go code reviewer ensuring high standards of idiomatic Go, concurrency correctness, explicit error wrapping, and allocation efficiency. Mandatory for all Go PRs.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-sky-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr panel</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Modified *.go Files</div>
+          <div class="text-xs text-white/60">Any diff touching Go code</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-rose-400">Quality Gate</div>
+          <div class="text-xs text-white/60">Blocks merge on CRITICAL/HIGH findings</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Expert evaluator for idiomatic Go and concurrency safety</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">go-reviewer</code> reviews code with the discerning eye of a veteran Go engineer. It enforces the idioms that make Go programs robust: early returns over nested ifs, proper error wrapping with <code class="font-mono text-xs text-sky-300">%w</code>, goroutine lifecycle management via contexts, and pre-allocation of slices in hot loops.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-sky-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Source Analysis</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads altered Go files and their surrounding package contexts to trace callers.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-sky-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Automated Checks</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes <code class="text-white font-mono text-[11px]">go vet</code>, <code class="text-white font-mono text-[11px]">staticcheck</code>, and race-detector test runs.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-sky-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Anti-pattern Scanning</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Detects raw error discards (<code class="text-white font-mono text-[11px]">_ = fn()</code>), mutex unlocks outside defer, and SQL concatenations.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-sky-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Diff Scoping</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Filters all repository changes strictly to modified Go packages and test suites.</p>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Goroutine Leak:</strong> Starting background work that never stops because it was never notified to cancel, wasting memory.</span> ·
+      <span class="ml-2"><strong class="text-white">Race Condition:</strong> When two threads read and write memory simultaneously without coordination, causing subtle corruption.</span> ·
+      <span class="ml-2"><strong class="text-white">Error Wrapping:</strong> Preserving the original root cause error while adding human-readable breadcrumb context.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The quality gatekeeper before Go code lands in main</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Invoked in Station IV as a specialized language reviewer. If Go code contains any high-severity anti-patterns or race conditions, it blocks the PR immediately.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Clean Build</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Station III Done</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">All code compiles and basic tests pass.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-sky-500 bg-sky-950/40 p-4 shadow-lg shadow-sky-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-sky-500 text-slate-900 font-bold text-xs grid place-items-center">GR</span>
+            <span class="text-xs font-mono font-semibold text-sky-200">go-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Language Audit</div>
+          <div class="mt-1 text-xs text-sky-200/80 leading-5">Scans concurrency, error handling, and memory allocations.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-amber-300">Feedback Loop</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Fix Dispatches</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Iterates with builder if any CRITICAL or HIGH flaws exist.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Ship Approval</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">PR Approved</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Branches ready for merge in Station V.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: REVIEW PRIORITIES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">03 — Inspection checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured priority review matrix</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/go-reviewer.md</code>, issues are strictly triaged into blocking vs advisory tiers.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-rose-500/30 bg-rose-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL — Security & Errors</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Ignored Errors:</strong> Using <code class="font-mono text-rose-200">_</code> to discard returned errors.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Missing Wrapping:</strong> <code class="font-mono text-rose-200">return err</code> without <code class="font-mono text-rose-200">fmt.Errorf("...: %w", err)</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>SQL / Command Injection:</strong> Concatenating input into database or exec calls.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Uncontrolled Panics:</strong> Panicking for recoverable business errors.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH — Concurrency & Idioms</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Goroutine Leaks:</strong> Spawning goroutines without context cancellation.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Channel Deadlocks:</strong> Unbuffered channels sending without ready receivers.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Mutex Misuse:</strong> Forgetting <code class="font-mono text-amber-200">defer mu.Unlock()</code> immediately after lock.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Deep Nesting:</strong> Nested if/else blocks instead of idiomatic early returns.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-blue-500/30 bg-blue-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM — Efficiency & Style</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>String Builder:</strong> Repeated <code class="font-mono text-blue-200">+</code> in loops instead of <code class="font-mono text-blue-200">strings.Builder</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Slice Capacity:</strong> Missing <code class="font-mono text-blue-200">make([]T, 0, cap)</code> for known item counts.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Context First:</strong> Context parameter not positioned as the first argument.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Table Tests:</strong> Unit tests not using table-driven slice structures.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: APPROVAL CRITERIA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">04 — Decision Framework</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Clear verdicts based on issue severity</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+          <span class="font-mono text-emerald-300 font-bold text-sm">APPROVE</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Zero CRITICAL and zero HIGH issues found. Code is idiomatic, leak-free, and safe for production.</p>
+      </div>
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+          <span class="font-mono text-amber-300 font-bold text-sm">WARNING</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Only MEDIUM issues (e.g. minor allocation tuning or naming suggestions). Does not block ship.</p>
+      </div>
+      <div class="rounded-2xl border border-rose-500/30 bg-rose-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+          <span class="font-mono text-rose-300 font-bold text-sm">BLOCK</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Any CRITICAL (security flaw, discarded error) or HIGH (goroutine leak, deadlock) issue halts the PR.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">05 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What go-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No code modifications</div>
+        <p class="mt-2 text-white/60">It is an auditor, not an editor. All required fixes are dispatched back to builder personas.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No bike-shedding formatting</div>
+        <p class="mt-2 text-white/60">Formatting is strictly handled by <code class="font-mono text-white text-[11px]">gofmt</code>; the reviewer never debates indentation or braces.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No personal style mandates</div>
+        <p class="mt-2 text-white/60">Enforces official Go team and Uber Go style guides rather than arbitrary personal preferences.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CROSS-LINKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">06 — Related Personas</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>
+        <p class="mt-1 text-sm text-white/60">Specialists dispatched across the delivery stations.</p>
+      </div>
+      <a href="../" class="text-sm text-sky-300 hover:text-white transition">All 17 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../go-build-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-sky-500/15 border border-sky-400/40 text-sky-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(14,165,233,0.25)]" title="Go Build Resolver">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A8.006 8.006 0 0 1 4.07 10H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 0 11 18.93V18a1 1 0 0 1 2 0v.93A8.006 8.006 0 0 0 19.93 12H19a1 1 0 0 1 0-2h.93A8.006 8.006 0 0 1 13 4.07V5a1 1 0 0 1-2 0v-.93A8.006 8.006 0 0 0 4.07 11H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 1 11 19.93z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-sky-200 transition-colors">go-build-resolver</div>
+        <div class="text-xs text-white/50">Go Build</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes Go compilation and go vet errors.</div>
+      </a>
+      <a href="../rust-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-orange-500/15 border border-orange-400/40 text-orange-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(249,115,22,0.25)]" title="Rust Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-orange-200 transition-colors">rust-reviewer</div>
+        <div class="text-xs text-white/50">Rust Safety</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Reviews lifetimes, ownership, and unsafe usage.</div>
+      </a>
+      <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-blue-200 transition-colors">typescript-reviewer</div>
+        <div class="text-xs text-white/50">TypeScript</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Type safety, null checks, and async patterns.</div>
+      </a>
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General Review</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Cross-language senior code review and standards.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: RAW DEFINITION -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-sky-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Go Reviewer definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete review guidelines, concurrency checklists, and diagnostic commands live in <code class="text-white font-mono text-xs">agents/go-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 17 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/go-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View go-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>React Build Resolver Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Diagnose and fix React build failures across Vite, webpack, Next.js, CRA, Parcel, esbuild, and Bun. Handles JSX compile errors, hydration mismatches, and RSC boundaries with minimal, surgical changes."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-cyan-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(6,182,212,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-cyan-300 font-mono">react-build-resolver</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-cyan-500/15 border border-cyan-400/20 px-2.5 py-0.5 text-xs text-cyan-200">
+          React & Bundler Diagnostics
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        react-build-resolver
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        React and bundler build specialist across Vite, Next.js, Webpack, Parcel, and Bun. Fixes JSX compilation errors, hydration mismatches, server/client component boundaries, and missing types with minimal, surgical changes.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-cyan-300 font-semibold">Station III</div>
+          <div class="text-xs text-white/60">iii-build-plan & bundler gate</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">React Build Failures</div>
+          <div class="text-xs text-white/60">JSX errors, hydration mismatch, RSC boundary</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Surgical Fixer</div>
+          <div class="text-xs text-white/60">Targeted patches, no speculative rewrites</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Rapid React and modern frontend bundler triage</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">react-build-resolver</code> solves the nuanced failures of modern React stacks. From missing <code class="font-mono text-cyan-300 text-xs">"use client"</code> directives in Next.js App Router to mismatched React major versions, JSX transforms, and CSS-in-JS hydration divergence, it repairs the build quickly without touching business logic.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Read & Edit</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Context & Patching</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Inspects component trees, imports, tsconfig options, and applies precise syntax edits.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Bundler Execution</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes <code class="text-white font-mono text-[11px]">npm run build</code>, <code class="text-white font-mono text-[11px]">vite build</code>, <code class="text-white font-mono text-[11px]">next build</code>, and <code class="text-white font-mono text-[11px]">npm ls react</code>.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Directive & Import Scan</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Finds server-only imports leaking into client bundles or hooks called in Server Components.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-cyan-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Config Discovery</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Locates bundler configs (<code class="text-white font-mono text-[11px]">vite.config.ts</code>, <code class="text-white font-mono text-[11px]">next.config.js</code>) and tsconfigs.</p>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Hydration Mismatch:</strong> When HTML rendered on the server differs from what the browser creates on first load.</span> ·
+      <span class="ml-2"><strong class="text-white">"use client":</strong> A boundary marker telling modern React that this component uses state or browser APIs.</span> ·
+      <span class="ml-2"><strong class="text-white">Duplicate React:</strong> When two versions of React exist in node_modules, breaking internal hook storage.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during frontend task build loops and shipping gates</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      When Station III completes a frontend task, the bundler is invoked. Any compilation, bundler loader failure, or hydration error immediately routes to this resolver.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Build Failure</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Bundler Emits Error</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Vite, Webpack, or Next.js build fails with error.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-cyan-500 bg-cyan-950/40 p-4 shadow-lg shadow-cyan-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500 text-slate-900 font-bold text-xs grid place-items-center">RBR</span>
+            <span class="text-xs font-mono font-semibold text-cyan-200">react-build-resolver</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Layer Isolation</div>
+          <div class="mt-1 text-xs text-cyan-200/80 leading-5">Categorizes into TS, bundler config, RSC boundary, or runtime.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Re-verify</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Bundler Passes</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Re-runs build script and runs tests to prove clean exit.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-cyan-300">Green Gate</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Resume Delivery</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Station proceeds to visual checks and review panel.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: COMMON FIX PATTERNS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">03 — Repair playbook</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Primary React failure modes and surgical solutions</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/react-build-resolver.md</code>, each pattern resolves the cause without modifying logic flow.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-2 gap-4">
+      <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-cyan-300">Next.js & RSC Boundaries</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">→</span> <span><strong>useState in Server Component:</strong> Prepend <code class="font-mono text-cyan-200">"use client"</code> to the file's first line or move hook to client child.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">→</span> <span><strong>Can't resolve 'fs' on client:</strong> Move Node-only operations to Server Components or API route handlers.</span></li>
+          <li class="flex items-start gap-2"><span class="text-cyan-400 font-bold">→</span> <span><strong>Hydration mismatch:</strong> Move non-deterministic values (<code class="font-mono text-cyan-200">Date.now()</code>, <code class="font-mono text-cyan-200">localStorage</code>) to <code class="font-mono text-cyan-200">useEffect</code>.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-blue-500/30 bg-blue-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-blue-300">JSX, Types & Bundlers</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">→</span> <span><strong>'React' is not defined:</strong> Set <code class="font-mono text-blue-200">"jsx": "react-jsx"</code> in tsconfig for React 17+ transform.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">→</span> <span><strong>Invalid hook call:</strong> Check duplicate React packages via <code class="font-mono text-blue-200">npm ls react</code> and dedupe.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">→</span> <span><strong>Missing React types:</strong> Install matching major <code class="font-mono text-blue-200">@types/react @types/react-dom</code>.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: RESOLUTION WORKFLOW -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">04 — Procedure</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Step-by-step React error elimination cadence</h2>
+    <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 1</span>
+          <div class="mt-1 font-semibold text-white text-sm">Run Build</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Captures full bundler and typecheck output.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Respect project script</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 2</span>
+          <div class="mt-1 font-semibold text-white text-sm">Identify Layer</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Separates TypeScript, bundler plugin, or RSC issues.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Root cause taxonomy</div>
+      </li>
+      <li class="rounded-xl border-2 border-cyan-500/80 bg-cyan-950/20 p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-300">Step 3</span>
+          <div class="mt-1 font-semibold text-white text-sm">Minimal Patch</div>
+          <p class="mt-2 text-xs text-white/70 leading-5">Applies tightest fix required to satisfy bundler.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-cyan-300/80 border-t border-cyan-500/30 pt-2">No speculative diffs</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 4</span>
+          <div class="mt-1 font-semibold text-white text-sm">Re-verify</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Re-runs build to ensure zero remaining errors.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Fresh build gate</div>
+      </li>
+      <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
+        <div>
+          <span class="text-xs font-mono font-bold text-cyan-400">Step 5</span>
+          <div class="mt-1 font-semibold text-white text-sm">Run Tests</div>
+          <p class="mt-2 text-xs text-white/60 leading-5">Runs component tests to verify no behavioral regression.</p>
+        </div>
+        <div class="mt-3 text-[11px] text-white/40 border-t border-white/5 pt-2">Green handoff</div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- SECTION 6: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">05 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What react-build-resolver does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No disabling type checks</div>
+        <p class="mt-2 text-white/60">Never silences errors with unprincipled <code class="font-mono text-white text-[11px]">@ts-ignore</code> or disabling strict compiler flags.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No component redesigns</div>
+        <p class="mt-2 text-white/60">Does not rewrite component hierarchies or styling libraries; fixes the error in the current design.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No unrequested major upgrades</div>
+        <p class="mt-2 text-white/60">Aligns packages within current major versions rather than forcing major breaking upgrades.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CROSS-LINKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">06 — Related Personas</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>
+        <p class="mt-1 text-sm text-white/60">Specialists dispatched across the delivery stations.</p>
+      </div>
+      <a href="../" class="text-sm text-cyan-300 hover:text-white transition">All 17 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../build-error-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)]" title="Build Error Resolver">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-amber-200 transition-colors">build-error-resolver</div>
+        <div class="text-xs text-white/50">TypeScript & General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes general compiler and type issues.</div>
+      </a>
+      <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 0h21A1.5 1.5 0 0 1 24 1.5v21a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 22.5v-21A1.5 1.5 0 0 1 1.5 0zm10.72 13.92h-2.9v7.07H6.77V13.92H3.87v-2.47h8.35v2.47zm3.17 4.96c.64.36 1.48.58 2.37.58 1.42 0 2.24-.69 2.24-1.69 0-.96-.65-1.46-2.02-1.99-1.78-.68-2.89-1.66-2.89-3.23 0-1.91 1.54-3.3 3.93-3.3 1.25 0 2.24.31 2.83.67l-.73 2.19c-.48-.28-1.22-.5-2.08-.5-1.2 0-1.84.6-1.84 1.43 0 .86.67 1.3 2.14 1.88 1.93.75 2.79 1.76 2.79 3.37 0 2.13-1.64 3.42-4.33 3.42-1.39 0-2.61-.41-3.26-.82l.81-2.21z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-blue-200 transition-colors">typescript-reviewer</div>
+        <div class="text-xs text-white/50">TypeScript</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Type safety, null checks, and async patterns.</div>
+      </a>
+      <a href="../tdd-guide/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(16,185,129,0.25)]" title="TDD Guide">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"/><path d="M14 9.3V2"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="m5.52 16 12.96 0"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-emerald-200 transition-colors">tdd-guide</div>
+        <div class="text-xs text-white/50">Testing</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Enforces test-first development and coverage.</div>
+      </a>
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General Review</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Cross-language senior code review and standards.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: RAW DEFINITION -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-cyan-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw React Build Resolver definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete system prompts, diagnostic commands, and bundler resolution rules live in <code class="text-white font-mono text-xs">agents/react-build-resolver.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 17 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/react-build-resolver.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View react-build-resolver.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>

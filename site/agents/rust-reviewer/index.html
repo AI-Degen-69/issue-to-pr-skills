@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rust Reviewer Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Mandatory for all Rust code changes."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-orange-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(249,115,22,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-orange-300 font-mono">rust-reviewer</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-orange-500/15 border border-orange-400/20 px-2.5 py-0.5 text-xs text-orange-200">
+          Rust Safety Specialist
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        rust-reviewer
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        Senior Rust code reviewer ensuring high standards of safety, ownership correctness, explicit error propagation, and unsafe auditability. Mandatory for all Rust pull requests.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-orange-300 font-semibold">Station IV</div>
+          <div class="text-xs text-white/60">iv-review-build-and-pr panel</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Modified *.rs Files</div>
+          <div class="text-xs text-white/60">Any diff modifying Rust code</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-rose-400">Quality Gate</div>
+          <div class="text-xs text-white/60">Blocks merge on CRITICAL/HIGH findings</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Rigorous memory safety, lifetime, and unsafe auditor</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">rust-reviewer</code> holds Rust PRs to the highest standard of idiomatic engineering. It flags unprincipled `.unwrap()` in production paths, requires explicit <code class="font-mono text-xs text-orange-300">// SAFETY:</code> comments for every unsafe block, catches blocking I/O inside asynchronous Tokio tasks, and eliminates unnecessary heap allocations.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Source Analysis</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Reads altered Rust files and callers across workspace crates to verify memory contracts.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Automated Tooling</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Executes <code class="text-white font-mono text-[11px]">cargo clippy -- -D warnings</code>, <code class="text-white font-mono text-[11px]">cargo audit</code>, and <code class="text-white font-mono text-[11px]">cargo test</code>.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Safety & Panic Scan</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Searches for unhandled `.unwrap()`, raw pointer arithmetic, and missing SAFETY comments.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-orange-300">Glob</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Workspace Scoping</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Isolates modified crate members, Cargo.toml files, and integration tests in the diff.</p>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-2xl border border-white/10 bg-white/[.02] p-4 text-xs leading-5 text-white/60">
+      <span class="font-semibold text-white">Glossary for non-coders:</span>
+      <span class="ml-2"><strong class="text-white">Unsafe Rust:</strong> A mode that relaxes compiler checks to allow raw hardware access, requiring strict human proof.</span> ·
+      <span class="ml-2"><strong class="text-white">Unwrap:</strong> Extracting a value that causes an immediate program crash if the value is empty or an error.</span> ·
+      <span class="ml-2"><strong class="text-white">Async Blocking:</strong> Running long computations on async workers, which freezes other simultaneous operations.</span>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">The gatekeeper before Rust code is merged into main</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Dispatched in Station IV as a specialized language reviewer. Any unhandled panic, unsafe without invariant documentation, or concurrency hazard blocks shipping.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">1</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Build Passing</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Station III Complete</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">cargo check and cargo test succeed.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-orange-500 bg-orange-950/40 p-4 shadow-lg shadow-orange-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-orange-500 text-slate-900 font-bold text-xs grid place-items-center">RR</span>
+            <span class="text-xs font-mono font-semibold text-orange-200">rust-reviewer</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Safety Audit</div>
+          <div class="mt-1 text-xs text-orange-200/80 leading-5">Scans unwrap calls, unsafe blocks, and async patterns.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-amber-500/20 text-amber-300 font-bold text-xs grid place-items-center">2</span>
+            <span class="text-xs font-mono font-semibold text-amber-300">Feedback Loop</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Fix Dispatches</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Dispatches to builder persona if flaws are identified.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-emerald-500/20 text-emerald-300 font-bold text-xs grid place-items-center">✓</span>
+            <span class="text-xs font-mono font-semibold text-emerald-300">Ship Approval</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">PR Approved</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Branch cleared for merge in Station V.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: REVIEW PRIORITIES -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">03 — Inspection checklist</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured priority review matrix</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Sourced directly from <code class="text-white font-mono text-xs">agents/rust-reviewer.md</code>, issues are strictly triaged into blocking vs advisory tiers.
+    </p>
+
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-rose-500/30 bg-rose-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL — Safety & Errors</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Unchecked unwrap():</strong> Raw <code class="font-mono text-rose-200">.unwrap()</code> or <code class="font-mono text-rose-200">.expect()</code> in production paths.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Unsafe without comment:</strong> Missing <code class="font-mono text-rose-200">// SAFETY:</code> documenting safety invariants.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Silenced errors:</strong> Discarding results via <code class="font-mono text-rose-200">let _ = result;</code> on <code class="font-mono text-rose-200">#[must_use]</code> types.</span></li>
+          <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Injection / Traversal:</strong> Unvalidated strings in commands or database queries.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH — Ownership & Async</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Unnecessary cloning:</strong> Calling <code class="font-mono text-amber-200">.clone()</code> solely to appease borrow checker without understanding.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Blocking in async:</strong> Using <code class="font-mono text-amber-200">std::thread::sleep</code> or blocking files in Tokio contexts.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Unbounded channels:</strong> Using unbounded channels without buffer limits or backpressure.</span></li>
+          <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Poisoning ignored:</strong> Ignoring <code class="font-mono text-amber-200">PoisonError</code> returned from mutex locks.</span></li>
+        </ul>
+      </div>
+
+      <div class="rounded-2xl border border-blue-500/30 bg-blue-950/15 p-5">
+        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM — Efficiency & Idioms</div>
+        <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>String vs &str:</strong> Taking owned <code class="font-mono text-blue-200">String</code> when borrowed <code class="font-mono text-blue-200">&str</code> suffices.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Missing capacity:</strong> Missing <code class="font-mono text-blue-200">Vec::with_capacity(n)</code> when size is known.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Clippy warnings:</strong> Silencing clippy warnings with unapproved <code class="font-mono text-blue-200">#[allow(...)]</code>.</span></li>
+          <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Derive order:</strong> Out-of-order derives (<code class="font-mono text-blue-200">Debug, Clone, PartialEq, Eq...</code>).</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: APPROVAL CRITERIA -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">04 — Decision Framework</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Clear verdicts based on issue severity</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+          <span class="font-mono text-emerald-300 font-bold text-sm">APPROVE</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Zero CRITICAL and zero HIGH issues found. Code is memory-safe, panic-free, and idiomatic.</p>
+      </div>
+      <div class="rounded-2xl border border-amber-500/30 bg-amber-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+          <span class="font-mono text-amber-300 font-bold text-sm">WARNING</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">MEDIUM issues only (e.g. minor allocation tuning or derive order). Does not block shipping.</p>
+      </div>
+      <div class="rounded-2xl border border-rose-500/30 bg-rose-950/20 p-5">
+        <div class="flex items-center gap-2">
+          <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+          <span class="font-mono text-rose-300 font-bold text-sm">BLOCK</span>
+        </div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Any CRITICAL (unsafe without justification, unwrap in production) or HIGH (async blocking) halts merge.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">05 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What rust-reviewer does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No code modifications</div>
+        <p class="mt-2 text-white/60">It is an auditor, not an editor. All required fixes are dispatched back to builder personas.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No formatting debates</div>
+        <p class="mt-2 text-white/60">Formatting is strictly settled by <code class="font-mono text-white text-[11px]">cargo fmt --check</code>; never argues indentation or line wraps.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No subjective rewrites</div>
+        <p class="mt-2 text-white/60">Accepts diverse working patterns as long as memory safety, lifetime invariants, and performance hold.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: CROSS-LINKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">06 — Related Personas</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>
+        <p class="mt-1 text-sm text-white/60">Specialists dispatched across the delivery stations.</p>
+      </div>
+      <a href="../" class="text-sm text-orange-300 hover:text-white transition">All 17 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../rust-build-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-orange-500/15 border border-orange-400/40 text-orange-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(249,115,22,0.25)]" title="Rust Build Resolver">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.93V17a1 1 0 0 1-2 0v-.07A8.006 8.006 0 0 1 4.07 10H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 0 11 18.93V18a1 1 0 0 1 2 0v.93A8.006 8.006 0 0 0 19.93 12H19a1 1 0 0 1 0-2h.93A8.006 8.006 0 0 1 13 4.07V5a1 1 0 0 1-2 0v-.93A8.006 8.006 0 0 0 4.07 11H5a1 1 0 0 1 0 2h-.93A8.006 8.006 0 0 1 11 19.93z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-orange-200 transition-colors">rust-build-resolver</div>
+        <div class="text-xs text-white/50">Rust Build</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes cargo check and borrow checker compilation errors.</div>
+      </a>
+      <a href="../security-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-red-500/15 border border-red-400/40 text-red-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(239,68,68,0.25)]" title="Security Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-red-200 transition-colors">security-reviewer</div>
+        <div class="text-xs text-white/50">Security</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">OWASP Top 10, auth, injection, and secrets.</div>
+      </a>
+      <a href="../go-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-sky-500/15 border border-sky-400/40 text-sky-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(14,165,233,0.25)]" title="Go Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1.5 12c0-3.3 2.7-6 6-6 1.8 0 3.4.8 4.5 2.1C13.1 6.8 14.7 6 16.5 6c3.3 0 6 2.7 6 6s-2.7 6-6 6c-1.8 0-3.4-.8-4.5-2.1-1.1 1.3-2.7 2.1-4.5 2.1-3.3 0-6-2.7-6-6z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-sky-200 transition-colors">go-reviewer</div>
+        <div class="text-xs text-white/50">Go Quality</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Idiomatic Go, concurrency, and error wrapping review.</div>
+      </a>
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Reviewer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General Review</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Cross-language senior code review and standards.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 8: RAW DEFINITION -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-orange-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Rust Reviewer definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete review guidelines, safety checklists, and diagnostic commands live in <code class="text-white font-mono text-xs">agents/rust-reviewer.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 17 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/rust-reviewer.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View rust-reviewer.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>
