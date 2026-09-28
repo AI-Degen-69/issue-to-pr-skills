@@ -1211,7 +1211,7 @@ function renderHomeTableOfContents() {
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
         e.preventDefault();
-        const yOffset = -76;
+        const yOffset = -80;
         const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
         history.pushState(null, '', '#' + targetId);
@@ -1230,54 +1230,110 @@ function renderHomeTableOfContents() {
   setupHomeTocScrollspy();
 }
 
+const PARENT_MAP = {
+  'sequential-stations': 'lifecycle',
+  'system-skills': 'lifecycle'
+};
+
+function getActiveHomeTarget() {
+  // 1. If at bottom of page (within 80px), activate catalog
+  if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 80)) {
+    return 'catalog';
+  }
+
+  // Reading line: 160px from the top of the viewport (below fixed navbar)
+  const readingLine = 160;
+
+  // Check sub-sections first (nested inside #lifecycle)
+  const subTargets = [
+    { id: 'system-skills', el: document.getElementById('system-skills') },
+    { id: 'sequential-stations', el: document.getElementById('sequential-stations') }
+  ];
+
+  for (const sub of subTargets) {
+    if (sub.el) {
+      const rect = sub.el.getBoundingClientRect();
+      if (rect.top <= readingLine && rect.bottom > readingLine) {
+        return sub.id;
+      }
+    }
+  }
+
+  // Check main chapters in order
+  const mainSections = [
+    'why',
+    'install',
+    'in-practice',
+    'lifecycle',
+    'agents',
+    'catalog'
+  ];
+
+  for (const id of mainSections) {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= readingLine && rect.bottom > readingLine) {
+        return id;
+      }
+    }
+  }
+
+  // Fallback: whichever section's top is closest above readingLine
+  let bestId = 'why';
+  let minDiff = Infinity;
+  let hasPassedAny = false;
+  const allIds = ['why', 'install', 'in-practice', 'lifecycle', 'sequential-stations', 'system-skills', 'agents', 'catalog'];
+  for (const id of allIds) {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top <= readingLine) {
+        hasPassedAny = true;
+        const diff = readingLine - rect.top;
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestId = id;
+        }
+      }
+    }
+  }
+  if (!hasPassedAny) {
+    return 'why';
+  }
+  return bestId;
+}
+
 function setupHomeTocScrollspy() {
   let isTicking = false;
 
-  const targetIds = [];
-  HOME_TOC_SECTIONS.forEach(sec => {
-    targetIds.push(sec.id);
-    if (sec.subItems) {
-      sec.subItems.forEach(sub => targetIds.push(sub.id));
-    }
-  });
-
   function update() {
-    const scrollPos = window.scrollY + 140;
-    let currentId = null;
-
-    for (let i = targetIds.length - 1; i >= 0; i--) {
-      const tid = targetIds[i];
-      const el = document.getElementById(tid);
-      if (el && el.offsetTop <= scrollPos) {
-        currentId = tid;
-        break;
-      }
-    }
-
-    if (!currentId && targetIds.length > 0) {
-      const firstEl = document.getElementById(targetIds[0]);
-      if (firstEl && scrollPos >= firstEl.offsetTop - 300) {
-        currentId = targetIds[0];
-      }
-    }
+    const currentId = getActiveHomeTarget();
+    const parentId = PARENT_MAP[currentId] || null;
 
     document.querySelectorAll('.toc-item').forEach(item => {
       const target = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
       const isSub = item.classList.contains('toc-subitem');
+
       if (target === currentId) {
         if (isSub) {
-          item.classList.add('bg-violet-600/25', 'text-violet-200', 'font-medium');
+          item.classList.add('bg-violet-600/30', 'text-violet-200', 'font-semibold', 'border-l-2', 'border-violet-400');
           item.classList.remove('text-white/50');
         } else {
-          item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.add('bg-violet-600/25', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
           item.classList.remove('text-white/65');
         }
+      } else if (target === parentId) {
+        // Parent chapter of the active sub-item
+        item.classList.add('text-white', 'font-semibold');
+        item.classList.remove('text-white/65', 'bg-violet-600/25', 'border-l-2', 'border-violet-400');
       } else {
+        // Inactive item
         if (isSub) {
-          item.classList.remove('bg-violet-600/25', 'text-violet-200', 'font-medium');
+          item.classList.remove('bg-violet-600/30', 'text-violet-200', 'font-semibold', 'border-l-2', 'border-violet-400');
           item.classList.add('text-white/50');
         } else {
-          item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.remove('bg-violet-600/25', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
           item.classList.add('text-white/65');
         }
       }
@@ -1287,6 +1343,13 @@ function setupHomeTocScrollspy() {
   }
 
   window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      requestAnimationFrame(update);
+      isTicking = true;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
     if (!isTicking) {
       requestAnimationFrame(update);
       isTicking = true;
