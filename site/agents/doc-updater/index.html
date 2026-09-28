@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Doc Updater Agent — Issue-to-PR Skills</title>
+<meta name="description" content="Documentation and codemap specialist: generates architectural codemaps, syncs READMEs with active code, and prevents documentation drift."/>
+<meta name="theme-color" content="#020617"/>
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','system-ui','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+<link rel="stylesheet" href="../../shared-interactions.css"/>
+<style>
+.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+</style>
+</head>
+<body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-indigo-500/30">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl" aria-label="Primary">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+    <a href="../../" class="flex items-center gap-3">
+      <div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div>
+      <span class="font-semibold tracking-tight">issue-to-pr<span class="text-white/50">.skills</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
+      <a href="../../#lifecycle" class="hover:text-white">Lifecycle</a>
+      <a href="../../skills/" class="hover:text-white">Skills</a>
+      <a href="../" class="text-white font-semibold">Agents</a>
+      <a href="../../docs/" class="hover:text-white">Docs</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+    <a href="../" class="text-sm text-white/70 hover:text-white flex items-center gap-1">← All Agents</a>
+  </div>
+</nav>
+
+<main id="main">
+  <!-- SECTION 1: HERO & OVERVIEW -->
+  <section class="relative overflow-hidden border-b border-white/5">
+    <div class="absolute inset-0" style="background:radial-gradient(700px 350px at 70% 0%, rgba(99,102,241,.18), transparent)"></div>
+    <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-14">
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="../" class="text-xs text-white/60 hover:text-white">Agents</a>
+        <span class="text-xs text-white/40">/</span>
+        <span class="text-xs text-indigo-300 font-mono">doc-updater</span>
+        <span class="ml-2 inline-flex items-center gap-1.5 rounded-full bg-indigo-500/15 border border-indigo-400/20 px-2.5 py-0.5 text-xs text-indigo-200">
+          Codemaps & Living Documentation
+        </span>
+      </div>
+
+      <h1 class="mt-4 text-[32px] sm:text-[42px] font-extrabold tracking-tight leading-tight">
+        doc-updater
+      </h1>
+      <p class="mt-3 max-w-[760px] text-[17px] leading-7 text-white/80">
+        A documentation and architecture codemap specialist. Inspects code changes, generates living maps in <code class="font-mono text-indigo-200">docs/CODEMAPS/</code>, and keeps README guides, API contracts, and usage examples perfectly synchronized with production code.
+      </p>
+
+      <div class="mt-6 grid sm:grid-cols-3 gap-3 max-w-[720px] text-sm">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Dispatched by</div>
+          <div class="mt-1 font-mono text-indigo-300 font-semibold">Station VI</div>
+          <div class="text-xs text-white/60">vi-close-pipeline & doc tasks</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Triggers on</div>
+          <div class="mt-1 font-semibold text-white">Documentation Drift</div>
+          <div class="text-xs text-white/60">Modified public APIs, new routes, closeout</div>
+        </div>
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-3.5">
+          <div class="text-[11px] uppercase tracking-wider text-white/50">Execution model</div>
+          <div class="mt-1 font-semibold text-emerald-400">Codemap Generator</div>
+          <div class="text-xs text-white/60">Single source of truth extraction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: WHAT IT IS & TOOLING -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">01 — What it is</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Automatic synchronization between code truth and written guides</h2>
+    <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
+      Documentation rots when written by hand and neglected during refactoring. The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">doc-updater</code> eliminates drift by generating codemaps directly from codebase ASTs, imports, exports, and schema definitions.
+    </p>
+
+    <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-indigo-300">Read</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">AST & JSDoc</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Extracts type interfaces, function docstrings, exported parameters, and environment schemas.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-indigo-300">Write / Edit</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Codemap Publishing</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Writes clean Markdown codemaps under 500 lines per module with fresh timestamps and ASCII diagrams.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-indigo-300">Grep</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Reference Audit</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Searches docs for renamed symbols, outdated paths, or stale command examples.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-mono text-sm font-semibold text-indigo-300">Bash</div>
+        <div class="mt-1 text-xs text-white/50 font-semibold uppercase tracking-wider">Doc Validation</div>
+        <p class="mt-2 text-xs text-white/70 leading-5">Runs link checkers, doc generators, and code-snippet compilers to verify accuracy.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PIPELINE PLACEMENT -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">02 — Lifecycle placement</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during post-build wrap-up and pipeline closeout</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      Ensures that before an issue closes and its branch is pruned, all documentation changes are committed alongside the code so external users and future agents have full context.
+    </p>
+
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/40 p-5 lg:p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-slate-500/20 text-slate-300 font-bold text-xs grid place-items-center">IV</span>
+            <span class="text-xs font-mono font-semibold text-slate-300">Station IV</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Review & Merge</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Feature code is reviewed, verified, and merged to base branch.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-indigo-500/20 text-indigo-300 font-bold text-xs grid place-items-center">V</span>
+            <span class="text-xs font-mono font-semibold text-indigo-300">Station V</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">PR Merged</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">CI passes, branch squashed, fast-forwarded to main.</div>
+        </div>
+
+        <div class="rounded-xl border-2 border-indigo-500 bg-indigo-950/40 p-4 shadow-lg shadow-indigo-900/30">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-indigo-500 text-white font-bold text-xs grid place-items-center">DU</span>
+            <span class="text-xs font-mono font-semibold text-indigo-200">doc-updater</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Synchronize Docs</div>
+          <div class="mt-1 text-xs text-indigo-200/80 leading-5">Updates codemaps, README examples, and guides to match new state.</div>
+        </div>
+
+        <div class="rounded-xl border border-white/10 bg-white/[.04] p-4">
+          <div class="flex items-center gap-2">
+            <span class="h-6 w-6 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs grid place-items-center">VI</span>
+            <span class="text-xs font-mono font-semibold text-cyan-300">Station VI</span>
+          </div>
+          <div class="mt-2 text-sm font-semibold text-white">Spotless Close</div>
+          <div class="mt-1 text-xs text-white/60 leading-5">Issue closed, artifacts swept, clean exit gate passed.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: CODEMAP ARCHITECTURE -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">03 — Codemap layout</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured repository maps</h2>
+    <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
+      <div class="text-indigo-400 font-bold">docs/CODEMAPS/</div>
+      <div class="mt-2 space-y-1 text-white/80">
+        <div>├── <span class="text-white font-bold">INDEX.md</span>          # High-level architecture and area catalog</div>
+        <div>├── <span class="text-white font-bold">frontend.md</span>       # UI components, routing, state stores, and layout primitives</div>
+        <div>├── <span class="text-white font-bold">backend.md</span>        # API endpoints, middleware pipelines, and controllers</div>
+        <div>├── <span class="text-white font-bold">database.md</span>       # Tables, schemas, relationships, indexes, and RLS policies</div>
+        <div>├── <span class="text-white font-bold">integrations.md</span>   # Third-party SDKs, webhook listeners, external APIs</div>
+        <div>└── <span class="text-white font-bold">workers.md</span>        # Background queues, event handlers, and scheduled crons</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: WHAT IT DOES NOT DO -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">04 — Strict boundaries</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">What doc-updater does NOT do</h2>
+    <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No code logic edits</div>
+        <p class="mt-2 text-white/60">Does not alter executable code or business logic; it documents what was built.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No marketing prose</div>
+        <p class="mt-2 text-white/60">Focuses on technical clarity, accurate code references, and developer-first guides rather than marketing copy.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
+        <div class="font-semibold text-white text-sm">No bloated files</div>
+        <p class="mt-2 text-white/60">Enforces token efficiency with a strict limit under 500 lines per generated codemap file.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: CROSS-LINKS -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">05 — Related Personas</div>
+    <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
+      <div>
+        <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>
+        <p class="mt-1 text-sm text-white/60">Specialists dispatched across the delivery stations.</p>
+      </div>
+      <a href="../" class="text-sm text-indigo-300 hover:text-white transition">All 17 agents →</a>
+    </div>
+    <div id="agentGrid" class="mt-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="../code-explorer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-sky-500/15 border border-sky-400/40 text-sky-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(14,165,233,0.25)]" title="Explorer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-explorer</div>
+        <div class="text-xs text-white/50">Explorer</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Traces code paths in unfamiliar repos.</div>
+      </a>
+      <a href="../code-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="Code Review">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
+        <div class="text-xs text-white/50">General</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+      </a>
+      <a href="../type-design-analyzer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-fuchsia-500/15 border border-fuchsia-400/40 text-fuchsia-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(217,70,239,0.25)]" title="Design">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.12 6.4-6.05-4.06a4.95 4.95 0 0 0-5.14 0L3.88 6.4a4.95 4.95 0 0 0-2.38 4.25v7.7a4.95 4.95 0 0 0 2.38 4.25l6.05 4.06a4.95 4.95 0 0 0 5.14 0l6.05-4.06a4.95 4.95 0 0 0 2.38-4.25v-7.7a4.95 4.95 0 0 0-2.38-4.25Z"/><path d="M12 22V12"/><path d="m3.29 7 8.71 5 8.71-5"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">type-design-analyzer</div>
+        <div class="text-xs text-white/50">Design</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks interfaces are simple and clear.</div>
+      </a>
+      <a href="../build-error-resolver/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+        <div class="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(245,158,11,0.25)]" title="Build">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">build-error-resolver</div>
+        <div class="text-xs text-white/50">Build</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Fixes build and TypeScript failures.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 7: RAW DEFINITION -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+    <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-indigo-600/15 via-black/40 to-violet-500/10 p-6 lg:p-8 flex flex-wrap items-center justify-between gap-6">
+      <div>
+        <h3 class="text-xl font-bold text-white">Inspect the raw Doc Updater definition</h3>
+        <p class="mt-1 text-sm text-white/70 max-w-[560px]">
+          The complete Markdown instructions and codemap templates live in <code class="text-white font-mono text-xs">agents/doc-updater.md</code>.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 text-sm font-semibold hover:bg-white/15">
+          ← Back to all 17 agents
+        </a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/doc-updater.md" target="_blank" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">
+          View doc-updater.md on GitHub ↗
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 mt-10">
+  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex flex-wrap items-center justify-between gap-4">
+    <span>© 2026 issue-to-pr-skills · MIT</span>
+    <div class="flex items-center gap-4">
+      <a href="../" class="hover:text-white">← All Agents</a>
+      <a href="../../" class="hover:text-white">Home</a>
+      <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
+    </div>
+  </div>
+</footer>
+<script src="../../shared-interactions.js"></script>
+</body>
+</html>
