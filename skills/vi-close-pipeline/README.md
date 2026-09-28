@@ -1,6 +1,6 @@
 # vi-close-pipeline — Station VI (Close Pipeline)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Post-merge closeout: verifies the issue is closed, sweeps stale
 artifacts by signal (any layout), handles dead code on the spot, and

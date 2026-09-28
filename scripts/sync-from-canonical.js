@@ -45,6 +45,17 @@ const EXCLUDE = [
   (rel) => rel === "results.json",
 ];
 
+// Mirror-specific rewrites applied AFTER copying. Canonical is authoritative for
+// content, but this pack is public and portable, so a few paths are renamed
+// here. Without these, every sync would revert them and re-break the links.
+const REWRITE = [
+  // Canonical: docs/issue-to-pr-skill-workflow.md. This pack: docs/pipeline.md.
+  [
+    /docs\/issue-to-pr-skill-workflow\.md/g,
+    "docs/pipeline.md",
+  ],
+];
+
 const CHECK_ONLY = process.argv.includes("--check");
 
 function walk(dir, base = dir, out = {}) {
@@ -59,7 +70,12 @@ function walk(dir, base = dir, out = {}) {
 }
 
 const read = (f) => fs.readFileSync(f, "utf8").replace(/\r\n/g, "\n");
-const same = (a, b) => read(a) === read(b);
+const rewrite = (text) =>
+  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), text);
+
+// What this pack SHOULD contain for a file, after rewrites.
+const expected = (src) => rewrite(read(src));
+const same = (src, dest) => read(dest) === expected(src);
 
 if (!fs.existsSync(CANONICAL)) {
   console.error(`✗ canonical skills root not found: ${CANONICAL}`);
@@ -90,7 +106,11 @@ for (const station of STATIONS) {
     drifted.push(`skills/${station}/${rel}`);
     if (CHECK_ONLY) continue;
     fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.copyFileSync(src, dest);
+    if (/\.(md|json|ya?ml)$/i.test(rel)) {
+      fs.writeFileSync(dest, expected(src), "utf8");
+    } else {
+      fs.copyFileSync(src, dest);
+    }
     copied.push(`skills/${station}/${rel}`);
   }
 

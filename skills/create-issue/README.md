@@ -1,6 +1,6 @@
 # create-issue — Intake (not a numbered station)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Turn one raw operator idea into one researched, publishable GitHub issue
 labeled `ready-for-agent` — without a draft-approval pause.

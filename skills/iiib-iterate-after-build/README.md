@@ -1,6 +1,6 @@
 # iiib-iterate-after-build — Station IIIB (Iterate After Build)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 The human-feedback fix loop between build and review. The operator
 describes corrections in free text; this station classifies each item,

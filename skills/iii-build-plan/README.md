@@ -1,6 +1,6 @@
 # iii-build-plan — Station III (Build)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Executes every task in `tasks/plan.md` with type-aware routing, TDD,
 atomic local commits, and simplification — no push, no PR here.
