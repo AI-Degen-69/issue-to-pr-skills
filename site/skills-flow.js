@@ -4,14 +4,14 @@
 const STATIONS_FLOW = [
   {
     id: 'i-pick-issue',
-    num: '01',
-    title: 'Station I \u2014 Pick & Map',
-    desc: 'Maps the open-issue backlog grouped by domain, recommends order, and highlights one pick. Routes into Station II.',
+    num: '#1',
+    title: 'Station #1 — Claim & Pick',
+    desc: 'Maps the open-issue backlog grouped by domain, recommends order, and highlights one pick. Routes into Station #2.',
     startWithLabel: 'Start with',
     startWithCommand: '/i-pick-issue',
     accent: 'from-purple-600 to-fuchsia-600',
     invoked: [
-      { id: 'pipeline-triage', name: 'pipeline-triage', title: 'The /pipeline-triage Skill', desc: 'State gate: runs first when the tree is dirty, commits are unpushed, or a PR is open \u2014 routes to the right station.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' },
+      { id: 'pipeline-triage', name: 'pipeline-triage', title: 'The /pipeline-triage Skill', desc: 'State gate: runs first when the tree is dirty, commits are unpushed, or a PR is open — routes to the right station.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' },
       { id: 'create-issue', name: 'create-issue', title: 'The /create-issue Skill', desc: 'Intake branch: turns a brand-new raw idea into a researched ready-for-agent issue.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'issue', kind: 'skill' },
       { id: 'context-engineering', name: 'context-engineering', title: 'The /context-engineering Skill', desc: 'Locks session scope before opening repository files.', gradient: 'from-cyan-600 to-blue-600', icon: 'compass', kind: 'skill' }
     ]
@@ -19,8 +19,8 @@ const STATIONS_FLOW = [
 
   {
     id: 'ii-plan-issue',
-    num: '02',
-    title: 'Station II \u2014 Plan',
+    num: '#2',
+    title: 'Station #2 — Plan & Constraints',
     desc: 'Right-sizes the issue, locks CONSTRAINTS.md, and writes tasks/plan.md as atomic vertical slices before any code.',
     startWithLabel: 'Start with',
     startWithCommand: '/ii-plan-issue',
@@ -42,8 +42,8 @@ const STATIONS_FLOW = [
 
   {
     id: 'iii-build-plan',
-    num: '03',
-    title: 'Station III \u2014 Build',
+    num: '#3',
+    title: 'Station #3 — Build with TDD',
     desc: 'Executes tasks/plan.md one task at a time with TDD, atomic local commits, and domain-routed specialists. Never pushes.',
     startWithLabel: 'Start with',
     startWithCommand: '/iii-build-plan',
@@ -66,8 +66,8 @@ const STATIONS_FLOW = [
 
   {
     id: 'iiib-iterate-after-build',
-    num: '04',
-    title: 'Station IIIB \u2014 Iterate',
+    num: '#3b',
+    title: 'Station #3b — Iterate Human Feedback',
     desc: 'Fast fix loop for operator corrections on a fresh build. Minimal verified fixes, committed locally. Loops until clean.',
     startWithLabel: 'Start with',
     startWithCommand: '/iiib-iterate-after-build',
@@ -86,8 +86,8 @@ const STATIONS_FLOW = [
 
   {
     id: 'iv-review-build-and-pr',
-    num: '05',
-    title: 'Station IV \u2014 Review & Ship',
+    num: '#4',
+    title: 'Station #4 — Review, Ship & PR',
     desc: 'Proof-before-review gate (playwright-cli browser pass or tests), OCR delegation scan, specialist reviewers, then push, PR, and the CodeRabbit trigger with ack classification.',
     startWithLabel: 'Start with',
     startWithCommand: '/iv-review-build-and-pr',
@@ -117,15 +117,15 @@ const STATIONS_FLOW = [
 
   {
     id: 'v-babysit-pr-and-merge',
-    num: '06',
-    title: 'Station V \u2014 Babysit & Merge',
-    desc: 'Consumes the trigger status from Station IV. One review round, triages every comment, batch-fixes in one commit, squash-merges on green CI.',
+    num: '#5',
+    title: 'Station #5 — Babysit PR & Merge',
+    desc: 'Consumes the trigger status from Station #4. One review round, triages every comment, batch-fixes in one commit, squash-merges on green CI.',
     startWithLabel: 'Start with',
     startWithCommand: '/v-babysit-pr-and-merge',
     accent: 'from-pink-600 to-rose-600',
     invoked: [
       { id: 'iii-build-plan', name: 'iii-build-plan', title: 'The /iii-build-plan Skill', desc: 'Re-applies accepted review fixes locally, verified per task.', gradient: 'from-emerald-600 to-teal-600', icon: 'build', kind: 'skill' },
-      { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'Fallback full review only when Station IV evidence cannot be reused.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
+      { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'Fallback full review only when Station #4 evidence cannot be reused.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
       { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Fixes build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
       { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
       { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Fixes React build failures found in CI.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
@@ -134,8 +134,8 @@ const STATIONS_FLOW = [
   },
   {
     id: 'vi-close-pipeline',
-    num: '07',
-    title: 'Station VI \u2014 Close Pipeline',
+    num: '#6',
+    title: 'Station #6 — Close Pipeline',
     desc: 'Pipeline closeout: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof, Clean Exit Gate.',
     startWithLabel: 'Start with',
     startWithCommand: '/vi-close-pipeline',
@@ -302,6 +302,7 @@ function getSkillIconSvg(iconType) {
       return `<svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
     case 'merge':
       return `<svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7a2 2 0 100-4 2 2 0 000 4zm0 8a2 2 0 100 4 2 2 0 000-4zm8-4a2 2 0 100-4 2 2 0 000 4z"/></svg>`;
+    case 'close':
     case 'prune':
       return `<svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`;
     case 'present':
