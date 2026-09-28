@@ -4,7 +4,7 @@
 - `skills/` must contain exactly the 46 pipeline-invoked skills documented in the canonical Skill-Call Map (`~/.agents/docs/issue-to-pr-skill-workflow.md`).
 - Every mirrored skill directory must be a byte-identical copy of its upstream source in `~/.agents/skills/`.
 - No merging or selective editing of mirrored files. Upstream is the single source of truth.
-- The 4 retired directories (`i-create-issue`, `vi-prune-artifacts`, `vii-present-pr`, `x-workflow-issue`) must be completely removed.
+- The 4 retired skill directories must be completely removed.
 
 ## Scope Discipline
 - Strictly touch only `skills/` and `scripts/verify-mirror.js` (plus planning docs under `tasks/` and `CONSTRAINTS.md`).

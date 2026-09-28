@@ -30,7 +30,6 @@ Specialist personas dispatched by Stations II–V based on the diff. A persona m
 | `react-build-resolver` | React build | React build breaks |
 | `go-build-resolver` | Go build | Go build breaks |
 | `rust-build-resolver` | Rust build | Rust build breaks |
-| `refactor-cleaner` | Dead code proof | cleanup |
 
 ## Adding a New Agent
 

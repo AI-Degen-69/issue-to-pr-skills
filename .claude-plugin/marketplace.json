@@ -10,7 +10,7 @@
     {
       "name": "issue-to-pr-skills",
       "source": "./",
-      "description": "End-to-end delivery pipeline: 10 stations (X, I-VII + triage) from raw idea to merged PR to visual showcase. With 33 supporting skills and 18 reviewer agents.",
+      "description": "End-to-end delivery pipeline: 10 pipeline skills (Gate, I-VI + intake/present) from raw idea to merged PR to visual showcase. With 36 supporting skills and 17 reviewer personas.",
       "category": "engineering",
       "keywords": [
         "pipeline",

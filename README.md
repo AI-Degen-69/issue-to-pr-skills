@@ -3,14 +3,14 @@
 [![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
 [![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![43 skills](https://img.shields.io/badge/skills-43-blue)](skills/)
-[![18 agents](https://img.shields.io/badge/agents-18-purple)](agents/)
+[![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
+[![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
 
 **An end-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase.**
 
 > **Website → https://AI-Degen-69.github.io/issue-to-pr-skills** — interactive pipeline, skill catalog, and guides (like [skills.addy.ie](https://skills.addy.ie)).
 
-Seven station skills carry one GitHub issue from mapping through planning, building, review, merge, and close — with an entry triage gate, an intake skill, an ad-hoc showcase skill, 33 supporting skills, and 18 specialist reviewer agents packed in, so the pipeline works out of the box.
+Ten pipeline skills (Gate, I–VI + intake/present) carry one GitHub issue from mapping through planning, building, review, merge, and close — with 36 supporting skills and 17 specialist reviewer personas packed in, so the pipeline works out of the box.
 
 ```
 [Entry]        pipeline-triage        State gate: dirty repo / open PR / unclear intent → routes once
@@ -96,21 +96,21 @@ npx skills add AI-Degen-69/issue-to-pr-skills --skill iv-review-build-and-pr
 
 Full station contracts: [docs/pipeline.md](docs/pipeline.md).
 
-## Supporting skills (33)
+## Supporting skills (36)
 
 Grouped by role. Each activates automatically when its station needs it — or invoke directly.
 
 **Build:** `test-driven-development`, `incremental-implementation`, `source-driven-development`, `doubt-driven-development`, `context-engineering`, `planning-and-task-breakdown`, `using-agent-skills`
 **Define:** `interview-me`, `idea-refine`, `spec-driven-development`, `constraint-driven-development`
-**Verify:** `browser-testing-with-devtools`, `debugging-and-error-recovery`, `diagnosing-bugs`, `verification-before-completion`, `click-path-audit`
+**Verify:** `browser-testing-with-devtools`, `debugging-and-error-recovery`, `diagnosing-bugs`, `verification-before-completion`, `click-path-audit`, `playwright-cli`
 **Review:** `code-review-and-quality`, `code-simplification`, `security-and-hardening`, `performance-optimization`, `documentation-and-adrs`, `extract-design-system`
 **Ship:** `git-workflow-and-versioning`, `ci-cd-and-automation`, `deprecation-and-migration`, `observability-and-instrumentation`, `shipping-and-launch`
-**Frontend:** `frontend-ui-engineering`, `tailwind-design-system`, `web-design-guidelines`, `vercel-react-best-practices`, `vercel-composition-patterns`
-**API:** `api-and-interface-design`
+**Frontend:** `frontend-ui-engineering`, `frontend-design`, `tailwind-design-system`, `web-design-guidelines`, `vercel-react-best-practices`, `vercel-composition-patterns`
+**API & UX:** `api-and-interface-design`, `humanizer`
 
-Browse all 43: see [the website](https://AI-Degen-69.github.io/issue-to-pr-skills#catalog) or run `npx skills add AI-Degen-69/issue-to-pr-skills --list`.
+Browse all 46: see [the website](https://AI-Degen-69.github.io/issue-to-pr-skills#catalog) or run `npx skills add AI-Degen-69/issue-to-pr-skills --list`.
 
-## Reviewer agents (18)
+## Reviewer agents (17)
 
 Specialist personas dispatched by Stations II–V based on the diff. A persona missing from disk is skipped and recorded — never simulated.
 
@@ -130,7 +130,6 @@ Specialist personas dispatched by Stations II–V based on the diff. A persona m
 | `react-build-resolver` | React build failures |
 | `go-build-resolver` | Go build failures |
 | `rust-build-resolver` | Rust build failures |
-| `refactor-cleaner` | Dead code removal with proof |
 | `type-design-analyzer` | Interface/domain-model design |
 | `code-explorer` | Execution-path tracing in unfamiliar code |
 | `doc-updater` | Docs drift after behavior changes |
@@ -141,8 +140,8 @@ See [docs/agents.md](docs/agents.md) for dispatch rules.
 
 | Layer | Paths | Purpose |
 |---|---|---|
-| Shared core | `skills/` (43) | Portable `SKILL.md` workflows |
-| Reviewers | `agents/` (18) | Specialist personas |
+| Shared core | `skills/` (46) | Portable `SKILL.md` workflows |
+| Reviewers | `agents/` (17) | Specialist personas |
 | References | `references/` (4) | Checklists loaded on demand |
 | Docs | `docs/` | Getting started, pipeline, skill anatomy |
 | Adapters | `.claude-plugin/`, `.claude/commands`, `plugin.json` | Claude Code, Codex marketplace |
