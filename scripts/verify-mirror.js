@@ -3,8 +3,9 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
 
-const ROOT = path.resolve(import.meta.dirname, "..");
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TARGET_DIR = path.join(ROOT, "skills");
 const SOURCE_DIR = path.join(os.homedir(), ".agents", "skills");
 
@@ -114,9 +115,16 @@ for (const retired of RETIRED_SKILLS) {
 }
 
 // 2. Check directory set in target
-const targetEntries = fs
-  .readdirSync(TARGET_DIR)
-  .filter((entry) => fs.statSync(path.join(TARGET_DIR, entry)).isDirectory());
+const targetEntries = [];
+for (const entry of fs.readdirSync(TARGET_DIR)) {
+  const fullPath = path.join(TARGET_DIR, entry);
+  const stat = fs.lstatSync(fullPath);
+  if (stat.isSymbolicLink()) {
+    fail(`target skill directory is a symbolic link or reparse point: ${entry}`);
+  } else if (stat.isDirectory()) {
+    targetEntries.push(entry);
+  }
+}
 
 const expectedSet = new Set(EXPECTED_SKILLS);
 const targetSet = new Set(targetEntries);
