@@ -574,7 +574,7 @@ function renderStations(){
       const g = GROUP[s.id] || 'plan';
       const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
       return `
-      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition flex flex-col justify-between">
+      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition flex flex-col justify-between scroll-mt-24">
         <div>
           <div class="flex items-center justify-between gap-2 mb-2.5">
             <span class="whitespace-nowrap inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold font-mono shrink-0 ${cfg.stationBadgeClass}">${s.label}</span>
@@ -592,7 +592,7 @@ function renderStations(){
   const sysEl=document.getElementById('systemSkillCards');
   if(sysEl){
     sysEl.innerHTML=SYSTEM_SKILLS.map(sys=>`
-      <div id="${sys.id}" class="card rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between">
+      <div id="${sys.id}" class="card rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between scroll-mt-24">
         <div>
           <div class="flex items-center justify-between gap-2 mb-2.5">
             <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0 ${sys.roleClass}">${sys.roleBadge}</span>
@@ -1142,8 +1142,123 @@ function setupReveal(){
   const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); obs.unobserve(e.target);}})}, {threshold:0.15});
   document.querySelectorAll('#stationCards > div, #systemSkillCards > div, #skillGrid a, #skillGridPreview > a, #agentGrid > a, #agentGridPreview > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
 }
+// Render Sticky Table of Contents on Home Page
+const HOME_TOC_STAGES = [
+  { id: 'pipeline-triage', num: 'Gate', title: 'Pipeline Triage', accent: 'from-cyan-500 to-blue-500' },
+  { id: 'create-issue', num: 'Intake', title: 'Create Issue', accent: 'from-fuchsia-500 to-pink-500' },
+  { id: 'i-pick-issue', num: '#1', title: 'Map & Pick', accent: 'from-purple-600 to-fuchsia-600' },
+  { id: 'ii-plan-issue', num: '#2', title: 'Plan & Constraints', accent: 'from-cyan-500 to-blue-600' },
+  { id: 'iii-build-plan', num: '#3', title: 'Build with TDD', accent: 'from-emerald-500 to-teal-600' },
+  { id: 'iiib-iterate-after-build', num: '#3b', title: 'Iterate Feedback', accent: 'from-emerald-600 to-cyan-600' },
+  { id: 'iv-review-build-and-pr', num: '#4', title: 'Review, Ship & PR', accent: 'from-violet-600 to-indigo-600' },
+  { id: 'v-babysit-pr-and-merge', num: '#5', title: 'Babysit & Merge', accent: 'from-amber-500 to-orange-600' },
+  { id: 'vi-close-pipeline', num: '#6', title: 'Close Pipeline', accent: 'from-slate-500 to-zinc-600' },
+  { id: 'present-pr', num: 'Ad-hoc', title: 'Present PR', accent: 'from-fuchsia-600 to-pink-600' }
+];
+
+function renderHomeTableOfContents() {
+  const container = document.getElementById('tableOfContents');
+  const mobileContainer = document.getElementById('mobileTableOfContents');
+  if (!container && !mobileContainer) return;
+
+  const html = HOME_TOC_STAGES.map(st => `
+    <a 
+      href="#${st.id}" 
+      id="toc-link-${st.id}"
+      class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
+      data-target="${st.id}"
+    >
+      <span class="flex items-center gap-2 truncate">
+        <span class="h-1.5 w-1.5 rounded-full bg-gradient-to-r ${st.accent} shrink-0"></span>
+        <span class="truncate">${st.title}</span>
+      </span>
+      <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">${st.num}</span>
+    </a>
+  `).join('');
+
+  if (container) container.innerHTML = html;
+  if (mobileContainer) mobileContainer.innerHTML = html;
+
+  document.querySelectorAll('.toc-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const targetId = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        const yOffset = -76;
+        const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        history.pushState(null, '', '#' + targetId);
+
+        targetEl.classList.add('ring-2', 'ring-violet-400/60', 'transition-all');
+        setTimeout(() => {
+          targetEl.classList.remove('ring-2', 'ring-violet-400/60');
+        }, 2000);
+
+        const mobileDetails = document.getElementById('mobileTocDetails');
+        if (mobileDetails) mobileDetails.removeAttribute('open');
+      }
+    });
+  });
+
+  setupHomeTocScrollspy();
+}
+
+function setupHomeTocScrollspy() {
+  let isTicking = false;
+
+  function update() {
+    const scrollPos = window.scrollY + 140;
+    let currentId = null;
+
+    const catalogEl = document.getElementById('catalog');
+    if (catalogEl && catalogEl.offsetTop <= scrollPos) {
+      currentId = 'catalog';
+    } else {
+      for (let i = HOME_TOC_STAGES.length - 1; i >= 0; i--) {
+        const st = HOME_TOC_STAGES[i];
+        const el = document.getElementById(st.id);
+        if (el && el.offsetTop <= scrollPos) {
+          currentId = st.id;
+          break;
+        }
+      }
+    }
+
+    if (!currentId && HOME_TOC_STAGES.length > 0) {
+      const firstEl = document.getElementById(HOME_TOC_STAGES[0].id);
+      if (firstEl && scrollPos >= firstEl.offsetTop - 300) {
+        currentId = HOME_TOC_STAGES[0].id;
+      }
+    }
+
+    document.querySelectorAll('.toc-item').forEach(item => {
+      const target = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
+      if (target === currentId) {
+        item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.remove('text-white/65');
+      } else {
+        item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.add('text-white/65');
+      }
+    });
+
+    isTicking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      requestAnimationFrame(update);
+      isTicking = true;
+    }
+  }, { passive: true });
+
+  update();
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
   initPipelineCarousel(); renderDiagram(); renderMobileDiagram(); renderStations(); renderAgents(); loadSkills();
+  renderHomeTableOfContents();
   showStation(0);
   setupMobileNav();
   document.getElementById('search')?.addEventListener('input', debouncedRender);
