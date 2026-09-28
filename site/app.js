@@ -1142,18 +1142,23 @@ function setupReveal(){
   const obs=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); obs.unobserve(e.target);}})}, {threshold:0.15});
   document.querySelectorAll('#stationCards > div, #systemSkillCards > div, #skillGrid a, #skillGridPreview > a, #agentGrid > a, #agentGridPreview > a, .reveal').forEach(el=>{el.classList.add('reveal'); obs.observe(el);});
 }
-// Render Sticky Table of Contents on Home Page
-const HOME_TOC_STAGES = [
-  { id: 'pipeline-triage', num: 'Gate', title: 'Pipeline Triage', accent: 'from-cyan-500 to-blue-500' },
-  { id: 'create-issue', num: 'Intake', title: 'Create Issue', accent: 'from-fuchsia-500 to-pink-500' },
-  { id: 'i-pick-issue', num: '#1', title: 'Map & Pick', accent: 'from-purple-600 to-fuchsia-600' },
-  { id: 'ii-plan-issue', num: '#2', title: 'Plan & Constraints', accent: 'from-cyan-500 to-blue-600' },
-  { id: 'iii-build-plan', num: '#3', title: 'Build with TDD', accent: 'from-emerald-500 to-teal-600' },
-  { id: 'iiib-iterate-after-build', num: '#3b', title: 'Iterate Feedback', accent: 'from-emerald-600 to-cyan-600' },
-  { id: 'iv-review-build-and-pr', num: '#4', title: 'Review, Ship & PR', accent: 'from-violet-600 to-indigo-600' },
-  { id: 'v-babysit-pr-and-merge', num: '#5', title: 'Babysit & Merge', accent: 'from-amber-500 to-orange-600' },
-  { id: 'vi-close-pipeline', num: '#6', title: 'Close Pipeline', accent: 'from-slate-500 to-zinc-600' },
-  { id: 'present-pr', num: 'Ad-hoc', title: 'Present PR', accent: 'from-fuchsia-600 to-pink-600' }
+// Render Sticky Table of Contents on Home Page (Onboarding Flow)
+const HOME_TOC_SECTIONS = [
+  { id: 'why', num: '01', title: 'Why it works', accent: 'from-violet-400 to-fuchsia-400' },
+  { id: 'install', num: '02', title: 'Install & Setup', accent: 'from-fuchsia-400 to-pink-400' },
+  { id: 'in-practice', num: '03', title: 'In practice', accent: 'from-pink-400 to-amber-400' },
+  { 
+    id: 'lifecycle', 
+    num: '04', 
+    title: 'The lifecycle', 
+    accent: 'from-cyan-400 to-blue-500',
+    subItems: [
+      { id: 'sequential-stations', title: 'Stations #1 → #6', num: '#1–6' },
+      { id: 'system-skills', title: 'System & Ad-hoc', num: '3' }
+    ]
+  },
+  { id: 'agents', num: '05', title: 'Specialist review', accent: 'from-blue-400 to-violet-500' },
+  { id: 'catalog', num: '06', title: 'The catalog', accent: 'from-violet-400 to-purple-500' }
 ];
 
 function renderHomeTableOfContents() {
@@ -1161,23 +1166,44 @@ function renderHomeTableOfContents() {
   const mobileContainer = document.getElementById('mobileTableOfContents');
   if (!container && !mobileContainer) return;
 
-  const html = HOME_TOC_STAGES.map(st => `
-    <a 
-      href="#${st.id}" 
-      id="toc-link-${st.id}"
-      class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
-      data-target="${st.id}"
-    >
-      <span class="flex items-center gap-2 truncate">
-        <span class="h-1.5 w-1.5 rounded-full bg-gradient-to-r ${st.accent} shrink-0"></span>
-        <span class="truncate">${st.title}</span>
-      </span>
-      <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">${st.num}</span>
-    </a>
-  `).join('');
+  const generateItemsHtml = (isMobile = false) => HOME_TOC_SECTIONS.map(sec => {
+    let itemHtml = `
+      <a 
+        href="#${sec.id}" 
+        id="${isMobile ? 'mobile-' : ''}toc-link-${sec.id}"
+        class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
+        data-target="${sec.id}"
+      >
+        <span class="flex items-center gap-2 truncate">
+          <span class="h-1.5 w-1.5 rounded-full bg-gradient-to-r ${sec.accent} shrink-0"></span>
+          <span class="truncate">${sec.title}</span>
+        </span>
+        <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">${sec.num}</span>
+      </a>
+    `;
 
-  if (container) container.innerHTML = html;
-  if (mobileContainer) mobileContainer.innerHTML = html;
+    if (sec.subItems && sec.subItems.length > 0) {
+      itemHtml += `<div class="ml-3 pl-2 border-l border-white/10 my-0.5 space-y-0.5">` + sec.subItems.map(sub => `
+        <a 
+          href="#${sub.id}" 
+          id="${isMobile ? 'mobile-' : ''}toc-link-${sub.id}"
+          class="toc-item toc-subitem flex items-center justify-between px-2.5 py-1.5 rounded-lg text-white/50 hover:text-white/80 hover:bg-white/5 transition font-normal group text-[11px]"
+          data-target="${sub.id}"
+        >
+          <span class="flex items-center gap-1.5 truncate">
+            <span class="text-white/30 group-hover:text-white/60">↳</span>
+            <span class="truncate">${sub.title}</span>
+          </span>
+          <span class="font-mono text-[10px] text-white/35 group-hover:text-white/55 ml-1.5 shrink-0">${sub.num}</span>
+        </a>
+      `).join('') + `</div>`;
+    }
+
+    return itemHtml;
+  }).join('');
+
+  if (container) container.innerHTML = generateItemsHtml(false);
+  if (mobileContainer) mobileContainer.innerHTML = generateItemsHtml(true);
 
   document.querySelectorAll('.toc-item').forEach(item => {
     item.addEventListener('click', (e) => {
@@ -1207,39 +1233,53 @@ function renderHomeTableOfContents() {
 function setupHomeTocScrollspy() {
   let isTicking = false;
 
+  const targetIds = [];
+  HOME_TOC_SECTIONS.forEach(sec => {
+    targetIds.push(sec.id);
+    if (sec.subItems) {
+      sec.subItems.forEach(sub => targetIds.push(sub.id));
+    }
+  });
+
   function update() {
     const scrollPos = window.scrollY + 140;
     let currentId = null;
 
-    const catalogEl = document.getElementById('catalog');
-    if (catalogEl && catalogEl.offsetTop <= scrollPos) {
-      currentId = 'catalog';
-    } else {
-      for (let i = HOME_TOC_STAGES.length - 1; i >= 0; i--) {
-        const st = HOME_TOC_STAGES[i];
-        const el = document.getElementById(st.id);
-        if (el && el.offsetTop <= scrollPos) {
-          currentId = st.id;
-          break;
-        }
+    for (let i = targetIds.length - 1; i >= 0; i--) {
+      const tid = targetIds[i];
+      const el = document.getElementById(tid);
+      if (el && el.offsetTop <= scrollPos) {
+        currentId = tid;
+        break;
       }
     }
 
-    if (!currentId && HOME_TOC_STAGES.length > 0) {
-      const firstEl = document.getElementById(HOME_TOC_STAGES[0].id);
+    if (!currentId && targetIds.length > 0) {
+      const firstEl = document.getElementById(targetIds[0]);
       if (firstEl && scrollPos >= firstEl.offsetTop - 300) {
-        currentId = HOME_TOC_STAGES[0].id;
+        currentId = targetIds[0];
       }
     }
 
     document.querySelectorAll('.toc-item').forEach(item => {
       const target = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
+      const isSub = item.classList.contains('toc-subitem');
       if (target === currentId) {
-        item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
-        item.classList.remove('text-white/65');
+        if (isSub) {
+          item.classList.add('bg-violet-600/25', 'text-violet-200', 'font-medium');
+          item.classList.remove('text-white/50');
+        } else {
+          item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.remove('text-white/65');
+        }
       } else {
-        item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
-        item.classList.add('text-white/65');
+        if (isSub) {
+          item.classList.remove('bg-violet-600/25', 'text-violet-200', 'font-medium');
+          item.classList.add('text-white/50');
+        } else {
+          item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.add('text-white/65');
+        }
       }
     });
 

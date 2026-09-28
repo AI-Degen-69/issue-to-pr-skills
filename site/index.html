@@ -238,7 +238,7 @@
   </div>
 </section>
 
-<!-- MAIN BODY WITH FLOATING STICKY TABLE OF CONTENTS IN LEFT MARGIN (NEAR 01 — THE LIFECYCLE) -->
+<!-- MAIN BODY WITH FLOATING STICKY TABLE OF CONTENTS IN LEFT MARGIN (NEAR 01 — WHY IT WORKS) -->
 <div class="relative mx-auto max-w-[1200px]">
 
   <!-- Mobile / Tablet Collapsible TOC (< 1540px) -->
@@ -247,26 +247,27 @@
       <summary class="cursor-pointer font-semibold text-white/90 flex items-center justify-between select-none">
         <span class="flex items-center gap-2">
           <span class="h-2 w-2 rounded-full bg-violet-400"></span>
-          <span>Table of Contents · Stages</span>
+          <span>Onboarding Guide · Table of Contents</span>
         </span>
-        <span class="text-violet-400 text-[11px] font-mono">10 stages ↓</span>
+        <span class="text-violet-400 text-[11px] font-mono">6 chapters ↓</span>
       </summary>
-      <nav id="mobileTableOfContents" class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-1 text-xs" aria-label="Mobile Stages Table of Contents">
+      <nav id="mobileTableOfContents" class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-1 text-xs" aria-label="Mobile Table of Contents">
         <!-- Populated dynamically via app.js -->
       </nav>
-      <div class="pt-2.5 mt-2.5 border-t border-white/10">
+      <div class="pt-2.5 mt-2.5 border-t border-white/10 flex items-center justify-between">
         <a 
-          href="#catalog" 
-          class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium text-[12px]"
-          data-target="catalog"
+          href="./docs/" 
+          class="text-violet-300 hover:text-white transition font-medium text-[11px] flex items-center gap-1"
         >
-          <span class="flex items-center gap-2">
-            <svg class="w-3.5 h-3.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-            </svg>
-            <span>Full Skills Catalog</span>
-          </span>
-          <span class="font-mono text-[11px] text-white/40">46</span>
+          <span>Open Guide &amp; Docs</span>
+          <span>→</span>
+        </a>
+        <a 
+          href="./skills/" 
+          class="text-white/60 hover:text-white transition font-medium text-[11px] flex items-center gap-1"
+        >
+          <span>Full Skills Catalog</span>
+          <span class="font-mono text-[10px] text-white/40">46</span>
         </a>
       </div>
     </details>
@@ -276,87 +277,47 @@
   <aside class="hidden min-[1540px]:block absolute right-full mr-6 2xl:mr-8 top-12 w-[230px] 2xl:w-[250px] h-[calc(100%-3rem)] pointer-events-none z-20">
     <div class="sticky top-20 pointer-events-auto rounded-2xl border border-white/10 bg-[#0b0f1e]/90 backdrop-blur-md p-3.5 shadow-xl max-h-[calc(100vh-6rem)] overflow-y-auto">
       <div class="flex items-center justify-between pb-3 mb-2 border-b border-white/10 px-1">
-        <span class="text-[11px] font-mono uppercase tracking-widest text-white/50">Pipeline Flow</span>
-        <span class="text-[11px] font-mono text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-400/20">10 Stages</span>
+        <span class="text-[11px] font-mono uppercase tracking-widest text-white/50">Onboarding</span>
+        <span class="text-[11px] font-mono text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-400/20">6 Chapters</span>
       </div>
       
-      <nav id="tableOfContents" class="flex flex-col gap-0.5 text-xs" aria-label="Stages Table of Contents">
+      <nav id="tableOfContents" class="flex flex-col gap-0.5 text-xs" aria-label="Table of Contents">
         <!-- Populated dynamically via app.js -->
       </nav>
       
-      <div class="pt-2.5 mt-2.5 border-t border-white/10">
+      <div class="pt-2.5 mt-2.5 border-t border-white/10 flex flex-col gap-1.5">
         <a 
-          href="#catalog" 
-          id="toc-link-catalog"
-          class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
-          data-target="catalog"
+          href="./docs/" 
+          class="flex items-center justify-between px-3 py-1.5 rounded-xl text-violet-300 hover:text-white hover:bg-violet-600/20 transition font-medium text-[11px]"
         >
-          <span class="flex items-center gap-2 truncate">
-            <svg class="w-3.5 h-3.5 text-violet-400 group-hover:translate-y-0.5 transition shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          <span class="flex items-center gap-1.5 truncate">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
-            <span class="truncate">Full Skills Catalog</span>
+            <span class="truncate">Guide &amp; Documentation</span>
           </span>
-          <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">46</span>
+          <span class="text-xs">→</span>
+        </a>
+        <a 
+          href="./skills/" 
+          class="flex items-center justify-between px-3 py-1.5 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition font-medium text-[11px]"
+        >
+          <span class="flex items-center gap-1.5 truncate">
+            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+            <span class="truncate">Full 46 Skills Catalog</span>
+          </span>
+          <span class="font-mono text-[10px] text-white/40">46</span>
         </a>
       </div>
     </div>
   </aside>
 
-<!-- LIFECYCLE -->
-<section id="lifecycle" aria-labelledby="lifecycle-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
-  <div class="flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <div class="text-xs uppercase tracking-[.14em] text-violet-300">01 — The lifecycle</div>
-      <h2 id="lifecycle-heading" class="mt-2 text-[28px] lg:text-[36px] font-bold tracking-tight">One command per phase. Skills load automatically.</h2>
-      <p class="mt-2 max-w-[640px] text-white/60">Stations are narrow. Each one has an entry condition, a verification gate, and a plain-English report that ends with the single next step. No station simulates missing work.</p>
-    </div>
-    <a href="#catalog" class="text-sm font-semibold text-violet-300 hover:text-violet-200">See all skills →</a>
-  </div>
-
-  <!-- diagram -->
-  <div class="mt-8 rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[.05] to-transparent p-4 lg:p-6">
-    <div class="hidden md:block overflow-x-auto">
-      <div class="min-w-[900px]">
-        <svg viewBox="0 0 1100 210" class="w-full h-[210px]" role="img" aria-label="Pipeline from Station #1 to #6">
-          <defs>
-            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
-          </defs>
-          <path id="pline" d="M 90 105 H 1010" class="pipeline-line" fill="none"/>
-          <g id="diagramStations"></g>
-        </svg>
-      </div>
-    </div>
-    <div id="diagramMobile" class="md:hidden space-y-2" aria-label="Pipeline — vertical on mobile"></div>
-    <div id="stationDetail" class="mt-3 rounded-2xl bg-black/30 border border-white/10 p-4 text-sm leading-6 text-white/80">Hover or tap a station dot for its simple explanation. The issue is always the star — machinery stays in <code class="px-1.5 py-0.5 rounded bg-white/10">tasks/plan.md</code>.</div>
-  </div>
-
-  <!-- station cards grid -->
-  <div class="mt-6">
-    <div class="text-xs uppercase tracking-[.14em] text-violet-300 mb-3 font-semibold">Sequential Pipeline Stations (#1 to #6)</div>
-    <div id="stationCards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  </div>
-
-  <!-- System & Ad-hoc Skills Section (Outside Linear Chain) -->
-  <div class="mt-10 pt-8 border-t border-white/10">
-    <div class="flex flex-wrap items-end justify-between gap-4 mb-4">
-      <div>
-        <div class="text-xs uppercase tracking-[.14em] text-cyan-300">Supporting Architecture</div>
-        <h3 class="mt-1 text-[22px] lg:text-[26px] font-bold tracking-tight text-white">System &amp; Ad-hoc Skills</h3>
-        <p class="mt-1 max-w-[680px] text-sm text-white/60">
-          These 3 skills support the pipeline without being a numbered station in the sequential #1→#6 chain: a pre-flight state gate before Station #1, an intake branch off Station #1, and an ad-hoc visual showcase runnable any time.
-        </p>
-      </div>
-      <a href="./skills/#catalog" class="text-xs font-semibold text-cyan-300 hover:text-cyan-200">Browse all 46 skills →</a>
-    </div>
-    <div id="systemSkillCards" class="grid md:grid-cols-3 gap-4"></div>
-  </div>
-</section>
-
-<!-- WHY -->
-<section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
-  <div class="text-xs uppercase tracking-[.14em] text-violet-300">02 — Why it works</div>
-  <h2 class="mt-2 text-[28px] lg:text-[32px] font-bold tracking-tight">AI agents default to the shortest path.<br/>These skills close the shortcut.</h2>
+<!-- 01 — WHY IT WORKS -->
+<section id="why" aria-labelledby="why-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
+  <div class="text-xs uppercase tracking-[.14em] text-violet-300">01 — Why it works</div>
+  <h2 id="why-heading" class="mt-2 text-[28px] lg:text-[32px] font-bold tracking-tight">AI agents default to the shortest path.<br/>These skills close the shortcut.</h2>
   <div class="mt-6 grid md:grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
       <div class="h-8 w-8 rounded-lg bg-violet-600/20 grid place-items-center">🛡️</div>
@@ -381,39 +342,11 @@
   </div>
 </section>
 
-<!-- CATALOG PREVIEW → full page at /skills/ -->
-<section id="catalog" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
-  <div class="flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <div class="text-xs uppercase tracking-[.14em] text-violet-300">03 — The catalog</div>
-      <h2 class="mt-2 text-[28px] lg:text-[32px] font-bold">46 skills spanning the whole delivery</h2>
-      <p class="mt-1 text-white/60 max-w-[640px]">On this page a taste of the recipes. The full searchable catalog with plain-language explainers lives on its own page — built for non-coders too.</p>
-    </div>
-    <a href="./skills/" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">Browse all 46 →</a>
-  </div>
-  <div id="skillGridPreview" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-  <div class="mt-6 text-center"><a href="./skills/" class="inline-flex items-center gap-2 rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold hover:bg-violet-500">Open skills page with search & filters →</a></div>
-</section>
-
-<!-- AGENTS PREVIEW -->
-<section id="agents" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
-  <div class="flex flex-wrap items-end justify-between gap-4">
-    <div>
-      <div class="text-xs uppercase tracking-[.14em] text-violet-300">04 — Specialist review</div>
-      <h2 class="mt-2 text-[28px] font-bold">Ship past a panel, not a rubber stamp</h2>
-      <p class="mt-1 text-white/60 max-w-[640px]">17 narrow experts — the AI picks only the ones that match your change. In plain words: a panel beats a single stamp. Full roster with simple explanations lives on its own page.</p>
-    </div>
-    <a href="./agents/" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">Meet all 17 →</a>
-  </div>
- 
-  <div id="agentGridPreview" class="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
-  <div class="mt-6 text-center"><a href="./agents/" class="inline-flex rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold hover:bg-violet-500">Open agents page →</a></div>
-</section>
-
-<!-- INSTALL -->
-<section id="install" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12">
+<!-- 02 — INSTALL & SETUP -->
+<section id="install" aria-labelledby="install-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
   <div class="rounded-[24px] border border-white/10 bg-gradient-to-br from-violet-600/20 via-fuchsia-500/10 to-cyan-500/10 p-6 lg:p-8">
-    <h2 class="text-[26px] font-bold">Give your agent a senior engineer’s instincts.</h2>
+    <div class="text-xs uppercase tracking-[.14em] text-violet-300 mb-2">02 — Install &amp; Setup</div>
+    <h2 id="install-heading" class="text-[26px] font-bold">Give your agent a senior engineer’s instincts.</h2>
     <p class="mt-2 text-white/70">One command installs all 46 skills into 70+ agents. Or grab one station.</p>
     <div class="mt-6 grid lg:grid-cols-3 gap-4">
       <div class="rounded-2xl bg-black/40 border border-white/10 p-4">
@@ -451,7 +384,7 @@
           <tr><td class="py-2 font-mono">Reviewers</td><td class="py-2 font-mono">agents/ (17)</td><td class="py-2 text-white/60">Specialist personas</td></tr>
           <tr><td class="py-2 font-mono">References</td><td class="py-2 font-mono">references/</td><td class="py-2 text-white/60">Checklists loaded on demand</td></tr>
           <tr><td class="py-2 font-mono">Docs</td><td class="py-2 font-mono">docs/</td><td class="py-2 text-white/60">Getting started, pipeline, agents</td></tr>
-          <tr><td class="py-2 font-mono">Adapters</td><td class="py-2 font-mono">.claude-plugin/, plugin.json</td><td class="py-2 text-white/60">Claude Code & Codex marketplace</td></tr>
+          <tr><td class="py-2 font-mono">Adapters</td><td class="py-2 font-mono">.claude-plugin/, plugin.json</td><td class="py-2 text-white/60">Claude Code &amp; Codex marketplace</td></tr>
           <tr><td class="py-2 font-mono">Site</td><td class="py-2 font-mono">site/</td><td class="py-2 text-white/60">This website (GitHub Pages)</td></tr>
         </tbody>
       </table>
@@ -460,16 +393,96 @@
   </div>
 </section>
 
-<!-- DIAGRAM EXPLAINER -->
-<section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-8">
-  <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6">
-    <h3 class="font-semibold">How it feels in practice — one issue, start to finish</h3>
-    <ol class="mt-3 grid lg:grid-cols-3 gap-4 text-sm leading-6">
+<!-- 03 — IN PRACTICE -->
+<section id="in-practice" aria-labelledby="in-practice-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10 scroll-mt-20">
+  <div class="text-xs uppercase tracking-[.14em] text-violet-300">03 — In practice</div>
+  <h2 id="in-practice-heading" class="mt-2 text-[28px] lg:text-[32px] font-bold tracking-tight">How it feels in practice — one issue, start to finish</h2>
+  <div class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-6">
+    <ol class="grid lg:grid-cols-3 gap-4 text-sm leading-6">
       <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">1. You paste an idea</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/create-issue add dark mode</code> — the skill researches the repo, uses real paths with line numbers, and publishes a <code>ready-for-agent</code> issue.</span></li>
       <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">2. You pick + plan</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code> shows backlog grouped by domain. <code class="px-1 py-0.5 rounded bg-white/10">/ii-plan-issue 123</code> sizes it, locks <code>CONSTRAINTS.md</code>, writes <code>tasks/plan.md</code> slices.</span></li>
       <li class="rounded-xl bg-black/20 border border-white/5 p-4"><span class="text-violet-300 font-semibold">3. It builds, reviews, merges</span><br/><span class="text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/iii-build-plan auto</code> TDDs each slice. <code class="px-1 py-0.5 rounded bg-white/10">/iv-review…</code> proves then reviews, opens PR, triggers @coderabbitai. <code class="px-1 py-0.5 rounded bg-white/10">/v-babysit…</code> merges. <code class="px-1 py-0.5 rounded bg-white/10">/present-pr</code> builds your showcase on request.</span></li>
     </ol>
   </div>
+</section>
+
+<!-- 04 — THE LIFECYCLE -->
+<section id="lifecycle" aria-labelledby="lifecycle-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <div class="text-xs uppercase tracking-[.14em] text-violet-300">04 — The lifecycle</div>
+      <h2 id="lifecycle-heading" class="mt-2 text-[28px] lg:text-[36px] font-bold tracking-tight">One command per phase. Skills load automatically.</h2>
+      <p class="mt-2 max-w-[640px] text-white/60">Stations are narrow. Each one has an entry condition, a verification gate, and a plain-English report that ends with the single next step. No station simulates missing work.</p>
+    </div>
+    <a href="./skills/" class="text-sm font-semibold text-violet-300 hover:text-violet-200">See all skills →</a>
+  </div>
+
+  <!-- diagram -->
+  <div class="mt-8 rounded-[24px] border border-white/10 bg-gradient-to-b from-white/[.05] to-transparent p-4 lg:p-6">
+    <div class="hidden md:block overflow-x-auto">
+      <div class="min-w-[900px]">
+        <svg viewBox="0 0 1100 210" class="w-full h-[210px]" role="img" aria-label="Pipeline from Station #1 to #6">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#22d3ee"/></linearGradient>
+          </defs>
+          <path id="pline" d="M 90 105 H 1010" class="pipeline-line" fill="none"/>
+          <g id="diagramStations"></g>
+        </svg>
+      </div>
+    </div>
+    <div id="diagramMobile" class="md:hidden space-y-2" aria-label="Pipeline — vertical on mobile"></div>
+    <div id="stationDetail" class="mt-3 rounded-2xl bg-black/30 border border-white/10 p-4 text-sm leading-6 text-white/80">Hover or tap a station dot for its simple explanation. The issue is always the star — machinery stays in <code class="px-1.5 py-0.5 rounded bg-white/10">tasks/plan.md</code>.</div>
+  </div>
+
+  <!-- station cards grid -->
+  <div id="sequential-stations" class="mt-6 scroll-mt-24">
+    <div class="text-xs uppercase tracking-[.14em] text-violet-300 mb-3 font-semibold">Sequential Pipeline Stations (#1 to #6)</div>
+    <div id="stationCards" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </div>
+
+  <!-- System & Ad-hoc Skills Section (Outside Linear Chain) -->
+  <div id="system-skills" class="mt-10 pt-8 border-t border-white/10 scroll-mt-24">
+    <div class="flex flex-wrap items-end justify-between gap-4 mb-4">
+      <div>
+        <div class="text-xs uppercase tracking-[.14em] text-cyan-300">Supporting Architecture</div>
+        <h3 class="mt-1 text-[22px] lg:text-[26px] font-bold tracking-tight text-white">System &amp; Ad-hoc Skills</h3>
+        <p class="mt-1 max-w-[680px] text-sm text-white/60">
+          These 3 skills support the pipeline without being a numbered station in the sequential #1→#6 chain: a pre-flight state gate before Station #1, an intake branch off Station #1, and an ad-hoc visual showcase runnable any time.
+        </p>
+      </div>
+      <a href="./skills/#catalog" class="text-xs font-semibold text-cyan-300 hover:text-cyan-200">Browse all 46 skills →</a>
+    </div>
+    <div id="systemSkillCards" class="grid md:grid-cols-3 gap-4"></div>
+  </div>
+</section>
+
+<!-- 05 — SPECIALIST REVIEW -->
+<section id="agents" aria-labelledby="agents-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <div class="text-xs uppercase tracking-[.14em] text-violet-300">05 — Specialist review</div>
+      <h2 id="agents-heading" class="mt-2 text-[28px] font-bold">Ship past a panel, not a rubber stamp</h2>
+      <p class="mt-1 text-white/60 max-w-[640px]">17 narrow experts — the AI picks only the ones that match your change. In plain words: a panel beats a single stamp. Full roster with simple explanations lives on its own page.</p>
+    </div>
+    <a href="./agents/" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">Meet all 17 →</a>
+  </div>
+ 
+  <div id="agentGridPreview" class="mt-8 grid md:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+  <div class="mt-6 text-center"><a href="./agents/" class="inline-flex rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold hover:bg-violet-500">Open agents page →</a></div>
+</section>
+
+<!-- 06 — THE CATALOG -->
+<section id="catalog" aria-labelledby="catalog-heading" class="mx-auto max-w-[1200px] px-5 lg:px-8 py-12 lg:py-16 scroll-mt-20">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <div class="text-xs uppercase tracking-[.14em] text-violet-300">06 — The catalog</div>
+      <h2 id="catalog-heading" class="mt-2 text-[28px] lg:text-[32px] font-bold">46 skills spanning the whole delivery</h2>
+      <p class="mt-1 text-white/60 max-w-[640px]">On this page a taste of the recipes. The full searchable catalog with plain-language explainers lives on its own page — built for non-coders too.</p>
+    </div>
+    <a href="./skills/" class="rounded-full bg-white text-slate-900 px-5 py-2 text-sm font-semibold hover:bg-white/90">Browse all 46 →</a>
+  </div>
+  <div id="skillGridPreview" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  <div class="mt-6 text-center"><a href="./skills/" class="inline-flex items-center gap-2 rounded-full bg-violet-600 px-6 py-2.5 text-sm font-semibold hover:bg-violet-500">Open skills page with search &amp; filters →</a></div>
 </section>
 
 </div>
