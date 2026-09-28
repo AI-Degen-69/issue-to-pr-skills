@@ -491,7 +491,7 @@ function renderStationsFlow() {
     }
 
     return `
-      <section id="${station.id}" class="station-row border-t border-white/10 pt-10 pb-12 first:border-t-0 first:pt-4">
+      <section id="${station.id}" class="station-row border-t border-white/10 pt-10 pb-12 first:border-t-0 first:pt-4 scroll-mt-24">
         <div class="grid lg:grid-cols-12 gap-8 lg:gap-10">
           
           <!-- Left Station Info -->
@@ -680,30 +680,109 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Render Station Pill Bar
-function renderStationPills() {
-  const container = document.getElementById('stationPills');
-  if (!container) return;
+// Render Sticky Table of Contents (Stages & bottom catalog anchor)
+function renderTableOfContents() {
+  const container = document.getElementById('tableOfContents');
+  const mobileContainer = document.getElementById('mobileTableOfContents');
+  if (!container && !mobileContainer) return;
 
-  container.innerHTML = STATIONS_FLOW.map(st => {
+  const html = STATIONS_FLOW.map(st => {
     const cleanTitle = st.title
       .replace(/^Station /, '')
       .replace(/^(State Gate|Intake Branch|Ad-hoc Showcase) — /, '')
       .replace(' — ', ' ');
     return `
-    <a 
-      href="#${st.id}" 
-      class="shrink-0 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[.04] hover:bg-white/[.1] hover:border-violet-500/40 text-xs text-white/80 hover:text-white transition flex items-center gap-1.5"
-    >
-      <span class="font-mono text-white/40 text-[11px]">${st.num}</span>
-      <span class="font-medium">${cleanTitle}</span>
-    </a>
-  `}).join('');
+      <a 
+        href="#${st.id}" 
+        id="toc-link-${st.id}"
+        class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
+        data-target="${st.id}"
+      >
+        <span class="flex items-center gap-2 truncate">
+          <span class="h-1.5 w-1.5 rounded-full bg-gradient-to-r ${st.accent} shrink-0"></span>
+          <span class="truncate">${cleanTitle}</span>
+        </span>
+        <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">${st.num}</span>
+      </a>
+    `;
+  }).join('');
+
+  if (container) container.innerHTML = html;
+  if (mobileContainer) mobileContainer.innerHTML = html;
+
+  // Add click handling for smooth scrolling
+  document.querySelectorAll('.toc-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      const targetId = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
+      const targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        const yOffset = -76;
+        const y = targetEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        history.pushState(null, '', '#' + targetId);
+
+        const mobileDetails = document.getElementById('mobileTocDetails');
+        if (mobileDetails) mobileDetails.removeAttribute('open');
+      }
+    });
+  });
+
+  setupTocScrollspy();
+}
+
+function setupTocScrollspy() {
+  let isTicking = false;
+
+  function update() {
+    const scrollPos = window.scrollY + 140;
+    let currentId = null;
+
+    const catalogEl = document.getElementById('catalog');
+    if (catalogEl && catalogEl.offsetTop <= scrollPos) {
+      currentId = 'catalog';
+    } else {
+      for (let i = STATIONS_FLOW.length - 1; i >= 0; i--) {
+        const st = STATIONS_FLOW[i];
+        const el = document.getElementById(st.id);
+        if (el && el.offsetTop <= scrollPos) {
+          currentId = st.id;
+          break;
+        }
+      }
+    }
+
+    if (!currentId && STATIONS_FLOW.length > 0) {
+      currentId = STATIONS_FLOW[0].id;
+    }
+
+    document.querySelectorAll('.toc-item').forEach(item => {
+      const target = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
+      if (target === currentId) {
+        item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.remove('text-white/65');
+      } else {
+        item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.add('text-white/65');
+      }
+    });
+
+    isTicking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!isTicking) {
+      requestAnimationFrame(update);
+      isTicking = true;
+    }
+  }, { passive: true });
+
+  update();
 }
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  renderStationPills();
+  renderTableOfContents();
   renderStationsFlow();
 
   // Smooth scroll and pulse highlight if target hash is present in URL

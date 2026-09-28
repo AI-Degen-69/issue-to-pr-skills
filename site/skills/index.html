@@ -16,7 +16,7 @@
 </head>
 <body class="bg-[#020617] text-slate-100 font-sans antialiased">
 <nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
-  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
+  <div class="mx-auto max-w-[1400px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
     <a href="../" class="flex items-center gap-3"><div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div><span class="font-semibold">issue-to-pr<span class="text-white/50">.skills</span></span></a>
     <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
       <a href="../#lifecycle" class="hover:text-white">Lifecycle</a>
@@ -32,7 +32,7 @@
 <!-- HEADER — Clean & Bold -->
 <section class="border-b border-white/10 pt-10 pb-8 relative overflow-hidden">
   <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(600px 240px at 50% 0%, rgba(124,58,237,.15), transparent)"></div>
-  <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8">
+  <div class="relative mx-auto max-w-[1400px] px-5 lg:px-8">
     <div class="inline-flex items-center gap-2 rounded-full bg-violet-500/15 border border-violet-400/20 px-3 py-1 text-xs text-violet-200 mb-3">
       Pipeline & Invocation Flow
     </div>
@@ -41,43 +41,80 @@
       Grouped by when you reach for them. Most people start with the main flow.
     </p>
 
-    <!-- Flow Navigation & Search Bar -->
-    <div class="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-white/10">
-      <!-- Search Input -->
-      <div class="relative flex-1 max-w-[380px]">
-        <input 
-          id="flowSearch" 
-          placeholder="Filter skills or stations (e.g. test, ui, review)…" 
-          aria-label="Filter skills or stations"
-          class="w-full rounded-full bg-white/5 border border-white/15 pl-4 pr-9 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-violet-400 focus:ring-1 focus:ring-violet-400 transition"
-        />
-        <button 
-          onclick="clearFlowSearch()" 
-          id="flowClearSearch" 
-          aria-label="Clear filter"
-          class="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-xs h-5 w-5 rounded-full bg-white/10 flex items-center justify-center transition"
-        >✕</button>
-      </div>
-
-      <!-- Quick Links -->
-      <div class="flex items-center gap-3 text-xs sm:text-sm text-white/60">
-        <span id="flowCount" class="font-mono text-xs text-white/50">10 stations & gates · 78 invocations</span>
-        <span class="text-white/20">|</span>
-        <a href="#catalog" class="hover:text-violet-300 transition">Jump to A–Z Catalog ↓</a>
-      </div>
-    </div>
-
-    <!-- Station quick jump pills -->
-    <div class="mt-4 flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none" id="stationPills">
-      <!-- Generated via skills-flow.js -->
-    </div>
   </div>
 </section>
 
-<!-- MAIN STATIONS FLOW VIEW -->
-<main class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8" id="stationsFlowContainer">
-  <!-- Dynamic content rendered by skills-flow.js -->
-</main>
+<!-- MAIN STATIONS FLOW VIEW WITH STICKY TABLE OF CONTENTS -->
+<div class="mx-auto max-w-[1400px] px-5 lg:px-8 py-8">
+  <div class="flex flex-col lg:flex-row items-start gap-8 lg:gap-10">
+
+    <!-- Mobile Collapsible TOC (< lg) -->
+    <details id="mobileTocDetails" class="lg:hidden w-full rounded-2xl border border-white/10 bg-[#0b0f1e]/90 backdrop-blur-md p-4 text-xs">
+      <summary class="cursor-pointer font-semibold text-white/90 flex items-center justify-between select-none">
+        <span class="flex items-center gap-2">
+          <span class="h-2 w-2 rounded-full bg-violet-400"></span>
+          <span>Table of Contents · Stages</span>
+        </span>
+        <span class="text-violet-400 text-[11px] font-mono">10 stages ↓</span>
+      </summary>
+      <nav id="mobileTableOfContents" class="mt-3 pt-3 border-t border-white/10 flex flex-col gap-1 text-xs" aria-label="Mobile Stages Table of Contents">
+        <!-- Populated dynamically via skills-flow.js -->
+      </nav>
+      <div class="pt-2.5 mt-2.5 border-t border-white/10">
+        <a 
+          href="#catalog" 
+          class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium text-[12px]"
+          data-target="catalog"
+        >
+          <span class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+            <span>Full Skills Catalog</span>
+          </span>
+          <span class="font-mono text-[11px] text-white/40">46</span>
+        </a>
+      </div>
+    </details>
+
+    <!-- Desktop Sticky Sidebar TOC (Vertical Axis) -->
+    <aside class="hidden lg:block w-[260px] xl:w-[280px] shrink-0 sticky top-20 z-20">
+      <div class="rounded-2xl border border-white/10 bg-[#0b0f1e]/90 backdrop-blur-md p-3.5 shadow-xl max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 mb-2 border-b border-white/10 px-1">
+          <span class="text-[11px] font-mono uppercase tracking-widest text-white/50">Pipeline Flow</span>
+          <span class="text-[11px] font-mono text-violet-300 bg-violet-500/15 px-2 py-0.5 rounded-full border border-violet-400/20">10 Stages</span>
+        </div>
+        
+        <nav id="tableOfContents" class="flex flex-col gap-0.5 text-xs" aria-label="Stages Table of Contents">
+          <!-- Populated dynamically via skills-flow.js -->
+        </nav>
+        
+        <div class="pt-2.5 mt-2.5 border-t border-white/10">
+          <a 
+            href="#catalog" 
+            id="toc-link-catalog"
+            class="toc-item flex items-center justify-between px-3 py-2 rounded-xl text-white/65 hover:text-white hover:bg-white/5 transition font-medium group text-[12px]"
+            data-target="catalog"
+          >
+            <span class="flex items-center gap-2 truncate">
+              <svg class="w-3.5 h-3.5 text-violet-400 group-hover:translate-y-0.5 transition shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+              </svg>
+              <span class="truncate">Full Skills Catalog</span>
+            </span>
+            <span class="font-mono text-[11px] text-white/40 group-hover:text-white/60 ml-2 shrink-0">46</span>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Stations Flow -->
+    <main class="flex-1 min-w-0" id="stationsFlowContainer">
+      <!-- Dynamic content rendered by skills-flow.js -->
+    </main>
+
+  </div>
+</div>
 
 <!-- SKILL DETAIL MODAL -->
 <div id="skillModalOverlay" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md items-center justify-center p-4 sm:p-6" onclick="if(event.target===this) closeSkillModal()">
@@ -87,8 +124,8 @@
 </div>
 
 <!-- COMPREHENSIVE A-Z CATALOG SECTION -->
-<section id="catalog" class="border-t border-white/10 bg-white/[.01] py-16">
-  <div class="mx-auto max-w-[1200px] px-5 lg:px-8">
+<section id="catalog" class="border-t border-white/10 bg-white/[.01] py-16 scroll-mt-20">
+  <div class="mx-auto max-w-[1400px] px-5 lg:px-8">
     <div class="flex flex-wrap items-end justify-between gap-4 pb-6 border-b border-white/10">
       <div>
         <h2 class="text-[26px] font-bold text-white tracking-tight">All 46 Skills Catalog</h2>
@@ -137,7 +174,7 @@
 </section>
 
 <footer class="border-t border-white/10">
-  <div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between">
+  <div class="mx-auto max-w-[1400px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between">
     <span>© 2026 issue-to-pr-skills · MIT</span>
     <div class="flex gap-4">
       <a href="#stationsFlowContainer" class="hover:text-white">↑ Back to Station Flow</a>
