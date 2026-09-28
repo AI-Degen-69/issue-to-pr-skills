@@ -15,25 +15,32 @@ Counts are exact and must stay true: `skills/` = 46 directories (10 stations + 3
 5. **Minimal diffs.** Fix the finding, don't restyle the skill.
 6. **Never commit scratch.** `scratch/`, OS temp, and per-issue work files don't belong in this repo.
 
-## The 10 pipeline stations are a mirror — never hand-edit them
+## The 46 mirrored skills are a copy — never hand-edit them
 
-`skills/pipeline-triage`, `i-pick-issue`, `create-issue`, `ii-plan-issue`,
-`iii-build-plan`, `iiib-iterate-after-build`, `iv-review-build-and-pr`,
-`v-babysit-pr-and-merge`, `vi-close-pipeline`, `present-pr` are **copied** from
-the canonical agent home (`~/.agents/skills/`). Canonical is authoritative.
+Every skill in `skills/` is **copied** from the canonical agent home
+(`~/.agents/skills/`): the 10 pipeline/system stations (`pipeline-triage`,
+`i-pick-issue`, `create-issue`, `ii-plan-issue`, `iii-build-plan`,
+`iiib-iterate-after-build`, `iv-review-build-and-pr`, `v-babysit-pr-and-merge`,
+`vi-close-pipeline`, `present-pr`) plus the 36 supporting skills. Canonical is
+authoritative for all of them.
 
-Change the station at the source, then re-sync:
+Change the skill at the source, then re-sync:
 
 ```bash
-node scripts/sync-from-canonical.js --check   # report drift, write nothing
-node scripts/sync-from-canonical.js           # copy into this pack
+npm run sync      # copy all 46 into this pack
+npm run check     # validate + verify byte-identical + confirm no drift
 ```
 
-Run `--check` before every release commit. A hand-edit here is overwritten on the
-next sync — this pack already drifted once and was still advertising a "Station
-VII" that no longer existed.
+Or per-file: `node scripts/sync-from-canonical.js --check` reports drift and
+writes nothing; drop `--check` to apply.
+
+Run `npm run check` before every release commit. A hand-edit here is overwritten
+on the next sync — this pack already drifted once and was still advertising a
+"Station VII" that no longer existed.
 
 Not synced on purpose: `evals/snapshots/`, `evals/iteration-*/` (historical
-baselines) and `results.json` (local grading artifact). The other skills here
-are a curated subset, not a mirror.
+baselines) and `results.json` (local grading artifact). Skills that exist only
+in canonical are deliberately out of the public pack; adding one means adding it
+to the list in `scripts/sync-from-canonical.js` **and** the identical
+`EXPECTED_SKILLS` list in `scripts/verify-mirror.js`.
 
