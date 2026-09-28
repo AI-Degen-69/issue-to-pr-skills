@@ -1,7 +1,7 @@
 {
   "name": "issue-to-pr-skills",
   "version": "0.1.0",
-  "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 33 supporting skills + 18 reviewer agents.",
+  "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 36 supporting skills + 17 reviewer personas.",
   "repository": {
     "type": "git",
     "url": "https://github.com/AI-Degen-69/issue-to-pr-skills"

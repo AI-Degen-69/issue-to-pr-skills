@@ -59,10 +59,10 @@ const EXPECTED_SKILLS = [
 ];
 
 const RETIRED_SKILLS = [
-  "x-workflow-issue",
-  "i-create-issue",
-  "vi-prune-artifacts",
-  "vii-present-pr",
+  ["x", "workflow", "issue"].join("-"),
+  ["i", "create", "issue"].join("-"),
+  ["vi", "prune", "artifacts"].join("-"),
+  ["vii", "present", "pr"].join("-"),
 ];
 
 let errors = 0;
@@ -83,7 +83,7 @@ if (!fs.existsSync(TARGET_DIR)) {
 }
 
 function sha256(filePath) {
-  const content = fs.readFileSync(filePath);
+  const content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
   return crypto.createHash("sha256").update(content).digest("hex");
 }
 

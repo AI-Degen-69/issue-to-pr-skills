@@ -1,7 +1,7 @@
 {
   "name": "issue-to-pr-skills",
   "version": "0.1.0",
-  "description": "End-to-end delivery pipeline: 10 stations from raw idea to merged PR to visual showcase. 33 supporting skills + 18 reviewer agents.",
+  "description": "End-to-end delivery pipeline: 10 stations from raw idea to merged PR to visual showcase. 36 supporting skills + 17 reviewer personas.",
   "author": {
     "name": "AI Degen"
   },
