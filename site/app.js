@@ -1,14 +1,14 @@
 // Site logic — pipeline + catalog
 const STATIONS = [
   {id:'pipeline-triage', label:'Entry', title:'Pipeline Triage', desc:'Dirty repo? Open PR? Unclear intent? Read-only triage inspects git state and routes to the right station. One router, max one handoff.', color:'cyan'},
-  {id:'create-issue', label:'Intake', title:'Create Researched Issue', desc:'Intake branch when there is nothing to pick. Raw idea → researched GitHub issue labeled ready-for-agent. Researches repo first (real paths with line numbers), captures open questions with defaults.', color:'cyan'},
   {id:'i-pick-issue', label:'I', title:'Map & Pick', desc:'Issue work only. Runs the triage gate itself, then maps the open-issue backlog grouped by domain with a recommended order and one highlighted pick. With an issue number, goes straight to Station II.', color:'cyan'},
+  {id:'create-issue', label:'Intake', title:'Create Researched Issue', desc:'Intake branch when there is nothing to pick. Raw idea → researched GitHub issue labeled ready-for-agent. Researches repo first (real paths with line numbers), captures open questions with defaults.', color:'cyan'},
   {id:'ii-plan-issue', label:'II', title:'Plan & Constraints', desc:'Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'cyan'},
   {id:'iii-build-plan', label:'III', title:'Build with TDD', desc:'Build. TDD per task, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
   {id:'iiib-iterate-after-build', label:'IIIB', title:'Iterate Human Feedback', desc:'Human feedback fix loop. Classifies each free-text correction (bug, dead button, UI alignment, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
   {id:'iv-review-build-and-pr', label:'IV', title:'Review, Ship & PR', desc:'Proof-before-review gate (live browser pass via playwright-cli, or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
   {id:'v-babysit-pr-and-merge', label:'V', title:'Babysit PR & Merge', desc:'Babysit & merge. Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
-  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Close. Confirms the PR merged, prunes only per-issue scratch that is closed and unreferenced, updates PROGRESS.md and the handoff. Showcases, research, and ADRs are untouchable.', color:'rose'},
+  {id:'vi-close-pipeline', label:'VI', title:'Close Pipeline', desc:'Pipeline closeout: issue closeout, signal-based artifact sweep, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
   {id:'present-pr', label:'Ad-hoc', title:'Present Showcase', desc:'Ad-hoc — run on request after a merge, not part of the automatic chain. Standalone HTML showcase: one centerpiece visual picked for this story, customer-simple words, try-it guide. Never the same twice.', color:'fuchsia'},
 ];
 
@@ -77,6 +77,7 @@ const GROUP = {
   'constraint-driven-development': 'plan',
   'interview-me': 'plan',
   'idea-refine': 'plan',
+  'humanizer': 'plan',
   'pipeline-triage': 'plan',
   'create-issue': 'plan',
   'i-pick-issue': 'plan',
@@ -93,6 +94,7 @@ const GROUP = {
   'context-engineering': 'build',
   'using-agent-skills': 'build',
   'frontend-ui-engineering': 'build',
+  'frontend-design': 'build',
   'tailwind-design-system': 'build',
   'extract-design-system': 'build',
   'debugging-and-error-recovery': 'build',
@@ -104,6 +106,7 @@ const GROUP = {
   'security-and-hardening': 'review',
   'performance-optimization': 'review',
   'browser-testing-with-devtools': 'review',
+  'playwright-cli': 'review',
   'verification-before-completion': 'review',
   'click-path-audit': 'review',
   'web-design-guidelines': 'review',
@@ -323,7 +326,7 @@ function renderChatBubbleContent(idx) {
     'iiib-iterate-after-build': 'Minimal diff fix gate: classifies human feedback (bug, dead button, CSS, or speed) and verifies against CONSTRAINTS.md.',
     'iv-review-build-and-pr': 'Multi-axis verification gate: automated test suites + visual proof + OCR delegation scan before generating the PR title & description.',
     'v-babysit-pr-and-merge': 'Autonomous CI gate: monitors workflow status with 5m→1m adaptive polling; resolves reviewer feedback & squash-merges on clean green.',
-    'vi-close-pipeline': 'Merge-confirmed close gate: prunes scratch ONLY if the parent issue is verified closed AND zero inbound references remain; then updates PROGRESS.md and the handoff.',
+    'vi-close-pipeline': 'Pipeline closeout gate: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof + tests, Clean Exit Gate.',
     'present-pr': 'Zero-dependency showcase gate: builds a self-contained single-file HTML presentation with live visuals, try-it guide, and zero external CDN scripts.'
   };
 
@@ -536,8 +539,8 @@ const PIPELINE_STATIONS_ORDER = [
   { key: 'build', label: 'Build', stationNum: 'III', desc: 'Build & iterate — test-driven development, UI engineering, fix loops' },
   { key: 'review', label: 'Review & PR', stationNum: 'IV', desc: 'Review & ship — verification gate, specialist review panel, PR creation' },
   { key: 'babysit', label: 'Babysit', stationNum: 'V', desc: 'Babysit & merge — automated reviews, CI status monitoring, squash merge' },
-  { key: 'prune', label: 'Prune', stationNum: 'VI', desc: 'Prune & clean — deprecation, ADR documentation, closed issue scratch cleanup' },
-  { key: 'present', label: 'Present', stationNum: 'VII', desc: 'Present & showcase — interactive visual showcase for completed PRs' }
+  { key: 'prune', label: 'Close', stationNum: 'VI', desc: 'Close pipeline — verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
+  { key: 'present', label: 'Present', stationNum: 'Ad-hoc', desc: 'Present & showcase — interactive visual showcase for completed PRs' }
 ];
 
 function setOrganizeMode(mode){
@@ -747,7 +750,6 @@ const AGENTS=[
   ['react-build-resolver','React Build','React build failures',false],
   ['go-build-resolver','Go Build','Go build failures',false],
   ['rust-build-resolver','Rust Build','Rust build failures',false],
-  ['refactor-cleaner','Cleanup','Dead code with proof',false],
   ['type-design-analyzer','Design','Interfaces & domain model',true],
   ['code-explorer','Explorer','Execution-path tracing',false],
   ['doc-updater','Docs','Docs drift after changes',false],
@@ -768,7 +770,6 @@ const AGENT_SUMMARIES = {
   'react-build-resolver': 'Resolves JSX/TSX compilation errors, bundler misconfigurations (Vite, Next.js), invalid imports, and hydration mismatches.',
   'go-build-resolver': 'Diagnoses Go compiler failures, package import loops, missing build tags, and cgo linking inconsistencies.',
   'rust-build-resolver': 'Resolves cargo build failures, unresolved crate dependencies, feature flag conflicts, and complex lifetime compiler errors.',
-  'refactor-cleaner': 'Identifies dead code, redundant abstractions, and unused exports, providing proofs that deletions preserve behavior.',
   'type-design-analyzer': 'Evaluates domain type systems to make illegal states unrepresentable, ensuring strong encapsulation and clear invariants.',
   'code-explorer': 'Traces complex execution paths, call graphs, and dependency trees across modules to map out the blast radius of changes.',
   'doc-updater': 'Prevents documentation drift by detecting out-of-sync READMEs, missing JSDoc/docstrings, and outdated API specifications.',
@@ -951,7 +952,7 @@ function filterAgents(forcedQuery){
   if(gp) {
     if(!q) {
       gp.innerHTML = AGENTS.slice(0, 4).map(([id, role, desc, hasPage], idx) => mk(id, role, desc, hasPage, './agents/', idx)).join('');
-      if(countEl) countEl.textContent = 'Showing 4 of 18 agents';
+      if(countEl) countEl.textContent = 'Showing 4 of 17 agents';
     } else if(matches.length === 0) {
       gp.innerHTML = `
         <div class="col-span-full rounded-2xl border border-white/10 bg-white/[.03] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
