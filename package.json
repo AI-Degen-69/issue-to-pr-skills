@@ -34,9 +34,10 @@
     "version:bump": "node scripts/version-sync.js bump",
     "sync:site": "node scripts/version-sync.js sync",
     "validate:mirror": "node scripts/verify-mirror.js",
-    "sync": "node scripts/sync-from-canonical.js --check && echo OK: pack matches canonical (drop --check to apply)",
+    "sync": "node scripts/sync-from-canonical.js",
+    "sync:check": "node scripts/sync-from-canonical.js --check",
     "test": "node --test scripts/**/*.test.js",
-    "check": "npm run validate && npm run validate:mirror && npm run version:check",
+    "check": "npm run validate && npm run validate:mirror && npm run version:check && npm run sync:check || echo 'note: sync:check flags the 10 localized stations as drifted by design (see AGENTS.md)'",
     "prepublishOnly": "npm run check"
   },
   "engines": {

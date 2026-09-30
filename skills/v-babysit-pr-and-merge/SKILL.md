@@ -118,7 +118,7 @@ digraph babysit_pr_and_merge {
 After the local reset lands on a clean base, run these three quick checks to decide the vi-close-pipeline recommendation in the report:
 
 1. **Issue state:** `gh issue view <id> --json state --jq .state` — OPEN = 🔴 (Required).
-2. **Leftover artifacts:** `git ls-files --others --exclude-standard | Select-String -Pattern '<id>|tasks/plan|scratch'` — any hit = 🟡 (Recommended); hits from 3+ distinct closed issues = 🟡 even without matching the current id.
+2. **Leftover artifacts:** check both untracked (`git ls-files --others --exclude-standard`) and tracked (`git ls-files`) files for `<id>|tasks/plan|scratch` — any hit = 🟡 (Recommended), unless the artifact's issue is verifiably closed and already cleaned; hits from 3+ distinct closed issues = 🟡 even without matching the current id.
 3. **Git cleanliness:** `git status --porcelain` — non-empty = 🔴 (Required).
 
 Pick the highest signal: 🔴 > 🟡 > 🟢. All three clean = 🟢 (Skip, continue to `/i-pick-issue`).

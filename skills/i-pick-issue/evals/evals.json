@@ -5,7 +5,7 @@
     {
       "id": "discovery-backlog-map",
       "prompt": "Run /i-pick-issue with no arguments on a repo that has several open issues.",
-      "expected_output": "Backlog map in the operator's language: every open issue listed with number, title, labels and one-line summary, grouped by domain/risk/dependency, a concrete recommended execution order with one single highlighted issue to start, and a halt asking the operator which issue to proceed with. Never picks silently.",
+      "expected_output": "Backlog map in English: every open issue listed with number, title, labels and one-line summary, grouped by domain/risk/dependency, a concrete recommended execution order with one single highlighted issue to start, and a halt asking the operator which issue to proceed with. Never picks silently.",
       "mode_coverage": ["discovery"],
       "files": [],
       "static_assertions": [

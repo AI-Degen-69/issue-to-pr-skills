@@ -44,6 +44,17 @@ const SKILLS_DIR = path.join(ROOT, 'skills');
 
 // --- Helper Functions ---
 
+function walkFiles(dir, base = dir, out = {}) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === 'node_modules' || entry.name === '.git') continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) walkFiles(full, base, out);
+    else out[path.relative(base, full).split(path.sep).join('/')] = full;
+  }
+  return out;
+}
+
 function parseFrontmatter(fileContent) {
   const cleanContent = fileContent.replace(/\r\n/g, '\n');
   if (!cleanContent.startsWith('---')) return {};
@@ -95,25 +106,31 @@ export function extractSkillsData() {
 
 export function computeFolderHash() {
   const hash = crypto.createHash('sha256');
-  // Hash all skills (SKILL.md and references)
+  // Hash all skill files (SKILL.md, references/, scripts/, evals) except historical artifacts
+  const isHistorical = (rel) => rel.includes('/evals/snapshots/') || rel.includes('/evals/iteration-') || rel.endsWith('/results.json');
   if (fs.existsSync(SKILLS_DIR)) {
-    const skills = fs.readdirSync(SKILLS_DIR).sort();
-    for (const skill of skills) {
+    const skillFiles = [];
+    for (const skill of fs.readdirSync(SKILLS_DIR).sort()) {
       const skillDir = path.join(SKILLS_DIR, skill);
       if (fs.statSync(skillDir).isDirectory()) {
-        const md = path.join(skillDir, 'SKILL.md');
-        if (fs.existsSync(md)) {
-          hash.update(`skill:${skill}:${fs.readFileSync(md, 'utf8').replace(/\r\n/g, '\n')}`);
+        for (const [rel, full] of Object.entries(walkFiles(skillDir))) {
+          if (!isHistorical(rel)) skillFiles.push([`${skill}/${rel}`, full]);
         }
       }
     }
+    skillFiles.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+    for (const [rel, full] of skillFiles) {
+      hash.update(`skill:${rel}:${fs.readFileSync(full, 'utf8').replace(/\r\n/g, '\n')}`);
+    }
   }
-  // Hash docs
-  const docsDir = path.join(ROOT, 'docs');
-  if (fs.existsSync(docsDir)) {
-    for (const f of fs.readdirSync(docsDir).sort()) {
-      if (f.endsWith('.md')) {
-        hash.update(`doc:${f}:${fs.readFileSync(path.join(docsDir, f), 'utf8').replace(/\r\n/g, '\n')}`);
+  // Hash docs and reviewer personas
+  for (const [label, dir] of [['doc', path.join(ROOT, 'docs')], ['agent', path.join(ROOT, 'agents')]]) {
+    if (fs.existsSync(dir)) {
+      const files = Object.entries(walkFiles(dir))
+        .filter(([rel]) => rel.endsWith('.md'))
+        .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
+      for (const [rel, full] of files) {
+        hash.update(`${label}:${rel}:${fs.readFileSync(full, 'utf8').replace(/\r\n/g, '\n')}`);
       }
     }
   }
@@ -167,6 +184,20 @@ export function checkSync() {
   const folderHash = computeFolderHash();
   const siteHash = getSiteHash();
 
+  // Cross-check every declared version source independently: version.json is
+  // only one of them, so a stale VERSION or package.json would otherwise pass.
+  const versionSources = [];
+  if (fs.existsSync(VERSION_FILE)) {
+    versionSources.push(['VERSION', fs.readFileSync(VERSION_FILE, 'utf8').trim().replace(/^Version:\s*/i, '')]);
+  }
+  if (fs.existsSync(PACKAGE_JSON)) {
+    try {
+      const pkg = JSON.parse(fs.readFileSync(PACKAGE_JSON, 'utf8'));
+      if (pkg.version) versionSources.push(['package.json', String(pkg.version).replace(/\.0$/, '')]);
+    } catch {}
+  }
+  const sourceDrift = versionSources.filter(([, v]) => v !== folderVer);
+
   // Check catalog diffs
   let catalogDiffs = [];
   if (fs.existsSync(SITE_SKILLS_JSON)) {
@@ -191,7 +222,8 @@ export function checkSync() {
   const versionsMatch = folderVer === siteVer;
   const hashesMatch = folderHash === siteHash;
   const catalogClean = catalogDiffs.length === 0;
-  const inSync = versionsMatch && hashesMatch && catalogClean;
+  const sourcesClean = sourceDrift.length === 0;
+  const inSync = versionsMatch && hashesMatch && catalogClean && sourcesClean;
 
   console.log('╔════════════════════════════════════════════════════════════════════════════╗');
   console.log('║                     VERSIONING SYNCHRONIZATION STATUS                      ║');
@@ -214,6 +246,9 @@ export function checkSync() {
     if (!catalogClean) {
       console.log(`║    - Out-of-date skill descriptions: ${catalogDiffs.slice(0, 3).join(', ')}${catalogDiffs.length > 3 ? '...' : ''}`.padEnd(77) + '║');
     }
+    if (!sourcesClean) {
+      console.log(`║    - Version source drift: ${sourceDrift.map(([f, v]) => `${f}=${v}`).join(', ')} (folder=${folderVer})`.padEnd(77) + '║');
+    }
     console.log('║  Action Needed  : Run "npm run sync:site" to bring site into sync.        ║');
   }
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
@@ -228,7 +263,15 @@ export function bumpVersion(typeArg) {
     try {
       const diffFiles = execSync('git status --porcelain', { encoding: 'utf8', cwd: ROOT });
       const lines = diffFiles.split(/\r?\n/).filter((l) => l.trim().length > 0);
-      const skillChanges = lines.some((l) => /skills[/\\]|agents[/\\]/.test(l));
+      // Parse status entries (XY PATH, or XY ORIG -> NEW for renames) and match
+      // only paths actually rooted at skills/ or agents/, so site pages like
+      // site/skills/index.html do not trigger a +1.0 skill bump.
+      const paths = lines.flatMap((l) => {
+        const body = l.slice(3);
+        const parts = body.split(' -> ');
+        return parts.map((p) => p.trim().replace(/^"|"$/g, ''));
+      });
+      const skillChanges = paths.some((p) => /^(skills|agents)[/\\]/.test(p));
       if (skillChanges) {
         bumpType = 'skill';
       } else {

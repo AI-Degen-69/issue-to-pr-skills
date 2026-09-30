@@ -93,9 +93,13 @@ for (const dir of skillDirs) {
   let m;
   while ((m = linkRe.exec(body))) {
     const href = m[1];
-    if (href.startsWith("http") || href.startsWith("#") || href.startsWith("/") || href.startsWith("mailto:") || href.startsWith("<")) continue;
+    // Unwrap <dest> forms; skip template placeholders like <url> (no extension)
+    const wrapped = href.match(/^<(.*)>$/);
+    const dest = wrapped ? wrapped[1] : href;
+    if (wrapped && !/^https?:|\.[a-z0-9]+($|[?#])/i.test(dest)) continue;
+    if (dest.startsWith("http") || dest.startsWith("#") || dest.startsWith("/") || dest.startsWith("mailto:")) continue;
     // relative path — resolve from skill dir
-    const targetPath = path.resolve(dir, href.split("#")[0].split("?")[0]);
+    const targetPath = path.resolve(dir, dest.split("#")[0].split("?")[0]);
     if (!fs.existsSync(targetPath)) {
       // allow links to docs that may be resolved from root? try ROOT-relative
       const alt = path.resolve(ROOT, href);

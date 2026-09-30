@@ -155,7 +155,7 @@ Branch: `[branch_name_pushed]`
 **Direct Pull Request Link:** [direct_github_pr_url]
 **CodeRabbit Status** *(one honest line):*
   - ✅ `CodeRabbit confirmed review started` — saw the bot's response ("Review triggered")
-  - ⏳ `Rate limit reached — review will start in N minutes` — per bot response, with link
+  - ⏳ `Rate limit reached — review not started, quota available again in N minutes` — per bot response, with link
   - ❓ `Trigger sent but no confirmation within 60s` — unknown if review started
   - ❗ `Other bot response` — quoted verbatim, with link
 * **Comment Links:** [mandatory if status is not ✅: direct link to trigger comment and bot reply]
