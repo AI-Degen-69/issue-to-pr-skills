@@ -1,6 +1,6 @@
 # i-pick-issue — Station I (Pick & Orchestrate)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 The single entry point for Issue work. Lists open issues, groups them by
 domain, recommends the next one by dependency order, takes the operator's

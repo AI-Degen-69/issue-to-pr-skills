@@ -1,6 +1,6 @@
 # iv-review-build-and-pr — Station IV (Review, Verify & Ship)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Multi-axis review, fix application, final verification, push, and PR —
 with an honest one-line CodeRabbit ack status. The only station that pushes.

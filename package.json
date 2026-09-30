@@ -33,9 +33,11 @@
     "version:check": "node scripts/version-sync.js check",
     "version:bump": "node scripts/version-sync.js bump",
     "sync:site": "node scripts/version-sync.js sync",
-    "check:sync": "node scripts/version-sync.js check",
+    "validate:mirror": "node scripts/verify-mirror.js && node scripts/sync-from-canonical.js --check",
+    "sync": "node scripts/sync-from-canonical.js",
     "test": "node --test scripts/**/*.test.js",
-    "check": "npm run validate && npm run version:check"
+    "check": "npm run validate && npm run validate:mirror && npm run version:check",
+    "prepublishOnly": "npm run check"
   },
   "engines": {
     "node": ">=18"

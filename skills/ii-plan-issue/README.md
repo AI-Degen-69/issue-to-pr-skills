@@ -1,6 +1,6 @@
 # ii-plan-issue — Station II (Define & Plan)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Turns one GitHub issue into an airtight executable plan: right-sized scope,
 locked constraints, mapped interfaces, and `tasks/plan.md` — then hands off

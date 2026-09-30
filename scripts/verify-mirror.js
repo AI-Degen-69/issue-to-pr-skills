@@ -98,8 +98,18 @@ if (!fs.existsSync(TARGET_DIR)) {
   process.exit(1);
 }
 
+// Mirror-specific rewrites. Canonical is authoritative for content, but this
+// pack is public and portable, so a few paths are renamed on the way in (see
+// scripts/sync-from-canonical.js, which applies the same table). Compare against
+// the rewritten form, otherwise every rewritten file is a false hash mismatch.
+const REWRITE = [
+  // Canonical: docs/issue-to-pr-skill-workflow.md. This pack: docs/pipeline.md.
+  [/docs\/issue-to-pr-skill-workflow\.md/g, "docs/pipeline.md"],
+];
+
 function sha256(filePath) {
-  const content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
+  let content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
+  for (const [re, to] of REWRITE) content = content.replace(re, to);
   return crypto.createHash("sha256").update(content).digest("hex");
 }
 

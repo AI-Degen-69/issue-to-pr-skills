@@ -1,6 +1,6 @@
 # v-babysit-pr-and-merge — Station V (Babysit PR & Merge)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Sits on the PR through one focused CodeRabbit review round (or agent
 fallback), triages every comment ACCEPT/REJECT, then squash-merges on

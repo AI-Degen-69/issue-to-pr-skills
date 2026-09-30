@@ -1,6 +1,6 @@
 # pipeline-triage — State Gate (not a numbered station)
 
-> Full station map: [`docs/issue-to-pr-skill-workflow.md`](../../docs/issue-to-pr-skill-workflow.md).
+> Full station map: [`docs/pipeline.md`](../../docs/pipeline.md).
 
 Session-start router for unfinished work. Inspects git/PR state
 read-only, picks exactly one next station from the routing table —
