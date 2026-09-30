@@ -1,8 +1,8 @@
-# AGENTS.md — working in this repo
+# AGENTS.md — working in this repo (Version: 1.0)
 
 ## What this repo is
 
-Public skill pack: 10 pipeline station skills (`skills/`), 33 supporting skills, 18 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
+Public skill pack: 10 pipeline station skills (`skills/`), 36 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
 
 ## Rules for changes here
 
@@ -12,3 +12,22 @@ Public skill pack: 10 pipeline station skills (`skills/`), 33 supporting skills,
 4. **Verify, don't assume.** Every skill change must pass the validator (`node scripts/validate.js skills/<name>` — see `scripts/` once added, or validate frontmatter + relative links by hand): `name` matches folder, description non-empty, every relative file ref and backticked skill ref resolves.
 5. **Minimal diffs.** Fix the finding, don't restyle the skill.
 6. **Never commit scratch.** `scratch/`, OS temp, and per-issue work files don't belong in this repo.
+7. **Keep site in sync.** Run `npm run check` before submitting changes.
+
+## Versioning & Site Synchronization
+
+This repository enforces a strict two-value version synchronization system:
+- **Folder Version:** `VERSION` / `version.json` / `package.json` (source of truth).
+- **Site Version:** `site/version.json` / `site/index.html` (public site).
+
+### Version Bump Policy
+- **`+0.1` (Doc/Small Change):** When editing docs, README, scripts, or site styles (`npm run version:bump -- --doc`).
+- **`+1.0` (Skill Change):** Whenever modifying, adding, or deleting any skill in `skills/` or persona in `agents/` (`npm run version:bump -- --skill`).
+
+### Agent NPM Commands
+- `npm run version:status` — Displays the comparison board (Folder Version vs Site Version + SHA-256 hashes).
+- `npm run version:bump` — Bumps the folder version (`--skill`, `--doc`, or auto-detect from git diff).
+- `npm run sync:site` — Regenerates `site/skills.json` from `skills/`, writes `site/version.json`, and updates site badges.
+- `npm run check` — Full gate: runs `npm run validate` + `npm run version:check`.
+- `npm test` — Runs the test suite (`scripts/version-sync.test.js`).
+

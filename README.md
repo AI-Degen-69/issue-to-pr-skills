@@ -3,6 +3,7 @@
 [![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
 [![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0-emerald.svg)](version.json)
 [![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
 [![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
 
@@ -153,6 +154,18 @@ See [docs/skill-anatomy.md](docs/skill-anatomy.md) for the format spec.
 ## How skills work
 
 Every skill follows the same anatomy: `SKILL.md` with frontmatter (`name` + `description` trigger surface), invocation, step-by-step protocol, guardrails, and a chat output contract. Detail lives in `references/` (loaded on demand); each skill with tests ships `evals/evals.json`. Verification is non-negotiable — every station ends with evidence (tests, build output, or runtime data), never "seems right".
+
+## Development & Version Synchronization
+
+This repository maintains synchronized version values between the source repository and the interactive website:
+
+| Command | Action |
+|---|---|
+| `npm run check` | Validates all skills and confirms site synchronization |
+| `npm run version:status` | Compares Folder Version vs Site Version + content hashes |
+| `npm run version:bump` | Bumps version (`+1.0` for skill changes, `+0.1` for docs/meta) |
+| `npm run sync:site` | Re-syncs `site/skills.json`, `site/version.json`, and site badges |
+| `npm test` | Runs the synchronization test suite |
 
 ## Contributing
 
