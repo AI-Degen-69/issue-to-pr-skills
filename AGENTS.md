@@ -50,7 +50,11 @@ npm run check     # validate + verify byte-identical + confirm no drift
 ```
 
 Or per-file: `node scripts/sync-from-canonical.js --check` reports drift and
-writes nothing; drop `--check` to apply.
+writes nothing; drop `--check` to apply. Note: the localized station files above
+intentionally differ from canonical (English-only contracts, portable paths), so
+`--check` reports them as drifted by design — `scripts/verify-mirror.js`
+(`npm run validate:mirror`) is the guard that accounts for that and must stay
+green.
 
 Run `npm run check` before every release commit. A hand-edit here is overwritten
 on the next sync — this pack already drifted once and was still advertising a
