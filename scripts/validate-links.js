@@ -12,9 +12,15 @@ function checkFile(file) {
   let m;
   while ((m = re.exec(text))) {
     const href = m[1];
-    if (href.startsWith("http") || href.startsWith("#") || href.startsWith("/") || href.startsWith("mailto:")) continue;
+    // Unwrap <dest> forms. Report templates use placeholder destinations like
+    // <url> or <link> (no file extension) — skip those; still validate real
+    // files written in angle brackets, e.g. <missing.md>.
+    const wrapped = href.match(/^<(.*)>$/);
+    const dest = wrapped ? wrapped[1] : href;
+    if (wrapped && !/^https?:|\.[a-z0-9]+($|[?#])/i.test(dest)) continue;
+    if (dest.startsWith("http") || dest.startsWith("#") || dest.startsWith("/") || dest.startsWith("mailto:")) continue;
     const base = path.dirname(file);
-    const target = path.resolve(base, href.split("#")[0].split("?")[0]);
+    const target = path.resolve(base, dest.split("#")[0].split("?")[0]);
     if (!fs.existsSync(target)) {
       console.warn(`⚠ ${path.relative(ROOT, file)}: broken link -> ${href}`);
       warnings++;

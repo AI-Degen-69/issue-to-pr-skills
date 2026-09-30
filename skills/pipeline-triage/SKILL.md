@@ -53,40 +53,40 @@ Pick exactly one row. First matching row wins.
 
 ## Output format
 
-Answer in Hebrew in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
+Answer in English in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
 
 After the status line, always list every changed file by category with a one-line classification of what it is (which issue/PR it belongs to, or "unknown origin"). Omit a category only when its count is 0. Also list each stash with its number, age, branch, and a one-line classification of its contents.
 
 ```markdown
-# 📊 Pipline Triage
-**ענף:** `name` | **קדימה/אחורה:** X/Y | **מבוימים:** X | **לא מבוימים:** X | **לא נעקבים:** X | **PR:** state | **סטאשים:** X
+# 📊 Pipeline Triage
+**Branch:** `name` | **Ahead/Behind:** X/Y | **Staged:** X | **Unstaged:** X | **Untracked:** X | **PR:** state | **Stashes:** X
 
-**מבוימים (X):**
+**Staged (X):**
 - `path/to/file` — classification
 
-**לא מבוימים (X):**
+**Unstaged (X):**
 - `path/to/file` — classification
 
-**לא נעקבים (X):**
+**Untracked (X):**
 - `path/to/file` — classification
 
-**סטאשים (X):**
+**Stashes (X):**
 - `stash@{0}` — date, branch, what it holds in one line
 
-## פירוש המצב:
-- [פירוש מצב הקבצים. מה השינויים של הקבצים, מאיפה מהם, האם הם חשובים / חלק מעבודה לא גמורה / סתם שטויות שצריך לזרוק]
-- [פירוש מצב הסטאשים. האם הם חשובים / חלק מעבודה לא גמורה / סתם שטויות שצריך לזרוק]
-- [פירוש מצב הענפים. האם הם חשובים / חלק מעבודה לא גמורה / סתם שטויות שצריך לזרוק]
-- [פירוש מצב ה-PR. מה השינויים של ה-PR, מאיפה מהם, האם הם חשובים / חלק מעבודה לא גמורה / סתם שטויות שצריך לזרוק]
+## Status Assessment:
+- [Assessment of files: what changed, where from, whether they are work-in-progress, critical, or scratch to discard]
+- [Assessment of stashes: whether they hold active work, stale experiments, or can be dropped]
+- [Assessment of branches: whether active, merged, or stale]
+- [Assessment of PR: PR status, review comments, whether action is required]
 
-## 🎯 מסקנות:
-- [סיכום קצר של המצב והגישה לטיפול עם הסבר הגיוני]
+## 🎯 Conclusions:
+- [Concise summary of state and rational approach to resolve it]
 
 ---
 
-## ➡️ השלב הבא:
-- [ההחלטה לאן לנתב את העבודה מכאן, איזה סקיל להפעיל מתוך הגיון ועבודה נכונה לפי המצב]
-- הנתיב שהוחלט עליו: **`<station>`**
+## ➡️ Next Step:
+- [Decision on where to route work from here, which station skill to invoke based on state]
+- Selected route: **`<station>`**
 ```
 
 ## Safety rules

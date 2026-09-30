@@ -2,7 +2,7 @@
 
 ## Skill pointer
 
-- `C:\Users\Tiger\.agents\skills\create-issue` (global copy is the single source of truth).
+- `skills/create-issue` in this repo.
 
 ## What the skill does
 
@@ -14,7 +14,7 @@ Intake branch of the issue→PR pipeline: one raw operator idea becomes one rese
 2. Open questions land in the issue body with `needs-answers` — publication is never blocked.
 3. Splits are wired as one family (`Part of #` / `Related:` / native dependency edges).
 4. The CodeRabbit plan request is posted as its own comment, body only, skipped for trivial docs-only issues, retried once on silence.
-5. Closeout is everyday Hebrew per the output contract.
+5. Closeout is everyday English per the output contract.
 
 ## Success definition (measurable)
 
@@ -25,10 +25,10 @@ Intake branch of the issue→PR pipeline: one raw operator idea becomes one rese
 | Outcome | Skips the plan request for docs/typo-only issues | Yes (regex) |
 | Outcome | Retries the request with the lowercase mention when no reply lands | Yes (regex) |
 | Style | Ambiguity goes to `Open questions`, never to a blocking interview | Yes (regex) |
-| Style | Closeout follows the Hebrew contract | Yes (regex) |
+| Style | Closeout follows the English contract | Yes (regex) |
 | Negative | No catch-all trigger wording that would convert remarks into issues | Yes (not_regex) |
 
-Behavioral (live-run, needs a real repo + `gh`): research quality, the actual publish, the actual comment, the actual Hebrew report — recorded as `not-run`.
+Behavioral (live-run, needs a real repo + `gh`): research quality, the actual publish, the actual comment, the actual English report — recorded as `not-run`.
 
 ## Loop config
 

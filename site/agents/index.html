@@ -3,24 +3,25 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Agents — Issue-to-PR Skills</title>
+<title>Agents: Issue-to-PR Skills</title>
 <meta name="description" content="17 reviewer personas in plain words: who checks what, why a panel beats a stamp."/>
-<meta name="theme-color" content="#020617"/>
+<meta name="theme-color" content="#09090b"/>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="../shared-interactions.css"/>
 <style>.glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}</style>
 </head>
-<body class="bg-[#020617] text-slate-100 font-sans antialiased">
-<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/70 backdrop-blur-xl">
+<body class="bg-[#09090b] text-zinc-100 font-sans antialiased">
+<nav class="sticky top-0 z-50 border-b border-white/10 bg-[#09090b]/70 backdrop-blur-xl">
   <div class="mx-auto max-w-[1200px] px-5 lg:px-8 flex h-[56px] items-center justify-between">
-    <a href="../" class="flex items-center gap-3"><div class="h-7 w-7 rounded-lg bg-gradient-to-br from-violet-600 to-fuchsia-500 grid place-items-center font-extrabold text-[12px]">I→P</div><span class="font-semibold">issue-to-pr<span class="text-white/50">.skills</span></span></a>
+    <a href="../" class="flex items-center gap-3"><div class="h-7 w-7 rounded-md bg-gradient-to-br from-amber-200 to-amber-400 grid place-items-center font-extrabold text-[12px] text-zinc-950">I→P</div><span class="font-semibold">issue-to-pr<span class="text-white/50">.skills</span></span></a>
     <div class="hidden md:flex items-center gap-6 text-sm text-white/70">
       <a href="../#lifecycle" class="hover:text-white">Lifecycle</a>
       <a href="../skills/" class="hover:text-white">Skills</a>
       <a href="./" class="text-white font-semibold">Agents</a>
       <a href="../docs/" class="hover:text-white">Docs</a>
+      <a href="../#support" class="hover:text-white">Support</a>
       <a href="https://github.com/AI-Degen-69/issue-to-pr-skills" target="_blank" class="hover:text-white">GitHub ↗</a>
     </div>
     <a href="../" class="text-sm text-white/70 hover:text-white">← Home</a>
@@ -29,17 +30,17 @@
 <section class="relative overflow-hidden border-b border-white/5">
   <div class="absolute inset-0" style="background:radial-gradient(600px 300px at 70% 0%, rgba(34,211,238,.14), transparent)"></div>
   <div class="relative mx-auto max-w-[1200px] px-5 lg:px-8 py-10 lg:py-12">
-    <div class="inline-flex items-center gap-2 rounded-full bg-cyan-500/15 border border-cyan-400/20 px-3 py-1 text-xs text-cyan-200">Plain words — you don't need to code</div>
+    <div class="inline-flex items-center gap-2 rounded-md bg-cyan-500/15 border border-cyan-400/20 px-3 py-1 text-xs text-cyan-200">Plain words · you don't need to code</div>
     <h1 class="mt-4 text-[30px] lg:text-[40px] font-extrabold tracking-tight leading-none">Reviewers are specialists. The AI asks the right ones.</h1>
     <p class="mt-3 max-w-[720px] text-[16px] leading-7 text-white/70">
-      No single reviewer catches everything. So we keep <span class="text-white">17 narrow experts</span> — one for security, one for React, one for data mistakes, one for chasing silent failures. The AI picks only the ones that match your change. If a specialist isn't installed, it's skipped — never faked.
+      No single reviewer catches everything. So we keep <span class="text-white">17 narrow experts</span>. One covers security, one covers React, one covers data mistakes, one chases silent failures. The AI picks only the ones that match your change. If a specialist isn't installed, it's skipped, never faked.
     </p>
-    <div class="mt-4 flex gap-2 text-sm"><a href="#agents" class="rounded-full bg-white text-slate-900 px-5 py-2 font-semibold">Meet the 17 ↓</a><a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 font-semibold hover:bg-white/15">Back to lifecycle</a></div>
+    <div class="mt-4 flex gap-2 text-sm"><a href="#agents" class="rounded-md bg-zinc-50 text-zinc-950 px-5 py-2 font-semibold hover:bg-white">Meet the 17 ↓</a><a href="../" class="rounded-full bg-white/10 border border-white/15 px-5 py-2 font-semibold hover:bg-white/15">Back to lifecycle</a></div>
   </div>
 </section>
 <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-  <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5 text-sm leading-6">
-    <div class="font-semibold">How it works — in 20 seconds</div>
+  <div class="rounded-xl border border-white/10 bg-white/[.04] p-5 text-sm leading-6">
+    <div class="font-semibold">How it works: in 20 seconds</div>
     <div class="mt-2 text-white/60">1. You change code → 2. The AI looks at <em class="text-white not-italic">what</em> changed → 3. It calls only the relevant reviewers in parallel → 4. You get one combined go / no-go.</div>
   </div>
 </section>
@@ -61,7 +62,7 @@
         type="text" 
         placeholder="Filter agents by role or name..." 
         aria-label="Filter agents by role or name"
-        class="w-full rounded-xl bg-white/5 border border-white/15 pl-10 pr-9 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-violet-400 focus:ring-1 focus:ring-violet-400 transition"
+        class="w-full rounded-xl bg-white/5 border border-white/15 pl-10 pr-9 py-2 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-amber-200/60 focus:ring-1 focus:ring-amber-200/60 transition"
       />
       <button 
         id="clearAgentSearch" 
@@ -74,29 +75,31 @@
   </div>
 
   <!-- Role Quick Filters -->
-  <div class="mt-4 flex items-center gap-1.5 overflow-x-auto pb-1 text-xs scrollbar-none">
+  <div class="mt-4 flex items-center gap-1 overflow-x-auto pb-1 text-xs scrollbar-none">
     <span class="text-white/40 mr-1 hidden sm:inline">Role:</span>
-    <button type="button" onclick="setAgentFilter('')" class="agent-chip px-3 py-1.5 rounded-lg bg-violet-600 border border-violet-500 text-white font-medium transition cursor-pointer" data-filter="" aria-pressed="true">All (17)</button>
-    <button type="button" onclick="setAgentFilter('Security')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Security" aria-pressed="false">Security</button>
-    <button type="button" onclick="setAgentFilter('TypeScript')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="TypeScript" aria-pressed="false">TypeScript</button>
-    <button type="button" onclick="setAgentFilter('React')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="React" aria-pressed="false">React</button>
-    <button type="button" onclick="setAgentFilter('Python')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Python" aria-pressed="false">Python</button>
-    <button type="button" onclick="setAgentFilter('Go')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Go" aria-pressed="false">Go</button>
-    <button type="button" onclick="setAgentFilter('Rust')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Rust" aria-pressed="false">Rust</button>
-    <button type="button" onclick="setAgentFilter('Data')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Data" aria-pressed="false">Data</button>
-    <button type="button" onclick="setAgentFilter('Reliability')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Reliability" aria-pressed="false">Reliability</button>
-    <button type="button" onclick="setAgentFilter('Testing')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Testing" aria-pressed="false">Testing</button>
-    <button type="button" onclick="setAgentFilter('Build')" class="agent-chip px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer" data-filter="Build" aria-pressed="false">Build</button>
+    <div class="inline-flex items-center gap-0.5 rounded-lg border border-white/10 bg-white/5 p-1" role="group" aria-label="Filter by role">
+    <button type="button" onclick="setAgentFilter('')" class="agent-chip px-3 py-1.5 rounded-md bg-zinc-50 text-zinc-950 font-medium transition shadow-sm cursor-pointer" data-filter="" aria-pressed="true">All (17)</button>
+    <button type="button" onclick="setAgentFilter('Security')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Security" aria-pressed="false">Security</button>
+    <button type="button" onclick="setAgentFilter('TypeScript')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="TypeScript" aria-pressed="false">TypeScript</button>
+    <button type="button" onclick="setAgentFilter('React')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="React" aria-pressed="false">React</button>
+    <button type="button" onclick="setAgentFilter('Python')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Python" aria-pressed="false">Python</button>
+    <button type="button" onclick="setAgentFilter('Go')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Go" aria-pressed="false">Go</button>
+    <button type="button" onclick="setAgentFilter('Rust')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Rust" aria-pressed="false">Rust</button>
+    <button type="button" onclick="setAgentFilter('Data')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Data" aria-pressed="false">Data</button>
+    <button type="button" onclick="setAgentFilter('Reliability')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Reliability" aria-pressed="false">Reliability</button>
+    <button type="button" onclick="setAgentFilter('Testing')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Testing" aria-pressed="false">Testing</button>
+    <button type="button" onclick="setAgentFilter('Build')" class="agent-chip px-3 py-1.5 rounded-md text-zinc-400 hover:text-white transition cursor-pointer" data-filter="Build" aria-pressed="false">Build</button>
+    </div>
     <span id="agentCount" class="font-mono text-white/50 ml-auto hidden sm:inline-block">17 agents</span>
   </div>
 
   <div id="agentGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
 </section>
-<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · <span id="siteVersionFooter">Version: 1.0</span> · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
 <script>
 const AGENTS=[
-  ['code-reviewer','General','Checks overall quality — would a senior engineer approve?',true],
-  ['security-reviewer','Security','Looks for auth, secrets, injection — OWASP.',true],
+  ['code-reviewer','General','Checks overall quality: would a senior engineer approve?',true],
+  ['security-reviewer','Security','Looks for auth, secrets, and injection (OWASP).',true],
   ['typescript-reviewer','TypeScript','Types and async done right.',true],
   ['react-reviewer','React','Hooks, accessibility, rendering.',true],
   ['python-reviewer','Python','Async, types, clean style.',true],
@@ -172,7 +175,7 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     case 'code-reviewer':
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="${role} Specialist">
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-white/5 border border-white/10 text-zinc-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0" title="${role} Specialist">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
       </div>`;
       break;
@@ -202,7 +205,7 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     case 'type-design-analyzer':
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-fuchsia-500/15 border border-fuchsia-400/40 text-fuchsia-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(217,70,239,0.25)]" title="${role} Specialist">
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-white/5 border border-white/10 text-zinc-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0" title="${role} Specialist">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.12 6.4-6.05-4.06a4.95 4.95 0 0 0-5.14 0L3.88 6.4a4.95 4.95 0 0 0-2.38 4.25v7.7a4.95 4.95 0 0 0 2.38 4.25l6.05 4.06a4.95 4.95 0 0 0 5.14 0l6.05-4.06a4.95 4.95 0 0 0 2.38-4.25v-7.7a4.95 4.95 0 0 0-2.38-4.25Z"/><path d="M12 22V12"/><path d="m3.29 7 8.71 5 8.71-5"/></svg>
       </div>`;
       break;
@@ -217,22 +220,22 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     default:
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold transition-transform group-hover/icon:scale-105 shrink-0">${(role||'').slice(0,2).toUpperCase()}</div>`;
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-gradient-to-br from-zinc-600 to-zinc-800 grid place-items-center text-xs font-bold transition-transform group-hover/icon:scale-105 shrink-0">${(role||'').slice(0,2).toUpperCase()}</div>`;
       break;
   }
 
   const summary = AGENT_SUMMARIES[id] || `${role} specialist reviewer for code quality and pipeline verification.`;
-  return `<div class="agent-icon-trigger group/icon relative inline-block shrink-0" tabindex="0" role="region" aria-label="${id} — ${role}: ${summary}">
+  return `<div class="agent-icon-trigger group/icon relative inline-block shrink-0" tabindex="0" role="region" aria-label="${id}, ${role}: ${summary}">
     ${iconDiv}
     <div class="agent-icon-tooltip" role="tooltip">
       <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-1.5 mb-1.5">
         <span class="font-mono text-xs font-bold text-white tracking-wide truncate">${id}</span>
-        <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-violet-300 border border-white/10 shrink-0">${role}</span>
+        <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10 shrink-0">${role}</span>
       </div>
       <p class="text-xs text-white/80 leading-relaxed font-sans">${summary}</p>
       <div class="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40 font-mono">
         <span>Specialist Agent</span>
-        <span class="text-violet-400 group-hover:text-violet-300">Click card for guide →</span>
+        <span class="text-zinc-500 group-hover:text-zinc-300">Click card for guide →</span>
       </div>
       <div class="agent-tooltip-arrow"></div>
     </div>
@@ -259,12 +262,12 @@ function renderAgentGrid(forcedQuery){
       (f === 'testing' && (q === 'test' || q === 'tdd'))
     ));
     if(isActive) {
-      btn.classList.add('bg-violet-600', 'border-violet-500', 'text-white');
-      btn.classList.remove('bg-white/5', 'border-white/10', 'text-white/70');
+      btn.classList.add('bg-zinc-50', 'text-zinc-950', 'shadow-sm');
+      btn.classList.remove('text-zinc-400');
       btn.setAttribute('aria-pressed', 'true');
     } else {
-      btn.classList.remove('bg-violet-600', 'border-violet-500', 'text-white');
-      btn.classList.add('bg-white/5', 'border-white/10', 'text-white/70');
+      btn.classList.remove('bg-zinc-50', 'text-zinc-950', 'shadow-sm');
+      btn.classList.add('text-zinc-400');
       btn.setAttribute('aria-pressed', 'false');
     }
   });
@@ -303,7 +306,7 @@ function renderAgentGrid(forcedQuery){
 
   if(matches.length === 0){
     grid.innerHTML = `
-      <div class="col-span-full rounded-2xl border border-white/10 bg-white/[.04] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+      <div class="col-span-full rounded-xl border border-white/10 bg-white/[.04] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
         <div class="h-10 w-10 mx-auto rounded-full bg-white/5 grid place-items-center text-base text-white/40">🔍</div>
         <div class="mt-3 text-base font-semibold text-white">No agents match “${rawQ}”</div>
         <p class="mt-1 text-sm text-white/50 max-w-sm mx-auto">Try searching for roles like Security, React, Python, or Data.</p>
@@ -318,9 +321,9 @@ function renderAgentGrid(forcedQuery){
     const target = hasPage ? '' : ' target="_blank"';
     const iconHtml = getAgentIconHtml(id, role);
     const delay = Math.min(index * 30, 240);
-    return `<a href="${href}"${target} style="animation-delay: ${delay}ms;" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+    return `<a href="${href}"${target} style="animation-delay: ${delay}ms;" class="group agent-card rounded-xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
       ${iconHtml}
-      <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">${id}</div>
+      <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-amber-100 transition-colors">${id}</div>
       <div class="text-xs text-white/50">${role}</div>
       <div class="mt-1 text-sm text-white/60 leading-5">${desc}</div>
     </a>`;

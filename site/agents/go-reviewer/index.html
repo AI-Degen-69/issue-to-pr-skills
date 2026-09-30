@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Go Reviewer Agent — Issue-to-PR Skills</title>
+<title>Go Reviewer Agent: Issue-to-PR Skills</title>
 <meta name="description" content="Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance. Mandatory for all Go code changes."/>
 <meta name="theme-color" content="#020617"/>
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
@@ -79,7 +79,7 @@
 
   <!-- SECTION 2: WHAT IT IS & TOOLING -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">01 — What it is</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">01 · What it is</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Expert evaluator for idiomatic Go and concurrency safety</h2>
     <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
       The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">go-reviewer</code> reviews code with the discerning eye of a veteran Go engineer. It enforces the idioms that make Go programs robust: early returns over nested ifs, proper error wrapping with <code class="font-mono text-xs text-sky-300">%w</code>, goroutine lifecycle management via contexts, and pre-allocation of slices in hot loops.
@@ -118,7 +118,7 @@
 
   <!-- SECTION 3: PIPELINE PLACEMENT -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">02 — Lifecycle placement</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">02 · Lifecycle placement</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">The quality gatekeeper before Go code lands in main</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Invoked in Station IV as a specialized language reviewer. If Go code contains any high-severity anti-patterns or race conditions, it blocks the PR immediately.
@@ -167,7 +167,7 @@
 
   <!-- SECTION 4: REVIEW PRIORITIES -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">03 — Inspection checklist</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">03 · Inspection checklist</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured priority review matrix</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Sourced directly from <code class="text-white font-mono text-xs">agents/go-reviewer.md</code>, issues are strictly triaged into blocking vs advisory tiers.
@@ -175,7 +175,7 @@
 
     <div class="mt-6 grid md:grid-cols-3 gap-4">
       <div class="rounded-2xl border border-rose-500/30 bg-rose-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL — Security & Errors</div>
+        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL: Security & Errors</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Ignored Errors:</strong> Using <code class="font-mono text-rose-200">_</code> to discard returned errors.</span></li>
           <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Missing Wrapping:</strong> <code class="font-mono text-rose-200">return err</code> without <code class="font-mono text-rose-200">fmt.Errorf("...: %w", err)</code>.</span></li>
@@ -185,7 +185,7 @@
       </div>
 
       <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH — Concurrency & Idioms</div>
+        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH: Concurrency & Idioms</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Goroutine Leaks:</strong> Spawning goroutines without context cancellation.</span></li>
           <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Channel Deadlocks:</strong> Unbuffered channels sending without ready receivers.</span></li>
@@ -195,7 +195,7 @@
       </div>
 
       <div class="rounded-2xl border border-blue-500/30 bg-blue-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM — Efficiency & Style</div>
+        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM: Efficiency & Style</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>String Builder:</strong> Repeated <code class="font-mono text-blue-200">+</code> in loops instead of <code class="font-mono text-blue-200">strings.Builder</code>.</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Slice Capacity:</strong> Missing <code class="font-mono text-blue-200">make([]T, 0, cap)</code> for known item counts.</span></li>
@@ -208,7 +208,7 @@
 
   <!-- SECTION 5: APPROVAL CRITERIA -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">04 — Decision Framework</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">04 · Decision Framework</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Clear verdicts based on issue severity</h2>
     <div class="mt-6 grid sm:grid-cols-3 gap-4">
       <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5">
@@ -237,7 +237,7 @@
 
   <!-- SECTION 6: WHAT IT DOES NOT DO -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">05 — Strict boundaries</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">05 · Strict boundaries</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">What go-reviewer does NOT do</h2>
     <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
@@ -257,7 +257,7 @@
 
   <!-- SECTION 7: CROSS-LINKS -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
-    <div class="text-xs uppercase tracking-[.14em] text-sky-300">06 — Related Personas</div>
+    <div class="text-xs uppercase tracking-[.14em] text-sky-300">06 · Related Personas</div>
     <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
       <div>
         <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>

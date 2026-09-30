@@ -65,6 +65,22 @@ const RETIRED_SKILLS = [
   ["vii", "present", "pr"].join("-"),
 ];
 
+// Localized pipeline stations: in this public repo, skill instructions and chat reports
+// are strictly English-only and portable, whereas the local user environment (~/.agents/skills)
+// uses Hebrew reporting contracts and machine-specific paths.
+const LOCALIZED_SKILLS = new Set([
+  "pipeline-triage",
+  "i-pick-issue",
+  "create-issue",
+  "ii-plan-issue",
+  "iii-build-plan",
+  "iiib-iterate-after-build",
+  "iv-review-build-and-pr",
+  "v-babysit-pr-and-merge",
+  "vi-close-pipeline",
+  "present-pr",
+]);
+
 let errors = 0;
 
 function fail(msg) {
@@ -184,10 +200,33 @@ for (const skill of EXPECTED_SKILLS) {
 
   for (const f of srcFiles) {
     if (tgtFileSet.has(f)) {
-      const srcHash = sha256(path.join(srcSkillDir, f));
-      const tgtHash = sha256(path.join(tgtSkillDir, f));
-      if (srcHash !== tgtHash) {
-        fail(`${skill}/${f}: hash mismatch (source=${srcHash.slice(0, 8)}, target=${tgtHash.slice(0, 8)})`);
+      const tgtFilePath = path.join(tgtSkillDir, f);
+      if (LOCALIZED_SKILLS.has(skill)) {
+        // For localized skills, verify English-only compliance and portability on active markdown and evals.json
+        if (f.endsWith(".md") || f === "evals/evals.json") {
+          // Snapshots/historical runs are preserved historical artifacts; active files must be English-only
+          if (!f.startsWith("evals/snapshots/") && !f.startsWith("evals/iteration-")) {
+            const content = fs.readFileSync(tgtFilePath, "utf8");
+            if (/[\u0590-\u05FF]/.test(content)) {
+              fail(`${skill}/${f}: contains Hebrew characters (must be English-only)`);
+            }
+            // Whitelist: technical mentions of Hebrew as *input* (branch-slug stripping,
+            // voice-note intake), not as a reporting/output language.
+            const stripped = content.replace(/never Hebrew[^.\n"]*|Hebrew-only|Hebrew voice-notes/gi, "");
+            if (/Hebrew/i.test(stripped)) {
+              fail(`${skill}/${f}: references Hebrew reporting (must be English-only, say "English")`);
+            }
+            if (/~[/\\]\.agents[/\\]agents/.test(content) || /C:[/\\]Users[/\\]/i.test(content)) {
+              fail(`${skill}/${f}: contains non-portable hardcoded agent/user path`);
+            }
+          }
+        }
+      } else {
+        const srcHash = sha256(path.join(srcSkillDir, f));
+        const tgtHash = sha256(tgtFilePath);
+        if (srcHash !== tgtHash) {
+          fail(`${skill}/${f}: hash mismatch (source=${srcHash.slice(0, 8)}, target=${tgtHash.slice(0, 8)})`);
+        }
       }
     }
   }
@@ -198,5 +237,5 @@ if (errors > 0) {
   process.exit(1);
 }
 
-console.log(`OK: ${EXPECTED_SKILLS.length} skills, byte-identical to source`);
+console.log(`OK: ${EXPECTED_SKILLS.length} skills verified (${EXPECTED_SKILLS.length - LOCALIZED_SKILLS.size} byte-identical to source, ${LOCALIZED_SKILLS.size} localized pipeline stations verified English-only & portable)`);
 process.exit(0);

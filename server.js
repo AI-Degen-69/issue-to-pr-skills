@@ -18,6 +18,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// Version endpoint for sync verification
+app.get('/api/version', (req, res) => {
+  res.sendFile(path.join(sitePath, 'version.json'));
+});
+
 // Fallback to index.html for unknown routes
 app.use((req, res) => {
   res.sendFile(path.join(sitePath, 'index.html'));

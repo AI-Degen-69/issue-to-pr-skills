@@ -1,6 +1,6 @@
 ---
 name: ii-plan-issue
-description: Station II (Define & Plan) of the 6-station pipeline (I–VI). Use when a GitHub issue needs to become an executable plan — fetches the issue via gh, right-sizes it, locks CONSTRAINTS.md, maps interfaces, writes tasks/plan.md, and hands off to /iii-build-plan auto. Reports in Hebrew, issue-first.
+description: Station II (Define & Plan) of the 6-station pipeline (I–VI). Use when a GitHub issue needs to become an executable plan — fetches the issue via gh, right-sizes it, locks CONSTRAINTS.md, maps interfaces, writes tasks/plan.md, and hands off to /iii-build-plan auto. Reports in English, issue-first.
 ---
 
 # Station II: Plan Issue (`ii-plan-issue`)
@@ -32,7 +32,7 @@ This skill implements **Station II (Define & Plan)** of the 6-station pipeline (
 4. **Proceed immediately — do not pause to ask.** Check tree clean (`git status --short --branch`, dirty → `pipeline-triage`), then claim the recommended issue (`gh issue edit <number> --add-assignee @me`), create the feature branch per Step 0B (`i<number>/<slug>` from the issue title), and go straight to Section 2 on it.
 
 ### If `gh` fails (not authenticated, offline, or issue not found)
-Stop the issue-dependent steps. Say in plain language exactly what failed, and ask the user for the issue number/title (or to run `gh auth login`). **Never fabricate issue content and never plan from imagined data (אין להמציא תוכן).**
+Stop the issue-dependent steps. Say in plain language exactly what failed, and ask the user for the issue number/title (or to run `gh auth login`). **Never fabricate issue content and never plan from imagined data.**
 
 ---
 
@@ -62,7 +62,7 @@ Stop the issue-dependent steps. Say in plain language exactly what failed, and a
    - For each open question, first try to resolve it **from the code** (and CodeRabbit's codebase analysis) — read the relevant paths, check how similar cases are handled in the repo.
    - Fold each resolved answer into the plan as planning input; record the resolved answers in `tasks/plan.md` so the reasoning survives the session.
    - Ask the operator **only what is genuinely unresolvable from code** — one focused batch, before Step 1. Never re-ask what the issue already answers.
-3. **Large or unfamiliar/legacy code:** before answering, deploy the `code-explorer` agent persona (from `~/.agents/agents/`) to trace the relevant execution paths and map the affected architecture layers; fold its findings into the plan. Persona file not found on disk → skip and record the skip — never simulate a missing reviewer persona (אין להמציא).
+3. **Large or unfamiliar/legacy code:** before answering, deploy the `code-explorer` agent persona (from this repo's `agents/` directory) to trace the relevant execution paths and map the affected architecture layers; fold its findings into the plan. Persona file not found on disk → skip and record the skip — never simulate a missing reviewer persona.
 
 ### Step 0B: Confirm Feature Branch (canonical rule for Section 1)
 Branch format is `i<number>/<slug>` from the current HEAD. Derive `<slug>` from the issue title: lowercase, spaces → dashes, keep only `a-z 0-9 -`, max 50 chars, never Hebrew — Hebrew chars are stripped, and an empty result falls back to `issue-<number>`. Example: issue #69 `Increase button size` → `i69/increase-button-size`; a Hebrew-only title for issue #70 → `i70/issue-70`.
@@ -104,16 +104,16 @@ Create or update `CONSTRAINTS.md` with strict, measurable boundaries:
 ### Step 4: Interface Contracts (`api-and-interface-design`)
 Lock types, data schemas, public function signatures, and communication contracts before writing business logic. Skip for Tiny/Docs tasks with no interface change.
 
-For Standard/Large work with a non-trivial domain model, run the `type-design-analyzer` agent persona (from `~/.agents/agents/`) over the interfaces being locked — encapsulation, invariant expression, and enforcement — before freezing the contract. Persona not found on disk → skip and record the skip.
+For Standard/Large work with a non-trivial domain model, run the `type-design-analyzer` agent persona (from this repo's `agents/` directory) over the interfaces being locked — encapsulation, invariant expression, and enforcement — before freezing the contract. Persona not found on disk → skip and record the skip.
 
 ### Step 5: One Improvement Proposal (evidence-based, classified adoption)
 Propose **at most one** concrete improvement to the issue's approach — an architectural simplification, a forgotten edge case, or a better fit to existing repo patterns.
-1. **Ground it in evidence:** quote the motivating evidence **verbatim** — the exact issue text, issue comment, or code lines — not just a file/line pointer. **No evidence ⇒ no proposal**; never invent filler to satisfy this step; say so and skip instead (אין להמציא).
+1. **Ground it in evidence:** quote the motivating evidence **verbatim** — the exact issue text, issue comment, or code lines — not just a file/line pointer. **No evidence ⇒ no proposal**; never invent filler to satisfy this step; say so and skip instead.
 2. **Classify the proposal:**
    - **Simplification / edge-case hardening** → adopt-by-default: folded into `tasks/plan.md` after the evidence check passes.
    - **Scope expansion** (new behavior the issue never asked for) → **opt-in only**: presented as a question, enters the plan solely on explicit operator approval.
 3. **Rejection is recorded** in `tasks/plan.md` with its reason, so the same proposal does not resurface next session.
-4. Present the proposal in the report in one plain-Hebrew sentence so the operator can reject before build.
+4. Present the proposal in the report in one plain-English sentence so the operator can reject before build.
 
 ### Step 6: Task Decomposition (`planning-and-task-breakdown`)
 1. **Dependency graph first:** before ordering anything, map which task unblocks which — a task depends on another when it needs that task's output (interface, file, data). Write the graph into `tasks/plan.md` as a `Depends on:` field per task.
@@ -127,40 +127,40 @@ Propose **at most one** concrete improvement to the issue's approach — an arch
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
 Rules:
 - **The issue leads.** Open with the issue and its plan; classification and guardrails get one compact line each. Never enumerate skills or planning steps in the chat report — skill names live in `tasks/plan.md` rows.
 - **What's-changed only.** Report the planned changes grouped by tag (new / changed / removed — fixed rarely applies at plan time). No commits, no test commands or counts, no skill names, no file paths. The plan is expectations, not results: each item says what *will* change and where in the product.
-- Everyday Hebrew, short sentences, only claims grounded in the issue and code — never fabricate.
+- Everyday English, short sentences, only claims grounded in the issue and code — never fabricate.
 - The report adapts by task type: Design leads with UI decisions, Debug with the reproduction hypothesis, Docs with the outline, Code with the approach.
-- "מה ה-Issue דורש" is short bullets quoting what the issue describes; the plan groups say what will change for each point.
+- "Issue Requirements" is short bullets quoting what the issue describes; the plan groups say what will change for each point.
 - The improvement proposal is one plain sentence, evidence-based, adopted by default — dropped only on explicit operator rejection.
 - Drop any section that carries nothing for this issue. Omit empty change groups entirely.
 
 ```markdown
-# 📐 II - תכנון: Issue #<מספר> — <כותרת ה-Issue>
+# 📐 II - Planning: Issue #<id> — <issue_title>
 
-Branch: `i<מספר>/<slug-מהכותרת>` — e.g. `i69/increase-button-size`
+Branch: `i<id>/<slug_from_title>` — e.g. `i69/increase-button-size`
 
-## מה ה-Issue דורש
-- [נקודה 1 במילים פשוטות — מה ה-issue מתאר]
-- [נקודה 2]
+## Issue Requirements
+- [point 1 in plain words — what the issue describes]
+- [point 2]
 
-## מה ייבנה
+## What Will Be Built
 
-### ➕ מה חדש?
-- [מיקום מוצרי + מה ייווצר — רק קבוצות עם תוכן]
+### ➕ What's New?
+- [product location + what will be created — only groups with content]
 
-### ✏️ מה שונה?
-- [מיקום מוצרי + מה ישתנה]
+### ✏️ What's Changed?
+- [product location + what will change]
 
-### ❌ מה הוסר?
-- [מיקום מוצרי + מה יוסר]
+### ❌ What's Removed?
+- [product location + what will be removed]
 
-התוכנית המלאה: `tasks/plan.md` · אימות מוגדר לכל משימה בתוכנית.
+Full plan: `tasks/plan.md` · verification defined for each task in the plan.
 
-💡 [הצעת שיפור אחת, משפט אחד בשפה פשוטה — מבוססת ראיות מה-issue ומהקוד; מאומצת כברירת מחדל, יורדת רק אם נדחית]
+💡 [One improvement proposal, one sentence in plain language — grounded in evidence from the issue and code; adopted by default, dropped only if rejected]
 
-👉 הבא: `/iii-build-plan auto`
+👉 Next: `/iii-build-plan auto`
 ```

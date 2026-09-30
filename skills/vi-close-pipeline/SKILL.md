@@ -15,13 +15,13 @@ Post-merge closeout that leaves the repository carrying only live knowledge — 
 
 ---
 
-## 1. Step 0 — Verify Merge & Close the Issue
+## 1. Step 0 — Verify Merge & Issue State
 
 1. Confirm the PR is merged: `gh pr view <n> --json state --jq .state` → must be `MERGED`. If not merged, stop and route back to `v-babysit-pr-and-merge`.
 2. Check the issue: `gh issue view <id> --json state`.
-   - If **CLOSED** — continue.
-   - If **OPEN but the PR is MERGED** (the PR body lacked `Closes #<id>`) — close it now:
-     `gh issue close <id> --comment "Closed via PR #<n> (merged)."` and report it.
+   - If **CLOSED** — continue. (Normal path — Station V Step 5a or GitHub `Closes #<id>` already handled this.)
+   - If **OPEN but the PR is MERGED** — safety net: close it now:
+     `gh issue close <id> --comment "Closed via PR #<n> (merged)."` and report it. (This means Station V's Step 5a was skipped or failed.)
    - If tracker state is ambiguous — ask the operator. Never guess.
 
 ---
@@ -110,23 +110,23 @@ If any check fails → fix it or escalate with the exact state. **Never declare 
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
 ```markdown
-# 🏁 VI - סגירת צינור — Issue #<id>:
+# 🏁 VI - Close Pipeline — Issue #<id>:
 
-## ✅ סטטוס Issue ו-PR:
-* **PR:** [#<n>](<url>) — [מוזג / סגור]
-* **Issue:** [#<id>](<url>) — [פתוח / סגור]
-* **Current Branch:** [מה המצב ענף עכשיו? Master נקי / מלוכלך, יש ענפים נוספים שקשורים למשימה / שלא קשורים למשימה וכו' וכו'. אם נקי אז לציין פשוט Master נקי. אם יש ענפים נוספים שקשורים לISSUE, לציין את זה כאן. ] 
+## ✅ Issue & PR Status:
+* **PR:** [#<n>](<url>) — [Merged / Closed]
+* **Issue:** [#<id>](<url>) — [Open / Closed]
+* **Current Branch:** [What is the current branch status? Base branch clean / dirty, any extra branches related or unrelated to the issue. If clean, simply state base branch clean.]
 
-## 💡 סיכום:
-* [תיאור של מה שנעשה החל מהצגת הבעיה / תיאור הISSUE להצגת הפתרון, מה שנעשה בפועל, הסבר טכני ופשוט, ואיך להשתמש במה שנעשה. סדר עניינים כללי. במידה ורלוונטי, אפשר להוסיף קצת מידע כללי על הבעיה עצמה, ולא רק על הפתרון.]
+## 💡 Summary:
+* [Description of what was done: problem statement / issue summary, implemented solution, what was actually changed, concise technical and plain explanation, and how to use the change. If relevant, include background context on the problem itself.]
 
-## 🎬 פרזנטציה:
-* אם רלוונטי, הרץ `/present-pr <n>` כדי להכין פרזנטציה ויזואלית.
+## 🎬 Presentation:
+* If relevant, run `/present-pr <n>` to generate a visual presentation.
 
-👉 **שלב הבא:**
-* אין — הצינור סגור, מוכן ל-`/i-pick-issue` הבא.
+👉 **Next Step:**
+* None — pipeline closed, ready for the next `/i-pick-issue`.
 ```
 

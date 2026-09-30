@@ -1,6 +1,6 @@
 {
   "name": "issue-to-pr-skills",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 36 supporting skills + 17 reviewer personas.",
   "repository": {
     "type": "git",
@@ -8,7 +8,18 @@
   },
   "homepage": "https://github.com/AI-Degen-69/issue-to-pr-skills",
   "license": "MIT",
-  "keywords": ["claude-code", "agent-skills", "opencode", "codex", "cursor", "ai-agents", "github", "pipeline", "tdd", "code-review"],
+  "keywords": [
+    "claude-code",
+    "agent-skills",
+    "opencode",
+    "codex",
+    "cursor",
+    "ai-agents",
+    "github",
+    "pipeline",
+    "tdd",
+    "code-review"
+  ],
   "type": "module",
   "scripts": {
     "dev": "node server.js",
@@ -18,10 +29,15 @@
     "validate": "node scripts/validate.js",
     "validate:skills": "node scripts/validate.js skills",
     "validate:links": "node scripts/validate-links.js",
-    "validate:mirror": "node scripts/verify-mirror.js && node scripts/sync-from-canonical.js --check",
+    "version:status": "node scripts/version-sync.js check",
+    "version:check": "node scripts/version-sync.js check",
+    "version:bump": "node scripts/version-sync.js bump",
+    "sync:site": "node scripts/version-sync.js sync",
+    "validate:mirror": "node scripts/verify-mirror.js",
     "sync": "node scripts/sync-from-canonical.js",
+    "sync:check": "node scripts/sync-from-canonical.js --check",
     "test": "node --test scripts/**/*.test.js",
-    "check": "npm run validate && npm run validate:mirror",
+    "check": "npm run validate && npm run validate:mirror && npm run version:check && npm run sync:check || echo 'note: sync:check flags the 10 localized stations as drifted by design (see AGENTS.md)'",
     "prepublishOnly": "npm run check"
   },
   "engines": {

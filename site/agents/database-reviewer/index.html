@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Database Reviewer Agent — Issue-to-PR Skills</title>
+<title>Database Reviewer Agent: Issue-to-PR Skills</title>
 <meta name="description" content="PostgreSQL and database specialist for query optimization, schema design, migrations, indexing, and Row Level Security (RLS)."/>
 <meta name="theme-color" content="#020617"/>
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
@@ -79,7 +79,7 @@
 
   <!-- SECTION 2: WHAT IT IS & TOOLING -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">01 — What it is</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">01 · What it is</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Guardian of data integrity, indexing, and transactional scale</h2>
     <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
       The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">database-reviewer</code> incorporates battle-tested Postgres patterns (including Supabase best practices) to ensure queries execute in milliseconds and migrations do not cause table locks or service downtime.
@@ -119,7 +119,7 @@
 
   <!-- SECTION 3: PIPELINE PLACEMENT -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">02 — Lifecycle placement</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">02 · Lifecycle placement</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Active during Station IV when data schemas change</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Whenever the diff contains changes to SQL migration directories, database schemas, or ORM models, Station IV triggers this persona before anything can be merged.
@@ -173,7 +173,7 @@
 
   <!-- SECTION 4: CHECKLIST -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">03 — Review checklist</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">03 · Review checklist</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 4-tier Database quality checklist</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Sourced directly from <code class="text-white font-mono text-xs">agents/database-reviewer.md</code>, focused on eliminating data corruption, slow queries, and locking traps.
@@ -182,7 +182,7 @@
     <div class="mt-6 grid md:grid-cols-2 gap-4">
       <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
-          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — Performance & Security Traps
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL: Performance & Security Traps
         </div>
         <p class="mt-1 text-xs text-red-200/70">Flaws that cause immediate production database lockouts or data breaches.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -195,7 +195,7 @@
 
       <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
-          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Query Architecture & Schema Hygiene
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH: Query Architecture & Schema Hygiene
         </div>
         <p class="mt-1 text-xs text-amber-200/70">Sub-optimal schemas that silently degrade throughput as data volume expands.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -208,7 +208,7 @@
 
       <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
-          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Concurrency & Pooling
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM: Concurrency & Pooling
         </div>
         <p class="mt-1 text-xs text-cyan-200/70">Connection exhaustion and deadlocking risks.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -220,7 +220,7 @@
 
       <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
-          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Naming & Migration Reversibility
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW: Naming & Migration Reversibility
         </div>
         <p class="mt-1 text-xs text-slate-300/70">Operational conventions and documentation.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -233,7 +233,7 @@
 
   <!-- SECTION 5: DECISION FLOW -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">04 — Decision process</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">04 · Decision process</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">How database-reviewer evaluates migration pull requests</h2>
     <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
       <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
@@ -281,7 +281,7 @@
 
   <!-- SECTION 6: CONCRETE CASES -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">05 — When it runs</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">05 · When it runs</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where database-reviewer engages</h2>
     <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
@@ -315,7 +315,7 @@
 
   <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">06 — Output format</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">06 · Output format</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured database finding & SQL remediation</h2>
 
     <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
@@ -357,7 +357,7 @@
 
       <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="font-mono text-red-400 font-semibold">
-          Verdict: BLOCK — Add missing index to prevent sequential scans on delete.
+          Verdict: BLOCK, Add missing index to prevent sequential scans on delete.
         </div>
         <div class="text-white/50">
           * Fast database access safeguards user responsiveness.
@@ -368,7 +368,7 @@
 
   <!-- SECTION 8: WHAT IT DOES NOT DO -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">07 — Strict boundaries</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">07 · Strict boundaries</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">What database-reviewer does NOT do</h2>
     <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
@@ -396,7 +396,7 @@
 
   <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
-    <div class="text-xs uppercase tracking-[.14em] text-amber-300">08 — The Reviewer Panel</div>
+    <div class="text-xs uppercase tracking-[.14em] text-amber-300">08 · The Reviewer Panel</div>
     <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
       <div>
         <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
@@ -411,7 +411,7 @@
         </div>
         <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
         <div class="text-xs text-white/50">General</div>
-        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality: would a senior engineer approve?</div>
       </a>
       <a href="../security-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
         <div class="h-8 w-8 rounded-xl bg-rose-500/15 border border-rose-400/40 text-rose-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(244,63,94,0.25)]" title="Security">
@@ -419,7 +419,7 @@
         </div>
         <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">security-reviewer</div>
         <div class="text-xs text-white/50">Security</div>
-        <div class="mt-1 text-sm text-white/60 leading-5">Looks for auth, secrets, injection — OWASP.</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Looks for auth, secrets, and injection (OWASP).</div>
       </a>
       <a href="../typescript-reviewer/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
         <div class="h-8 w-8 rounded-xl bg-[#3178C6]/20 border border-[#3178C6]/40 text-[#60A5FA] grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(49,120,198,0.25)]" title="TypeScript">

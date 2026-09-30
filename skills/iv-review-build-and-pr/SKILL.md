@@ -44,9 +44,9 @@ Use OCR only for fixed work (file pick + rules). The thinking stays with you. No
 **Prerequisite:** the `ocr` CLI must be on PATH — `ocr --version`. If missing: `npm install -g @alibaba-group/open-code-review`, then retry once. `--format json` requires v1.9.0+ (verified locally: v1.12.10).
 
 ### Step 1B: Dynamic Reviewer Discovery & Multi-Axis Review (uses OCR output as input)
-Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no file left out, line numbers from OCR win on conflicts). Inspect the diff (`git diff --name-only origin/<base>...HEAD`) and discover matching specialized reviewers from the project's agent repository (`.agents/agents/`, `~/.agents/agents/`, or builtins):
+Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no file left out, line numbers from OCR win on conflicts). Inspect the diff (`git diff --name-only origin/<base>...HEAD`) and discover matching specialized reviewers from this repo's `agents/` directory or builtins:
 
-**Reviewer honesty rule:** a reviewer persona that is not found on disk is skipped — record the skip and the reason in the report. Never invent or simulate a missing reviewer (אין להמציא).
+**Reviewer honesty rule:** a reviewer persona that is not found on disk is skipped — record the skip and the reason in the report. Never invent or simulate a missing reviewer.
 
 1. **General Code Quality (`code-review-and-quality`):**
    - Check diff clarity, clean naming, absence of dead code, and adherence to project patterns.
@@ -67,7 +67,7 @@ Feed the OCR file list + Rule Groups + OCR finds into each reviewer below (no fi
    - Verify that test assertions test real domain behavior and edge cases, not hollow mocks.
    - Map each changed behavior to the test that covers it; rate uncovered paths by impact (critical / important / nice-to-have). (Absorbed from ECC `pr-test-analyzer`.)
 6. **Docs Drift (`doc-updater`, diff-triggered):**
-   - Deploy when the diff touches `*.md` files, docstrings, or README/docs adjacent to changed behavior. Verify that documentation touched by the diff still matches the code — no stale examples, no outdated API references. Persona from `~/.agents/agents/`; not found on disk → skip and record the skip (אין להמציא).
+   - Deploy when the diff touches `*.md` files, docstrings, or README/docs adjacent to changed behavior. Verify that documentation touched by the diff still matches the code — no stale examples, no outdated API references. Persona from this repo's `agents/` directory; not found on disk → skip and record the skip.
 
 ### Step 1C: Spec Axis — Diff vs Issue & Plan (from Matt Pocock's two-axis review)
 Before applying fixes, run the Spec axis in full:
@@ -93,8 +93,8 @@ Before applying fixes, run the Spec axis in full:
 
 1. **For Frontend / Web / UI Changes — re-run the Step 0 Browser Gate (fast-first) on the fixed code:** same order, same bar — zero uncaught console errors, zero failed network requests.
 2. **For Backend / API / Logic Changes:**
-   - Run targeted test suites matching modified files (e.g. `pytest tests/test_<module>.py`) to confirm zero regressions in touched modules. Avoid running the full repository test suite locally (>10s); GitHub CI runs the full regression suite on push as the merge gate.
-   - Run `verification-before-completion` to guarantee all acceptance criteria from the issue remain 100% satisfied.
+   - Run targeted test suites matching modified files (e.g. `pytest tests/test_<module>.py`) to confirm zero regressions in touched modules. Avoid running full repository test sweeps locally; GitHub CI runs the full regression suite on push as the merge gate.
+   - If review fixes in Step 2 modified logic, run targeted tests for those modified files. If Step 2 applied no logic changes, Step 0's proof already stands.
 3. **Only when verification is completely green** may the agent proceed to Git push.
 
 ### Step 4: Git Synchronization & Push (`git-workflow-and-versioning`)
@@ -144,30 +144,30 @@ Before applying fixes, run the Spec axis in full:
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
-At the conclusion of Station IV, you MUST report to the user in clean, everyday Hebrew using this exact structured format. Output rules: what's-changed only — what the review changed in the product, grouped by tag. Never mention commits, hashes, test commands, test counts, skill names, or file paths. The branch stays as the work ID. A reviewer that came back clean is not listed at all — only reviewers whose findings changed something appear, with plain-language fixes ordered easy → hard.
+At the conclusion of Station IV, you MUST report to the user in clean, everyday English using this exact structured format. Output rules: what's-changed only — what the review changed in the product, grouped by tag. Never mention commits, hashes, test commands, test counts, skill names, or file paths. The branch stays as the work ID. A reviewer that came back clean is not listed at all — only reviewers whose findings changed something appear, with plain-language fixes ordered easy → hard.
 
 ```markdown
-# 🚢 IV - סקירת קוד ויצירת PR
+# 🚢 IV - Code Review & PR Creation
 
-Branch: `[שם הענף שנשלח]`
-**קישור ישיר ל-Pull Request:** [לינק ישיר ל-PR ב-GitHub]
-**סטטוס CodeRabbit** *(שורה אחת כנה):*
-  - ✅ `CodeRabbit אישר שהסקירה התחילה` — ראינו את תגובת הבוט ("Review triggered")
-  - ⏳ `המכסה מלאה — הסקירה תתחיל בעוד N דקות` — לפי תגובת הבוט, עם קישור
-  - ❓ `נשלחה בקשת הפעלה אבל לא התקבל אישור תוך 60 שניות` — לא יודעים אם הסקירה התחילה
-  - ❗ `תגובה אחרת של הבוט` — מצוטטת כמות שהיא, עם קישור
-* **קישורים לתגובות:** [חובה אם הסטטוס אינו ✅: קישור ישיר לתגובת הטריגר ולתגובת הבוט]
+Branch: `[branch_name_pushed]`
+**Direct Pull Request Link:** [direct_github_pr_url]
+**CodeRabbit Status** *(one honest line):*
+  - ✅ `CodeRabbit confirmed review started` — saw the bot's response ("Review triggered")
+  - ⏳ `Rate limit reached — review not started, quota available again in N minutes` — per bot response, with link
+  - ❓ `Trigger sent but no confirmation within 60s` — unknown if review started
+  - ❗ `Other bot response` — quoted verbatim, with link
+* **Comment Links:** [mandatory if status is not ✅: direct link to trigger comment and bot reply]
 
-## 🩹 מה תוקן בעקבות הסקירה?
-* **[מיקום מוצרי]** — [מה נמצא ומה עובד עכשיו, בשפה פשוטה — רק קבוצות עם תוכן]
+## 🩹 What Was Fixed During Review?
+* **[product location]** — [what was found and what works now, in plain language — only groups with content]
 
-## ➕ מה חדש? / ✏️ מה שונה?
-* [רק אם הסקירה הוסיפה או שינתה משהו מעבר לתיקונים — אחרת הקבוצה לא מופיעה]
+## ➕ What's New? / ✏️ What's Changed?
+* [only if the review added or changed something beyond fixes — otherwise omit section]
 
-## 🧠 סיכום מההתחלה עד כאן:
-[מהמשתמש ביקש, מה תוכנן, מה נבנה ומה נשלח ל-PR — במילים פשוטות, בלי מושגי קוד.]
+## 🧠 End-to-End Summary:
+[What was requested, what was planned, what was built, and what was shipped to the PR — in plain everyday language, no dense jargon.]
 
-👉 **שלב הבא:** `/v-babysit-pr-and-merge` יושב על ה-PR ומחכה לתגובות, מתקן, וממזג.
+👉 **Next Step:** `/v-babysit-pr-and-merge` tracks the PR, resolves review comments, and merges.
 ```

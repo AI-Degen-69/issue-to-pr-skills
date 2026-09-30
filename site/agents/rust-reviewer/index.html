@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Rust Reviewer Agent — Issue-to-PR Skills</title>
+<title>Rust Reviewer Agent: Issue-to-PR Skills</title>
 <meta name="description" content="Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Mandatory for all Rust code changes."/>
 <meta name="theme-color" content="#020617"/>
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
@@ -79,7 +79,7 @@
 
   <!-- SECTION 2: WHAT IT IS & TOOLING -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">01 — What it is</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">01 · What it is</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Rigorous memory safety, lifetime, and unsafe auditor</h2>
     <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
       The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">rust-reviewer</code> holds Rust PRs to the highest standard of idiomatic engineering. It flags unprincipled `.unwrap()` in production paths, requires explicit <code class="font-mono text-xs text-orange-300">// SAFETY:</code> comments for every unsafe block, catches blocking I/O inside asynchronous Tokio tasks, and eliminates unnecessary heap allocations.
@@ -118,7 +118,7 @@
 
   <!-- SECTION 3: PIPELINE PLACEMENT -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">02 — Lifecycle placement</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">02 · Lifecycle placement</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">The gatekeeper before Rust code is merged into main</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Dispatched in Station IV as a specialized language reviewer. Any unhandled panic, unsafe without invariant documentation, or concurrency hazard blocks shipping.
@@ -167,7 +167,7 @@
 
   <!-- SECTION 4: REVIEW PRIORITIES -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">03 — Inspection checklist</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">03 · Inspection checklist</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured priority review matrix</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Sourced directly from <code class="text-white font-mono text-xs">agents/rust-reviewer.md</code>, issues are strictly triaged into blocking vs advisory tiers.
@@ -175,7 +175,7 @@
 
     <div class="mt-6 grid md:grid-cols-3 gap-4">
       <div class="rounded-2xl border border-rose-500/30 bg-rose-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL — Safety & Errors</div>
+        <div class="text-xs font-bold font-mono uppercase text-rose-400">CRITICAL: Safety & Errors</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Unchecked unwrap():</strong> Raw <code class="font-mono text-rose-200">.unwrap()</code> or <code class="font-mono text-rose-200">.expect()</code> in production paths.</span></li>
           <li class="flex items-start gap-2"><span class="text-rose-400 font-bold">✕</span> <span><strong>Unsafe without comment:</strong> Missing <code class="font-mono text-rose-200">// SAFETY:</code> documenting safety invariants.</span></li>
@@ -185,7 +185,7 @@
       </div>
 
       <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH — Ownership & Async</div>
+        <div class="text-xs font-bold font-mono uppercase text-amber-300">HIGH: Ownership & Async</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Unnecessary cloning:</strong> Calling <code class="font-mono text-amber-200">.clone()</code> solely to appease borrow checker without understanding.</span></li>
           <li class="flex items-start gap-2"><span class="text-amber-400 font-bold">!</span> <span><strong>Blocking in async:</strong> Using <code class="font-mono text-amber-200">std::thread::sleep</code> or blocking files in Tokio contexts.</span></li>
@@ -195,7 +195,7 @@
       </div>
 
       <div class="rounded-2xl border border-blue-500/30 bg-blue-950/15 p-5">
-        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM — Efficiency & Idioms</div>
+        <div class="text-xs font-bold font-mono uppercase text-blue-300">MEDIUM: Efficiency & Idioms</div>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
           <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>String vs &str:</strong> Taking owned <code class="font-mono text-blue-200">String</code> when borrowed <code class="font-mono text-blue-200">&str</code> suffices.</span></li>
           <li class="flex items-start gap-2"><span class="text-blue-400 font-bold">i</span> <span><strong>Missing capacity:</strong> Missing <code class="font-mono text-blue-200">Vec::with_capacity(n)</code> when size is known.</span></li>
@@ -208,7 +208,7 @@
 
   <!-- SECTION 5: APPROVAL CRITERIA -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">04 — Decision Framework</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">04 · Decision Framework</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Clear verdicts based on issue severity</h2>
     <div class="mt-6 grid sm:grid-cols-3 gap-4">
       <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5">
@@ -237,7 +237,7 @@
 
   <!-- SECTION 6: WHAT IT DOES NOT DO -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">05 — Strict boundaries</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">05 · Strict boundaries</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">What rust-reviewer does NOT do</h2>
     <div class="mt-6 grid sm:grid-cols-3 gap-4 text-xs leading-5">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
@@ -257,7 +257,7 @@
 
   <!-- SECTION 7: CROSS-LINKS -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
-    <div class="text-xs uppercase tracking-[.14em] text-orange-300">06 — Related Personas</div>
+    <div class="text-xs uppercase tracking-[.14em] text-orange-300">06 · Related Personas</div>
     <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
       <div>
         <h2 class="text-[26px] font-bold tracking-tight">Explore other helper and reviewer personas</h2>

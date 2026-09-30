@@ -67,7 +67,7 @@ Only after the operator selected an issue (step 4) AND an execution mode (step 1
 ### Step 2: Station II — Plan (`ii-plan-issue <number>`)
 
 - Hand off to `ii-plan-issue` to perform scope right-sizing (Trivial/Small/Standard/Large), auto-detect stack, lock `CONSTRAINTS.md`, specify interfaces, and write `tasks/plan.md`.
-- Report plan summary in plain Hebrew to the user.
+- Report plan summary in plain English to the user.
 
 ### Step 3: Station III — Build (`iii-build-plan auto`)
 
@@ -93,40 +93,40 @@ Only after the operator selected an issue (step 4) AND an execution mode (step 1
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
-### במצב Discovery (ללא ארגומנט):
+### In Discovery Mode (no arguments):
 
 ```markdown
-# 🗺️ I - מיפוי ובחירת משימה (Backlog):
+# 🗺️ I - Task Mapping & Backlog Selection:
 
-## 📋 חלוקת ה-Issues הפתוחים לפי תחומים:
-* **[תחום / קבוצה 1]:**
-  - [#<id> - <כותרת>](<link>) `[labels]` — <תקציר מהות המשימה במשפט>
-* **[תחום / קבוצה 2]:**
-  - [#<id> - <כותרת>](<link>) `[labels]` — <תקציר מהות המשימה במשפט>
+## 📋 Open Issues by Domain:
+* **[Domain / Group 1]:**
+  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
+* **[Domain / Group 2]:**
+  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
 
-## 🎯 סדר עבודה מומלץ (Dependencies & Impact):
-1. **#<id>** — [נימוק: משימת בסיס/תשתית שחוסמת משימות אחרות]
-2. **#<id>** — [נימוק: משימת המשך ישירה]
-3. **#<id>** — [נימוק: עצמאית ומשנית]
+## 🎯 Recommended Execution Order (Dependencies & Impact):
+1. **#<id>** — [Rationale: foundational/infrastructure task blocking others]
+2. **#<id>** — [Rationale: direct follow-up task]
+3. **#<id>** — [Rationale: independent or secondary]
 
 ---
 
-## 📊 המשימה הבאה שנבחרה להתחלה:
-* **Issue מוביל:** [#<id> - <כותרת>](<link>)
-* **סיבת הבחירה:** מסירה חסימות ומאפשרת התקדמות חלקה לשאר ה-Backlog.
+## 📊 Selected Next Issue to Start:
+* **Lead Issue:** [#<id> - <title>](<link>)
+* **Selection Reason:** Removes blockers and enables smooth progress for the rest of the backlog.
 
-## 🧠 סיכום:
-בשורות בודדות בעברית פשוטה: מה תמונת המצב הכוללת של המשימות הפתוחות, ולמה סדר הביצוע הזה יחסוך שבירת קוד ובנייה כפולה.
+## 🧠 Summary:
+In a few plain English sentences: the overall picture of open issues, and why this execution order avoids breakage and rework.
 
-👉 **שלב הבא:** בחר את ה-Issue להתחלה, ואז בחר מצב ביצוע:
-* **🚶 מצב צעד-צעד (מומלץ):** תחנה אחת בכל פעם — עצירה ואישור שלך בין כל תחנה.
-* **🚀 מצב תזמור מלא:** ריצה רציפה מתכנון (II) ועד מיזוג, ניקוי וסגירה (VI) — עם דיווח בכל תחנה.
+👉 **Next Step:** Select an issue to start with, then choose execution mode:
+* **🚶 Step-by-Step Mode (Recommended):** One station at a time — pauses for your review between stations.
+* **🚀 Full Orchestration Mode:** Continuous execution from planning (II) through build, review, merge, sweep, and closeout (VI) — with updates at each station.
 
-רק לאחר בחירת Issue + מצב נמשך ל-`/ii-plan-issue <id>`.
+Only proceed to `/ii-plan-issue <id>` after issue + mode selection.
 ```
 
-### במצב תזמור (End-to-End Orchestration):
+### In Orchestration Mode (End-to-End Orchestration):
 
-דווח בצורה תמציתית בעברית על כל תחנה שהושלמה בהתאם לחוזה הדיווח שלה, והצג את המצב הנוכחי ואת התחנה הבאה בתור.
+Report concisely in English on each completed station matching its output contract, showing current progress and the next station in line.

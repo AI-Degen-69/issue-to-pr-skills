@@ -5,7 +5,7 @@ const STATIONS_FLOW = [
   {
     id: 'pipeline-triage',
     num: 'Gate',
-    title: 'State Gate — Pipeline Triage',
+    title: 'State Gate: Pipeline Triage',
     desc: 'Pre-flight check before Station #1: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
     startWithLabel: 'Start with',
     startWithCommand: '/pipeline-triage',
@@ -18,7 +18,7 @@ const STATIONS_FLOW = [
   {
     id: 'create-issue',
     num: 'Intake',
-    title: 'Intake Branch — Create Issue',
+    title: 'Intake Branch: Create Issue',
     desc: 'Intake branch when there is nothing to pick in Station #1: turns a raw operator idea into a researched, structured GitHub issue labeled ready-for-agent.',
     startWithLabel: 'Start with',
     startWithCommand: '/create-issue <idea>',
@@ -31,7 +31,7 @@ const STATIONS_FLOW = [
   {
     id: 'i-pick-issue',
     num: '#1',
-    title: 'Station #1 — Claim & Pick',
+    title: 'Station #1: Claim & Pick',
     desc: 'Maps the open-issue backlog grouped by domain, recommends execution order, and highlights one pick. Locks session scope before opening files, routes into Station #2.',
     startWithLabel: 'Start with',
     startWithCommand: '/i-pick-issue',
@@ -45,7 +45,7 @@ const STATIONS_FLOW = [
   {
     id: 'ii-plan-issue',
     num: '#2',
-    title: 'Station #2 — Plan & Constraints',
+    title: 'Station #2: Plan & Constraints',
     desc: 'Right-sizes the issue, routes domain specialists, specifies interfaces, locks CONSTRAINTS.md, and writes tasks/plan.md as atomic vertical slices before any code.',
     startWithLabel: 'Start with',
     startWithCommand: '/ii-plan-issue',
@@ -76,7 +76,7 @@ const STATIONS_FLOW = [
   {
     id: 'iii-build-plan',
     num: '#3',
-    title: 'Station #3 — Build with TDD',
+    title: 'Station #3: Build with TDD',
     desc: 'Executes tasks/plan.md one task at a time with domain-routed specialists, TDD, docs grounding, atomic local commits, and code simplification. Never pushes.',
     startWithLabel: 'Start with',
     startWithCommand: '/iii-build-plan',
@@ -97,7 +97,7 @@ const STATIONS_FLOW = [
       { id: 'tdd-guide', name: 'tdd-guide', title: 'The tdd-guide Persona', desc: 'Enforces write-tests-first discipline and ~80%+ test coverage.', gradient: 'from-green-500 to-emerald-700', icon: 'shield', kind: 'agent' },
       { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Resolves generic syntax, compiler, and import errors with minimal diffs.', gradient: 'from-amber-500 to-amber-800', icon: 'shield', kind: 'agent' },
       { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Resolves React-specific compilation and JSX/build failures.', gradient: 'from-cyan-400 to-cyan-700', icon: 'shield', kind: 'agent' },
-      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Resolves Go build and compiler errors.', gradient: 'from-sky-600 to-slate-800', icon: 'shield', kind: 'agent' },
+      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Resolves Go build and compiler errors.', gradient: 'from-sky-600 to-zinc-800', icon: 'shield', kind: 'agent' },
       { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Resolves Rust borrow checker, lifetime, and compilation errors.', gradient: 'from-orange-600 to-stone-800', icon: 'shield', kind: 'agent' }
     ]
   },
@@ -105,7 +105,7 @@ const STATIONS_FLOW = [
   {
     id: 'iiib-iterate-after-build',
     num: '#3b',
-    title: 'Station #3b — Iterate Human Feedback',
+    title: 'Station #3b: Iterate Human Feedback',
     desc: 'Fast fix loop for operator corrections on a fresh build. Classifies comments into specialist lanes, applies minimal fixes, simplifies, and verifies until clean.',
     startWithLabel: 'Start with',
     startWithCommand: '/iiib-iterate-after-build',
@@ -128,7 +128,7 @@ const STATIONS_FLOW = [
   {
     id: 'iv-review-build-and-pr',
     num: '#4',
-    title: 'Station #4 — Review, Ship & PR',
+    title: 'Station #4: Review, Ship & PR',
     desc: 'Proof-before-review gate (playwright-cli browser pass or tests), OCR delegation scan, specialist reviewers, then push, PR, and the CodeRabbit trigger with ack classification.',
     startWithLabel: 'Start with',
     startWithCommand: '/iv-review-build-and-pr',
@@ -138,7 +138,7 @@ const STATIONS_FLOW = [
       { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Step 0 Proof Gate: live browser inspection for performance profiling and traces only.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
       { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Step 1B: general code quality, naming, lack of dead code, and pattern adherence.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
       { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Step 1B: audits inputs, secrets exposure, session boundaries, and supply chain.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
-      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Step 1B: test engineering audit — verifies real domain tests, not hollow mocks.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
+      { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Step 1B: test engineering audit. It verifies real domain tests, not hollow mocks.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
       { id: 'web-design-guidelines', name: 'web-design-guidelines', title: 'The /web-design-guidelines Skill', desc: 'Step 1B: reviews UI for accessibility, WCAG contrast, and ARIA attributes.', gradient: 'from-teal-600 to-cyan-600', icon: 'palette', kind: 'skill' },
       { id: 'api-and-interface-design', name: 'api-and-interface-design', title: 'The /api-and-interface-design Skill', desc: 'Step 1B Advisory: REST contracts and endpoint boundary review when APIs change.', gradient: 'from-indigo-600 to-violet-600', icon: 'layout', kind: 'skill' },
       { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Step 1B Advisory: reviews UI components, state lifecycles, and layout integrity.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
@@ -161,8 +161,8 @@ const STATIONS_FLOW = [
   {
     id: 'v-babysit-pr-and-merge',
     num: '#5',
-    title: 'Station #5 — Babysit PR & Merge',
-    desc: 'Consumes trigger status from Station #4. Sits on PR through one focused CodeRabbit review round (skills: none — gh API + CodeRabbit only), resolves comments, squash-merges on green CI.',
+    title: 'Station #5: Babysit PR & Merge',
+    desc: 'Consumes trigger status from Station #4. Sits on PR through one focused CodeRabbit review round (skills: none, gh API + CodeRabbit only), resolves comments, squash-merges on green CI.',
     startWithLabel: 'Start with',
     startWithCommand: '/v-babysit-pr-and-merge',
     accent: 'from-pink-600 to-rose-600',
@@ -170,7 +170,7 @@ const STATIONS_FLOW = [
       { id: 'code-reviewer', name: 'code-reviewer', title: 'The code-reviewer Persona', desc: 'Full fallback code quality review only when CodeRabbit evidence is unavailable.', gradient: 'from-violet-600 to-purple-700', icon: 'shield', kind: 'agent' },
       { id: 'build-error-resolver', name: 'build-error-resolver', title: 'The build-error-resolver Persona', desc: 'Fixes generic build and compile failures found in CI merge checks.', gradient: 'from-amber-500 to-amber-800', icon: 'shield', kind: 'agent' },
       { id: 'react-build-resolver', name: 'react-build-resolver', title: 'The react-build-resolver Persona', desc: 'Fixes React compilation failures found in CI merge checks.', gradient: 'from-cyan-400 to-cyan-700', icon: 'shield', kind: 'agent' },
-      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go compilation and package failures found in CI merge checks.', gradient: 'from-sky-600 to-slate-800', icon: 'shield', kind: 'agent' },
+      { id: 'go-build-resolver', name: 'go-build-resolver', title: 'The go-build-resolver Persona', desc: 'Fixes Go compilation and package failures found in CI merge checks.', gradient: 'from-sky-600 to-zinc-800', icon: 'shield', kind: 'agent' },
       { id: 'rust-build-resolver', name: 'rust-build-resolver', title: 'The rust-build-resolver Persona', desc: 'Fixes Rust borrow checker and build failures found in CI merge checks.', gradient: 'from-orange-600 to-stone-800', icon: 'shield', kind: 'agent' }
     ]
   },
@@ -178,7 +178,7 @@ const STATIONS_FLOW = [
   {
     id: 'vi-close-pipeline',
     num: '#6',
-    title: 'Station #6 — Close Pipeline',
+    title: 'Station #6: Close Pipeline',
     desc: 'Post-merge closeout: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof, Clean Exit Gate.',
     startWithLabel: 'Start with',
     startWithCommand: '/vi-close-pipeline',
@@ -191,7 +191,7 @@ const STATIONS_FLOW = [
   {
     id: 'present-pr',
     num: 'Ad-hoc',
-    title: 'Ad-hoc Showcase — Present PR',
+    title: 'Ad-hoc Showcase: Present PR',
     desc: 'Ad-hoc visual presentation run on request after Station #6 or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
     startWithLabel: 'Start with',
     startWithCommand: '/present-pr <id>',
@@ -273,7 +273,7 @@ const AGENT_GRADIENTS = {
   'tdd-guide': 'from-green-500 to-emerald-700',
   'build-error-resolver': 'from-amber-500 to-amber-800',
   'react-build-resolver': 'from-cyan-400 to-cyan-700',
-  'go-build-resolver': 'from-sky-600 to-slate-800',
+  'go-build-resolver': 'from-sky-600 to-zinc-800',
   'rust-build-resolver': 'from-orange-600 to-stone-800',
   'doc-updater': 'from-indigo-500 to-violet-700',
   'code-explorer': 'from-slate-500 to-slate-700',
@@ -453,7 +453,7 @@ function renderStationsFlow() {
       const isAgent = skill.kind === 'agent';
       return `
       <div 
-        class="skill-card${isAgent ? ' agent-card-kind' : ''} group flex items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.07] hover:border-violet-500/40 transition cursor-pointer"${isAgent ? ' style="border-color: rgba(245,158,11,.35)"' : ''}
+        class="skill-card${isAgent ? ' agent-card-kind' : ''} group flex items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-xl border border-white/10 bg-white/[.03] hover:bg-white/[.07] hover:border-violet-500/40 transition cursor-pointer"${isAgent ? ' style="border-color: rgba(245,158,11,.35)"' : ''}
         onclick="openSkillModal('${skill.id}', '${station.id}')"
         role="button"
         tabindex="0"
@@ -464,20 +464,20 @@ function renderStationsFlow() {
             ${isAgent ? getPersonaIconSvg(skill.id) : getSkillIconSvg(skill.icon)}
           </div>
           <div class="flex-1 min-w-0">
-            <div class="font-bold text-white text-[15px] sm:text-[16px] leading-snug group-hover:text-violet-200 transition-colors">${HUMAN_TITLES[skill.id] || HUMAN_TITLES[skill.name] || skill.title}</div>
+            <div class="font-bold text-white text-[15px] sm:text-[16px] leading-snug group-hover:text-amber-100 transition-colors">${HUMAN_TITLES[skill.id] || HUMAN_TITLES[skill.name] || skill.title}</div>
             <div class="text-xs sm:text-sm text-white/60 mt-1 line-clamp-2 leading-relaxed">${skill.desc}</div>
           </div>
         </div>
-        <div class="shrink-0">${isAgent ? '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#fcd34d;background:rgba(245,158,11,.15);border:1px solid rgba(251,191,36,.45)">AGENT →</span>' : '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#67e8f9;background:rgba(6,182,212,.12);border:1px solid rgba(34,211,238,.4)">SKILL →</span>'}
+        <div class="shrink-0">${isAgent ? '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md shrink-0" style="color:#fcd34d;background:rgba(245,158,11,.15);border:1px solid rgba(251,191,36,.45)">AGENT →</span>' : '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#67e8f9;background:rgba(6,182,212,.12);border:1px solid rgba(34,211,238,.4)">SKILL →</span>'}
         </div>
       </div>
     `}).join('');
 
     if (!cardsHtml) {
       cardsHtml = `
-        <div class="p-5 rounded-2xl border border-white/10 bg-white/[.02] text-sm text-white/50 font-mono flex items-center gap-2">
+        <div class="p-5 rounded-xl border border-white/10 bg-white/[.02] text-sm text-white/50 font-mono flex items-center gap-2">
           <span>⚡</span>
-          <span>None — internal zero-dependency component kit only (skills: none)</span>
+          <span>None: internal zero-dependency component kit only (skills: none)</span>
         </div>
       `;
     } else if (station.id === 'v-babysit-pr-and-merge' && !query) {
@@ -497,14 +497,14 @@ function renderStationsFlow() {
           <!-- Left Station Info -->
           <div class="lg:col-span-4 lg:sticky lg:top-24 self-start">
             <div class="flex items-center gap-2 mb-2">
-              <span class="font-mono text-xs sm:text-sm font-semibold text-slate-400 tracking-wider">${station.num}</span>
+              <span class="font-mono text-xs sm:text-sm font-semibold text-zinc-400 tracking-wider">${station.num}</span>
               <span class="h-2 w-2 rounded-full bg-gradient-to-r ${station.accent}"></span>
             </div>
             <h2 class="text-2xl sm:text-[26px] font-extrabold text-white tracking-tight leading-snug">${station.title}</h2>
             <p class="text-sm sm:text-[15px] text-white/60 mt-3 leading-relaxed">${station.desc}</p>
             <div class="mt-5 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs sm:text-sm font-mono text-white/80">
               <span class="text-white/50">${station.startWithLabel}</span>
-              <a href="#${station.id}" class="text-violet-300 font-semibold hover:text-violet-200 underline decoration-violet-400/40">${station.startWithCommand}</a>
+              <a href="#${station.id}" class="text-zinc-200 font-semibold hover:text-white underline decoration-zinc-500">${station.startWithCommand}</a>
             </div>
           </div>
 
@@ -520,10 +520,10 @@ function renderStationsFlow() {
 
   if (renderedStationsCount === 0 && query) {
     container.innerHTML = `
-      <div class="rounded-2xl border border-white/10 bg-white/[.04] p-10 text-center my-8">
+      <div class="rounded-xl border border-white/10 bg-white/[.04] p-10 text-center my-8">
         <div class="text-lg font-bold text-white">No skills match “${query}”</div>
-        <p class="text-sm text-white/60 mt-2">Try searching for a different keyword like <span class="text-violet-300">test</span>, <span class="text-violet-300">review</span>, or <span class="text-violet-300">frontend</span>.</p>
-        <button onclick="clearFlowSearch()" class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition">
+        <p class="text-sm text-white/60 mt-2">Try searching for a different keyword like <span class="text-amber-200/70">test</span>, <span class="text-amber-200/70">review</span>, or <span class="text-amber-200/70">frontend</span>.</p>
+        <button onclick="clearFlowSearch()" class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-md bg-zinc-50 text-zinc-950 text-sm font-semibold hover:bg-white transition">
           Clear Search
         </button>
       </div>
@@ -586,7 +586,7 @@ function openSkillModal(skillId, stationId) {
 
   const skillGrp = (window.GROUP && window.GROUP[foundSkill.name]) ? window.GROUP[foundSkill.name] : 'plan';
   const tagCfg = (window.TAG_CONFIG && window.TAG_CONFIG[skillGrp]) ? window.TAG_CONFIG[skillGrp] : null;
-  const tagBadgeHtml = tagCfg ? `<span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${tagCfg.tagClass}">${tagCfg.tag}</span>` : '';
+  const tagBadgeHtml = tagCfg ? `<span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border ${tagCfg.tagClass}">${tagCfg.tag}</span>` : '';
 
   modalContent.innerHTML = `
     <div class="flex items-start justify-between gap-4">
@@ -639,11 +639,18 @@ function openSkillModal(skillId, stationId) {
         href="${foundSkill.kind === 'agent' ? `https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/agents/${foundSkill.name}.md` : `https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${foundSkill.name}`}" 
         target="_blank" 
         rel="noopener noreferrer" 
-        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-bold transition shadow-lg shadow-violet-600/30"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-50 hover:bg-white text-zinc-950 text-xs font-bold transition shadow-sm"
       >
         <span>${foundSkill.kind === 'agent' ? 'View Persona on GitHub' : 'View SKILL.md on GitHub'}</span>
         <span>↗</span>
       </a>
+    </div>
+
+    <!-- Support strip -->
+    <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-3 text-xs text-white/50">
+      <span>Free forever. MIT.</span>
+      <!-- TODO: replace href="#" with Buy Me a Coffee URL -->
+      <a href="#" data-coffee-placeholder="true" title="TODO: add Buy Me a Coffee link" class="text-amber-200/80 hover:text-amber-200 transition">☕ Coffee</a>
     </div>
   `;
 
@@ -689,8 +696,8 @@ function renderTableOfContents() {
   const html = STATIONS_FLOW.map(st => {
     const cleanTitle = st.title
       .replace(/^Station /, '')
-      .replace(/^(State Gate|Intake Branch|Ad-hoc Showcase) — /, '')
-      .replace(' — ', ' ');
+      .replace(/^(State Gate|Intake Branch|Ad-hoc Showcase): /, '')
+      .replace(': ', ' ');
     return `
       <a 
         href="#${st.id}" 
@@ -759,10 +766,10 @@ function setupTocScrollspy() {
     document.querySelectorAll('.toc-item').forEach(item => {
       const target = item.getAttribute('data-target') || (item.getAttribute('href') || '').replace('#', '');
       if (target === currentId) {
-        item.classList.add('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.add('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
         item.classList.remove('text-white/65');
       } else {
-        item.classList.remove('bg-violet-600/20', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+        item.classList.remove('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
         item.classList.add('text-white/65');
       }
     });

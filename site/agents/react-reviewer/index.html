@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>React Reviewer Agent — Issue-to-PR Skills</title>
+<title>React Reviewer Agent: Issue-to-PR Skills</title>
 <meta name="description" content="Expert React and JSX code reviewer specializing in hook correctness, render performance, RSC boundaries, and accessibility."/>
 <meta name="theme-color" content="#020617"/>
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml"/>
@@ -81,7 +81,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 2: WHAT IT IS & TOOLING -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-10">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">01 — What it is</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">01 · What it is</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Dedicated inspector for React lifecycle, hooks, and UI safety</h2>
     <p class="mt-2 max-w-[760px] text-white/70 text-sm leading-6">
       The <code class="px-1.5 py-0.5 rounded bg-white/10 font-mono text-white text-xs">react-reviewer</code> inspects component rendering loops, ensures accessibility compliance, and audits React-specific security flaws like server action leaks or dangerous HTML injection.
@@ -121,7 +121,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 3: PIPELINE PLACEMENT -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">02 — Lifecycle placement</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">02 · Lifecycle placement</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Co-dispatched alongside typescript-reviewer on UI changes</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       When a PR touches <code class="text-white font-mono text-xs">.tsx</code> or <code class="text-white font-mono text-xs">.jsx</code> files, both agents run in parallel: typescript-reviewer validates the types and async logic, while react-reviewer audits the component tree.
@@ -219,7 +219,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 4: CHECKLIST -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">03 — Review checklist</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">03 · Review checklist</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">The 4-tier React checklist</h2>
     <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
       Sourced directly from <code class="text-white font-mono text-xs">agents/react-reviewer.md</code>, focused strictly on React-specific vulnerabilities, performance bottlenecks, and accessibility.
@@ -228,7 +228,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
     <div class="mt-6 grid md:grid-cols-2 gap-4">
       <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-red-400">
-          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL — React Security
+          <span class="h-2 w-2 rounded-full bg-red-400"></span> CRITICAL: React Security
         </div>
         <p class="mt-1 text-xs text-red-200/70">Flaws allowing code execution in client browsers or secret exposure.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -241,7 +241,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
       <div class="rounded-2xl border border-amber-500/30 bg-amber-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-amber-400">
-          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH — Hook Correctness & Lifecycle
+          <span class="h-2 w-2 rounded-full bg-amber-400"></span> HIGH: Hook Correctness & Lifecycle
         </div>
         <p class="mt-1 text-xs text-amber-200/70">Violating React invariants that cause infinite loops, desynchronized state, or memory leaks.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -254,7 +254,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
       <div class="rounded-2xl border border-cyan-500/30 bg-cyan-950/15 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-cyan-400">
-          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM — Render Performance & Boundaries
+          <span class="h-2 w-2 rounded-full bg-cyan-400"></span> MEDIUM: Render Performance & Boundaries
         </div>
         <p class="mt-1 text-xs text-cyan-200/70">Wasted render cycles and jarring layout shifts.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -266,7 +266,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
       <div class="rounded-2xl border border-slate-500/30 bg-slate-900/30 p-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold font-mono uppercase text-slate-300">
-          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW — Accessibility (a11y) & Clean HTML
+          <span class="h-2 w-2 rounded-full bg-slate-400"></span> LOW: Accessibility (a11y) & Clean HTML
         </div>
         <p class="mt-1 text-xs text-slate-300/70">Keyboard navigation and assistive technology compatibility.</p>
         <ul class="mt-3 space-y-2 text-xs text-white/80 leading-5">
@@ -279,7 +279,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 5: DECISION FLOW -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">04 — Decision process</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">04 · Decision process</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured component lifecycle evaluation</h2>
     <ol class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-3">
       <li class="rounded-xl border border-white/10 bg-white/[.04] p-4 flex flex-col justify-between">
@@ -327,7 +327,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 6: CONCRETE CASES -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">05 — When it runs</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">05 · When it runs</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Real-world scenarios where react-reviewer engages</h2>
     <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm leading-6">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-5">
@@ -361,7 +361,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 7: WHAT YOU GET BACK (OUTPUTS) -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">06 — Output format</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">06 · Output format</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">Structured finding format & actionable remediation</h2>
 
     <div class="mt-6 rounded-2xl border border-white/10 bg-black/60 p-5 font-mono text-xs">
@@ -406,7 +406,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
       <div class="mt-4 pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs">
         <div class="font-mono text-cyan-300 font-semibold">
-          Verdict: WARNING — Fix stale closure before merging to production.
+          Verdict: WARNING, Fix stale closure before merging to production.
         </div>
         <div class="text-white/50">
           * Clean components protect UX stability.
@@ -417,7 +417,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 8: WHAT IT DOES NOT DO -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">07 — Strict boundaries</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">07 · Strict boundaries</div>
     <h2 class="mt-2 text-[26px] font-bold tracking-tight">What react-reviewer does NOT do</h2>
     <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs leading-5">
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
@@ -437,7 +437,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
       <div class="rounded-2xl border border-white/10 bg-white/[.04] p-4">
         <div class="font-semibold text-white text-sm">Visual graphic design</div>
         <p class="mt-2 text-white/60">
-          Subjective aesthetic decisions (color palettes, font choices) are outside scope — focus remains strictly on accessibility, rendering bugs, and security.
+          Subjective aesthetic decisions (color palettes, font choices) are outside scope. Focus stays on accessibility, rendering bugs, and security.
         </p>
       </div>
     </div>
@@ -445,7 +445,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
 
   <!-- SECTION 8B: EXPLORE OTHER REVIEWERS -->
   <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
-    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">08 — The Reviewer Panel</div>
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">08 · The Reviewer Panel</div>
     <div class="flex flex-wrap items-end justify-between gap-4 mt-2">
       <div>
         <h2 class="text-[26px] font-bold tracking-tight">Explore other specialist reviewers</h2>
@@ -476,7 +476,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
         </div>
         <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">code-reviewer</div>
         <div class="text-xs text-white/50">General</div>
-        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality — would a senior engineer approve?</div>
+        <div class="mt-1 text-sm text-white/60 leading-5">Checks overall quality: would a senior engineer approve?</div>
       </a>
       <a href="../silent-failure-hunter/" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
         <div class="h-8 w-8 rounded-xl bg-red-500/15 border border-red-400/40 text-red-300 grid place-items-center transition-transform group-hover:scale-105 shrink-0 shadow-[0_0_12px_rgba(239,68,68,0.25)]" title="Reliability">

@@ -79,7 +79,7 @@ conversation.
      again with the mention spelled exactly `@coderabbitai` in lowercase (a
      capitalized mention was observed to return no plan at all), and say in the
      closeout that a retry was sent.
-8. **Closeout in chat:** You MUST report to the user in clean, everyday Hebrew following the Output Contract below. Never make the user wait before creation.
+8. **Closeout in chat:** You MUST report to the user in clean, everyday English following the Output Contract below. Never make the user wait before creation.
 
 ## Intake template
 
@@ -111,31 +111,31 @@ last item is a runnable verification command.
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
-At the conclusion of this intake, you MUST report to the user in clean, everyday Hebrew using this exact structured format:
+At the conclusion of this intake, you MUST report to the user in clean, everyday English using this exact structured format:
 
 ```markdown
-# 📝 סיכום יצירת Issue:
+# 📝 Issue Creation Summary:
 
-## 🔍 מה נמצא בקוד:
-* **קבצים ומיקומים:**
-  - `[נתיב_קובץ:שורה]` — [מה יש שם ולמה זה קשור למשימה]
-* **מה כלול ומה לא (Scope):** [שורה-שתיים: מה המשימה מכסה, ומה מפורש מחוץ לתחום]
-* **תנאי קבלה:**
-  - [קריטריון קבלה מרכזי]
-  - פקודת אימות: `[בדיקה שחייבת לעבור]`
+## 🔍 Codebase Findings:
+* **Files & Locations:**
+  - `[file_path:line]` — [what is there and how it relates to the task]
+* **Scope (In/Out):** [1-2 lines: what the task covers, and what is explicitly out of scope]
+* **Acceptance Criteria:**
+  - [core acceptance criterion]
+  - Verification command: `[test/check that must pass]`
 
 ---
 
-## 📊 פרטי ה-Issue:
-* **מספר וקישור:** [#<id> - <כותרת ה-Issue>](<קישור ישיר ל-Issue ב-GitHub>)
-* **סאב-אישיוז:** [רק אם הרעיון פוצל — פירוט ה-siblings ומספריהם; אם לא פוצל, שורה זו לא מופיעה כלל]
+## 📊 Issue Details:
+* **Number & Link:** [#<id> - <issue_title>](<direct_github_issue_url>)
+* **Sub-Issues:** [only if the idea was split — list of siblings and their numbers; omit line if not split]
 
-## 🧠 סיכום במילים פשוטות:
-[2-3 משפטים בשפה שכל אדם מבין, בלי מונחי קוד: מה היה הרעיון או הבעיה, מה ה-Issue מבקש לעשות בעבודה, ואיך יידעו שהעבודה הושלמה. אין מילוי, אין באזוורדים.]
+## 🧠 Plain Language Summary:
+[2-3 sentences in clear language anyone understands, without dense jargon: what the idea or problem was, what the issue proposes to do, and how completion is verified. No fluff, no buzzwords.]
 
-## 👉 מה עכשיו:
-1. הרץ `/i-pick-issue` כדי למפות את כל ה-Backlog ולבחור על איזה Issue עובדים.
-2. אם יש הצעה לשיפור ה-Issue שנכתב (הבהרה, תיחום, תנאי קבלה חסר) — הצע אותה כאן בשורה-שתיים; אם אין, כתוב "אין הצעות" — אין להמציא.
+## 👉 Next Steps:
+1. Run `/i-pick-issue` to map the backlog and select which issue to work on.
+2. If there are suggested improvements to the drafted issue (clarification, tighter scope, missing acceptance criteria) — propose them here in 1-2 lines; if none, write "None" — do not fabricate suggestions.
 ```

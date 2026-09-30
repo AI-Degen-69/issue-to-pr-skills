@@ -29,7 +29,8 @@ Split the operator message into separate items (one bug or change each). For eve
 - **Bug / error / regression** (crash, console error, worked before and broke): `diagnosing-bugs` for the full diagnosis loop (feedback loop, minimise, hypothesise, instrument, fix, regression test), then `debugging-and-error-recovery` for reproduce, localize, fix, and guard.
 - **Dead button** (click does nothing, no error): follow the dead-button checklist in [references/click-path-audit.md](references/click-path-audit.md) — trace the handler call by call and find the state write that undoes an earlier one.
 - **UI / styling / mobile change** (works but looks wrong): `frontend-ui-engineering` (plus `tailwind-design-system` when design tokens apply).
-- **Slow**: `performance-optimization` — profile before optimizing.- **Auth / secrets / untrusted input**: `security-and-hardening`.
+- **Slow**: `performance-optimization` — profile before optimizing.
+- **Auth / secrets / untrusted input**: `security-and-hardening`.
 - **Unclear**: treat as a bug, ask exactly one focused question, never guess.
 
 ## 3. Per-Item Fix Loop
@@ -41,25 +42,25 @@ For every item, in order:
 3. **Apply the minimal fix** with the routed skill. One item, one fix.
 4. **Simplify** with `code-simplification`: no dead code, no extra abstractions.
 5. **Commit locally**: `<type>(<scope>): <summary> (#<issue>)`. Never push, never open a PR.
-6. **Verify**: browser check for UI via `browser-testing-with-devtools` (live DOM, console, network — zero uncaught errors), targeted tests for logic via `test-driven-development`, and `verification-before-completion` against the operator's words. Regression tests go at the seam that actually reproduces the bug (unit, integration, or e2e — whatever reaches the real pattern at the call site); when no correct seam exists, that itself is an architectural finding — record it in the commit and surface it in the report.
+6. **Verify**: browser check for UI via `browser-testing-with-devtools` (live DOM, console, network — zero uncaught errors), and targeted test runner for logic via `test-driven-development` covering modified files. Do NOT run full test suites or redundant VBC sweeps per fix; the final pre-push gate in Station IV validates the overall state. Regression tests go at the seam that actually reproduces the bug (unit, integration, or e2e — whatever reaches the real pattern at the call site); when no correct seam exists, that itself is an architectural finding — record it in the commit and surface it in the report.
 7. **Next item.** A red verification stops the loop until green.
 
 ## 4. Guardrails
 
 Respect `CONSTRAINTS.md` (no skipped tests, no new external dependencies without approval, zero regressions in touched modules). Never touch code outside the reported items. Never push to origin — `iv-review-build-and-pr` is the only station that pushes.
 
-## Hebrew Chat Output Contract
+## Chat Output Contract
 
-Report in clean, everyday Hebrew. Write for the customer who ordered the product, never for a developer. What's-changed only: one line per fixed item — product location + what was wrong in plain words, then what works now. No skill names, no commits, no tests, no file paths. Never use the word console. Say "checked in the browser, no errors" instead.
+Report in clean, everyday English. Write for the customer who ordered the product, never for a developer. What's-changed only: one line per fixed item — product location + what was wrong in plain words, then what works now. No skill names, no commits, no tests, no file paths. Never use the word console. Say "checked in the browser, no errors" instead.
 
 ```markdown
-# 🔁 IIIB - תיקונים אחרי בנייה (סיכום איטרציה):
+# 🔁 IIIB - Post-Build Iteration (Iteration Summary):
 
-## 🩹 מה תוקן?
-* **[מיקום מוצרי]** — [לפני: מה לא עבד לאדם. עכשיו: מה עובד]
+## 🩹 What's Fixed?
+* **[product location]** — [Before: what was broken. Now: what works]
 
-## ➕ מה חדש? / ✏️ מה שונה?
-* [רק אם תיקון הוסיף או שינה משהו מעבר לתיקון עצמו — אחרת הקבוצה לא מופיעה]
+## ➕ What's New? / ✏️ What's Changed?
+* [only if a fix added or changed something beyond the fix itself — otherwise omit section]
 
-👉 **שלב הבא:** `/iv-review-build-and-pr` — הכל עובד, מוכן לסקירה ושליחה.
+👉 **Next Step:** `/iv-review-build-and-pr` — everything works, ready for review and shipping.
 ```

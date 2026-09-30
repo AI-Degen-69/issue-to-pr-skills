@@ -33,14 +33,14 @@ green CI. Zero human in the loop.
    (with reasoned reply + thread resolve) — exactly one focused round,
    one batch commit + push.
 4. Merges (squash) on green CI, resets local checkout to base. Reports
-   triage + what was fixed (product location per item) in Hebrew — see the contracts in `SKILL.md`.
+   triage + what was fixed (product location per item) in English — see the contracts in `SKILL.md`.
    Never claims a clean pass when the review never finished.
 
 ## Files in this folder
 
 | Path | What it is |
 |---|---|
-| `SKILL.md` | Agent contract (countdown, triage, merge rules, Hebrew output contracts). |
+| `SKILL.md` | Agent contract (countdown, triage, merge rules, English output contracts). |
 | `references/review-loop.md` | Step 0 ship handshake + Step 1 review trigger and countdown. |
 | `references/triage-and-apply.md` | Step 2 extraction/triage, Step 2B fallback review, Step 3 late rejections, Step 4 code application and thread replies. |
 | `references/merge-and-reset.md` | Step 5 CI gate and merge, Step 5b post-merge local reset. |

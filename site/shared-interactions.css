@@ -79,16 +79,16 @@ main .rounded-xl.border:not(.agent-card) {
 main .rounded-2xl.border:not(.agent-card):hover,
 main .rounded-xl.border:not(.agent-card):hover {
   transform: translateY(-3px) scale(1.008);
-  box-shadow: 0 16px 36px -10px rgba(124, 58, 237, 0.28),
-              0 0 0 1px rgba(168, 85, 247, 0.35);
-  border-color: rgba(168, 85, 247, 0.4) !important;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55),
+              0 0 0 1px rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.22) !important;
 }
 
 .card:active,
 .interactive-card:active,
 [data-interactive="true"]:active {
   transform: translateY(-1px) scale(0.992) !important;
-  box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.2) !important;
+  box-shadow: 0 8px 18px -6px rgba(0, 0, 0, 0.5) !important;
   transition-duration: 0.08s;
 }
 
@@ -115,7 +115,7 @@ a.btn:hover,
 .rounded-full[class*="bg-white"]:hover,
 .rounded-full[class*="bg-violet"]:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px -4px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.5);
 }
 
 button:not([disabled]):active,
@@ -136,7 +136,7 @@ a.btn:active,
 .click-ripple {
   position: absolute;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(236, 72, 153, 0.15) 60%, transparent 80%);
+  background: radial-gradient(circle, rgba(253, 230, 138, 0.35) 0%, rgba(255, 255, 255, 0.12) 60%, transparent 80%);
   transform: scale(0);
   animation: ripple-spread 0.55s ease-out forwards;
   pointer-events: none;
@@ -257,10 +257,9 @@ a.btn:active,
 .agent-grid-card:hover,
 .agent-showcase-card:hover {
   transform: translateY(-8px) scale(1.025) !important;
-  box-shadow: 0 22px 45px -12px rgba(124, 58, 237, 0.45),
-              0 0 24px -2px rgba(34, 211, 238, 0.25),
-              0 0 0 1px rgba(168, 85, 247, 0.55) !important;
-  border-color: rgba(168, 85, 247, 0.6) !important;
+  box-shadow: 0 22px 45px -12px rgba(0, 0, 0, 0.6),
+              0 0 0 1px rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
   background-color: rgba(255, 255, 255, 0.08) !important;
   z-index: 10;
 }
@@ -272,7 +271,7 @@ a.btn:active,
 .agent-showcase-card:hover .h-8.w-8 {
   transform: scale(1.12) rotate(-2deg);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.25);
 }
 
 /* ==========================================================================
@@ -354,7 +353,7 @@ a.btn:active,
 
 /* Subtle pulse glow around icon on hover trigger */
 .agent-icon-trigger:hover .h-8.w-8 {
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.8) !important;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3) !important;
 }
 
 @media (max-width: 640px) {
@@ -421,11 +420,11 @@ a.btn:active,
 }
 
 .hero-badge:hover {
-  border-color: rgba(168, 85, 247, 0.5);
+  border-color: rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 18px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
 }
 
 .hero-badge .dot {
@@ -491,8 +490,8 @@ a.btn:active,
 }
 
 .cmd-body:hover {
-  border-color: rgba(168, 85, 247, 0.5);
-  box-shadow: 0 20px 40px -10px rgba(124, 58, 237, 0.25), 0 0 0 1px rgba(168, 85, 247, 0.3);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .cmd-prompt {
@@ -850,7 +849,7 @@ a.btn:active,
   flex-shrink: 0;
   width: 215px;
   padding: 16px;
-  border-radius: 20px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0.5;
@@ -871,8 +870,8 @@ a.btn:active,
   opacity: 1;
   transform: scale(1.08);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.04) 100%);
-  border-color: var(--theme-accent, #c2410c);
-  box-shadow: 0 0 28px var(--theme-accent-glow, rgba(194, 65, 12, 0.42)), 0 16px 32px -10px rgba(0, 0, 0, 0.8);
+  border-color: rgba(253, 230, 138, 0.5);
+  box-shadow: 0 0 28px rgba(253, 230, 138, 0.14), 0 16px 32px -10px rgba(0, 0, 0, 0.8);
   z-index: 10;
 }
 
@@ -898,7 +897,7 @@ a.btn:active,
   height: 0;
   border-left: 9px solid transparent;
   border-right: 9px solid transparent;
-  border-bottom: 9px solid #0e162e;
+  border-bottom: 9px solid #141417;
 }
 
 /* Scroll unroll/closing keyframes */
@@ -967,8 +966,8 @@ a.btn:active,
 
 .carousel-dot.active {
   width: 24px;
-  background: var(--theme-accent, #c2410c);
-  box-shadow: 0 0 10px var(--theme-accent-glow, rgba(194, 65, 12, 0.5));
+  background: #fde68a;
+  box-shadow: 0 0 10px rgba(253, 230, 138, 0.4);
 }
 
 /* Reduced motion support */
