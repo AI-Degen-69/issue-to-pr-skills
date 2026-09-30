@@ -12,7 +12,7 @@ function checkFile(file) {
   let m;
   while ((m = re.exec(text))) {
     const href = m[1];
-    if (href.startsWith("http") || href.startsWith("#") || href.startsWith("/") || href.startsWith("mailto:")) continue;
+    if (href.startsWith("http") || href.startsWith("#") || href.startsWith("/") || href.startsWith("mailto:") || href.startsWith("<")) continue;
     const base = path.dirname(file);
     const target = path.resolve(base, href.split("#")[0].split("?")[0]);
     if (!fs.existsSync(target)) {

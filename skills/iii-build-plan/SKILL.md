@@ -40,17 +40,17 @@ For every task executed, follow these phases:
 4. **Risk-first order:** follow the plan's task order (risk-first from Station II); when the plan leaves freedom, take the riskiest, most-uncertain task first — while being wrong is still cheap.
 5. **Route & Invoke Domain Skill:** Inspect the task's domain tag in `tasks/plan.md` and invoke the matching specialized skill (full matrix in `references/routing.md`):
    - **UI / Frontend / Design:** Activate `frontend-ui-engineering` (and `tailwind-design-system` if applicable). Identify what visual components, styling, or layouts are missing or broken, and implement them across the project according to modern standards.
-   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from `~/.agents/agents/`): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent — אין להמציא).
+   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from this repo's `agents/` directory): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent).
    - **Debug / Defect:** Activate `debugging-and-error-recovery` (investigate root cause before writing fixes).
    - **Performance:** Activate `performance-optimization`.
    - **Security:** Activate `security-and-hardening`.
    - **Docs:** Activate `documentation-and-adrs`.
 
 ### Phase 2: Implementation (Type-Aware Build)
-- **Code Tasks:** Follow TDD — write minimal clean code to fulfill the requirement.
+- **Code Tasks:** Follow TDD — write minimal clean code to fulfill the requirement. Run only the targeted test file for the touched module during the TDD cycle. Do NOT run the full repository test suite here; full regression testing is deferred to CI on push.
 - **Design & UI Tasks:** Ground styles in existing project tokens and components; implement accessible, responsive UI structure.
 - **Official Docs Grounding:** When using modern or external libraries, consult official documentation (`source-driven-development`) to ensure correct API usage.
-- **Build Error Resolution (ECC resolvers):** If compiler, syntax, or import failures occur, deploy the matching `<stack>-build-resolver` agent persona from `~/.agents/agents/` (`build-error-resolver` generic; `react-build-resolver` / `go-build-resolver` / `rust-build-resolver` when the diff touches React / Go / Rust): minimal diffs only — no architectural edits — get the build green, then resume the task. Persona not found on disk → apply the generic surgical-fix loop and record the skip.
+- **Build Error Resolution (ECC resolvers):** If compiler, syntax, or import failures occur, deploy the matching `<stack>-build-resolver` agent persona from this repo's `agents/` directory (`build-error-resolver` generic; `react-build-resolver` / `go-build-resolver` / `rust-build-resolver` when the diff touches React / Go / Rust): minimal diffs only — no architectural edits — get the build green, then resume the task. Persona not found on disk → apply the generic surgical-fix loop and record the skip.
 - **NOTICED-BUT-NOT-TOUCHING:** anything spotted mid-build that is out of scope — a bug in adjacent code, a tempting refactor, a quick win — is never touched. Capture it as a one-line future Issue candidate and surface it in the closing report; the operator decides whether it becomes an Issue.
 - **Feature flags / safe defaults / rollback:** for risky behavior changes, prefer a feature flag or a safe default that keeps the old behavior reachable; keep every task rollback-friendly (atomic commits, no destructive data changes without a path back). `git-workflow-and-versioning` governs commit discipline: atomic commits, ~100-line change sizing, commit-as-save-point.
 - **Observability touchpoint:** when a task changes production-facing behavior (API responses, background jobs, integrations), add — or note in the report as a follow-up — the instrumentation it needs (structured log, metric) per `observability-and-instrumentation`.
@@ -67,27 +67,27 @@ For every task executed, follow these phases:
 
 ---
 
-## Hebrew Chat Output Contract (חובת דיווח בעברית)
+## Chat Output Contract
 
-At the conclusion of Station III, you MUST report to the user in clean, everyday Hebrew using this exact structured format.
+At the conclusion of Station III, you MUST report to the user in clean, everyday English using this exact structured format.
 What's-changed only: report the product changes grouped by tag. Never mention commits, hashes, tree state, test commands, test counts, skill names, or file paths. The branch stays as the work ID. Omit empty groups. Max ~7 items — group beyond that.
 
 ```markdown
-# 🔨 III - בנייה: Issue #<מספר> — <כותרת ה-Issue>
+# 🔨 III - Build: Issue #<id> — <issue_title>
 
-Branch: `i<מספר>/<slug>`
+Branch: `i<id>/<slug>`
 
-## ➕ מה חדש?
-- [מיקום מוצרי (דף/לשונית/חלק) + מה נוצר — רק קבוצות עם תוכן]
+## ➕ What's New?
+- [product location (page/tab/section) + what was created — only groups with content]
 
-## ✏️ מה שונה?
-- [מיקום מוצרי + מה השתנה]
+## ✏️ What's Changed?
+- [product location + what changed]
 
-## ❌ מה הוסר?
-- [מיקום מוצרי + מה הוסר]
+## ❌ What's Removed?
+- [product location + what was removed]
 
-## 🩹 מה תוקן?
-- [מיקום מוצרי + מה היה שבור ומה עובד עכשיו]
+## 🩹 What's Fixed?
+- [product location + what was broken and what works now]
 
-👉 **הבא:** `/iv-review-build-and-pr` — סקירה ושליחה.
+👉 **Next:** `/iv-review-build-and-pr` — review and ship.
 ```

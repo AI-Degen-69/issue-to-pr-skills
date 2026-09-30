@@ -5,7 +5,7 @@
     {
       "id": "condensed-triage-list",
       "prompt": "Babysit PR #128: CodeRabbit posted 3 inline comments (one real nil-pointer bug, one wrong constant suggestion, one cosmetic nit). Triage them and report.",
-      "expected_output": "Hebrew Report 1: one concise line per comment with ACCEPT/REJECT and a one-phrase reason, most critical first, no full quotes of bot text. Inline ACCEPT/REJECT replies still posted per thread on GitHub.",
+      "expected_output": "Report 1: one concise line per comment with ACCEPT/REJECT and a one-phrase reason, most critical first, no full quotes of bot text. Inline ACCEPT/REJECT replies still posted per thread on GitHub.",
       "files": [],
       "static_assertions": [
         { "id": "one-line-per-comment", "type": "regex", "pattern": "One concise, matter-of-fact line per review comment", "must_match": true, "why": "the chat summary is a list of decisions, not a transcript of bot comments" },
@@ -37,18 +37,18 @@
     {
       "id": "final-summary-after-merge",
       "prompt": "Work on PR #130 is done and merged. Give me the final summary.",
-      "expected_output": "Hebrew Report 2: PR title and number as a link with MERGED status, back-to-base note, fixes ordered critical to minor, and vi-close-pipeline as the next step.",
+      "expected_output": "Report 2: PR title and number as a link with MERGED status, back-to-base note, fixes ordered critical to minor, and vi-close-pipeline as the next step.",
       "files": [],
       "static_assertions": [
         { "id": "pr-link-with-merged", "type": "regex", "pattern": "MERGED", "must_match": true, "why": "the summary leads with the PR identity and its merged state" },
-        { "id": "back-to-base", "type": "regex", "pattern": "חזרנו לענף הבסיס", "must_match": true, "why": "the return to a clean base is part of what the operator is told" },
-        { "id": "impact-order", "type": "regex", "pattern": "מהמשפיע ביותר למינורי", "must_match": true, "why": "fixes are listed critical-to-minor, not in comment arrival order" },
-        { "id": "next-step-vi", "type": "regex", "pattern": "/vi-close-pipeline <id>", "must_match": true, "why": "the summary always names the next station" },
+        { "id": "back-to-base", "type": "regex", "pattern": "Returned to base branch", "must_match": true, "why": "the return to a clean base is part of what the operator is told" },
+        { "id": "impact-order", "type": "regex", "pattern": "most critical first", "must_match": true, "why": "fixes are listed critical-to-minor, not in comment arrival order" },
+        { "id": "next-step-vi", "type": "regex", "pattern": "vi-close-pipeline", "must_match": true, "why": "the summary always names the next station" },
         { "id": "no-raw-comment-text", "type": "regex", "pattern": "Never dump raw CodeRabbit text", "must_match": true, "why": "raw bot text stays on GitHub, never in the operator chat" }
       ],
       "live_assertions": [
         "The PR is confirmed MERGED before the summary is written",
-        "The Hebrew summary names the PR and the next station"
+        "The summary names the PR and the next station"
       ]
     },
     {

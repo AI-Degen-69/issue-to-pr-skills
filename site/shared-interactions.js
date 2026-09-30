@@ -1,5 +1,5 @@
 /**
- * issue-to-pr-skills — Shared Interaction & Animation Engine
+ * issue-to-pr-skills: Shared Interaction & Animation Engine
  * Automatically injects scroll progress, reveals components on scroll,
  * binds magnetic hover feedback, and attaches click ripple physics.
  */
@@ -237,7 +237,7 @@
         trigger.className = 'agent-icon-trigger group/icon relative inline-block shrink-0';
         trigger.setAttribute('tabindex', '0');
         trigger.setAttribute('role', 'region');
-        trigger.setAttribute('aria-label', `${agentId} — ${role}: ${summary}`);
+        trigger.setAttribute('aria-label', `${agentId}, ${role}: ${summary}`);
 
         const tooltip = document.createElement('div');
         tooltip.className = 'agent-icon-tooltip';
@@ -245,12 +245,12 @@
         tooltip.innerHTML = `
           <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-1.5 mb-1.5">
             <span class="font-mono text-xs font-bold text-white tracking-wide truncate">${agentId}</span>
-            <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-violet-300 border border-white/10 shrink-0">${role}</span>
+            <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10 shrink-0">${role}</span>
           </div>
           <p class="text-xs text-white/80 leading-relaxed font-sans">${summary}</p>
           <div class="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40 font-mono">
             <span>Specialist Agent</span>
-            <span class="text-violet-400 group-hover:text-violet-300">Click card for guide →</span>
+            <span class="text-zinc-500 group-hover:text-zinc-300">Click card for guide →</span>
           </div>
           <div class="agent-tooltip-arrow"></div>
         `;
@@ -261,6 +261,28 @@
       });
     };
     enhanceAgentCardTooltips();
+
+    // 6b. Hero stat count-up (respects reduced motion)
+    const statNums = document.querySelectorAll('.stat-num[data-count]');
+    if (statNums.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const animateCount = (el) => {
+        const target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        const dur = 900;
+        const t0 = performance.now();
+        const tick = (t) => {
+          const p = Math.min((t - t0) / dur, 1);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+      const statObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { animateCount(e.target); statObs.unobserve(e.target); }
+        });
+      }, { threshold: 0.4 });
+      statNums.forEach(el => statObs.observe(el));
+    }
 
     // 7. Theme: Permanently locked in Dark Burnt Tiger Orange & Warm Ochre
     function initAppTheme() {

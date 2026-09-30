@@ -144,32 +144,32 @@ Example tone:
 
 ---
 
-## Hebrew Chat Output Contract
+## Chat Output Contract
 
 **Strict Prohibition:** NEVER output test-runner commands (`pytest`, `npm test`, `jest`, `vitest`, or equivalents). Tests already passed earlier. Manual check is human touch-and-see only.
 **Strict Instruction on "Try it yourself":** Direct the user to try the change in the REAL APPLICATION / PROJECT itself (the running system, UI dashboard, app screen, or CLI), NEVER in the generated presentation/HTML showcase.
-**No Meta-showcase in Chat:** Do NOT output the section "🖼️ איך בחרתי להציג את זה / How I chose to show it" in the chat report — keep the chat report focused solely on the value, how to try it in the real application, and links/paths.
+**No Meta-showcase in Chat:** Do NOT output the section "🖼️ How I chose to show it" in the chat report — keep the chat report focused solely on the value, how to try it in the real application, and links/paths.
 
 ```markdown
-# 🎨 סיכום והצגת PR:
+# 🎨 PR Summary & Showcase:
 
-## 📊 Issue ו-PR:
+## 📊 Issue & PR:
 * **Issue:** [#<id> - <title>](<url>)
 * **PR:** [#<n> - <title>](<url>) 🟢 MERGED
 
-## 💡 מה השתנה:
-* [לפני העדכון: מה לא עבד או מה היה חסר]
-* [עכשיו: מה השתפר ומה אפשר לעשות]
+## 💡 What Changed:
+* [Before update: what wasn't working or what was missing]
+* [Now: what improved and what can be done]
 
-## 👁️ ווידוא ידני:
-1. **מה לוודא:** פתח את [מסך האפליקציה / טאב / כפתור במערכת החיה עצמה]
-2. **מה לצפות לראות:** [מה השינוי אמור לעשות, או מה התוצאה שהמשתמש אמור לראות]
+## 👁️ Manual Verification:
+1. **What to verify:** Open [application screen / tab / control in the live system]
+2. **What to expect:** [what the change does, or the result the user should see]
 
-## 🎨 קובץ פרזנטציה:
-- **נתיב:** [נתיב מלא לקובץ שנוצר]
-- **פתח:** [start <file.html>]
+## 🎨 Presentation File:
+- **Path:** [full path to generated HTML file]
+- **Open:** [start <file.html>]
 
 ---
 
-# ➡️ השלב הבא: 
-- סגירת ה-issue והכנה ל-Issue הבא: **`/vi-close-pipline`**
+# ➡️ Next Step: 
+- Close the issue and prepare for the next issue: **`/vi-close-pipeline`**

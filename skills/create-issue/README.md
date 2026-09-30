@@ -32,13 +32,13 @@ labeled `ready-for-agent` — without a draft-approval pause.
 3. Ambiguity goes to **Open questions** in the body + `needs-answers` label — never blocks publication.
 4. Publishes immediately (`gh issue create ... --label ready-for-agent`).
 5. Posts the CodeRabbit plan prompt as its own comment (body only, skipped for trivial docs-only issues, retried once on silence).
-6. Reports back in everyday Hebrew per the output contract in `SKILL.md`.
+6. Reports back in everyday English per the output contract in `SKILL.md`.
 
 ## Files in this folder
 
 | Path | What it is |
 |---|---|
-| `SKILL.md` | Agent contract (workflow, quality bar, Hebrew output contract). |
+| `SKILL.md` | Agent contract (workflow, quality bar, English output contract). |
 | `references/issue-tracker.md` | Intake template + `gh` command conventions (single source of truth for the body). |
 | `references/coderabbit-plan-prompt.md` | The canonical `@coderabbitai plan` prompt (body only — never post the file as-is). |
 | `scripts/grade.js` | Deterministic grader (`audit` / `case`, zero dependencies). |
@@ -56,5 +56,5 @@ verification command.
 ```bash
 /create-issue Retry failed uploads three times before giving up
 # → researches deploy code, publishes issue #N labeled ready-for-agent,
-#   posts the plan request, reports back in Hebrew with link + next step (/i-pick-issue)
+#   posts the plan request, reports back in English with link + next step (/i-pick-issue)
 ```

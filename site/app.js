@@ -17,7 +17,7 @@ const SYSTEM_SKILLS = [
     title: 'Pipeline Triage',
     desc: 'Pre-flight check before Station #1: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
     roleBadge: 'State Gate',
-    roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
+    roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Attached before Station #1',
     command: '/pipeline-triage'
   },
@@ -27,7 +27,7 @@ const SYSTEM_SKILLS = [
     title: 'Create Researched Issue',
     desc: 'Intake branch when there is nothing to pick in Station #1. Turns a raw idea into a researched GitHub issue labeled ready-for-agent with concrete file paths and line numbers.',
     roleBadge: 'Intake Branch',
-    roleClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
+    roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Branches off Station #1',
     command: '/create-issue <idea>'
   },
@@ -37,7 +37,7 @@ const SYSTEM_SKILLS = [
     title: 'Present Showcase',
     desc: 'Ad-hoc presentation run on request after Station #6 or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
     roleBadge: 'Ad-hoc Showcase',
-    roleClass: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30',
+    roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Suggested after Station #6 · Runnable any time',
     command: '/present-pr <id>'
   }
@@ -49,73 +49,73 @@ const TAG_CONFIG = {
     tag: 'Claim',
     label: 'Claim',
     color: 'cyan',
-    tagClass: 'bg-cyan-500/15 text-cyan-300 border-cyan-400/30',
-    stationCardClass: 'border-cyan-500/50 bg-gradient-to-b from-cyan-950/40 to-cyan-950/10 shadow-[0_0_24px_rgba(6,182,212,0.14)] hover:border-cyan-400 hover:bg-cyan-950/50 hover:shadow-[0_0_32px_rgba(6,182,212,0.25)]',
-    stationBadgeClass: 'bg-cyan-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]',
-    openLinkClass: 'text-cyan-300 hover:text-cyan-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   plan: {
     tag: 'Plan',
     label: 'Plan',
     color: 'sky',
-    tagClass: 'bg-sky-500/15 text-sky-300 border-sky-400/30',
-    stationCardClass: 'border-sky-500/50 bg-gradient-to-b from-sky-950/40 to-sky-950/10 shadow-[0_0_24px_rgba(14,165,233,0.14)] hover:border-sky-400 hover:bg-sky-950/50 hover:shadow-[0_0_32px_rgba(14,165,233,0.25)]',
-    stationBadgeClass: 'bg-sky-500/25 text-sky-200 border border-sky-400/50 shadow-[0_0_10px_rgba(14,165,233,0.3)]',
-    openLinkClass: 'text-sky-300 hover:text-sky-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   build: {
     tag: 'Build',
     label: 'Build',
     color: 'emerald',
-    tagClass: 'bg-emerald-500/15 text-emerald-300 border-emerald-400/30',
-    stationCardClass: 'border-emerald-500/50 bg-gradient-to-b from-emerald-950/40 to-emerald-950/10 shadow-[0_0_24px_rgba(16,185,129,0.14)] hover:border-emerald-400 hover:bg-emerald-950/50 hover:shadow-[0_0_32px_rgba(16,185,129,0.25)]',
-    stationBadgeClass: 'bg-emerald-500/25 text-emerald-200 border border-emerald-400/50 shadow-[0_0_10px_rgba(16,185,129,0.3)]',
-    openLinkClass: 'text-emerald-300 hover:text-emerald-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   review: {
     tag: 'Review & PR',
     label: 'Review & PR',
     color: 'violet',
-    tagClass: 'bg-violet-500/15 text-violet-300 border-violet-400/30',
-    stationCardClass: 'border-violet-500/50 bg-gradient-to-b from-violet-950/40 to-violet-950/10 shadow-[0_0_24px_rgba(139,92,246,0.18)] hover:border-violet-400 hover:bg-violet-950/50 hover:shadow-[0_0_32px_rgba(139,92,246,0.28)]',
-    stationBadgeClass: 'bg-violet-500/25 text-violet-200 border border-violet-400/50 shadow-[0_0_10px_rgba(139,92,246,0.35)]',
-    openLinkClass: 'text-violet-300 hover:text-violet-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   babysit: {
     tag: 'Babysit',
     label: 'Babysit',
     color: 'amber',
-    tagClass: 'bg-amber-500/15 text-amber-300 border-amber-400/30',
-    stationCardClass: 'border-amber-500/50 bg-gradient-to-b from-amber-950/40 to-amber-950/10 shadow-[0_0_24px_rgba(245,158,11,0.14)] hover:border-amber-400 hover:bg-amber-950/50 hover:shadow-[0_0_32px_rgba(245,158,11,0.25)]',
-    stationBadgeClass: 'bg-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_10px_rgba(245,158,11,0.3)]',
-    openLinkClass: 'text-amber-300 hover:text-amber-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   close: {
     tag: 'Close',
     label: 'Close',
     color: 'rose',
-    tagClass: 'bg-rose-500/15 text-rose-300 border-rose-400/30',
-    stationCardClass: 'border-rose-500/50 bg-gradient-to-b from-rose-950/40 to-rose-950/10 shadow-[0_0_24px_rgba(244,63,94,0.14)] hover:border-rose-400 hover:bg-rose-950/50 hover:shadow-[0_0_32px_rgba(244,63,94,0.25)]',
-    stationBadgeClass: 'bg-rose-500/25 text-rose-200 border border-rose-400/50 shadow-[0_0_10px_rgba(244,63,94,0.3)]',
-    openLinkClass: 'text-rose-300 hover:text-rose-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   prune: {
     tag: 'Close',
     label: 'Close',
     color: 'rose',
-    tagClass: 'bg-rose-500/15 text-rose-300 border-rose-400/30',
-    stationCardClass: 'border-rose-500/50 bg-gradient-to-b from-rose-950/40 to-rose-950/10 shadow-[0_0_24px_rgba(244,63,94,0.14)] hover:border-rose-400 hover:bg-rose-950/50 hover:shadow-[0_0_32px_rgba(244,63,94,0.25)]',
-    stationBadgeClass: 'bg-rose-500/25 text-rose-200 border border-rose-400/50 shadow-[0_0_10px_rgba(244,63,94,0.3)]',
-    openLinkClass: 'text-rose-300 hover:text-rose-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   },
   present: {
     tag: 'Present',
     label: 'Present',
     color: 'fuchsia',
-    tagClass: 'bg-fuchsia-500/15 text-fuchsia-300 border-fuchsia-400/30',
-    stationCardClass: 'border-fuchsia-500/50 bg-gradient-to-b from-fuchsia-950/40 to-fuchsia-950/10 shadow-[0_0_24px_rgba(217,70,239,0.18)] hover:border-fuchsia-400 hover:bg-fuchsia-950/50 hover:shadow-[0_0_32px_rgba(217,70,239,0.28)]',
-    stationBadgeClass: 'bg-fuchsia-500/25 text-fuchsia-200 border border-fuchsia-400/50 shadow-[0_0_10px_rgba(217,70,239,0.35)]',
-    openLinkClass: 'text-fuchsia-300 hover:text-fuchsia-200'
+    tagClass: 'bg-white/5 text-zinc-300 border-white/15',
+    stationCardClass: 'border-white/15 bg-white/[.03] hover:border-white/25 hover:bg-white/[.05]',
+    stationBadgeClass: 'bg-white/5 text-zinc-200 border border-white/15',
+    openLinkClass: 'text-zinc-200 hover:text-white'
   }
 };
 
@@ -373,7 +373,7 @@ function renderChatBubbleContent(idx) {
   const GATES = {
     'pipeline-triage': 'Session pre-flight check: read-only analysis of git working tree & status. No code modifications until target station is locked.',
     'create-issue': 'Research-first gate: extracts concrete file paths with line numbers; captures open questions with explicit default assumptions before marking ready-for-agent.',
-    'i-pick-issue': 'Mapping gate: maps the backlog by domain with a recommended order and one highlighted pick, then halts for the operator — never auto-selects silently.',
+    'i-pick-issue': 'Mapping gate: maps the backlog by domain with a recommended order and one highlighted pick, then halts for the operator. It never auto-selects silently.',
     'ii-plan-issue': 'Constraint gate: locks CONSTRAINTS.md (zero regressions rule) and breaks feature into atomic vertical slices in tasks/plan.md before any coding.',
     'iii-build-plan': 'Proof-before-next gate: strictly runs TDD per slice; requires passing unit tests or interactive browser verification before proceeding.',
     'iiib-iterate-after-build': 'Minimal diff fix gate: classifies human feedback (bug, dead button, CSS, or speed) and verifies against CONSTRAINTS.md.',
@@ -388,7 +388,7 @@ function renderChatBubbleContent(idx) {
   bubble.innerHTML = `
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-white/10">
       <div class="flex items-center flex-wrap gap-2">
-        <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-orange-600/20 text-orange-400 border border-orange-500/30 whitespace-nowrap">
+        <span class="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-white/5 text-zinc-300 border border-white/15 whitespace-nowrap">
           Station ${s.label}
         </span>
         <span class="px-2.5 py-0.5 rounded-md text-xs font-medium border ${cfg.tagClass}">
@@ -423,7 +423,7 @@ function renderChatBubbleContent(idx) {
       <div class="flex items-center gap-2.5">
         <a 
           href="./skills/#${s.id}" 
-          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-white bg-orange-600 hover:bg-orange-500 transition shadow-md shadow-orange-950/50"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold text-zinc-950 bg-zinc-50 hover:bg-white transition shadow-sm"
           title="Open station ${s.id} on the skills page"
         >
           <span>Explore /${s.id} in Skills Page</span>
@@ -553,7 +553,7 @@ function showStation(i){
   if(!s) return;
   const d=document.getElementById('stationDetail');
   if(!d) return;
-  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-violet-500/20 text-violet-300 border border-violet-500/30 mr-2 whitespace-nowrap">Station ${s.label}</span> <span class="font-mono text-violet-300">/${s.id}</span> — <span class="font-semibold text-white">${s.title}</span> — ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-violet-400 ml-1">Open skill ↗</a>`;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold bg-white/5 text-zinc-300 border border-white/10 mr-2 whitespace-nowrap">Station ${s.label}</span> <span class="font-mono text-amber-200/70">/${s.id}</span>: <span class="font-semibold text-white">${s.title}</span>, ${s.desc} <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="underline decoration-zinc-500 ml-1">Open skill ↗</a>`;
 }
 
 function showSystemSkill(id){
@@ -561,7 +561,7 @@ function showSystemSkill(id){
   if(!sys) return;
   const d=document.getElementById('stationDetail');
   if(!d) return;
-  d.innerHTML=`<span class="px-2 py-0.5 rounded-full text-xs font-mono font-bold ${sys.roleClass} mr-2 whitespace-nowrap">${sys.roleBadge}</span> <span class="font-mono text-cyan-300">/${sys.id}</span> — <span class="font-semibold text-white">${sys.title}</span> — ${sys.desc} <span class="text-white/50 text-xs">(${sys.timing})</span> <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="underline decoration-cyan-400 ml-1">Open skill ↗</a>`;
+  d.innerHTML=`<span class="px-2 py-0.5 rounded-md text-xs font-mono font-bold ${sys.roleClass} mr-2 whitespace-nowrap">${sys.roleBadge}</span> <span class="font-mono text-amber-200/70">/${sys.id}</span>: <span class="font-semibold text-white">${sys.title}</span>, ${sys.desc} <span class="text-white/50 text-xs">(${sys.timing})</span> <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="underline decoration-zinc-500 ml-1">Open skill ↗</a>`;
 }
 window.showStation = showStation;
 window.showSystemSkill = showSystemSkill;
@@ -574,11 +574,11 @@ function renderStations(){
       const g = GROUP[s.id] || 'plan';
       const cfg = TAG_CONFIG[g] || TAG_CONFIG.plan;
       return `
-      <div id="${s.id}" class="card rounded-2xl border ${cfg.stationCardClass} p-5 transition flex flex-col justify-between scroll-mt-24">
+      <div id="${s.id}" class="card rounded-xl border ${cfg.stationCardClass} p-5 transition flex flex-col justify-between scroll-mt-24">
         <div>
           <div class="flex items-center justify-between gap-2 mb-2.5">
-            <span class="whitespace-nowrap inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold font-mono shrink-0 ${cfg.stationBadgeClass}">${s.label}</span>
-            <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border shrink-0 ${cfg.tagClass}">${cfg.tag}</span>
+            <span class="whitespace-nowrap inline-flex items-center justify-center px-2.5 py-1 rounded-md text-xs font-bold font-mono shrink-0 ${cfg.stationBadgeClass}">${s.label}</span>
+            <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border shrink-0 inline-flex items-center gap-1.5 ${cfg.tagClass}"><span class="h-1.5 w-1.5 rounded-full bg-${cfg.color}-400 shrink-0"></span>${cfg.tag}</span>
           </div>
           <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${s.id}</div>
           <div class="mt-1 text-xs font-medium text-white/50">${s.title}</div>
@@ -592,17 +592,17 @@ function renderStations(){
   const sysEl=document.getElementById('systemSkillCards');
   if(sysEl){
     sysEl.innerHTML=SYSTEM_SKILLS.map(sys=>`
-      <div id="${sys.id}" class="card rounded-2xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between scroll-mt-24">
+      <div id="${sys.id}" class="card rounded-xl border border-white/10 bg-white/[.03] hover:bg-white/[.06] hover:border-white/20 p-5 transition flex flex-col justify-between scroll-mt-24">
         <div>
           <div class="flex items-center justify-between gap-2 mb-2.5">
-            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border shrink-0 ${sys.roleClass}">${sys.roleBadge}</span>
+            <span class="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-md border shrink-0 ${sys.roleClass}">${sys.roleBadge}</span>
             <span class="text-[11px] font-mono text-white/40 shrink-0">${sys.timing}</span>
           </div>
           <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${sys.id}</div>
           <div class="text-[11px] text-amber-300/80 font-mono mt-0.5">${sys.command}</div>
           <p class="mt-2.5 text-sm leading-relaxed text-white/70">${sys.desc}</p>
         </div>
-        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="mt-4 inline-flex text-xs font-semibold text-violet-300 hover:text-violet-200">View SKILL.md ↗</a>
+        <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="mt-4 inline-flex text-xs font-semibold text-zinc-200 hover:text-white">View SKILL.md ↗</a>
       </div>
     `).join('');
   }
@@ -621,13 +621,13 @@ let _debounceT=null;
 let currentOrganizeMode = 'az'; // 'az' or 'pipeline'
 
 const PIPELINE_STATIONS_ORDER = [
-  { key: 'claim', label: 'Claim', stationNum: '#1', desc: 'Claim & pick — issue work entry, triage gate, domain backlog mapping and recommended pick' },
-  { key: 'plan', label: 'Plan', stationNum: '#2', desc: 'Define & plan — right-sizing, spec, constraints, vertical task slices' },
-  { key: 'build', label: 'Build', stationNum: '#3–#3b', desc: 'Build & iterate — test-driven development, UI engineering, human feedback fix loops' },
-  { key: 'review', label: 'Review & PR', stationNum: '#4', desc: 'Review & ship — proof gate, specialist review panel, PR creation & CodeRabbit trigger' },
-  { key: 'babysit', label: 'Babysit', stationNum: '#5', desc: 'Babysit & merge — automated reviews, CI status monitoring, squash merge' },
-  { key: 'close', label: 'Close', stationNum: '#6', desc: 'Close pipeline — verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
-  { key: 'present', label: 'Present', stationNum: 'Ad-hoc', desc: 'Present & showcase — interactive visual showcase for completed PRs' }
+  { key: 'claim', label: 'Claim', stationNum: '#1', desc: 'Claim & pick: issue work entry, triage gate, domain backlog mapping and recommended pick' },
+  { key: 'plan', label: 'Plan', stationNum: '#2', desc: 'Define & plan: right-sizing, spec, constraints, vertical task slices' },
+  { key: 'build', label: 'Build', stationNum: '#3, #3b', desc: 'Build & iterate: test-driven development, UI engineering, human feedback fix loops' },
+  { key: 'review', label: 'Review & PR', stationNum: '#4', desc: 'Review & ship: proof gate, specialist review panel, PR creation & CodeRabbit trigger' },
+  { key: 'babysit', label: 'Babysit', stationNum: '#5', desc: 'Babysit & merge: automated reviews, CI status monitoring, squash merge' },
+  { key: 'close', label: 'Close', stationNum: '#6', desc: 'Close pipeline: verify issue closed, signal-based sweep, dead-code exception, Clean Exit Gate' },
+  { key: 'present', label: 'Present', stationNum: 'Ad-hoc', desc: 'Present & showcase: interactive visual showcase for completed PRs' }
 ];
 
 function setOrganizeMode(mode){
@@ -642,11 +642,11 @@ function updateOrganizeButtons(activeMode){
   const btnPipe = document.getElementById('btnOrgPipeline');
   if(btnAz && btnPipe){
     if(activeMode === 'az'){
-      btnAz.className = 'px-3 py-1.5 rounded-full font-medium transition bg-violet-600 text-white shadow-sm';
-      btnPipe.className = 'px-3 py-1.5 rounded-full font-medium transition text-white/70 hover:text-white';
+      btnAz.className = 'px-3 py-1.5 rounded-md font-medium transition bg-zinc-50 text-zinc-950 shadow-sm';
+      btnPipe.className = 'px-3 py-1.5 rounded-md font-medium transition text-zinc-400 hover:text-white';
     } else {
-      btnAz.className = 'px-3 py-1.5 rounded-full font-medium transition text-white/70 hover:text-white';
-      btnPipe.className = 'px-3 py-1.5 rounded-full font-medium transition bg-violet-600 text-white shadow-sm';
+      btnAz.className = 'px-3 py-1.5 rounded-md font-medium transition text-zinc-400 hover:text-white';
+      btnPipe.className = 'px-3 py-1.5 rounded-md font-medium transition bg-zinc-50 text-zinc-950 shadow-sm';
     }
   }
 }
@@ -660,23 +660,23 @@ function renderSkillCardHtml(s){
   const st = STATIONS.find(x => x.id === s.name);
 
   const cardClasses = isPipeline
-    ? `card rounded-2xl border ${cfg.stationCardClass} p-5 text-left transition block relative`
+    ? `card rounded-xl border ${cfg.stationCardClass} p-5 text-left transition block relative`
     : sysSkill
-      ? `card rounded-2xl border border-cyan-500/30 bg-cyan-950/20 p-5 text-left hover:border-cyan-400/50 hover:bg-cyan-950/30 transition block relative`
-      : `card rounded-2xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block`;
+      ? `card rounded-xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block relative`
+      : `card rounded-xl border border-white/10 bg-white/[.04] p-5 text-left hover:bg-white/[.07] hover:border-white/20 transition block`;
 
   const badgeHtml = isPipeline
-    ? `<span class="text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${cfg.stationBadgeClass}">Station ${st ? st.label : ''}</span>`
+    ? `<span class="text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-md whitespace-nowrap ${cfg.stationBadgeClass}">Station ${st ? st.label : ''}</span>`
     : sysSkill
-      ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full whitespace-nowrap ${sysSkill.roleClass}">${sysSkill.roleBadge}</span>`
+      ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md whitespace-nowrap ${sysSkill.roleClass}">${sysSkill.roleBadge}</span>`
       : '';
 
-  const linkColor = isPipeline ? cfg.openLinkClass : sysSkill ? 'text-cyan-300 hover:text-cyan-200' : 'text-violet-300 hover:text-violet-200';
+  const linkColor = isPipeline ? cfg.openLinkClass : sysSkill ? 'text-zinc-200 hover:text-white' : 'text-zinc-200 hover:text-white';
 
   return `
   <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.name}" target="_blank" class="${cardClasses}">
     <div class="flex items-center gap-2 flex-wrap">
-      <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
+      <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border ${cfg.tagClass}">${cfg.tag}</span>
       ${badgeHtml}
     </div>
     <div class="mt-3 font-mono text-[13px] font-semibold text-white">${s.name}</div>
@@ -699,11 +699,11 @@ function updateStationFilterChips(activeVal){
   document.querySelectorAll('.station-filter-btn').forEach(btn => {
     const filterKey = btn.dataset.filter || 'all';
     if(filterKey === activeVal){
-      btn.classList.add('bg-violet-600', 'border-violet-500', 'text-white', 'shadow-sm');
-      btn.classList.remove('bg-white/5', 'text-white/70');
+      btn.classList.add('bg-zinc-50', 'text-zinc-950', 'shadow-sm');
+      btn.classList.remove('text-zinc-400');
     } else {
-      btn.classList.remove('bg-violet-600', 'border-violet-500', 'text-white', 'shadow-sm');
-      btn.classList.add('bg-white/5', 'text-white/70');
+      btn.classList.remove('bg-zinc-50', 'text-zinc-950', 'shadow-sm');
+      btn.classList.add('text-zinc-400');
     }
   });
 }
@@ -739,18 +739,18 @@ function renderSkills(){
   if(list.length===0){
     const qRaw=document.getElementById('search').value;
     el.className = "mt-8";
-    el.innerHTML=`<div class="col-span-full rounded-2xl border border-white/10 bg-white/[.04] p-8 text-center">
+    el.innerHTML=`<div class="col-span-full rounded-xl border border-white/10 bg-white/[.04] p-8 text-center">
       <div class="h-10 w-10 mx-auto rounded-full bg-white/5 grid place-items-center text-base text-white/40">🔍</div>
       <div class="mt-3 text-base font-semibold text-white">No skills match “${qRaw}”</div>
-      <div class="mt-2 text-sm text-white/60">Try <button onclick="document.getElementById('search').value='';renderSkills()" class="underline decoration-violet-400 text-white">clear search</button> or filter by station:</div>
+      <div class="mt-2 text-sm text-white/60">Try <button onclick="document.getElementById('search').value='';renderSkills()" class="underline decoration-amber-200/60 text-white">clear search</button> or filter by station:</div>
       <div class="inline-flex gap-2 flex-wrap justify-center mt-3">
-        <button onclick="setStationFilter('claim')" class="px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-medium">Claim</button>
-        <button onclick="setStationFilter('plan')" class="px-3 py-1 rounded-full bg-sky-500/15 border border-sky-400/30 text-sky-300 text-xs font-medium">Plan</button>
-        <button onclick="setStationFilter('build')" class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-xs font-medium">Build</button>
-        <button onclick="setStationFilter('review')" class="px-3 py-1 rounded-full bg-violet-500/15 border border-violet-400/30 text-violet-300 text-xs font-medium">Review & PR</button>
-        <button onclick="setStationFilter('babysit')" class="px-3 py-1 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 text-xs font-medium">Babysit</button>
-        <button onclick="setStationFilter('close')" class="px-3 py-1 rounded-full bg-rose-500/15 border border-rose-400/30 text-rose-300 text-xs font-medium">Close</button>
-        <button onclick="setStationFilter('present')" class="px-3 py-1 rounded-full bg-fuchsia-500/15 border border-fuchsia-400/30 text-fuchsia-300 text-xs font-medium">Present</button>
+        <button onclick="setStationFilter('claim')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Claim</button>
+        <button onclick="setStationFilter('plan')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Plan</button>
+        <button onclick="setStationFilter('build')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Build</button>
+        <button onclick="setStationFilter('review')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Review & PR</button>
+        <button onclick="setStationFilter('babysit')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Babysit</button>
+        <button onclick="setStationFilter('close')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Close</button>
+        <button onclick="setStationFilter('present')" class="px-3 py-1 rounded-md bg-white/5 text-zinc-300 text-xs font-medium">Present</button>
       </div>
     </div>`;
   } else if(currentOrganizeMode === 'pipeline'){
@@ -814,12 +814,12 @@ function renderPreview(){
     const cfg=TAG_CONFIG[g]||TAG_CONFIG.plan;
     const isPipeline=STATIONS.some(x=>x.id===s.name);
     const cardClasses = isPipeline
-      ? `card rounded-2xl border ${cfg.stationCardClass} p-5 block transition`
-      : `card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition`;
+      ? `card rounded-xl border ${cfg.stationCardClass} p-5 block transition`
+      : `card rounded-xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition`;
 
     return `<a href="./skills/" class="${cardClasses}">
       <div class="flex items-center gap-2">
-        <span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-full border ${cfg.tagClass}">${cfg.tag}</span>
+<span class="text-[11px] font-medium tracking-wide px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 ${cfg.tagClass}"><span class="h-1.5 w-1.5 rounded-full bg-${cfg.color}-400 shrink-0"></span>${cfg.tag}</span>
         ${isPipeline ? `<span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full ${cfg.stationBadgeClass}">Station</span>` : ''}
       </div>
       <div class="mt-2 font-mono text-sm font-semibold text-white">${s.name}</div>
@@ -907,7 +907,7 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     case 'code-reviewer':
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-violet-500/15 border border-violet-400/40 text-violet-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(139,92,246,0.25)]" title="${role} Specialist">
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-white/5 border border-white/10 text-zinc-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0" title="${role} Specialist">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
       </div>`;
       break;
@@ -937,7 +937,7 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     case 'type-design-analyzer':
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-fuchsia-500/15 border border-fuchsia-400/40 text-fuchsia-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0 shadow-[0_0_12px_rgba(217,70,239,0.25)]" title="${role} Specialist">
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-white/5 border border-white/10 text-zinc-300 grid place-items-center transition-transform group-hover/icon:scale-105 shrink-0" title="${role} Specialist">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.12 6.4-6.05-4.06a4.95 4.95 0 0 0-5.14 0L3.88 6.4a4.95 4.95 0 0 0-2.38 4.25v7.7a4.95 4.95 0 0 0 2.38 4.25l6.05 4.06a4.95 4.95 0 0 0 5.14 0l6.05-4.06a4.95 4.95 0 0 0 2.38-4.25v-7.7a4.95 4.95 0 0 0-2.38-4.25Z"/><path d="M12 22V12"/><path d="m3.29 7 8.71 5 8.71-5"/></svg>
       </div>`;
       break;
@@ -952,22 +952,22 @@ function getAgentIconHtml(id, role){
       </div>`;
       break;
     default:
-      iconDiv = `<div class="h-8 w-8 rounded-xl bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold transition-transform group-hover/icon:scale-105 shrink-0">${(role||'').slice(0,2).toUpperCase()}</div>`;
+      iconDiv = `<div class="h-8 w-8 rounded-xl bg-gradient-to-br from-zinc-600 to-zinc-800 grid place-items-center text-xs font-bold transition-transform group-hover/icon:scale-105 shrink-0">${(role||'').slice(0,2).toUpperCase()}</div>`;
       break;
   }
 
   const summary = AGENT_SUMMARIES[id] || `${role} specialist reviewer for code quality and pipeline verification.`;
-  return `<div class="agent-icon-trigger group/icon relative inline-block shrink-0" tabindex="0" role="region" aria-label="${id} — ${role}: ${summary}">
+  return `<div class="agent-icon-trigger group/icon relative inline-block shrink-0" tabindex="0" role="region" aria-label="${id}, ${role}: ${summary}">
     ${iconDiv}
     <div class="agent-icon-tooltip" role="tooltip">
       <div class="flex items-center justify-between gap-2 border-b border-white/10 pb-1.5 mb-1.5">
         <span class="font-mono text-xs font-bold text-white tracking-wide truncate">${id}</span>
-        <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-violet-300 border border-white/10 shrink-0">${role}</span>
+        <span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-white/10 text-zinc-300 border border-white/10 shrink-0">${role}</span>
       </div>
       <p class="text-xs text-white/80 leading-relaxed font-sans">${summary}</p>
       <div class="mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[10px] text-white/40 font-mono">
         <span>Specialist Agent</span>
-        <span class="text-violet-400 group-hover:text-violet-300">Click card for guide →</span>
+        <span class="text-zinc-500 group-hover:text-zinc-300">Click card for guide →</span>
       </div>
       <div class="agent-tooltip-arrow"></div>
     </div>
@@ -998,11 +998,11 @@ function filterAgents(forcedQuery){
       (text === 'data' && (q === 'db' || q === 'sql' || q === 'database'))
     ));
     if(isActive) {
-      btn.classList.add('bg-violet-600', 'border-violet-500', 'text-white');
+      btn.classList.add('bg-zinc-50', 'border-zinc-50', 'text-zinc-950');
       btn.classList.remove('bg-white/5', 'border-white/10', 'text-white/70');
       btn.setAttribute('aria-pressed', 'true');
     } else {
-      btn.classList.remove('bg-violet-600', 'border-violet-500', 'text-white');
+      btn.classList.remove('bg-zinc-50', 'border-zinc-50', 'text-zinc-950');
       btn.classList.add('bg-white/5', 'border-white/10', 'text-white/70');
       btn.setAttribute('aria-pressed', 'false');
     }
@@ -1013,9 +1013,9 @@ function filterAgents(forcedQuery){
     const target = hasPage ? '' : ' target="_blank"';
     const iconHtml = getAgentIconHtml(id, role);
     const delay = Math.min(index * 30, 240);
-    return `<a href="${href}"${target} style="animation-delay: ${delay}ms;" class="group agent-card rounded-2xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
+    return `<a href="${href}"${target} style="animation-delay: ${delay}ms;" class="group agent-card rounded-xl border border-white/10 bg-white/[.04] p-5 block hover:bg-white/[.07] hover:border-white/20 transition">
       ${iconHtml}
-      <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-violet-200 transition-colors">${id}</div>
+      <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-amber-100 transition-colors">${id}</div>
       <div class="text-xs text-white/50">${role}</div>
       <div class="mt-1 text-sm text-white/60 leading-5">${desc}</div>
     </a>`;
@@ -1049,10 +1049,10 @@ function filterAgents(forcedQuery){
       if(countEl) countEl.textContent = 'Showing 4 of 17 agents';
     } else if(matches.length === 0) {
       gp.innerHTML = `
-        <div class="col-span-full rounded-2xl border border-white/10 bg-white/[.03] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+        <div class="col-span-full rounded-xl border border-white/10 bg-white/[.03] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
           <div class="h-10 w-10 mx-auto rounded-full bg-white/5 grid place-items-center text-base text-white/40">🔍</div>
           <div class="mt-3 text-sm font-semibold text-white">No agents match “${rawQ}”</div>
-          <p class="mt-1 text-xs text-white/50 max-w-sm mx-auto">Try searching for roles like <button type="button" onclick="setAgentFilter('Security')" class="text-violet-300 underline">Security</button>, <button type="button" onclick="setAgentFilter('React')" class="text-violet-300 underline">React</button>, or <button type="button" onclick="setAgentFilter('Data')" class="text-violet-300 underline">Data</button>.</p>
+          <p class="mt-1 text-xs text-white/50 max-w-sm mx-auto">Try searching for roles like <button type="button" onclick="setAgentFilter('Security')" class="text-zinc-200 underline">Security</button>, <button type="button" onclick="setAgentFilter('React')" class="text-zinc-200 underline">React</button>, or <button type="button" onclick="setAgentFilter('Data')" class="text-zinc-200 underline">Data</button>.</p>
           <button type="button" onclick="clearAgentSearch()" class="mt-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition">Clear filter</button>
         </div>
       `;
@@ -1067,7 +1067,7 @@ function filterAgents(forcedQuery){
   if(g) {
     if(matches.length === 0) {
       g.innerHTML = `
-        <div class="col-span-full rounded-2xl border border-white/10 bg-white/[.03] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
+        <div class="col-span-full rounded-xl border border-white/10 bg-white/[.03] p-8 text-center" style="animation: agentFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;">
           <div class="h-10 w-10 mx-auto rounded-full bg-white/5 grid place-items-center text-base text-white/40">🔍</div>
           <div class="mt-3 text-sm font-semibold text-white">No agents match “${rawQ}”</div>
           <button type="button" onclick="clearAgentSearch()" class="mt-4 px-3 py-1 rounded-full bg-white/10 hover:bg-white/15 text-xs font-medium text-white transition">Clear filter</button>
@@ -1116,10 +1116,10 @@ function renderMobileDiagram(){
   const el=document.getElementById('diagramMobile');
   if(!el) return;
   const stationsHtml = STATIONS.map((s,i)=>`
-    <button onclick="showStation(${i});document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.04] px-4 py-3 hover:bg-white/[.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400">
-      <span class="h-8 w-8 rounded-full bg-gradient-to-br from-violet-600 to-cyan-500 grid place-items-center text-xs font-bold shrink-0">${s.label}</span>
+    <button onclick="showStation(${i});document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.04] px-4 py-3 hover:bg-white/[.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-200">
+      <span class="h-8 w-8 rounded-full bg-gradient-to-br from-zinc-600 to-zinc-800 grid place-items-center text-xs font-bold shrink-0">${s.label}</span>
       <span class="font-mono text-sm">${s.id}</span>
-      <span class="ml-auto text-violet-300 text-xs">→</span>
+      <span class="ml-auto text-zinc-400 text-xs">→</span>
     </button>
   `).join('');
 
@@ -1127,8 +1127,8 @@ function renderMobileDiagram(){
     <div class="pt-4 pb-1 text-xs font-mono uppercase tracking-wider text-white/50">System &amp; Supporting Skills (Outside Chain)</div>
     <div class="space-y-2">
       ${SYSTEM_SKILLS.map(sys=>`
-        <button onclick="showSystemSkill('${sys.id}');document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[.02] px-4 py-2.5 hover:bg-white/[.06] text-xs">
-          <span class="px-2 py-0.5 rounded-full font-mono text-[10px] ${sys.roleClass}">${sys.roleBadge}</span>
+        <button onclick="showSystemSkill('${sys.id}');document.getElementById('stationDetail').scrollIntoView({behavior:'smooth',block:'nearest'})" class="w-full text-left flex items-center gap-3 rounded-xl border border-white/5 bg-white/[.02] px-4 py-2.5 hover:bg-white/[.06] text-xs">
+          <span class="px-2 py-0.5 rounded-md font-mono text-[10px] ${sys.roleClass}">${sys.roleBadge}</span>
           <span class="font-mono text-white/90">/${sys.id}</span>
           <span class="ml-auto text-white/40 text-[11px]">${sys.timing}</span>
         </button>
@@ -1144,8 +1144,8 @@ function setupReveal(){
 }
 // Render Sticky Table of Contents on Home Page (Onboarding Flow)
 const HOME_TOC_SECTIONS = [
-  { id: 'why', num: '01', title: 'Why it works', accent: 'from-violet-400 to-fuchsia-400' },
-  { id: 'install', num: '02', title: 'Install & Setup', accent: 'from-fuchsia-400 to-pink-400' },
+  { id: 'why', num: '01', title: 'Why it works', accent: 'from-zinc-400 to-zinc-600' },
+  { id: 'install', num: '02', title: 'Install & Setup', accent: 'from-amber-200 to-amber-400' },
   { id: 'in-practice', num: '03', title: 'In practice', accent: 'from-pink-400 to-amber-400' },
   { 
     id: 'lifecycle', 
@@ -1153,12 +1153,12 @@ const HOME_TOC_SECTIONS = [
     title: 'The lifecycle', 
     accent: 'from-cyan-400 to-blue-500',
     subItems: [
-      { id: 'sequential-stations', title: 'Stations #1 → #6', num: '#1–6' },
+      { id: 'sequential-stations', title: 'Stations #1 → #6', num: '#1-6' },
       { id: 'system-skills', title: 'System & Ad-hoc', num: '3' }
     ]
   },
-  { id: 'agents', num: '05', title: 'Specialist review', accent: 'from-blue-400 to-violet-500' },
-  { id: 'catalog', num: '06', title: 'The catalog', accent: 'from-violet-400 to-purple-500' }
+  { id: 'agents', num: '05', title: 'Specialist review', accent: 'from-zinc-400 to-zinc-600' },
+  { id: 'catalog', num: '06', title: 'The catalog', accent: 'from-amber-200 to-amber-400' }
 ];
 
 function renderHomeTableOfContents() {
@@ -1216,9 +1216,9 @@ function renderHomeTableOfContents() {
         window.scrollTo({ top: y, behavior: 'smooth' });
         history.pushState(null, '', '#' + targetId);
 
-        targetEl.classList.add('ring-2', 'ring-violet-400/60', 'transition-all');
+        targetEl.classList.add('ring-2', 'ring-amber-200/50', 'transition-all');
         setTimeout(() => {
-          targetEl.classList.remove('ring-2', 'ring-violet-400/60');
+          targetEl.classList.remove('ring-2', 'ring-amber-200/50');
         }, 2000);
 
         const mobileDetails = document.getElementById('mobileTocDetails');
@@ -1317,23 +1317,23 @@ function setupHomeTocScrollspy() {
 
       if (target === currentId) {
         if (isSub) {
-          item.classList.add('bg-violet-600/30', 'text-violet-200', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.add('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
           item.classList.remove('text-white/50');
         } else {
-          item.classList.add('bg-violet-600/25', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.add('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
           item.classList.remove('text-white/65');
         }
       } else if (target === parentId) {
         // Parent chapter of the active sub-item
         item.classList.add('text-white', 'font-semibold');
-        item.classList.remove('text-white/65', 'bg-violet-600/25', 'border-l-2', 'border-violet-400');
+        item.classList.remove('text-white/65', 'bg-white/10', 'border-l-2', 'border-amber-200/60');
       } else {
         // Inactive item
         if (isSub) {
-          item.classList.remove('bg-violet-600/30', 'text-violet-200', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.remove('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
           item.classList.add('text-white/50');
         } else {
-          item.classList.remove('bg-violet-600/25', 'text-white', 'font-semibold', 'border-l-2', 'border-violet-400');
+          item.classList.remove('bg-white/10', 'text-white', 'font-semibold', 'border-l-2', 'border-amber-200/60');
           item.classList.add('text-white/65');
         }
       }
