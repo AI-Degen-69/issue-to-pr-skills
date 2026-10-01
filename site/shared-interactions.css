@@ -970,6 +970,114 @@ a.btn:active,
   box-shadow: 0 0 10px rgba(253, 230, 138, 0.4);
 }
 
+/* ==========================================================================
+   Page Backdrop System (Issue #44)
+   --------------------------------------------------------------------------
+   A CSS-only, theme-consistent backdrop layer. Each page family opts in with
+   additive body classes:
+     .page-backdrop.page-backdrop--home   (site/index.html)
+     .page-backdrop.page-backdrop--skills (site/skills/index.html)
+     .page-backdrop.page-backdrop--agents (site/agents/index.html)
+     .page-backdrop.page-backdrop--docs   (site/docs/index.html)
+     .page-backdrop.page-backdrop--detail (site/agents/<slug>/index.html, 17 pages)
+
+   Implementation: two fixed, non-interactive body pseudo-elements sitting at
+   z-index: -1 (body stays non-positioned, so no new stacking context is
+   created and the sticky nav / modals / tooltips are never trapped).
+   `body::before` paints a soft radial glow; `body::after` paints a faint grid
+   pattern. Hues are dedicated per-page custom properties (NOT derived from
+   runtime --theme-accent variables) so each page keeps its identity across
+   themes. Alpha stays low so every variant reads as the same dark family.
+   ========================================================================== */
+
+.page-backdrop {
+  /* Defaults: neutral dark-family glow + grid, used by the detail variant. */
+  --backdrop-glow-a: rgba(148, 163, 184, 0.10);
+  --backdrop-glow-b: rgba(148, 163, 184, 0.05);
+  --backdrop-grid: rgba(255, 255, 255, 0.025);
+  --backdrop-grid-size: 32px;
+  /* Radial placement of the primary glow (position x y, size x y). */
+  --backdrop-glow-pos: 50% 0%;
+  --backdrop-glow-size: 900px 420px;
+}
+
+/* Home — warm amber glow, matching the amber brand accents. */
+.page-backdrop--home {
+  --backdrop-glow-a: rgba(251, 191, 36, 0.12);
+  --backdrop-glow-b: rgba(251, 191, 36, 0.05);
+  --backdrop-grid: rgba(255, 255, 255, 0.03);
+  --backdrop-glow-pos: 50% 0%;
+  --backdrop-glow-size: 1100px 520px;
+}
+
+/* Skills — violet, matching the Skills header radial rgba(124,58,237,.15). */
+.page-backdrop--skills {
+  --backdrop-glow-a: rgba(124, 58, 237, 0.16);
+  --backdrop-glow-b: rgba(168, 85, 247, 0.06);
+  --backdrop-glow-pos: 50% 0%;
+  --backdrop-glow-size: 1000px 460px;
+}
+
+/* Agents — cyan, matching the Agents header radial rgba(34,211,238,.14). */
+.page-backdrop--agents {
+  --backdrop-glow-a: rgba(34, 211, 238, 0.14);
+  --backdrop-glow-b: rgba(34, 211, 238, 0.05);
+  --backdrop-glow-pos: 70% 0%;
+  --backdrop-glow-size: 1000px 480px;
+}
+
+/* Docs — emerald, matching the Docs header radial rgba(16,185,129,.14). */
+.page-backdrop--docs {
+  --backdrop-glow-a: rgba(16, 185, 129, 0.14);
+  --backdrop-glow-b: rgba(16, 185, 129, 0.05);
+  --backdrop-glow-pos: 20% 0%;
+  --backdrop-glow-size: 1000px 480px;
+}
+
+/* Detail — shared neutral grid + soft slate glow, no persona hue. */
+.page-backdrop--detail {
+  --backdrop-glow-a: rgba(148, 163, 184, 0.10);
+  --backdrop-glow-b: rgba(148, 163, 184, 0.04);
+  --backdrop-grid: rgba(255, 255, 255, 0.028);
+  --backdrop-glow-pos: 50% 0%;
+  --backdrop-glow-size: 900px 420px;
+}
+
+.page-backdrop::before,
+.page-backdrop::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Glow layer */
+.page-backdrop::before {
+  background: radial-gradient(
+      var(--backdrop-glow-size, 900px 420px) at var(--backdrop-glow-pos, 50% 0%),
+      var(--backdrop-glow-a, rgba(148, 163, 184, 0.1)),
+      transparent 70%
+    ),
+    radial-gradient(
+      600px 320px at 100% 100%,
+      var(--backdrop-glow-b, rgba(148, 163, 184, 0.05)),
+      transparent 70%
+    );
+}
+
+/* Pattern layer */
+.page-backdrop::after {
+  background-image: linear-gradient(var(--backdrop-grid, rgba(255, 255, 255, 0.025)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--backdrop-grid, rgba(255, 255, 255, 0.025)) 1px, transparent 1px);
+  background-size: var(--backdrop-grid-size, 32px) var(--backdrop-grid-size, 32px);
+  -webkit-mask-image: radial-gradient(1200px 700px at 50% 0%, #000 0%, transparent 85%);
+  mask-image: radial-gradient(1200px 700px at 50% 0%, #000 0%, transparent 85%);
+}
+
+/* The backdrop carries no animation or transition of its own, so it is already
+   static under prefers-reduced-motion — no extra rule needed. */
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   html {
