@@ -1,27 +1,19 @@
-# CONSTRAINTS — Issue #23: "See it in action" real captures on agent pages
+# CONSTRAINTS — Issue #40: site/ stays static (Option A decision)
+
+## Decision (locked): Option A — stay static
+- `site/` remains plain static HTML + CDN Tailwind (`cdn.tailwindcss.com` in `site/index.html:16`). No `site-web/`, no Vite/Next, no `components.json`, no shadcn CLI/MCP install.
+- The shadcn skill is used as design-rules inspiration only (Card/Tabs/Badge/Button patterns hand-applied in static HTML/CSS), never as installed components.
+- Rationale: site is ~26 HTML pages (~1.4 MB total), single `server.js` static serve + GitHub Pages `path: 'site'` deploy; a rebuild adds build toolchain + deploy migration cost with no matching payoff while the page count and interactivity (vanilla `app.js`, `skills-flow.js`, `shared-interactions.js`) stay small.
 
 ## Zero regressions
-- The five target pages (`site/agents/{code-reviewer,python-reviewer,typescript-reviewer,react-reviewer,type-design-analyzer}/index.html`) keep their existing sections, order, tile routing, and reveal-observer behavior intact.
-- `/agents/` grid reveal (`site/app.js` reveal-observer selector) must keep matching — no change to card markup or `site/app.js`.
-- No changes to validators, workflows, `agents/*.md`, or pipeline skills.
+- No new directories (`site-web/` must not exist), no changes to `server.js` static-serve behavior, no changes to `.github/workflows/static.yml` deploy path (`site`), no changes to `skills/` or `agents/` markdown sources.
+- `site/index.html` CDN Tailwind script tag stays; no build step introduced (`npm run build` stays a no-op echo).
 
-## No fabrication (hard rule)
-- Every capture comes from a real run of the actual persona on a checked-in demo diff. No mockups, no hand-written fake findings.
-- Any capture that cannot be produced for real is reported as a skip in the issue thread and the page falls back to text.
-
-## Portability / privacy
-- No usernames, machine paths, tokens, private repo or customer names inside any committed capture or text. File-by-file hygiene check before commit.
-
-## Page weight budgets (hard limits)
-- PNG/JPEG/WebP still ≤ 256 KB each; GIF ≤ 1.5 MB; width ≤ 1200 px.
-- Gate: the issue's inline `node -e` budget-check one-liner over `site/` must print `OK` and exit 0.
-
-## Accessibility
-- Descriptive alt text (never just "screenshot"), visible caption, `width`/`height` attributes, `loading="lazy"`, static poster shown for animated GIF under `prefers-reduced-motion: reduce`, section readable with images blocked.
+## Portability
+- English only in committed docs (per repo AGENTS.md); relative paths only; no absolute paths, usernames, or OS-specific homes.
+- `docs/site-static-decision.md` is the explicit "stay static + why" record the issue's Option-A acceptance criterion demands.
 
 ## Anti-cheat
-- No skipping or disabling validators; no deleting assertions; no widening `.gitignore` for scratch captures.
-- Full-suite sweeps stay with CI on push; targeted checks here are the budget one-liner, `npm run validate`, and `node scripts/validate-links.js`.
+- No skipping or disabling validators; `npm run check` must pass. A shadcn rebuild (Option B artifacts: `site-web/`, `components.json`) failing to appear is the correct outcome, not a gap.
+- Minimal diff: decision record + pointer docs only; no restyling of the site, no touching skills/agents sources.
 
-## Dependencies
-- No new external dependencies, no new npm packages, no `<video>`/external hosting.
