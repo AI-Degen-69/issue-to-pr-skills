@@ -1,19 +1,23 @@
-# CONSTRAINTS — Issue #40: site/ stays static (Option A decision)
+# CONSTRAINTS — Issue #44: Distinct theme-consistent page backgrounds
 
-## Decision (locked): Option A — stay static
-- `site/` remains plain static HTML + CDN Tailwind (`cdn.tailwindcss.com` in `site/index.html:16`). No `site-web/`, no Vite/Next, no `components.json`, no shadcn CLI/MCP install.
-- The shadcn skill is used as design-rules inspiration only (Card/Tabs/Badge/Button patterns hand-applied in static HTML/CSS), never as installed components.
-- Rationale: site is ~26 HTML pages (~1.4 MB total), single `server.js` static serve + GitHub Pages `path: 'site'` deploy; a rebuild adds build toolchain + deploy migration cost with no matching payoff while the page count and interactivity (vanilla `app.js`, `skills-flow.js`, `shared-interactions.js`) stay small.
+## Scope (locked)
+- CSS-only background layer: shared utilities in `site/shared-interactions.css` + additive body classes on 21 pages (Home, Skills, Agents, Docs, 17 agent-detail pages).
+- Distinct but harmonious dark-family backdrops; existing content, nav/IA, light mode out of scope.
+- Must NOT modify: `skills/`, `agents/` markdown sources, `site/app.js`, `site/shared-interactions.js`, `server.js`, workflows, validators, version badges/footers rewritten by `scripts/version-sync.js`.
 
 ## Zero regressions
-- No new directories (`site-web/` must not exist), no changes to `server.js` static-serve behavior, no changes to `.github/workflows/static.yml` deploy path (`site`), no changes to `skills/` or `agents/` markdown sources.
-- `site/index.html` CDN Tailwind script tag stays; no build step introduced (`npm run build` stays a no-op echo).
+- Body base colors stay (`bg-[#09090b]` top-level, `bg-[#020617]` detail pages); existing `.glass`, `.hero-grid`, inline header gradients, per-page `selection:` accents untouched.
+- No new stacking contexts trapping nav/modal/tooltips/fixed controls; sticky nav, modal, tooltips, back-to-top/progress controls keep working.
+- No horizontal overflow introduced; Home + Skills desktop TOCs intact.
 
-## Portability
-- English only in committed docs (per repo AGENTS.md); relative paths only; no absolute paths, usernames, or OS-specific homes.
-- `docs/site-static-decision.md` is the explicit "stay static + why" record the issue's Option-A acceptance criterion demands.
+## Accessibility
+- Text contrast preserved (4.5:1 normal, 3:1 large) at each variant's brightest region; static backdrop under `prefers-reduced-motion: reduce`.
+
+## Dependencies
+- No external images/fonts/JS, no new npm packages, no new network requests; works from static file serving.
 
 ## Anti-cheat
-- No skipping or disabling validators; `npm run check` must pass. A shadcn rebuild (Option B artifacts: `site-web/`, `components.json`) failing to appear is the correct outcome, not a gap.
-- Minimal diff: decision record + pointer docs only; no restyling of the site, no touching skills/agents sources.
+- No skipping validators; `npm run validate`, `node scripts/validate-links.js`, `npm run validate:mirror`, `npm run version:check` each run separately (never masked by `npm run check`'s `|| echo`); `npm test` green.
+- Version bump policy: `+0.1` doc change (`npm run version:bump -- --doc` then `npm run sync:site`); never hand-edit `site/version.json` or `site/skills.json`.
+
 
