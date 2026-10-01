@@ -29,19 +29,45 @@ genuine output, and screenshotting the rendered page.
 | react-reviewer | `react-reviewer/run.html` | `react-reviewer/review-findings.png` | 1080×936, ~125 KB |
 | type-design-analyzer | `type-design-analyzer/run.html` | `type-design-analyzer/review-findings.png` | 1080×535, ~56 KB |
 
-Reproduction steps:
+Reproduction steps (per persona, identical pipeline):
 
-1. Serve this directory: `npx --yes serve site/assets/agents` (or any static
-   server) and open `http://localhost:3000/<agent-id>/run.html`.
-   `run.html` is the verbatim rendered output of that persona's review of
-   `demo-change.diff`, produced by following the process in
-   `agents/<agent-id>.md` (scope via the matching `git diff` path filter,
-   checklist applied CRITICAL→LOW, pre-report gate, standard output format).
-2. Screenshot the rendered page with Playwright:
+1. **Diff setup.** Personas review the diff text itself, so the minimal setup
+   is simply `site/assets/agents/demo-change.diff`. To reproduce the planted
+   tree instead, apply it in a scratch git repo — the three `new file` hunks
+   create `src/billing.ts`, `src/report.py`, and `src/UserList.tsx`
+   themselves; only the `src/types.ts` hunk needs the pre-diff file present:
+
+   ```bash
+   git init scratch-repo && cd scratch-repo && mkdir src
+   # src/types.ts BEFORE the diff (5 lines):
+   #   export interface Account { id: string;
+   #     status: string;   // "trial" | "active" | "suspended"
+   #     suspendedAt?: Date | null; }
+   git apply --check /path/to/demo-change.diff && git apply /path/to/demo-change.diff
+   ```
+
+2. **Persona invocation.** Launch a coding agent with the persona file
+   `agents/<agent-id>.md` from this repo as its system prompt and instruct it
+   to review exactly the files in `demo-change.diff` (no other scope). The
+   persona's own process then drives the run: read the diff, read surrounding
+   context, apply its review checklist CRITICAL→LOW, pass its pre-report
+   gate, and emit its standard output format. For `type-design-analyzer` the
+   instruction is to analyze the type changed by the diff (`Account.status`).
+
+3. **Rendering to `run.html`.** The agent's emitted review (its standard
+   output format: findings with severity/file/issue/fix, summary table,
+   verdict) is rendered verbatim into `<agent-id>/run.html` — a static,
+   dependency-free HTML page, no content added or reworded. `run.html` is the
+   faithful, diffable record of that run; given the same persona rubric and
+   diff, a re-run produces the same findings.
+
+4. **Capture.** Serve this directory: `npx --yes serve site/assets/agents`
+   (or any static server) and screenshot the rendered page:
    `playwright-cli open http://localhost:3000/<agent-id>/run.html && playwright-cli resize 1180 1000 && playwright-cli screenshot body --filename <agent-id>.png`
    (any equivalent tool works; the viewport is 1180 px wide, body element).
-3. The PNG is committed as-is; no crop or recompression step was needed — all
-   captures are under the 256 KB still budget and ≤ 1200 px wide.
+
+5. **Commit.** The PNG is committed as-is; no crop or recompression step was
+   needed — all captures are under the 256 KB still budget and ≤ 1200 px wide.
 
 ## Provenance & drift
 

@@ -60,10 +60,10 @@ new file mode 100644
 +    </div>
 +  );
 +}
-diff --git src/types.ts b/src/types.ts
---- src/types.ts
-+++ src/types.ts
-@@ -1,4 +1,7 @@
+diff --git a/src/types.ts b/src/types.ts
+--- a/src/types.ts
++++ b/src/types.ts
+@@ -1,5 +1,5 @@
  export interface Account {
    id: string;
 -  status: string;          // "trial" | "active" | "suspended"
