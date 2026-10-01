@@ -1,158 +1,63 @@
 # Agent Detail Page Captures Recipe
 
-This directory contains visual captures for the agent detail pages under `site/agents/`.
-All captures are stored in agent-specific subdirectories and referenced via depth-2 relative paths (`../../assets/agents/<agent-id>/capture-1.png`).
+This directory holds the visual evidence for the "See it in action" sections on
+the five agent detail pages under `site/agents/` (issue #23). Every capture is a
+real run — no mockups, no hand-written fake findings. Each page's capture was
+produced by running the persona's actual review process (as defined in
+`agents/<agent-id>.md`) against the committed demo diff, rendering the run's
+genuine output, and screenshotting the rendered page.
 
----
+## Shared demo diff
 
-## Portability & Privacy Audit
+- **File:** `site/assets/agents/demo-change.diff`
+- **Provenance:** purpose-built for this issue — a tiny, self-contained
+  change-set (4 short files) with planted flaws, one per persona lane. No
+  third-party, private, or customer code appears anywhere in it.
+- Flaws planted per file: `src/billing.ts` (console.log of card data, `any`
+  types, `card.token!`, async-in-`forEach`), `src/report.py` (f-string SQL,
+  bare `except:`, mutable default arg, missing hints), `src/UserList.tsx`
+  (empty `useEffect` dep array, `key={index}`, clickable `div`, no fetch error
+  path), `src/types.ts` (free-form `status: string`).
 
-In accordance with `AGENTS.md` and repository guidelines:
-- **Zero machine or user credentials**: No usernames, home directories (`/Users/...`, `/home/...`), internal tokens, or SSH hosts.
-- **Path hygiene**: All demonstrated file paths are project-root relative (e.g. `src/auth/webhook.ts`, `src/api/users.py`, `src/services/billing.ts`, `src/components/UserProfile.tsx`, `src/models/async-state.ts`).
-- **No private or proprietary code**: All evaluated code samples are minimal, self-contained demonstration cases created specifically for this purpose.
+## Per-capture recipe (identical steps for all five)
 
----
+| Agent | Run page (committed) | Capture | Size |
+|---|---|---|---|
+| code-reviewer | `code-reviewer/run.html` | `code-reviewer/review-findings.png` | 1080×1020, ~122 KB |
+| python-reviewer | `python-reviewer/run.html` | `python-reviewer/review-findings.png` | 1080×1024, ~128 KB |
+| typescript-reviewer | `typescript-reviewer/run.html` | `typescript-reviewer/review-findings.png` | 1080×963, ~124 KB |
+| react-reviewer | `react-reviewer/run.html` | `react-reviewer/review-findings.png` | 1080×936, ~125 KB |
+| type-design-analyzer | `type-design-analyzer/run.html` | `type-design-analyzer/review-findings.png` | 1080×535, ~56 KB |
 
-## Capture Inventory & Reproduction Recipes
+Reproduction steps:
 
-### 1. `code-reviewer` (`site/assets/agents/code-reviewer/capture-1.png`)
-- **Target File**: `src/auth/webhook.ts`
-- **Case**: Payment webhook handler without HMAC signature verification and an empty `catch` block that returns HTTP 200 upon failure.
-- **Reviewer Command**:
-  ```bash
-  gh pr diff | agent-review --persona code-reviewer
-  ```
-- **Demo Diff**:
-  ```diff
-  --- a/src/auth/webhook.ts
-  +++ b/src/auth/webhook.ts
-  @@ -8,6 +8,11 @@ export async function handlePaymentWebhook(req: any, res: any) {
-  +  try {
-  +    const event = req.body;
-  +    await processPayment(event);
-  +    return res.status(200).json({ received: true });
-  +  } catch (err) {
-  +    return res.status(200).json({ received: true });
-  +  }
-  ```
-- **Outcome / Findings**:
-  - `[CRITICAL] Security / Auth Verification`: Missing HMAC signature check allows unauthenticated payment spoofing.
-  - `[CRITICAL] Correctness / Error Handling`: Silently returning HTTP 200 falsely acknowledges failed webhook processing.
-  - `VERDICT: REQUEST_CHANGES` (2 critical issues).
-- **Asset Specifications**: 960x410 px PNG, 79.4 KB (budget limit: 256 KB).
+1. Serve this directory: `npx --yes serve site/assets/agents` (or any static
+   server) and open `http://localhost:3000/<agent-id>/run.html`.
+   `run.html` is the verbatim rendered output of that persona's review of
+   `demo-change.diff`, produced by following the process in
+   `agents/<agent-id>.md` (scope via the matching `git diff` path filter,
+   checklist applied CRITICAL→LOW, pre-report gate, standard output format).
+2. Screenshot the rendered page with Playwright:
+   `playwright-cli open http://localhost:3000/<agent-id>/run.html && playwright-cli resize 1180 1000 && playwright-cli screenshot body --filename <agent-id>.png`
+   (any equivalent tool works; the viewport is 1180 px wide, body element).
+3. The PNG is committed as-is; no crop or recompression step was needed — all
+   captures are under the 256 KB still budget and ≤ 1200 px wide.
 
----
+## Provenance & drift
 
-### 2. `python-reviewer` (`site/assets/agents/python-reviewer/capture-1.png`)
-- **Target File**: `src/api/users.py`
-- **Case**: Database query endpoint using f-string string interpolation (SQL injection) and a bare `except:` block.
-- **Reviewer Command**:
-  ```bash
-  ruff check src/api/users.py && agent-review --persona python-reviewer
-  ```
-- **Demo Diff**:
-  ```diff
-  --- a/src/api/users.py
-  +++ b/src/api/users.py
-  @@ -5,8 +5,10 @@ def get_user_by_email(db: sqlite3.Connection, user_email: str):
-  +    try:
-  +        query = f"SELECT * FROM users WHERE email = '{user_email}'"
-  +        cursor.execute(query)
-  +        return cursor.fetchone()
-  +    except:
-  +        return None
-  ```
-- **Outcome / Findings**:
-  - `[CRITICAL] S608`: SQL injection vector through string-based query construction (CWE-89).
-  - `[CRITICAL] E722`: Bare `except:` intercepts `BaseException`, masking `KeyboardInterrupt` and `SystemExit`.
-  - `VERDICT: BLOCK` (2 critical issues).
-- **Asset Specifications**: 960x390 px PNG, 76.7 KB (budget limit: 256 KB).
+- The capture content is the personas' deterministic checklist applied to the
+  committed `demo-change.diff`; `run.html` (committed next to each PNG) is the
+  exact rendered run, so every capture can be re-derived or diffed.
+- Captures were produced against the tree containing the demo diff as committed
+  with this recipe (see the PR that carries this change for the exact commit).
+- When `agents/<agent-id>.md` evolves its rubric, re-run the steps above and
+  refresh both `run.html` and the PNG (manual follow-up; no automation).
 
----
+## Portability & privacy audit
 
-### 3. `typescript-reviewer` (`site/assets/agents/typescript-reviewer/capture-1.png`)
-- **Target File**: `src/services/billing.ts`
-- **Case**: Untrusted payload cast with double assertion (`as any as SubscriptionPlan`) and unhandled floating promise in analytics dispatcher.
-- **Reviewer Command**:
-  ```bash
-  tsc --noEmit && agent-review --persona typescript-reviewer
-  ```
-- **Demo Diff**:
-  ```diff
-  --- a/src/services/billing.ts
-  +++ b/src/services/billing.ts
-  @@ -10,6 +10,8 @@ export function applyPlanUpgrade(rawPayload: unknown): void {
-  +  const plan = rawPayload as any as SubscriptionPlan;
-  +  dispatchAnalyticsEvent({ planId: plan.id, timestamp: Date.now() });
-  ```
-- **Outcome / Findings**:
-  - `[CRITICAL] @typescript-eslint/no-floating-promises`: Promise returned by `dispatchAnalyticsEvent` is not awaited or caught.
-  - `[HIGH] Unsound Type Assertion`: `as any as T` disables compiler type-checking at untrusted boundary.
-  - `VERDICT: REQUEST_CHANGES`.
-- **Asset Specifications**: 960x390 px PNG, 76.8 KB (budget limit: 256 KB).
-
----
-
-### 4. `react-reviewer` (`site/assets/agents/react-reviewer/capture-1.png`)
-- **Target File**: `src/components/UserProfile.tsx`
-- **Case**: Component with conditional `useEffect` hook called after an early `return` check, plus unsanitized `dangerouslySetInnerHTML`.
-- **Reviewer Command**:
-  ```bash
-  eslint src/components/UserProfile.tsx && agent-review --persona react-reviewer
-  ```
-- **Demo Diff**:
-  ```diff
-  --- a/src/components/UserProfile.tsx
-  +++ b/src/components/UserProfile.tsx
-  @@ -8,6 +8,8 @@ export function UserProfile({ userId, comment }: Props) {
-  +  if (!userId) return <div>User not found</div>;
-  +  useEffect(() => { fetchUserData(userId).then(setData); }, [userId]);
-  +  return <div>{comment && <div dangerouslySetInnerHTML={{ __html: comment.body }} />}</div>;
-  ```
-- **Outcome / Findings**:
-  - `[CRITICAL] react-hooks/rules-of-hooks`: Hook called after early return statement, violating React fiber order invariants.
-  - `[CRITICAL] React Security`: Direct injection of unsanitized HTML via `dangerouslySetInnerHTML` allows stored XSS.
-  - `VERDICT: BLOCK`.
-- **Asset Specifications**: 960x390 px PNG, 78.9 KB (budget limit: 256 KB).
-
----
-
-### 5. `type-design-analyzer` (`site/assets/agents/type-design-analyzer/capture-1.png`)
-- **Target File**: `src/models/async-state.ts`
-- **Case**: Refactoring an ambiguous "bag-of-optionals" state interface into an explicit discriminated union.
-- **Reviewer Command**:
-  ```bash
-  agent-review --persona type-design-analyzer src/models/async-state.ts
-  ```
-- **Demo Diff**:
-  ```diff
-  --- a/src/models/async-state.ts
-  +++ b/src/models/async-state.ts
-  @@ -1,7 +1,6 @@
-  -export interface LegacyAsyncState<T> {
-  -  data?: T;
-  -  error?: Error;
-  -  isLoading?: boolean;
-  -  isIdle?: boolean;
-  -}
-  +export type AsyncState<T> =
-  +  | { status: 'idle' }
-  +  | { status: 'loading' }
-  +  | { status: 'success'; data: T }
-  +  | { status: 'error'; error: Error };
-  ```
-- **Outcome / Findings**:
-  - `Encapsulation`: EXCELLENT
-  - `Invariant Expression`: EXCELLENT (impossible state `loading: true && error: Error` is prevented at compile time)
-  - `Invariant Usefulness`: HIGH (exhaustive TypeScript narrowing)
-  - `Enforcement`: COMPILE-TIME
-  - `VERDICT: DESIGN APPROVED (Model Quality: Excellent)`.
-- **Asset Specifications**: 960x380 px PNG, 83.4 KB (budget limit: 256 KB).
-
----
-
-## Maintenance & Refresh Policy
-
-- Captures represent deterministic evaluation outputs against defined test diffs.
-- When an agent persona in `agents/<agent-id>.md` evolves its review rubric, re-run the respective test case in `scratch/demos/` and refresh the raster asset using the reproduction script.
+- No usernames, home/machine paths, tokens, private repo or customer names in
+  any capture, run page, or the demo diff — checked file by file before commit.
+- All paths shown inside the captures are project-relative demo paths
+  (`src/billing.ts`, `src/report.py`, `src/UserList.tsx`, `src/types.ts`).
+- Budgets: stills ≤ 256 KB ✔, width ≤ 1200 px ✔; no GIFs shipped, so no
+  `prefers-reduced-motion` poster is required.

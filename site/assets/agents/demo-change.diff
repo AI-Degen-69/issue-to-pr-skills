@@ -1,0 +1,72 @@
+# Demo change-set for the "See it in action" captures (issue #23).
+# Purpose-built, tiny, and self-contained: no real product code, no third-party
+# or private code. Every persona capture on the agent pages was produced by
+# running that persona's review process against exactly this diff.
+diff --git a/src/billing.ts b/src/billing.ts
+new file mode 100644
+--- /dev/null
++++ b/src/billing.ts
+@@ -0,0 +1,12 @@
++import { logAudit } from "./audit";
++
++export function chargeCard(card: any, amountCents: number) {
++  console.log("charging card", card);
++  const result = paymentGateway.charge(card.token!, amountCents);
++  logAudit("charge", card.id);
++  return result;
++}
++
++export function refundAll(cards: any[]) {
++  cards.forEach(async (c) => refund(c.id));
++}
+diff --git a/src/report.py b/src/report.py
+new file mode 100644
+--- /dev/null
++++ b/src/report.py
+@@ -0,0 +1,12 @@
++import sqlite3
++
++def rows_for(user_id, cache={}):
++    if user_id not in cache:
++        conn = sqlite3.connect("app.db")
++        cache[user_id] = conn.execute(
++            f"SELECT * FROM orders WHERE user_id = {user_id}"
++        ).fetchall()
++    return cache[user_id]
++
++def export_csv(path):
++    try:
++        write_rows(path)
++    except:
++        pass
+diff --git a/src/UserList.tsx b/src/UserList.tsx
+new file mode 100644
+--- /dev/null
++++ b/src/UserList.tsx
+@@ -0,0 +1,11 @@
++"use client";
++import { useEffect, useState } from "react";
++
++export function UserList({ teamId }: { teamId: string }) {
++  const [users, setUsers] = useState<User[]>([]);
++  useEffect(() => {
++    fetchUsers(teamId).then(setUsers);
++  }, []);
++  return (
++    <div>
++      {users.map((u, i) => (
++        <UserRow key={i} user={u} onClick={() => openUser(u)} />
++      ))}
++    </div>
++  );
++}
+diff --git src/types.ts b/src/types.ts
+--- src/types.ts
++++ src/types.ts
+@@ -1,4 +1,7 @@
+ export interface Account {
+   id: string;
+-  status: string;          // "trial" | "active" | "suspended"
++  status: string;          // free-form: "trial", "ACTIVE ", "suspend", ...
+   suspendedAt?: Date | null;
+ }

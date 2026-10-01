@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>type-design-analyzer · real run</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e2e8f0;font:15px/1.6 system-ui,-apple-system,'Segoe UI',sans-serif;padding:28px;width:1080px}
+h1{font-size:16px;color:#a5b4fc;margin:0 0 4px;font-family:system-ui,sans-serif}
+.sub{font-size:12px;color:#64748b;margin:0 0 18px;font-family:system-ui,sans-serif}
+.typecard{border:1px solid #334155;border-radius:10px;padding:16px 18px;margin-bottom:14px;background:#0f172a}
+.tname{font:700 15px/1.4 'Cascadia Code',Consolas,monospace;color:#7dd3fc}
+.tloc{color:#94a3b8;font-size:13px;margin-top:2px}
+.scores{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;margin-top:12px;font-size:14px}
+.score .bar{height:8px;border-radius:99px;background:#1e293b;margin-top:4px;overflow:hidden}
+.score .fill{height:100%;border-radius:99px}
+.red{background:#f87171}.amber{background:#fbbf24}.green{background:#34d399}
+.assess{margin-top:12px;font-size:14px;color:#cbd5e1}
+.suggest{margin-top:6px;font-size:14px;color:#e2e8f0}
+.suggest code{font:13px 'Cascadia Code',Consolas,monospace;background:#020617;border:1px solid #1e293b;border-radius:6px;padding:2px 6px;color:#7dd3fc}
+</style>
+</head>
+<body>
+<h1>$ agent type-design-analyzer — analysis of demo-change.diff (src/types.ts)</h1>
+<p class="sub">Persona: agents/type-design-analyzer.md · four dimensions: encapsulation, invariant expression, invariant usefulness, enforcement. Real run, real output.</p>
+
+<div class="typecard">
+<div class="tname">Account.status: string</div>
+<div class="tloc">src/types.ts:3 · modified in this diff</div>
+<div class="scores">
+<div class="score">Encapsulation · 6/10<div class="bar"><div class="fill amber" style="width:60%"></div></div></div>
+<div class="score">Invariant expression · 2/10<div class="bar"><div class="fill red" style="width:20%"></div></div></div>
+<div class="score">Invariant usefulness · 8/10<div class="bar"><div class="fill green" style="width:80%"></div></div></div>
+<div class="score">Enforcement · 1/10<div class="bar"><div class="fill red" style="width:10%"></div></div></div>
+</div>
+<div class="assess"><b>Overall: weak — illegal states fully representable.</b> The business rule "an account is exactly one of trial / active / suspended" is real and matters (billing depends on it), but the type states it only in a comment. Any string — "ACTIVE ", "suspend", a typo — compiles, flows past every call site, and only explodes at runtime in billing logic.</div>
+<div class="suggest"><b>Suggestion 1:</b> replace the string with a union — <code>status: "trial" | "active" | "suspended"</code>. The compiler then enforces the invariant at every assignment and every switch is exhaustiveness-checked.</div>
+<div class="suggest"><b>Suggestion 2:</b> make the illegal state unrepresentable — <code>suspendedAt</code> should be required exactly when status is "suspended"; model it as a discriminated union so a suspended account without a timestamp cannot exist.</div>
+<div class="suggest"><b>Suggestion 3:</b> if values arrive from outside (API), parse at the boundary — <code>parseStatus(raw: string): AccountStatus</code> — so untrusted strings are rejected once, at the edge, instead of being trusted everywhere.</div>
+</div>
+</body>
+</html>
