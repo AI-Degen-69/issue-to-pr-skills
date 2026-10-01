@@ -16,6 +16,7 @@
 .glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
 figure{margin:0}
 figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
+.capture-shot{max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
 </style>
 </head>
 <body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-cyan-500/30">
@@ -487,6 +488,19 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
         <div class="mt-1 text-sm text-white/60 leading-5">Finds swallowed errors that hide bugs.</div>
       </a>
     </div>
+  </section>
+
+  <!-- SECTION 8C: SEE IT IN ACTION (real capture, issue #23) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-cyan-300">Real run</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">See it in action</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      The capture below is the real output of running this persona's review process on the React component of a tiny demo change-set. It is not a mockup — the demo diff and the exact reproduction steps are recorded in <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/site/assets/agents/README.md" target="_blank" rel="noopener noreferrer" class="text-cyan-300 hover:text-white">site/assets/agents/README.md</a>.
+    </p>
+    <figure class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <img src="../../assets/agents/react-reviewer/review-findings.png" alt="Review report showing a CRITICAL missing teamId dependency in useEffect that shows another team's users, a CRITICAL list keyed by array index, a HIGH clickable div that keyboard users cannot operate, and a HIGH missing fetch error path, ending with verdict BLOCK" width="1080" height="936" loading="lazy" class="capture-shot"/>
+      <figcaption class="mt-3">Running <code class="font-mono text-white/80">react-reviewer</code> on <code class="font-mono text-white/80">src/UserList.tsx</code> from the demo diff: hook dependency and key-prop CRITICALs, plus an a11y HIGH — verdict BLOCK. Full details in <code class="font-mono text-white/80">run.html</code> next to the capture.</figcaption>
+    </figure>
   </section>
 
   <!-- SECTION 9: LINKS & FOOTER CTA -->
