@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>code-reviewer · real run</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e2e8f0;font:14px/1.55 'Cascadia Code','Consolas',ui-monospace,monospace;padding:28px;width:1080px}
+h1{font-size:15px;color:#a5b4fc;margin:0 0 4px;font-family:system-ui,sans-serif}
+.sub{font-size:12px;color:#64748b;margin:0 0 18px;font-family:system-ui,sans-serif}
+.finding{border:1px solid #334155;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#0f172a}
+.sev{font-weight:700;letter-spacing:.02em}
+.crit{color:#f87171}.high{color:#fbbf24}
+.file{color:#94a3b8}
+.issue,.fix{color:#cbd5e1;margin-top:6px}
+.code{margin-top:8px;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:10px 12px;font-size:13px}
+.bad{color:#f87171}.good{color:#34d399}
+table{border-collapse:collapse;margin-top:4px;font-size:13px}
+td,th{border-bottom:1px solid #1e293b;padding:5px 22px 5px 0;text-align:left}
+th{color:#64748b;font-weight:600}
+td:first-child{font-weight:700}
+.verdict{margin-top:16px;color:#fbbf24;font-weight:700}
+</style>
+</head>
+<body>
+<h1>$ agent code-reviewer — review of demo-change.diff</h1>
+<p class="sub">Persona: agents/code-reviewer.md · Read the diff, read surrounding context, applied the review checklist → Pre-Report Gate → report. Real run, real output.</p>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] console.log leaks card data and stays in production code</div>
+<div class="file">File: src/billing.ts:4</div>
+<div class="issue">Issue: debug statement prints the full card object (number + token) on every charge; the data lands in server logs.</div>
+<div class="fix">Fix: remove the statement; structured audit logging already exists one line below.</div>
+<div class="code"><span class="bad">+ console.log("charging card", card);</span><br/><span class="good">+ logAudit("charge", card.id);   // already present</span></div>
+</div>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] Non-null assertion can crash chargeCard at runtime</div>
+<div class="file">File: src/billing.ts:5</div>
+<div class="issue">Issue: <b>card.token!</b> bypasses the type check; a card without a token becomes undefined sent to the gateway, failing mid-payment.</div>
+<div class="fix">Fix: guard and fail explicitly — <b>if (!card.token) throw new Error(...)</b></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Floating promises in refundAll — refunds fire and are never awaited</div>
+<div class="file">File: src/billing.ts:11</div>
+<div class="issue">Issue: forEach with an async callback starts the refunds but returns immediately; failures are unhandled and the caller sees success too early.</div>
+<div class="fix">Fix: for...of + await, or Promise.all with error handling.</div>
+<div class="code"><span class="bad">+ cards.forEach(async (c) =&gt; refund(c.id));</span><br/><span class="good">+ for (const c of cards) await refund(c.id);</span></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] any types erase all checking on the payment path</div>
+<div class="file">File: src/billing.ts:3,10</div>
+<div class="issue">Issue: <b>card: any</b> and <b>cards: any[]</b> — the compiler cannot catch a malformed card, wrong field names, or a bad amount type on the most sensitive path in the module.</div>
+<div class="fix">Fix: define a Card interface; type refundAll(cards: Card[]).</div>
+</div>
+
+<table>
+<tr><th>Severity</th><th>Count</th><th>Status</th></tr>
+<tr><td style="color:#f87171">CRITICAL</td><td>2</td><td style="color:#f87171">fail</td></tr>
+<tr><td style="color:#fbbf24">HIGH</td><td>2</td><td style="color:#fbbf24">warn</td></tr>
+</table>
+<div class="verdict">Verdict: BLOCK — CRITICAL issues must be fixed before merge.</div>
+</body>
+</html>

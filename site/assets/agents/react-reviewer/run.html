@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>react-reviewer · real run</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e2e8f0;font:14px/1.55 'Cascadia Code','Consolas',ui-monospace,monospace;padding:28px;width:1080px}
+h1{font-size:15px;color:#a5b4fc;margin:0 0 4px;font-family:system-ui,sans-serif}
+.sub{font-size:12px;color:#64748b;margin:0 0 18px;font-family:system-ui,sans-serif}
+.finding{border:1px solid #334155;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#0f172a}
+.sev{font-weight:700;letter-spacing:.02em}
+.crit{color:#f87171}.high{color:#fbbf24}
+.file{color:#94a3b8}
+.issue,.fix{color:#cbd5e1;margin-top:6px}
+.code{margin-top:8px;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:10px 12px;font-size:13px}
+.bad{color:#f87171}.good{color:#34d399}
+.verdict{margin-top:16px;color:#fbbf24;font-weight:700}
+</style>
+</head>
+<body>
+<h1>$ agent react-reviewer — review of demo-change.diff ('*.tsx' scope)</h1>
+<p class="sub">Persona: agents/react-reviewer.md · git diff -- '*.tsx' → hooks rules → a11y → state correctness. Real run, real output.</p>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] Conditional-equivalent hook: empty dep array drops a reactive value</div>
+<div class="file">File: src/UserList.tsx:7-9</div>
+<div class="issue">Issue: the effect reads <b>teamId</b> but its dependency array is <b>[]</b> — when teamId changes, the effect does not re-run and the list shows another team's users. (exhaustive-deps violation; the persona checks the array, not just hook placement.)</div>
+<div class="fix">Fix: useEffect(() =&gt; { fetchUsers(teamId).then(setUsers); }, [teamId]);</div>
+<div class="code"><span class="bad">- }, []);</span><br/><span class="good">+ }, [teamId]);</span></div>
+</div>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] key={index} in a list whose rows carry state</div>
+<div class="file">File: src/UserList.tsx:12</div>
+<div class="issue">Issue: <b>key={i}</b> — when users reorder (sort, filter, prepend), React reuses rows by position: open-row state, focus and input content attach to the wrong user.</div>
+<div class="fix">Fix: key={u.id} — stable database IDs only.</div>
+<div class="code"><span class="bad">- &lt;UserRow key={i} user={u} onClick={() =&gt; openUser(u)} /&gt;</span><br/><span class="good">+ &lt;UserRow key={u.id} user={u} onClick={() =&gt; openUser(u)} /&gt;</span></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Clickable row is a div — keyboard users cannot open a user</div>
+<div class="file">File: src/UserList.tsx:10-13</div>
+<div class="issue">Issue: <b>&lt;div&gt;…onClick</b> — not focusable, no Enter/Space, invisible to the accessibility tree as a button. Mouse-only interaction.</div>
+<div class="fix">Fix: render rows as &lt;button&gt; (or role="button" + tabIndex + key handlers — button wins).</div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Effect has no failure path: rejected fetch leaves the list silently empty</div>
+<div class="file">File: src/UserList.tsx:8</div>
+<div class="issue">Issue: fetchUsers(teamId).then(setUsers) with no .catch — on error the component renders an empty list with no message and no retry.</div>
+<div class="fix">Fix: add error state + .catch(setError), render it.</div>
+</div>
+
+<div class="verdict">Verdict: BLOCK — CRITICAL issues must be fixed before merge.</div>
+</body>
+</html>

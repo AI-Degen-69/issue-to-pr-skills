@@ -1,4 +1,4 @@
-# AGENTS.md — working in this repo (Version: 1.0)
+# AGENTS.md — working in this repo (Version: 1.1)
 
 ## What this repo is
 

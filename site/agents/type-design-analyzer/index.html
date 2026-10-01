@@ -16,6 +16,7 @@
 .glass{backdrop-filter:blur(16px);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
 figure{margin:0}
 figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
+.capture-shot{max-width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
 </style>
 </head>
 <body class="bg-[#020617] text-slate-100 font-sans antialiased selection:bg-indigo-500/30">
@@ -198,7 +199,7 @@ figcaption{font-size:0.8125rem;color:rgba(255,255,255,.6)}
     </p>
 
     <div class="mt-6 grid md:grid-cols-2 gap-4">
-      <div class="rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
+      <div class="min-w-0 rounded-2xl border border-red-500/30 bg-red-950/15 p-5">
         <div class="text-xs font-bold font-mono uppercase text-red-400 flex items-center gap-2">
           <span class="h-2 w-2 rounded-full bg-red-400"></span> WEAK: Bag-of-Optionals (Allows 16 illegal combinations)
         </div>
@@ -220,7 +221,7 @@ interface AsyncResult&lt;T&gt; {
         </div>
       </div>
 
-      <div class="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5">
+      <div class="min-w-0 rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5">
         <div class="text-xs font-bold font-mono uppercase text-emerald-400 flex items-center gap-2">
           <span class="h-2 w-2 rounded-full bg-emerald-400"></span> STRONG: Discriminated Union (Zero illegal states)
         </div>
@@ -394,6 +395,19 @@ type AsyncResult&lt;T&gt; =
         <div class="mt-1 text-sm text-white/60 leading-5">Async, types, and clean PEP 8 style.</div>
       </a>
     </div>
+  </section>
+
+  <!-- SECTION 7C: SEE IT IN ACTION (real capture, issue #23) -->
+  <section class="mx-auto max-w-[1200px] px-5 lg:px-8 py-8 border-t border-white/5">
+    <div class="text-xs uppercase tracking-[.14em] text-indigo-300">Real run</div>
+    <h2 class="mt-2 text-[26px] font-bold tracking-tight">See it in action</h2>
+    <p class="mt-2 max-w-[740px] text-white/70 text-sm leading-6">
+      The capture below is the real output of running this persona's four-dimension analysis on the type changed by a tiny demo change-set. It is not a mockup — the demo diff and the exact reproduction steps are recorded in <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/site/assets/agents/README.md" target="_blank" rel="noopener noreferrer" class="text-indigo-300 hover:text-white">site/assets/agents/README.md</a>.
+    </p>
+    <figure class="mt-6 rounded-2xl border border-white/10 bg-white/[.03] p-5">
+      <img src="../../assets/agents/type-design-analyzer/review-findings.png" alt="Type evaluation card for Account.status scored across encapsulation 6/10, invariant expression 2/10, invariant usefulness 8/10 and enforcement 1/10, judged weak because any string compiles, with three suggestions including a status union type" width="1080" height="535" loading="lazy" class="capture-shot"/>
+      <figcaption class="mt-3">Running <code class="font-mono text-white/80">type-design-analyzer</code> on <code class="font-mono text-white/80">Account.status</code> from the demo diff: the free-form string is judged weak, with a union-type fix. Full details in <code class="font-mono text-white/80">run.html</code> next to the capture.</figcaption>
+    </figure>
   </section>
 
   <!-- SECTION 8: LINKS & FOOTER CTA -->

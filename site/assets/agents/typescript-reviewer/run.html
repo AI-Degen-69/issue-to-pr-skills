@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>typescript-reviewer · real run</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e2e8f0;font:14px/1.55 'Cascadia Code','Consolas',ui-monospace,monospace;padding:28px;width:1080px}
+h1{font-size:15px;color:#a5b4fc;margin:0 0 4px;font-family:system-ui,sans-serif}
+.sub{font-size:12px;color:#64748b;margin:0 0 18px;font-family:system-ui,sans-serif}
+.finding{border:1px solid #334155;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#0f172a}
+.sev{font-weight:700;letter-spacing:.02em}
+.crit{color:#f87171}.high{color:#fbbf24}
+.file{color:#94a3b8}
+.issue,.fix{color:#cbd5e1;margin-top:6px}
+.code{margin-top:8px;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:10px 12px;font-size:13px}
+.bad{color:#f87171}.good{color:#34d399}
+.verdict{margin-top:16px;color:#f87171;font-weight:700}
+</style>
+</head>
+<body>
+<h1>$ agent typescript-reviewer — review of demo-change.diff ('*.ts' scope)</h1>
+<p class="sub">Persona: agents/typescript-reviewer.md · git diff scope established → tsc/eslint route checked → CRITICAL→MEDIUM checklist. Real run, real output.</p>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] Hardcoded trust boundary: card data logged to console</div>
+<div class="file">File: src/billing.ts:4</div>
+<div class="issue">Issue: console.log of the raw card object exposes token material in logs — secrets in logs are a listed CRITICAL lane for this persona.</div>
+<div class="fix">Fix: delete the statement; keep the structured logAudit call only.</div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] any without justification disables checking on the payment path</div>
+<div class="file">File: src/billing.ts:3,10</div>
+<div class="issue">Issue: <b>card: any</b> and <b>cards: any[]</b> — use <b>unknown</b> and narrow, or a precise Card type. As written, misspelled fields compile.</div>
+<div class="fix">Fix: interface Card { id: string; token: string } and refundAll(cards: Card[]).</div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] async with forEach does not await</div>
+<div class="file">File: src/billing.ts:11</div>
+<div class="issue">Issue: <b>cards.forEach(async (c) =&gt; refund(c.id))</b> — the async callbacks are floating promises; rejections are unhandled.</div>
+<div class="fix">Fix: for...of + await, or Promise.all with a .catch.</div>
+<div class="code"><span class="bad">- cards.forEach(async (c) =&gt; refund(c.id));</span><br/><span class="good">+ await Promise.all(cards.map((c) =&gt; refund(c.id)));</span></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Non-null assertion without a preceding guard</div>
+<div class="file">File: src/billing.ts:5</div>
+<div class="issue">Issue: <b>card.token!</b> asserts away strict-null checking with no runtime check — undefined reaches the gateway.</div>
+<div class="fix">Fix: if (!card.token) throw new Error("card missing token");</div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] status: string encodes an enum as free text</div>
+<div class="file">File: src/types.ts:3</div>
+<div class="issue">Issue: the comment admits three legal values but the type allows any string — "ACTIVE " with a trailing space compiles.</div>
+<div class="fix">Fix: status: "trial" | "active" | "suspended"</div>
+</div>
+
+<div class="verdict">Verdict: BLOCK — CRITICAL issues must be fixed before merge.</div>
+</body>
+</html>

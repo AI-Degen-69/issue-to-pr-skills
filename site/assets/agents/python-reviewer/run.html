@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>python-reviewer · real run</title>
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:#0b1120;color:#e2e8f0;font:14px/1.55 'Cascadia Code','Consolas',ui-monospace,monospace;padding:28px;width:1080px}
+h1{font-size:15px;color:#a5b4fc;margin:0 0 4px;font-family:system-ui,sans-serif}
+.sub{font-size:12px;color:#64748b;margin:0 0 18px;font-family:system-ui,sans-serif}
+.finding{border:1px solid #334155;border-radius:10px;padding:14px 16px;margin-bottom:12px;background:#0f172a}
+.sev{font-weight:700;letter-spacing:.02em}
+.crit{color:#f87171}.high{color:#fbbf24}
+.file{color:#94a3b8}
+.issue,.fix{color:#cbd5e1;margin-top:6px}
+.code{margin-top:8px;background:#020617;border:1px solid #1e293b;border-radius:8px;padding:10px 12px;font-size:13px}
+.bad{color:#f87171}.good{color:#34d399}
+.verdict{margin-top:16px;color:#f87171;font-weight:700}
+</style>
+</head>
+<body>
+<h1>$ agent python-reviewer — review of demo-change.diff ('*.py' scope)</h1>
+<p class="sub">Persona: agents/python-reviewer.md · git diff -- '*.py' → applied CRITICAL→MEDIUM checklist. Real run, real output.</p>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] SQL injection via f-string interpolation</div>
+<div class="file">File: src/report.py:7</div>
+<div class="issue">Issue: user_id is interpolated straight into the query — <b>f"SELECT * FROM orders WHERE user_id = {user_id}"</b>. Input like <b>"1 OR 1=1"</b> returns every order in the table.</div>
+<div class="fix">Fix: parameterize — <b>conn.execute("SELECT * FROM orders WHERE user_id = ?", (user_id,))</b></div>
+<div class="code"><span class="bad">- f"SELECT * FROM orders WHERE user_id = {user_id}"</span><br/><span class="good">+ "SELECT * FROM orders WHERE user_id = ?", (user_id,)</span></div>
+</div>
+
+<div class="finding">
+<div class="sev crit">[CRITICAL] Bare except swallows every error</div>
+<div class="file">File: src/report.py:14</div>
+<div class="issue">Issue: <b>except: pass</b> hides disk failures, permission errors, and bugs alike — a failed export looks like success.</div>
+<div class="fix">Fix: catch the specific exception and log it.</div>
+<div class="code"><span class="bad">- except:</span><br/><span class="bad">-     pass</span><br/><span class="good">+ except OSError as e:</span><br/><span class="good">+     logging.error("csv export failed: %s", e)</span></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Mutable default argument persists between calls</div>
+<div class="file">File: src/report.py:3</div>
+<div class="issue">Issue: <b>cache={}</b> is evaluated once at definition — all callers share one dict, so results from an earlier call leak into later ones.</div>
+<div class="fix">Fix: default to None and create the dict inside.</div>
+<div class="code"><span class="bad">- def rows_for(user_id, cache={}):</span><br/><span class="good">+ def rows_for(user_id, cache=None):</span><br/><span class="good">+     if cache is None: cache = {}</span></div>
+</div>
+
+<div class="finding">
+<div class="sev high">[HIGH] Missing type hints on public functions</div>
+<div class="file">File: src/report.py:3,12</div>
+<div class="issue">Issue: rows_for(user_id, cache={}) and export_csv(path) have no annotations; cache's type is especially unclear.</div>
+<div class="fix">Fix: def rows_for(user_id: int, cache: dict[int, list] | None = None) -> list: …</div>
+</div>
+
+<div class="verdict">Verdict: BLOCK — CRITICAL issues must be fixed before merge.</div>
+</body>
+</html>
