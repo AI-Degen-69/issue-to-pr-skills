@@ -1,6 +1,6 @@
 {
   "name": "issue-to-pr-skills",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 36 supporting skills + 17 reviewer personas.",
   "repository": {
     "type": "git",
