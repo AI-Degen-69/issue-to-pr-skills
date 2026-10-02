@@ -1,6 +1,6 @@
 {
   "name": "issue-to-pr-skills",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 36 supporting skills + 17 reviewer personas.",
   "repository": {
     "type": "git",
@@ -40,13 +40,13 @@
     "validate:mirror": "node scripts/verify-mirror.js",
     "sync": "node scripts/sync-from-canonical.js",
     "sync:check": "node scripts/sync-from-canonical.js --check",
-    "test": "node --test scripts/**/*.test.js",
-    "check": "npm run validate && npm run validate:mirror && npm run version:check && npm run sync:check",
-    "check:strict": "npm run validate && npm run validate:mirror && npm run version:check && npm run sync:check -- --strict",
+    "test": "node --test",
+    "check": "npm run validate && npm run validate:links && npm run validate:mirror && npm run version:check && npm run sync:check",
+    "check:strict": "npm run validate && npm run validate:links && npm run validate:mirror && npm run version:check && npm run sync:check -- --strict",
     "prepublishOnly": "npm run check"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "dependencies": {
     "express": "^5.2.1"
