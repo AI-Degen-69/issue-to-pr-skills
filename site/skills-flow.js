@@ -649,8 +649,8 @@ function openSkillModal(skillId, stationId) {
     <!-- Support strip -->
     <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between gap-3 text-xs text-white/50">
       <span>Free forever. MIT.</span>
-      <!-- TODO: replace href="#" with Buy Me a Coffee URL -->
-      <a href="#" data-coffee-placeholder="true" title="TODO: add Buy Me a Coffee link" class="text-amber-200/80 hover:text-amber-200 transition">☕ Coffee</a>
+      <!-- Funding — Buy Me a Coffee -->
+      <a href="https://buymeacoffee.com/ai.degen" target="_blank" rel="noopener noreferrer" title="Buy me a coffee on Buy Me a Coffee" class="text-amber-200/80 hover:text-amber-200 transition">☕ Coffee</a>
     </div>
   `;
 
