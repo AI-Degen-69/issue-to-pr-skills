@@ -6,6 +6,7 @@
 [![Version](https://img.shields.io/badge/version-1.4-emerald.svg)](version.json)
 [![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
 [![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=social&logo=buy-me-a-coffee)](https://buymeacoffee.com/ai.degen)
 
 **An end-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase.**
 

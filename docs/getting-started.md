@@ -38,3 +38,11 @@ Skills are plain Markdown. Copy `skills/<name>/` into your tool's skills directo
 - The pipeline reports in plain English. If your team prefers another language, translate the Chat Output Contract templates in `skills/*/SKILL.md` — keep the structure, change the words.
 - Reviewer personas live in `agents/` — add your stack's reviewer by copying the closest one.
 - Quality bars live in each project's `CONSTRAINTS.md` (written by Station II per issue), not in the skills — the skills stay generic.
+
+## Support
+
+Free forever and MIT licensed. If it shipped your PR faster, you can say thanks here:
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=social&logo=buy-me-a-coffee)](https://buymeacoffee.com/ai.degen)
+
+Support covers hosting and maintenance — it never buys a feature or a priority.
