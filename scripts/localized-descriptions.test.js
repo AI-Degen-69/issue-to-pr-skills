@@ -12,8 +12,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = path.resolve(import.meta.dirname, '..');
+// package.json declares `node: >=18`, and `import.meta.dirname` only landed in
+// 20.11 — so it would be `undefined` here and the file would fail to load.
+// The five scripts that use it are on Node 20 in CI; a new file does not have
+// to repeat that, so derive the directory from import.meta.url instead.
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CANONICAL = process.env.AGENTS_HOME
   ? path.join(process.env.AGENTS_HOME, 'skills')
   : path.join(process.env.USERPROFILE || process.env.HOME || '', '.agents', 'skills');
@@ -68,7 +73,13 @@ test('every localized station description matches canonical', { skip: !canonical
   for (const station of LOCALIZED) {
     const canonicalFile = path.join(CANONICAL, station, 'SKILL.md');
     const packFile = path.join(ROOT, 'skills', station, 'SKILL.md');
-    if (!fs.existsSync(canonicalFile)) continue;
+    // A canonical home that resolves but is missing stations is a broken
+    // install. Skipping those silently would shrink the comparison and still
+    // report green — the exact failure this gate exists to prevent.
+    assert.ok(
+      fs.existsSync(canonicalFile),
+      `canonical ${canonicalFile} is missing — AGENTS_HOME does not look like a full skills home`
+    );
     compared++;
     const canonicalText = localized(description(canonicalFile));
     const packText = description(packFile);
