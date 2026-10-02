@@ -1,4 +1,4 @@
-# AGENTS.md — working in this repo (Version: 1.4)
+# AGENTS.md — working in this repo (Version: 1.5)
 
 ## What this repo is
 
@@ -30,7 +30,10 @@ This repository enforces a strict two-value version synchronization system:
 - `npm run version:status` — Displays the comparison board (Folder Version vs Site Version + SHA-256 hashes).
 - `npm run version:bump` — Bumps the folder version (`--skill`, `--doc`, or auto-detect from git diff).
 - `npm run sync:site` — Regenerates `site/skills.json` from `skills/`, writes `site/version.json`, and updates site badges.
-- `npm run check` — Full gate: runs validate + mirror verification + version check.
+- `npm run check` — Full gate: runs validate + mirror verification + version check +
+  sync check. Plain `&&` chain, so a failure anywhere **fails the command**.
+- `npm run check:strict` — same, plus `--strict`, which also fails on drift inside
+  the 10 localized stations. Use before a release.
 - `npm test` — Runs the test suite (`scripts/version-sync.test.js`).
 
 ## The 46 mirrored skills are a copy — never hand-edit them
@@ -46,15 +49,19 @@ Change the skill at the source, then re-sync:
 
 ```bash
 npm run sync      # copy all 46 into this pack
-npm run check     # validate + verify byte-identical + confirm no drift
+npm run check         # validate + verify byte-identical + report drift
 ```
 
 Or per-file: `node scripts/sync-from-canonical.js --check` reports drift and
 writes nothing; drop `--check` to apply. Note: the localized station files above
 intentionally differ from canonical (English-only contracts, portable paths), so
-`--check` reports them as drifted by design — `scripts/verify-mirror.js`
-(`npm run validate:mirror`) is the guard that accounts for that and must stay
-green.
+`sync:check` **reports** that drift by name and does **not** fail on it
+(`scripts/drift-policy.js` draws the line: a mirrored skill that drifted always
+fails, localized drift fails only under `--strict`). `scripts/verify-mirror.js`
+(`npm run validate:mirror`) is the guard that accounts for the localization and
+must stay green. Do not silence `npm run check` with a trailing `|| echo` — shell
+precedence made that mask swallow every earlier failure, which is how the gate
+came to exit `0` unconditionally.
 
 Run `npm run check` before every release commit. A hand-edit here is overwritten
 on the next sync — this pack already drifted once and was still advertising a
