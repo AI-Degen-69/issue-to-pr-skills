@@ -134,7 +134,7 @@ const STATIONS_FLOW = [
     startWithCommand: '/iv-review-build-and-pr',
     accent: 'from-violet-600 to-purple-600',
     invoked: [
-      { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Step 0 Proof Gate: preferred headless browser automation for fast UI/DOM proof.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
+      { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Step 0 Proof Gate: the only permitted headless browser automation for fast UI/DOM proof — capped at 8 calls, never substituted for a failing tool.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
       { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Step 0 Proof Gate: live browser inspection for performance profiling and traces only.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
       { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Step 1B: general code quality, naming, lack of dead code, and pattern adherence.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
       { id: 'security-and-hardening', name: 'security-and-hardening', title: 'The /security-and-hardening Skill', desc: 'Step 1B: audits inputs, secrets exposure, session boundaries, and supply chain.', gradient: 'from-red-600 to-rose-600', icon: 'shield', kind: 'skill' },
