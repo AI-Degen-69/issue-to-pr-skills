@@ -3,7 +3,7 @@
 [![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
 [![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.6-emerald.svg)](version.json)
+[![Version](https://img.shields.io/badge/version-2.7-emerald.svg)](version.json)
 [![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
 [![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=social&logo=buy-me-a-coffee)](https://buymeacoffee.com/ai.degen)
@@ -54,6 +54,11 @@ AI coding agents default to the shortest path: skipping specs, tests, and review
 - **The issue is the star.** Reports open with the issue and its plan; machinery stays in `tasks/plan.md`.
 
 ## Installation
+
+> **Requires Node 22+** to run this repo's own tooling (`npm run check`, `npm test`, the
+> sync and site scripts). The skill pack itself is plain Markdown — copying `skills/` into
+> an agent needs no Node at all. The floor is `fs.globSync` (added in v22.0.0), and CI
+> matrixes it so the declaration stays tested rather than aspirational.
 
 **Any agent, one command** (via the open [skills CLI](https://github.com/vercel-labs/skills)):
 
