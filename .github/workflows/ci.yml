@@ -8,12 +8,23 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 22 is the floor package.json declares (fs.globSync landed in v22.0.0);
+        # 24 is current LTS. A floor nobody runs is a comment, not a contract -
+        # this job is what keeps the declaration honest.
+        node-version: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
+      # Not `npm run check`: sync:check needs a canonical home that CI does not
+      # have and exits non-zero without one. The steps are listed individually.
       - run: npm run validate
+      - run: npm run validate:links
+      - run: npm test
 
   package:
     runs-on: ubuntu-latest
