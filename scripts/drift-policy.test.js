@@ -5,11 +5,11 @@ import path from 'node:path';
 import { classifyDrift, driftExitCode } from './drift-policy.js';
 
 const LOCALIZED = new Set(['i-pick-issue', 'present-pr']);
-// Stands in for the canonical Hebrew check: only these two "canonical" files are Hebrew.
-const isTranslated = (station, rel) => rel === 'SKILL.md' && station === 'i-pick-issue';
+// Stands in for the sync guard: only these two "canonical" files may not be published.
+const isBlocked = (station, rel) => rel === 'SKILL.md' && station === 'i-pick-issue';
 
-test('classifyDrift splits mirrored, translated and stale drift', () => {
-  const { blocking, translated, stale } = classifyDrift(
+test('classifyDrift splits blocking, blocked and stale', () => {
+  const { blocking, blocked, stale } = classifyDrift(
     [
       'skills/i-pick-issue/SKILL.md',
       'skills/i-pick-issue/README.md',
@@ -17,9 +17,9 @@ test('classifyDrift splits mirrored, translated and stale drift', () => {
       'skills/using-agent-skills/SKILL.md',
     ],
     LOCALIZED,
-    isTranslated
+    isBlocked
   );
-  assert.deepEqual(translated, ['skills/i-pick-issue/SKILL.md']);
+  assert.deepEqual(blocked, ['skills/i-pick-issue/SKILL.md']);
   assert.deepEqual(stale, [
     'skills/i-pick-issue/README.md',
     'skills/present-pr/README.md',
@@ -27,50 +27,50 @@ test('classifyDrift splits mirrored, translated and stale drift', () => {
   assert.deepEqual(blocking, ['skills/using-agent-skills/SKILL.md']);
 });
 
-test('localized drift with no Hebrew canonical is not reported as a translation', () => {
-  // The bug this bucket exists for: lumping these with translated files tells the
-  // next maintainer to re-translate work that is already done.
-  const { translated, stale } = classifyDrift(
-    ['skills/present-pr/README.md'],
+test('a file the guard would block is never called merely stale', () => {
+  // The bug this bucket exists for: telling the next maintainer that a blocked
+  // file is "just out of date" invites a re-sync the guard will refuse anyway.
+  const { blocked, stale } = classifyDrift(
+    ['skills/i-pick-issue/SKILL.md'],
     LOCALIZED,
-    isTranslated
+    isBlocked
   );
-  assert.deepEqual(translated, []);
-  assert.deepEqual(stale, ['skills/present-pr/README.md']);
+  assert.deepEqual(blocked, ['skills/i-pick-issue/SKILL.md']);
+  assert.deepEqual(stale, []);
 });
 
 test('classifyDrift returns empty buckets when nothing drifted', () => {
-  const { blocking, translated, stale } = classifyDrift([], LOCALIZED, isTranslated);
+  const { blocking, blocked, stale } = classifyDrift([], LOCALIZED, isBlocked);
   assert.deepEqual(blocking, []);
-  assert.deepEqual(translated, []);
+  assert.deepEqual(blocked, []);
   assert.deepEqual(stale, []);
 });
 
 test('a path that is not under skills/ is treated as blocking', () => {
-  const { blocking } = classifyDrift(['somewhere/else/file.md'], LOCALIZED, isTranslated);
+  const { blocking } = classifyDrift(['somewhere/else/file.md'], LOCALIZED, isBlocked);
   assert.deepEqual(blocking, ['somewhere/else/file.md']);
 });
 
 test('a mirrored skill that drifted always fails the gate', () => {
-  const drift = classifyDrift(['skills/context-engineering/SKILL.md'], LOCALIZED, isTranslated);
+  const drift = classifyDrift(['skills/context-engineering/SKILL.md'], LOCALIZED, isBlocked);
   assert.equal(driftExitCode(drift, false), 1);
   assert.equal(driftExitCode(drift, true), 1);
 });
 
 test('localized drift alone passes by default and fails under --strict', () => {
-  const drift = classifyDrift(['skills/i-pick-issue/SKILL.md'], LOCALIZED, isTranslated);
+  const drift = classifyDrift(['skills/present-pr/README.md'], LOCALIZED, isBlocked);
   assert.equal(driftExitCode(drift, false), 0, 'by design, must not fail the default gate');
   assert.equal(driftExitCode(drift, true), 1, '--strict must demand a synchronized pack');
 });
 
-test('--strict also fails on stale localized drift', () => {
-  const drift = classifyDrift(['skills/present-pr/README.md'], LOCALIZED, isTranslated);
+test('--strict also fails on guard-blocked localized drift', () => {
+  const drift = classifyDrift(['skills/i-pick-issue/SKILL.md'], LOCALIZED, isBlocked);
   assert.equal(driftExitCode(drift, false), 0);
   assert.equal(driftExitCode(drift, true), 1);
 });
 
 test('clean tree passes under both modes', () => {
-  const drift = classifyDrift([], LOCALIZED, isTranslated);
+  const drift = classifyDrift([], LOCALIZED, isBlocked);
   assert.equal(driftExitCode(drift, false), 0);
   assert.equal(driftExitCode(drift, true), 0);
 });
@@ -117,4 +117,32 @@ test('drift-policy stays in sync with the localized skill lists', () => {
   const b = extract('verify-mirror.js', 'LOCALIZED_SKILLS');
   assert.deepEqual(a, b, 'the two LOCALIZED_SKILLS lists must stay identical');
   assert.equal(a.length, 10, 'all 10 localized pipeline stations must be listed');
+});
+
+// The writer and the gate must apply identical rules. Before this change the
+// rules existed only in verify-mirror.js, so a file carrying a machine-specific
+// home path was copied into the pack first and rejected afterwards - the same
+// "sync reported success, npm run check failed later" shape as the Hebrew leak.
+test('the sync guard and the mirror gate share one set of content rules', () => {
+  const here = path.resolve(import.meta.dirname);
+  const sync = fs.readFileSync(path.join(here, 'sync-from-canonical.js'), 'utf8');
+  const mirror = fs.readFileSync(path.join(here, 'verify-mirror.js'), 'utf8');
+  for (const [name, text] of [
+    ['sync-from-canonical.js', sync],
+    ['verify-mirror.js', mirror],
+  ]) {
+    assert.ok(
+      text.includes('from "./content-rules.js"'),
+      `${name} must import the shared content rules instead of carrying its own`
+    );
+  }
+  // No local copy of the old inline rules may survive in the gate.
+  assert.ok(
+    !mirror.includes('\\u0590-\\u05FF'),
+    'verify-mirror.js must not keep its own Hebrew-character regex'
+  );
+  assert.ok(
+    !/Users\[\/\\\\\]/.test(mirror),
+    'verify-mirror.js must not keep its own home-path regex'
+  );
 });

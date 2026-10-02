@@ -4,6 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { contentViolation } from "./content-rules.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TARGET_DIR = path.join(ROOT, "skills");
@@ -207,17 +208,11 @@ for (const skill of EXPECTED_SKILLS) {
           // Snapshots/historical runs are preserved historical artifacts; active files must be English-only
           if (!f.startsWith("evals/snapshots/") && !f.startsWith("evals/iteration-")) {
             const content = fs.readFileSync(tgtFilePath, "utf8");
-            if (/[\u0590-\u05FF]/.test(content)) {
-              fail(`${skill}/${f}: contains Hebrew characters (must be English-only)`);
-            }
-            // Whitelist: technical mentions of Hebrew as *input* (branch-slug stripping,
-            // voice-note intake), not as a reporting/output language.
-            const stripped = content.replace(/never Hebrew[^.\n"]*|Hebrew-only|Hebrew voice-notes/gi, "");
-            if (/Hebrew/i.test(stripped)) {
-              fail(`${skill}/${f}: references Hebrew reporting (must be English-only, say "English")`);
-            }
-            if (/~[/\\]\.agents[/\\]agents/.test(content) || /C:[/\\]Users[/\\]/i.test(content)) {
-              fail(`${skill}/${f}: contains non-portable hardcoded agent/user path`);
+            // Shared with sync-from-canonical.js so the writer and this gate
+            // cannot drift into disagreeing about what may be published (#52).
+            const violation = contentViolation(content);
+            if (violation) {
+              fail(`${skill}/${f}: ${violation}`);
             }
           }
         }

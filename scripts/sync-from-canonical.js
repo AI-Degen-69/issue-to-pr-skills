@@ -24,6 +24,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { classifyDrift, driftExitCode } from "./drift-policy.js";
+import { blocksSync } from "./content-rules.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -142,9 +143,6 @@ const isActiveLocalized = (skill, rel) =>
 // case to catch either: all 52 active canonical text files were scanned for
 // mangled Hebrew (Latin-1 supplement runs, cp1255-in-UTF-8 artifacts) and none
 // matched. This now mirrors what verify-mirror.js actually enforces.
-const HEBREW_CHARS = /[\u0590-\u05FF]/;
-const needsTranslation = (text) => HEBREW_CHARS.test(text);
-
 const CHECK_ONLY = process.argv.includes("--check");
 // --strict additionally fails on localized drift (see drift-policy.js). The 10
 // localized stations are hand-maintained English and differ from canonical by
@@ -152,12 +150,11 @@ const CHECK_ONLY = process.argv.includes("--check");
 // wants a perfectly synchronized pack asks for --strict explicitly.
 const STRICT = process.argv.includes("--strict");
 
-// Does canonical for this localized file actually contain Hebrew? Same character
-// test the guard above uses, so "translated" and "skipped by the guard" can never
-// disagree. Lets the report distinguish a real translation from plain staleness.
-const canonicalIsHebrew = (station, rel) => {
+// Would the guard above block this canonical file? Same shared rule, so the
+// drift report and the writer can never disagree about a single file.
+const canonicalIsBlocked = (station, rel) => {
   const src = path.join(CANONICAL, station, rel);
-  return fs.existsSync(src) && needsTranslation(read(src));
+  return fs.existsSync(src) && blocksSync(read(src)) !== null;
 };
 
 function walk(dir, base = dir, out = {}) {
@@ -229,10 +226,15 @@ for (const station of STATIONS) {
     const dest = path.join(to, rel);
     if (fs.existsSync(dest) && same(src, dest)) continue;
 
-    // Block Hebrew canonical content from overwriting the hand-maintained
-    // English translation (see the Hebrew guard above). Report it, write
-    // nothing, and keep whatever English version is already in the pack.
-    if (isActiveLocalized(station, rel) && needsTranslation(read(src))) {
+    // Block canonical content that must not be published verbatim from the
+    // hand-maintained translation (see the Hebrew guard above). Report it,
+    // write nothing, and keep whatever English version is already in the pack.
+    // Portability is checked here too, not only after the fact in
+    // verify-mirror.js - otherwise the copy lands first and is rejected later,
+    // which is the same "sync succeeded, npm run check failed" shape as the
+    // Hebrew leak, one rule narrower (#52).
+    const violation = isActiveLocalized(station, rel) ? blocksSync(read(src)) : null;
+    if (violation) {
       untranslated.push(`skills/${station}/${rel}`);
       continue;
     }
@@ -262,9 +264,9 @@ for (const s of missing) console.warn(`  ⚠ station missing from canonical: ${s
 function reportUntranslated() {
   if (!untranslated.length) return;
   console.warn(
-    `\n⚠ ${untranslated.length} file(s) skipped: canonical is Hebrew, this pack is English-only.`
+    `\n⚠ ${untranslated.length} file(s) skipped: canonical content cannot be published as-is (Hebrew characters, or a machine-specific home path).`
   );
-  console.warn("  These were NOT overwritten. Re-translate them from canonical by hand:");
+  console.warn("  These were NOT overwritten. Fix or adapt them in canonical by hand:");
   untranslated.forEach((f) => console.warn(`  ⚠ ${f}`));
 }
 
@@ -273,10 +275,10 @@ if (CHECK_ONLY) {
   // of copied. They must go through the same classifier, or the "translated"
   // bucket stays permanently empty and the report splits on a line that does
   // not exist. reportUntranslated() is therefore the write-mode reporter only.
-  const { blocking, translated, stale } = classifyDrift(
+  const { blocking, blocked, stale } = classifyDrift(
     [...drifted, ...untranslated],
     LOCALIZED_SKILLS,
-    canonicalIsHebrew
+    canonicalIsBlocked
   );
 
   if (blocking.length) {
@@ -287,23 +289,26 @@ if (CHECK_ONLY) {
   }
 
   // Reported by name rather than hidden behind a shell `||`: this drift is real
-  // and visible on every run. The two localized buckets are kept apart on purpose.
-  if (translated.length) {
+  // and visible on every run. The three buckets are never merged - each answer a
+  // different question, and the reason printed is true for every file in it.
+  if (blocked.length) {
     console.log(
-      `\n⚠ ${translated.length} file(s) inside the ${LOCALIZED_SKILLS.size} localized stations differ because canonical is Hebrew and this pack is English-only.`
+      `
+⚠ ${blocked.length} file(s) inside the ${LOCALIZED_SKILLS.size} localized stations are NOT synced: canonical cannot be published as-is.`
     );
     console.log(
-      `  Expected: translating them is a deliberate human step.${STRICT ? " Failing under --strict." : ""}`
+      `  Expected: hand-maintained here (Hebrew characters, or a machine-specific home path).${STRICT ? " Failing under --strict." : ""}`
     );
-    translated.forEach((f) => console.log(`  ~ ${f}`));
+    blocked.forEach((f) => console.log(`  ~ ${f}`));
   }
 
   if (stale.length) {
     console.log(
-      `\n⚠ ${stale.length} file(s) inside the localized stations differ although canonical has no Hebrew.`
+      `
+⚠ ${stale.length} file(s) inside the localized stations are stale: sync would copy them, the pack copy is behind.`
     );
     console.log(
-      "  NOT a translation difference: the English here is stale or hand-edited. Re-sync or fix by hand."
+      "  NOT blocked - these are portable English files. Re-sync or fix by hand."
     );
     console.log(
       `  Reported only${STRICT ? " — failing under --strict." : "; pass --strict (npm run check:strict) to require them to match"}.`
@@ -311,7 +316,7 @@ if (CHECK_ONLY) {
     stale.forEach((f) => console.log(`  ~ ${f}`));
   }
 
-  process.exit(driftExitCode({ blocking, translated, stale }, STRICT));
+  process.exit(driftExitCode({ blocking, blocked, stale }, STRICT));
 }
 
 reportUntranslated();

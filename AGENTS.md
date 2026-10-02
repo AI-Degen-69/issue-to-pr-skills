@@ -1,4 +1,4 @@
-# AGENTS.md — working in this repo (Version: 1.5)
+# AGENTS.md — working in this repo (Version: 1.6)
 
 ## What this repo is
 
@@ -65,11 +65,9 @@ came to exit `0` unconditionally.
 
 Run `npm run check` before every release commit. A hand-edit here is overwritten
 on the next sync — this pack already drifted once and was still advertising a
-"Station VII" that no longer existed.
+"Station VII" that no longer existed.Not synced on purpose: `evals/snapshots/`, `evals/iteration-*/` (historical baselines) and `results.json` (local grading artifact). Skills that exist only in canonical are deliberately out of the public pack; adding one means adding it to the list in `scripts/sync-from-canonical.js` **and** the identical `EXPECTED_SKILLS` list in `scripts/verify-mirror.js`.
 
-Not synced on purpose: `evals/snapshots/`, `evals/iteration-*/` (historical
-baselines) and `results.json` (local grading artifact). Skills that exist only
-in canonical are deliberately out of the public pack; adding one means adding it
-to the list in `scripts/sync-from-canonical.js` **and** the identical
-`EXPECTED_SKILLS` list in `scripts/verify-mirror.js`.
+**The writer and the gate share one rule set.** `scripts/content-rules.js` holds what may be published: no Hebrew characters, no Hebrew reporting language, no machine-specific home path. `sync-from-canonical.js` applies `blocksSync()` *before* copying and `verify-mirror.js` applies `contentViolation()` *after* — so a file can never land in the pack only to be rejected afterwards. `blocksSync()` is deliberately narrower: it omits the Hebrew-reporting word heuristic, which is a property of the published pack, not of a canonical file (tried and reverted in #50). Adding a rule means adding it to that module, never inline.
+
+**The writer and the gate share one rule set.** `scripts/content-rules.js` holds what may be published: no Hebrew characters, no Hebrew reporting language, no machine-specific home path. `sync-from-canonical.js` applies `blocksSync()` *before* copying and `verify-mirror.js` applies `contentViolation()` *after* — so a file can never land in the pack only to be rejected afterwards. `blocksSync()` is deliberately narrower: it omits the Hebrew-reporting word heuristic, which is a property of the published pack, not of a canonical file (tried and reverted in #50). Adding a rule means adding it to that module, never inline.
 
