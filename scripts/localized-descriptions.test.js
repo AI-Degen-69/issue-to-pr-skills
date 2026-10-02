@@ -64,10 +64,12 @@ const canonicalAvailable = fs.existsSync(CANONICAL);
 
 test('every localized station description matches canonical', { skip: !canonicalAvailable && 'no canonical home' }, () => {
   const drifted = [];
+  let compared = 0;
   for (const station of LOCALIZED) {
     const canonicalFile = path.join(CANONICAL, station, 'SKILL.md');
     const packFile = path.join(ROOT, 'skills', station, 'SKILL.md');
     if (!fs.existsSync(canonicalFile)) continue;
+    compared++;
     const canonicalText = localized(description(canonicalFile));
     const packText = description(packFile);
     if (canonicalText !== packText) drifted.push({ station, canonicalText, packText });
@@ -81,6 +83,23 @@ test('every localized station description matches canonical', { skip: !canonical
       '\n\nEither the pack drifted, or a difference became intentional — then extend\n' +
       'ALLOWED_LOCALIZED_SUBSTITUTIONS with a reason instead of editing the pack text.'
   );
+  // A canonical home that resolves but holds none of these stations would make
+  // the comparison above vacuously green. Silence here is the failure mode
+  // this whole gate exists to prevent, so say so loudly instead.
+  assert.ok(compared > 0, `AGENTS_HOME resolved to ${CANONICAL}, which holds none of the ${LOCALIZED.length} localized stations`);
+});
+
+test('this list matches the two scripts it shadows', () => {
+  // The same 10 names are written out in three places. sync-from-canonical.js
+  // already refuses to start when its list disagrees with verify-mirror.js;
+  // this gate must not be the one copy that quietly falls behind.
+  const listIn = (file, name) => {
+    const block = read(path.join(ROOT, file)).match(new RegExp(`${name}\\s*=\\s*new Set\\(\\[([\\s\\S]*?)\\]\\)`));
+    assert.ok(block, `${file} no longer declares ${name}`);
+    return [...block[1].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
+  };
+  assert.deepEqual(listIn('scripts/verify-mirror.js', 'LOCALIZED_SKILLS'), LOCALIZED);
+  assert.deepEqual(listIn('scripts/sync-from-canonical.js', 'LOCALIZED_SKILLS'), LOCALIZED);
 });
 
 test('the whitelist stays live', { skip: !canonicalAvailable && 'no canonical home' }, () => {
