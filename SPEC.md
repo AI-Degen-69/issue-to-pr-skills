@@ -92,3 +92,70 @@ change only makes the condition **visible** in `sync:check`.
   expected to self-resolve once `npm run sync && npm run sync:site` can carry a
   corrected description through.
 - Touching any skill content under `skills/`.
+---
+
+# Addendum — Issue #52: the sync writer had no portability rule
+
+Found while fixing #48, by running `npm run sync` in write mode and watching 21
+translated files get overwritten.
+
+## The defect
+
+The Hebrew guard decided what to block using one signal only: Hebrew characters.
+Anything else was copied straight into the public pack. Measured before the fix:
+
+```
+files a blind `npm run sync` would WRITE: 21
+  would contain Hebrew        : 0
+  would carry a home path     : 2
+    home-path: create-issue/evals/intake.md
+    home-path: vi-close-pipeline/evals/intake.md
+```
+
+So the blind sync would not have broken the English-only rule — it would have
+broken the *portability* rule, which `AGENTS.md` rule 1 and `verify-mirror.js` both
+enforce. Same failure shape as the Hebrew leak: the copy lands, sync reports
+success, and `npm run check` fails afterwards — one rule narrower.
+
+## The fix
+
+`scripts/content-rules.js` holds what may be published, and both sides of the
+write apply it:
+
+| Where | Function | When |
+|---|---|---|
+| before copying | `blocksSync()` | refuses the write, names the file, leaves the pack copy intact |
+| after publishing | `contentViolation()` | fails `validate:mirror` |
+
+`blocksSync()` is deliberately **narrower** than `contentViolation()`: it omits the
+Hebrew-reporting word heuristic. That heuristic describes the published pack, not a
+canonical file — using it as a write-block was tried and reverted in #50, where it
+mislabelled 20 already-translated files as untranslated. Hebrew characters and home
+paths are different: those are facts about the bytes being copied, so blocking the
+copy is correct. A test fails if that regression returns.
+
+## Effect on the drift report
+
+The `translated` bucket became `blocked`, because its real question is "would sync
+write this or refuse it" — and the answer is now a shared rule, so the report cannot
+disagree with the writer. Measured after:
+
+| Bucket | Count |
+|---|---|
+| `blocking` | 0 |
+| `blocked` | 21 (19 Hebrew characters + 2 home paths) |
+| `stale` | 19 |
+
+## Acceptance criteria (all verified)
+
+1. A canonical file with `~/.agents`, `C:\Users\…`, `/home/<user>` or `/Users/<user>`
+   destined for a localized station is blocked and named; the pack copy is untouched.
+   *(probe: temp `AGENTS_HOME`, 0 pack changes)*
+2. The same content under a non-localized station is still written — the guard stays
+   scoped to the localized exception. *(probe: `PROBE.txt` written, then cleaned)*
+3. Rules live in one module used by both scripts; a test fails if either script
+   reintroduces an inline copy.
+4. `npm run sync` writes 19 files and blocks 21, instead of writing 21.
+5. `npm test` 26/26; `validate`, `validate-links`, `validate:mirror`, `version:check`,
+   `check` green; `check:strict` exits 1 as designed.
+6. No file under `skills/` modified by any of this.
