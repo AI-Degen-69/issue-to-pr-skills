@@ -221,3 +221,59 @@ touches `skills-flow.js`, and `index.html` contains no browser-tool wording at a
    `check`'s exit-code contract untouched.
 6. The `blocked` / `stale` drift buckets are unchanged (`21` / `19`) — this issue
    changes a localized station's hand-written English, not the sync rules.
+
+---
+
+# Addendum — Issue #55: the declared Node floor was wrong by four majors
+
+## The defect
+
+`package.json` declared `engines.node: ">=18"`. The repo needs **Node 22**.
+
+| API | Needs | Used by |
+|---|---|---|
+| `import.meta.dirname` | 20.11 | `validate.js`, `validate-links.js`, `sync-from-canonical.js`, `drift-policy.test.js`, `version-sync.test.js` |
+| **`fs.globSync`** | **22.0.0** | `validate-links.js` (top-level, unguarded) |
+
+The issue that reported this blamed `import.meta.dirname` and proposed a `>=20.11` floor.
+That floor is still wrong: `fs.globSync` is documented as *Added in: v22.0.0* with no
+Node 20 entry and no backport to the 20.x line, so `npm run validate:links` throws
+`TypeError: fs.globSync is not a function` on any Node 20.
+
+## Why it drifted four majors without a red check
+
+`scripts/validate-links.js` is the only `fs.globSync` user, and **no gate ever ran it**:
+
+- `check` = `validate` + `validate:mirror` + `version:check` + `sync:check` — no `validate:links`.
+- `validate.js` has its own link logic; it does not import `validate-links.js`.
+- CI ran only `npm run validate`, on `node-version: 20`.
+
+CI was green on a Node version that cannot run the repo's own link validator.
+
+## The trap
+
+`validate-links.js` always exited `0` — it printed `N warning(s)` and returned, with no
+`process.exitCode`. Wiring it into `check` unmodified would have added a step that can
+never turn the gate red: coverage that looks real and verifies nothing — the same shape as
+the `|| echo` incident in AGENTS.md. The exit code is fixed first, so the wiring means
+something.
+
+## The fix
+
+1. `engines.node` → `">=22"`.
+2. `validate-links.js` exits non-zero when it has warnings.
+3. `check` and `check:strict` run `validate:links`.
+4. CI's validate job matrixes `[22, 24]` and runs `npm run validate && npm run validate:links && npm run test` — the declared floor plus current LTS, so the floor is *tested*, not asserted.
+
+Option 2 (make Node 18 real) was rejected on evidence: it needs hand-rolled globbing to
+replace `fs.globSync`, five `import.meta.dirname` rewrites, and an 18 matrix entry — to
+support a runtime CI never ran. `npm run check` still does not run in CI: `sync:check`
+needs a canonical home this repo does not publish.
+
+## Acceptance criteria
+
+1. `engines.node` equals the version the code actually requires, and CI runs that version.
+2. `validate:links` fails on a broken link instead of printing and passing.
+3. `npm run check` covers link validation and stays cross-shell safe (plain `&&`).
+4. CI matrixes the declared floor, not only a newer one.
+5. `npm run check` → exit 0; `npm test` green; the drift buckets stay `21` / `19`.
