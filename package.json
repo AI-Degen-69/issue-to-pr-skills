@@ -40,7 +40,7 @@
     "validate:mirror": "node scripts/verify-mirror.js",
     "sync": "node scripts/sync-from-canonical.js",
     "sync:check": "node scripts/sync-from-canonical.js --check",
-    "test": "node --test scripts/**/*.test.js",
+    "test": "node --test",
     "check": "npm run validate && npm run validate:links && npm run validate:mirror && npm run version:check && npm run sync:check",
     "check:strict": "npm run validate && npm run validate:links && npm run validate:mirror && npm run version:check && npm run sync:check -- --strict",
     "prepublishOnly": "npm run check"
