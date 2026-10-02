@@ -3,9 +3,10 @@
 [![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
 [![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.3-emerald.svg)](version.json)
+[![Version](https://img.shields.io/badge/version-1.4-emerald.svg)](version.json)
 [![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
 [![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=social&logo=buy-me-a-coffee)](https://buymeacoffee.com/ai.degen)
 
 **An end-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase.**
 

@@ -1,6 +1,6 @@
 {
   "name": "issue-to-pr-skills",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "End-to-end delivery pipeline for AI coding agents: from raw idea to merged PR to visual showcase. 10 station skills + 36 supporting skills + 17 reviewer personas.",
   "repository": {
     "type": "git",
@@ -8,6 +8,10 @@
   },
   "homepage": "https://github.com/AI-Degen-69/issue-to-pr-skills",
   "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://buymeacoffee.com/ai.degen"
+  },
   "keywords": [
     "claude-code",
     "agent-skills",
