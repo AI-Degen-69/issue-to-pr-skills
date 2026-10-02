@@ -23,6 +23,7 @@
 //     public pack; adding one means adding it here too.
 import fs from "node:fs";
 import path from "node:path";
+import { classifyDrift, driftExitCode } from "./drift-policy.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -145,6 +146,19 @@ const HEBREW_CHARS = /[\u0590-\u05FF]/;
 const needsTranslation = (text) => HEBREW_CHARS.test(text);
 
 const CHECK_ONLY = process.argv.includes("--check");
+// --strict additionally fails on localized drift (see drift-policy.js). The 10
+// localized stations are hand-maintained English and differ from canonical by
+// design, so the default gate reports them without failing; a release check that
+// wants a perfectly synchronized pack asks for --strict explicitly.
+const STRICT = process.argv.includes("--strict");
+
+// Does canonical for this localized file actually contain Hebrew? Same character
+// test the guard above uses, so "translated" and "skipped by the guard" can never
+// disagree. Lets the report distinguish a real translation from plain staleness.
+const canonicalIsHebrew = (station, rel) => {
+  const src = path.join(CANONICAL, station, rel);
+  return fs.existsSync(src) && needsTranslation(read(src));
+};
 
 function walk(dir, base = dir, out = {}) {
   if (!fs.existsSync(dir)) return out;
@@ -255,14 +269,49 @@ function reportUntranslated() {
 }
 
 if (CHECK_ONLY) {
-  reportUntranslated();
-  console.log(
-    drifted.length
-      ? `✗ ${drifted.length} file(s) out of sync with canonical:`
-      : "✓ all mirrored stations match canonical"
+  // The guard-blocked Hebrew files are drift too - they are just reported instead
+  // of copied. They must go through the same classifier, or the "translated"
+  // bucket stays permanently empty and the report splits on a line that does
+  // not exist. reportUntranslated() is therefore the write-mode reporter only.
+  const { blocking, translated, stale } = classifyDrift(
+    [...drifted, ...untranslated],
+    LOCALIZED_SKILLS,
+    canonicalIsHebrew
   );
-  drifted.forEach((f) => console.log(`  ~ ${f}`));
-  process.exit(drifted.length ? 1 : 0);
+
+  if (blocking.length) {
+    console.log(`✗ ${blocking.length} file(s) out of sync with canonical:`);
+    blocking.forEach((f) => console.log(`  ~ ${f}`));
+  } else {
+    console.log("✓ all mirrored skills match canonical byte-for-byte");
+  }
+
+  // Reported by name rather than hidden behind a shell `||`: this drift is real
+  // and visible on every run. The two localized buckets are kept apart on purpose.
+  if (translated.length) {
+    console.log(
+      `\n⚠ ${translated.length} file(s) inside the ${LOCALIZED_SKILLS.size} localized stations differ because canonical is Hebrew and this pack is English-only.`
+    );
+    console.log(
+      `  Expected: translating them is a deliberate human step.${STRICT ? " Failing under --strict." : ""}`
+    );
+    translated.forEach((f) => console.log(`  ~ ${f}`));
+  }
+
+  if (stale.length) {
+    console.log(
+      `\n⚠ ${stale.length} file(s) inside the localized stations differ although canonical has no Hebrew.`
+    );
+    console.log(
+      "  NOT a translation difference: the English here is stale or hand-edited. Re-sync or fix by hand."
+    );
+    console.log(
+      `  Reported only${STRICT ? " — failing under --strict." : "; pass --strict (npm run check:strict) to require them to match"}.`
+    );
+    stale.forEach((f) => console.log(`  ~ ${f}`));
+  }
+
+  process.exit(driftExitCode({ blocking, translated, stale }, STRICT));
 }
 
 reportUntranslated();
