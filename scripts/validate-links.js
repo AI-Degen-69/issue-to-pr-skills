@@ -32,5 +32,12 @@ for (const md of [...fs.globSync("skills/*/SKILL.md"), ...fs.globSync("docs/*.md
   if (fs.existsSync(md)) checkFile(md);
 }
 
-if (warnings === 0) console.log("✓ all relative links resolve");
-else console.log(`${warnings} warning(s)`);
+if (warnings === 0) {
+  console.log("✓ all relative links resolve");
+} else {
+  // This script is wired into `npm run check`, so printing a count and exiting 0
+  // would add a step that can never turn the gate red - coverage that looks real
+  // and verifies nothing. The exit code is the check.
+  console.error(`✗ ${warnings} unresolved relative link(s) — see above`);
+  process.exitCode = 1;
+}
