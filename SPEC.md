@@ -159,3 +159,65 @@ disagree with the writer. Measured after:
 5. `npm test` 26/26; `validate`, `validate-links`, `validate:mirror`, `version:check`,
    `check` green; `check:strict` exits 1 as designed.
 6. No file under `skills/` modified by any of this.
+
+---
+
+# Addendum — Issue #47: a hand-maintained localized station drifts, and the site copies it
+
+## The defect
+
+`site/skills.json` carried Station IV's old `playwright-cli preferred` description. The
+obvious reading is stale site metadata; the actual cause is upstream of it.
+
+`site/skills.json` is **generated**. `extractSkillsData` reads `description` from this
+repo's own `skills/<name>/SKILL.md`, and `syncSite()` rewrites the file. The pack source
+was stale in exactly the same way, so regenerating reproduced the stale string and a
+hand-edit would be erased by the next `sync:site`.
+
+The pack source is stale because `iv-review-build-and-pr` is one of the 10 localized
+stations. `sync-from-canonical.js` refuses to machine-copy those (Hebrew reporting
+contracts, home paths), so their English text is hand-maintained — and drifts silently
+after every canonical change. Canonical fixed the gate in `0b6563e` (tool allowlist,
+call cap, abort rule); the pack never received it. Canonical 196 lines vs pack 173: the
+missing 23 lines are the entire `Step 0.1` section.
+
+`version:check` cannot see this — a hand-maintained localized station is always in sync
+with itself, so it reports `46/46 skills aligned`. `sync:check` sees the file as
+`stale`, which does not distinguish "needs re-copy" from "needs a human".
+
+## The fix
+
+Port the canonical browser-gate fix into the pack's English copy, then regenerate the
+site so the corrected description propagates instead of being typed in twice.
+
+| Site text | Source | Action |
+|---|---|---|
+| `site/skills.json` | generated from pack `SKILL.md` | regenerate via `sync:site` |
+| `site/skills-flow.js` | hand-maintained | edit (2 strings) |
+| `skills/iv-review-build-and-pr/SKILL.md` | hand-maintained localized English | edit (the actual fix) |
+
+## Scope item 2, resolved by measurement
+
+All 10 localized stations compared, canonical vs pack, description frontmatter only:
+
+| Result | Count | Stations |
+|---|---|---|
+| Byte-identical | 8 | triage, pick, create, build, iterate, babysit, close, present |
+| English-only localization (intended) | 1 | `ii-plan-issue` — `Reports in English` vs `Reports in Hebrew` |
+| Real drift | 1 | `iv-review-build-and-pr` |
+
+Scope item 3 resolves to `site/skills-flow.js`, not `site/index.html`: `sync:site` never
+touches `skills-flow.js`, and `index.html` contains no browser-tool wording at all.
+
+## Acceptance criteria
+
+1. The pack Station IV skill states `playwright-cli only` in both the description and
+   Step 0, and carries `Step 0.1` — allowlist table, attempt budget, abort rule.
+2. `site/skills.json` carries the corrected description, produced by `sync:site`
+   (never hand-edited).
+3. No site or pack copy describes the browser tool as *preferred*.
+4. Pack stays English-only and portable — no Hebrew characters, no home path.
+5. `npm test`, `validate`, `validate:mirror`, `version:check`, `check` all green;
+   `check`'s exit-code contract untouched.
+6. The `blocked` / `stale` drift buckets are unchanged (`21` / `19`) — this issue
+   changes a localized station's hand-written English, not the sync rules.
