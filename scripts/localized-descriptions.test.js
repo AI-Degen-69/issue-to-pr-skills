@@ -19,9 +19,12 @@ import { fileURLToPath } from 'node:url';
 // The five scripts that use it are on Node 20 in CI; a new file does not have
 // to repeat that, so derive the directory from import.meta.url instead.
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CANONICAL = process.env.AGENTS_HOME
-  ? path.join(process.env.AGENTS_HOME, 'skills')
-  : path.join(process.env.USERPROFILE || process.env.HOME || '', '.agents', 'skills');
+// An empty fallback would resolve to the RELATIVE path `.agents/skills` - which
+// exists in this very repo, empty. The gate would then run against nothing and
+// fail in a way that reads like a real drift. No home variable means no canonical
+// home, and that must be a clean skip, never a confident wrong answer.
+const canonicalHome = process.env.AGENTS_HOME || process.env.USERPROFILE || process.env.HOME || '';
+const CANONICAL = canonicalHome ? path.join(canonicalHome, '.agents', 'skills') : '';
 
 // Keep identical to LOCALIZED_SKILLS in sync-from-canonical.js and
 // verify-mirror.js. A station missing here is one whose English text can drift
@@ -65,7 +68,7 @@ const localized = (text) =>
 // A consumer installs this pack read-only and has no canonical home. Skipping
 // is the honest outcome there: there is nothing to compare against, so there is
 // no drift to report.
-const canonicalAvailable = fs.existsSync(CANONICAL);
+const canonicalAvailable = CANONICAL !== '' && path.isAbsolute(CANONICAL) && fs.existsSync(CANONICAL);
 
 test('every localized station description matches canonical', { skip: !canonicalAvailable && 'no canonical home' }, () => {
   const drifted = [];
