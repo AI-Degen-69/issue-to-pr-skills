@@ -96,6 +96,54 @@ const REWRITE = [
   ],
 ];
 
+// --- Hebrew guard -----------------------------------------------------------
+// The local canonical home (~/.agents) runs Hebrew reporting contracts. This
+// pack is public and must stay English-only (verify-mirror.js enforces it on
+// LOCALIZED_SKILLS). The 10 localized stations are therefore hand-maintained in
+// English here, NOT machine-copied: a copy of a Hebrew canonical file would
+// overwrite the English translation with Hebrew, which `npm run check` then
+// rejects - leaving the operator with a broken pack and a sync that "succeeded".
+//
+// Translations cannot be derived mechanically, so this script does NOT attempt
+// them. It blocks the write and names the file, leaving the English version
+// intact. Re-translating the changed file is a deliberate human step.
+// Keep this list identical to LOCALIZED_SKILLS in verify-mirror.js.
+const LOCALIZED_SKILLS = new Set([
+  "pipeline-triage",
+  "i-pick-issue",
+  "create-issue",
+  "ii-plan-issue",
+  "iii-build-plan",
+  "iiib-iterate-after-build",
+  "iv-review-build-and-pr",
+  "v-babysit-pr-and-merge",
+  "vi-close-pipeline",
+  "present-pr",
+]);
+
+// Scope: every active text file of a localized station, not just the .md and
+// evals.json pair verify-mirror.js inspects. verify-mirror only scans those two
+// extensions, so a Hebrew comment in a station .js would pass its English-only
+// gate while still shipping to a public repo - covering scripts/ here closes that.
+const TEXT_FILE = /\.(md|json|ya?ml|js|mjs|cjs|ts)$/i;
+const isActiveLocalized = (skill, rel) =>
+  LOCALIZED_SKILLS.has(skill) &&
+  TEXT_FILE.test(rel) &&
+  !rel.startsWith("evals/snapshots/") &&
+  !rel.startsWith("evals/iteration-");
+
+// Hebrew characters only. A word-level "Hebrew" test was also tried and
+// reverted: it matched English prose that merely *mentions* the reporting
+// language (e.g. "// The Hebrew report template = ..." or docs prose saying
+// "reports in plain Hebrew"), so 21 of the 40 blocked files were pure English
+// with zero Hebrew characters. Any genuinely Hebrew text contains Hebrew
+// characters, so the character test loses no coverage. There is no mojibake
+// case to catch either: all 52 active canonical text files were scanned for
+// mangled Hebrew (Latin-1 supplement runs, cp1255-in-UTF-8 artifacts) and none
+// matched. This now mirrors what verify-mirror.js actually enforces.
+const HEBREW_CHARS = /[\u0590-\u05FF]/;
+const needsTranslation = (text) => HEBREW_CHARS.test(text);
+
 const CHECK_ONLY = process.argv.includes("--check");
 
 function walk(dir, base = dir, out = {}) {
@@ -148,6 +196,7 @@ try {
 const copied = [];
 const drifted = [];
 const missing = [];
+const untranslated = [];
 
 for (const station of STATIONS) {
   const from = path.join(CANONICAL, station);
@@ -165,6 +214,15 @@ for (const station of STATIONS) {
   for (const [rel, src] of srcFiles) {
     const dest = path.join(to, rel);
     if (fs.existsSync(dest) && same(src, dest)) continue;
+
+    // Block Hebrew canonical content from overwriting the hand-maintained
+    // English translation (see the Hebrew guard above). Report it, write
+    // nothing, and keep whatever English version is already in the pack.
+    if (isActiveLocalized(station, rel) && needsTranslation(read(src))) {
+      untranslated.push(`skills/${station}/${rel}`);
+      continue;
+    }
+
     drifted.push(`skills/${station}/${rel}`);
     if (CHECK_ONLY) continue;
     fs.mkdirSync(path.dirname(dest), { recursive: true });
@@ -187,7 +245,17 @@ for (const station of STATIONS) {
 
 for (const s of missing) console.warn(`  ⚠ station missing from canonical: ${s}`);
 
+function reportUntranslated() {
+  if (!untranslated.length) return;
+  console.warn(
+    `\n⚠ ${untranslated.length} file(s) skipped: canonical is Hebrew, this pack is English-only.`
+  );
+  console.warn("  These were NOT overwritten. Re-translate them from canonical by hand:");
+  untranslated.forEach((f) => console.warn(`  ⚠ ${f}`));
+}
+
 if (CHECK_ONLY) {
+  reportUntranslated();
   console.log(
     drifted.length
       ? `✗ ${drifted.length} file(s) out of sync with canonical:`
@@ -197,6 +265,7 @@ if (CHECK_ONLY) {
   process.exit(drifted.length ? 1 : 0);
 }
 
+reportUntranslated();
 console.log(
   copied.length
     ? `✓ synced ${copied.length} file(s) from canonical:`
