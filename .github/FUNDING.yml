@@ -1,0 +1,7 @@
+# Funding for issue-to-pr-skills.
+# Uses `custom:` because Buy Me a Coffee is not one of GitHub's native
+# funding platforms; `github:`/`patreon:`/`open_collective:` would all render
+# the Sponsor button but point at the wrong provider.
+# Keep this URL identical to the `funding.url` in package.json and to the
+# three coffee links in site/ (index.html support CTA + footer, skills-flow.js modal).
+custom: ["https://buymeacoffee.com/ai.degen"]

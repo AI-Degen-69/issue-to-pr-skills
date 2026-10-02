@@ -8,6 +8,10 @@
   },
   "homepage": "https://github.com/AI-Degen-69/issue-to-pr-skills",
   "license": "MIT",
+  "funding": {
+    "type": "individual",
+    "url": "https://buymeacoffee.com/ai.degen"
+  },
   "keywords": [
     "claude-code",
     "agent-skills",
