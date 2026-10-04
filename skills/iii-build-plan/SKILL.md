@@ -66,7 +66,9 @@ is XS or S, the plan touches at most 2 files, adds no behavior, and needs no new
 **7-box gate** in `quick-fix`. All 7 pass → offer the operator the lane in one line (push straight
 to `main`, no PR, no reviews, no CodeRabbit). **Yes** → hand off to `quick-fix` **with your 7-box
 verdict** so it re-checks only size and its own diff, which works on the base branch — switch off
-this feature branch first, or the lane's own base-branch precondition fails and it routes to
+this feature branch first (commit or stash `tasks/plan.md` / `tasks/todo.md` changes on the feature
+branch so the handoff is clean, without discarding them and without carrying them onto base),
+or the lane's own base-branch precondition fails and it routes to
 `pipeline-triage`. **No, or any box fails** → continue into Phase 2 and build as planned, and
 remove the label (`gh issue edit <number> --remove-label "quick-fix"`) — a plan being built here
 has already disproved the lane.

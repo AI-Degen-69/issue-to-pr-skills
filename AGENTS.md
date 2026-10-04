@@ -2,7 +2,7 @@
 
 ## What this repo is
 
-Public skill pack: 10 pipeline station skills (`skills/`), 36 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
+Public skill pack: 10 pipeline station skills (`skills/`), 37 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
 
 Counts are exact and must stay true: `skills/` = 47 directories (10 stations + 37 supporting), `agents/` = 17 personas. `scripts/verify-mirror.js` checks the skill set and is the source of truth for that number.
 
@@ -42,7 +42,7 @@ Every skill in `skills/` is **copied** from the canonical agent home
 (`~/.agents/skills/`): the 10 pipeline/system stations (`pipeline-triage`,
 `i-pick-issue`, `create-issue`, `ii-plan-issue`, `iii-build-plan`,
 `iiib-iterate-after-build`, `iv-review-build-and-pr`, `v-babysit-pr-and-merge`,
-`vi-close-pipeline`, `present-pr`) plus the 36 supporting skills. Canonical is
+`vi-close-pipeline`, `present-pr`) plus the 37 supporting skills. Canonical is
 authoritative for all of them.
 
 Change the skill at the source, then re-sync:

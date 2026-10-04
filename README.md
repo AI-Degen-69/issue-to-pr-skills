@@ -12,7 +12,7 @@
 
 > **Website → https://AI-Degen-69.github.io/issue-to-pr-skills** — interactive pipeline, skill catalog, and guides (like [skills.addy.ie](https://skills.addy.ie)).
 
-Ten pipeline skills (Gate, I–VI + intake/present) carry one GitHub issue from mapping through planning, building, review, merge, and close — with 36 supporting skills and 17 specialist reviewer personas packed in, so the pipeline works out of the box.
+Ten pipeline skills (Gate, I–VI + intake/present) carry one GitHub issue from mapping through planning, building, review, merge, and close — with 37 supporting skills and 17 specialist reviewer personas packed in, so the pipeline works out of the box.
 
 ```
 [Entry]        pipeline-triage        State gate: dirty repo / open PR / unclear intent → routes once

@@ -64,7 +64,9 @@ Three outcomes:
 3. **Labeled and Tiny** → run the **7-box gate** in `quick-fix`. A Tiny issue may still be the
    wrong lane: right-sizing measures size, the gate measures risk. All 7 pass → tell the operator
    in one line that this looks like a quick fix (push straight to `main`, no PR, no reviews, no
-   CodeRabbit) and ask whether to take it. They choose: **yes** → hand off to `quick-fix`
+   CodeRabbit) and ask whether to take it. They choose: **yes** → switch back to a clean,
+   synced base branch first (`git stash push` any planning scratch or leave it committed on the
+   feature branch — never carry it onto base), then hand off to `quick-fix`
    **with your 7-box verdict** so it re-checks only size and its own diff instead of re-reading
    the issue, and stop this station; **no, or any box fails** → continue to Step 0A as normal,
    and if any box failed remove the label so a later session is not misled.
