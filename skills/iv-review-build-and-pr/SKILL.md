@@ -10,7 +10,7 @@ This skill implements **Station IV (Review, Verify & Ship)** of the 6-station pi
 ## Pipeline Position
 - **Station:** Station IV of VI
 - **Previous Station:** `iii-build-plan` (Build)
-- **Next Station:** `v-babysit-pr-and-merge` (Babysit & Merge)
+- **Next Station:** `quick-fix` (only on a Step 0.2 divert — which itself requires a `quick-fix`-labeled issue, the gate passing, and the operator's choice) or `v-babysit-pr-and-merge` (Babysit & Merge)
 
 ---
 
@@ -59,6 +59,27 @@ Only the tools listed above may run in this gate. No other browser automation to
 - **A dead browser session is not a product failure.** If the tooling cannot verify (daemon down, port taken, server not up), that is an *unverified* gate, **not** a red gate. Do **not** route it to `iiib-iterate-after-build` as a correction item — there is no defect to fix, and sending one wastes a full fix loop.
 - **Unverified is an allowed outcome, and the honest one.** A gate that reports "curl smoke green (3/3), DOM check unverified — playwright session failed to launch" passes this station. Fabricating a pass, or looping on broken tooling to manufacture one, does not.
 - **Never open a browser at all** when `curl` already proves the change. If the smoke check is green and the change has no visual/interactive surface, that *is* the gate — skip the browser.
+
+#### Step 0.2: Quick-Fix Lane Divert (after the proof gate, before any review work)
+
+Last chance to skip the review machinery, and the most valuable one — Steps 1 and 1B (OCR plus every ECC reviewer) plus the CodeRabbit round are the bulk of the cost. Step 0 has already proved the build works, so the gate below runs against known-good code.
+
+**The label precondition comes first.** Read the current labels of the linked issue
+(`gh issue view <number> --json labels`). If no issue is linked, or the issue lacks the `quick-fix` label,
+skip the gate entirely — continue into Step 1 normally, with no gate text and no lane offer.
+
+Read `git diff --name-only origin/<base>...HEAD`. If the **entire** change passes the **7-box gate** in `quick-fix`, offer the operator the lane in one line (push straight
+to `main`, no PR, no ECC reviewers, no CodeRabbit). **Yes** → hand off to `quick-fix`, passing your 7-box verdict with the handoff so the lane re-checks only size and its own diff instead of re-reading the issue; **no, or any box fails** → continue into Step 1 normally, and remove the label (`gh issue edit <number> --remove-label "quick-fix"`) — this diff has already disproved the lane.
+
+One mechanical difference from the earlier divert points: the work is already committed on a feature branch, while `quick-fix` works on the base branch. Before handing off, return to base carrying the change:
+
+```bash
+git switch <base> && git merge --squash <feature-branch>
+```
+
+That leaves the work staged and uncommitted on `main` — one of the two tree states `quick-fix`
+accepts (the other being a clean tree), and the one its step 2 names explicitly. Do not create a PR
+as a substitute when the lane is declined; declining means the full pipeline runs as written.
 
 ### Step 1: OCR Delegation Review (MANDATORY, FIRST — embedded procedure)
 
