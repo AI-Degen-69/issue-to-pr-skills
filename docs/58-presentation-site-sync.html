@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The website is up to date again</title>
+<style>
+:root { --ink:#eaf1f6; --muted:#9aabb8; --bg:#0b1117; --panel:#121c25; --panel-2:#172530;
+--line:#29404d; --accent:#82AAFF; --accent-ink:#0a1830; --old:#8a6d3b; --shadow:0 20px 55px rgba(0,0,0,.28); }
+* { box-sizing:border-box } body { margin:0; color:var(--ink); background:var(--bg); font:16px/1.65 "Segoe UI",Tahoma,sans-serif }
+main { max-width:1100px; margin:auto; padding:40px 20px 70px }
+h1 { font-size:2rem; line-height:1.25; margin:0 0 .4rem }
+.sub { color:var(--muted); font-size:1.05rem; margin:0 0 1.6rem }
+.split { display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:stretch }
+@media(max-width:820px){ .split { grid-template-columns:1fr } .arrow { transform:rotate(90deg); margin:auto } }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:26px; box-shadow:var(--shadow) }
+.panel.after { border-color:var(--accent) }
+.tag { display:inline-block; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; border-radius:999px; padding:.25rem .8rem; margin-bottom:1rem }
+.tag.old { background:#2a2417; color:var(--old); border:1px solid var(--old) }
+.tag.new { background:var(--accent); color:var(--accent-ink); font-weight:700 }
+.arrow { align-self:center; font-size:2rem; color:var(--accent) }
+.mock { background:var(--panel-2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-top:1rem }
+.mock .bar { height:10px; border-radius:6px; background:#24384a; margin:.55rem 0 }
+.mock .bar.short { width:55% } .mock .bar.mid { width:78% }
+.badge { display:inline-block; border-radius:8px; padding:.3rem .8rem; font-weight:700; font-size:.9rem }
+.badge.old { background:#2a2417; color:var(--old); border:1px solid var(--old) }
+.badge.new { background:var(--accent); color:var(--accent-ink) }
+.note { font-size:.8rem; color:var(--muted); margin-top:1rem }
+.callout { border-left:3px solid var(--accent); background:rgba(255,255,255,.04); padding:1rem 1.2rem; border-radius:0 8px 8px 0; margin:1.6rem 0 0 }
+.callout ol { margin:.4rem 0 0; padding-left:1.3rem }
+.links { margin-top:1.6rem; color:var(--muted); font-size:.9rem }
+</style>
+</head>
+<body>
+<main>
+<h1>The website is up to date again</h1>
+<p class="sub">Before, the public site showed yesterday's words with an old version stamp. Now every skill description is current and the stamp says 5.7.</p>
+<div class="split">
+<section class="panel" aria-label="Before">
+<span class="tag old">Before</span>
+<h2 style="margin:.2rem 0 .6rem; font-size:1.2rem">Stale words, old stamp</h2>
+<p style="margin:0">Visitors read skill descriptions the team had already moved past, under a badge that no longer matched the work.</p>
+<div class="mock" aria-hidden="true">
+<span class="badge old">Version: 2.7</span>
+<div class="bar mid"></div><div class="bar"></div><div class="bar short"></div>
+</div>
+<p class="note">Illustration drawn from the real change, not a screenshot.</p>
+</section>
+<div class="arrow" aria-hidden="true">→</div>
+<section class="panel after" aria-label="After">
+<span class="tag new">Now live</span>
+<h2 style="margin:.2rem 0 .6rem; font-size:1.2rem">46 descriptions current, stamped 5.7</h2>
+<p style="margin:0">The catalog, the badge, and the footers were rebuilt from the latest skills — what you read is what the team ships.</p>
+<div class="mock" aria-hidden="true">
+<span class="badge new">Version: 5.7</span>
+<div class="bar mid"></div><div class="bar"></div><div class="bar short"></div>
+</div>
+<p class="note">All 46 skill cards refreshed, including the Station I picker text.</p>
+</section>
+</div>
+<div class="callout">
+<strong>See it yourself on the real site (2 steps):</strong>
+<ol>
+<li>Open the site home page in this project (<em>site/index.html</em>) → look at the footer badge.</li>
+<li>Open the skills catalog (<em>site/skills/</em>) → all 46 cards show the current descriptions.</li>
+</ol>
+</div>
+<p class="links">Request #57 · Change #58 · put live 4 Oct 2026 ✓</p>
+</main>
+</body>
+</html>
