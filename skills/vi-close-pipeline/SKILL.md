@@ -56,6 +56,7 @@ A candidate file is eligible for deletion **only when BOTH conditions hold**:
 2. **Research papers & findings:** `runs/.../research-papers/`, dated reports and benchmarks.
 3. **Active planning & backlog:** `TODO.md`, `ideas/`, active RFCs.
 4. **Permanent docs:** anything linked from `README.md` or indexed in project documentation.
+5. **NOTICED-BUT-NOT-TOUCHING ledger:** `docs/issues/<id>-noticed-but-not-touching.md` — the per-issue candidate record defined below; never pruned, even when its issue is closed.
 
 ---
 
@@ -95,6 +96,16 @@ Dead or zombie code tied to the merged work (unused modules, superseded APIs, or
 
 ---
 
+## 7B. Candidate Disposition — NOTICED-BUT-NOT-TOUCHING owner (Station VI)
+
+Station VI is the single end-to-end owner of NOTICED-BUT-NOT-TOUCHING candidates. Any discovering station only appends an `open` row to the ledger; only Station VI resolves rows.
+
+1. **Ledger:** `docs/issues/<id>-noticed-but-not-touching.md` — one Markdown table with columns `ID (N1, N2, …) | candidate (one line) | discovering station | evidence (path:line) | status | resolution`. Allowed statuses only: `open`, `published`, `duplicate`, `dismissed`. Each resolution is an issue reference (`#N`) or a dismissal reason. Absent ledger means zero candidates; a station creates the ledger only when recording its first candidate.
+2. **Disposition:** read the ledger and present each `open` row to the operator — one decision per row: publish, dismiss with a reason, or confirm a duplicate. Before offering publish, search existing issues with the tracker list command; on a probable duplicate propose `duplicate #N` for confirmation. On a publish decision invoke `create-issue` with the candidate plus provenance (`Found during #<id>`) and record the returned issue number. Merged PR, clean tree, and automation never replace operator approval; `defer` is not a resolution — undecided stays `open`.
+3. **Commit:** commit the ledger update alone (`chore: record noticed-but-not-touching disposition (#<id>)`); the Clean Exit Gate push sends it.
+
+---
+
 ## 8. The Clean Exit Gate (mandatory, last step)
 
 The pipeline is NOT closed until every check passes:
@@ -103,30 +114,57 @@ The pipeline is NOT closed until every check passes:
 2. Confirm checkout is on the base branch (`master`/`main` per `gh repo view --json defaultBranchRef`).
 3. `git status --porcelain` → **empty**.
 4. `git status` → `up to date with 'origin/<base>'` (no ahead/behind).
-5. `git fetch --prune` → no dead remote branches; `git branch` → no leftover merged feature branches.
+5. Remote branches: `git ls-remote --heads origin` → **no merged feature branch survives on the server**, and `git branch` → no leftover merged feature branches. This half reads server state, because the local half cannot see it: `git fetch --prune` only drops stale *remote-tracking refs*, and `git branch` without `-a` never lists the remote at all. A merged branch still present in that output **fails** this check. **An unrelated active branch does not** — a head that still belongs to an open PR is not a leftover, and failing on it would strand closeout on a healthy repo; treat only branches with no open PR as violations. Station V step 5b owns deleting it (`git push origin --delete <branch>`); this gate observes and blocks, it does not delete.
 6. Stashes: none related to this issue remain (list any foreign stashes in the report).
+7. NOTICED-BUT-NOT-TOUCHING ledger contains zero rows with status `open` (absent ledger counts as zero).
 
 If any check fails → fix it or escalate with the exact state. **Never declare closeout on a dirty or diverged folder.**
 
+### Blocked / Incomplete — a real outcome, not a failure to hide
+
+The Clean Exit Gate has exactly two honest endings: **closed** (all seven checks green) or
+**blocked** (at least one check could not be made green). Report the blocked state as its
+own outcome — never round it up to "closed" and never bury it under the success summary.
+
+The report MUST name, for each blocking item: the exact failing check, the observed state
+(verbatim command output, not a paraphrase), and what is needed to clear it. Blocking items
+that make closeout **incomplete** rather than merely delayed:
+
+1. **Foreign dirt** in `git status --porcelain` you did not create and may not commit.
+2. **Failed push** — local commits unpushed, or the remote rejected the push.
+3. **Residual branches, worktrees, or stashes** tied to this issue (or unattributable ones) — including a merged branch that survived on the remote (`git ls-remote --heads origin` still lists it). Clear it with `git push origin --delete <branch>`; never round a surviving branch up to "closed".
+4. **API failure** — `gh` unauthenticated, rate-limited, or the tracker unreachable, so an
+   issue-close or PR-merge state could not be confirmed.
+5. **Unresolved `open` rows** in the NOTICED-BUT-NOT-TOUCHING ledger awaiting operator disposition.
+
+When closeout ends blocked: keep every permanent-knowledge and uncommitted file intact,
+do **not** force-push, do **not** force-delete branches, and do **not** close an issue whose
+state you could not verify. Name the next action and who owns it.
+
+### A presentation offered after this station ends with the same clean-exit check
+
+`/present-pr <id>` may be suggested from this report, but building the page writes a file.
+Offering it never exempts the folder from Section 8: when the operator accepts and the page
+is staged or committed, re-run the Clean Exit Gate (`git push`, base branch, spotless, pruned)
+before ending the session. A closeout that passed the gate and then went dirty by adding a
+presentation file is **not** a clean exit — it ends blocked, and the report says so.
+
 ---
 
-## Chat Output Contract
+## 9. Final verification walkthrough (mandatory input to the report)
 
-```markdown
-# 🏁 VI - Close Pipeline — Issue #<id>:
+Build the walkthrough in the report from the live product, not from memory:
 
-## ✅ Issue & PR Status:
-* **PR:** [#<n>](<url>) — [Merged / Closed]
-* **Issue:** [#<id>](<url>) — [Open / Closed]
-* **Current Branch:** [What is the current branch status? Base branch clean / dirty, any extra branches related or unrelated to the issue. If clean, simply state base branch clean.]
+1. Name the real screen / tab / button the operator opens — never the presentation file.
+2. Write at most 5 steps. Every step is: where → what to do → what to see.
+3. Use `→` arrows between screens and give a direct link when one exists.
+4. Say exactly what to look at (text, state, count) so the operator knows it worked.
+5. Prefer visual proof. Backend-only with nothing to see → say so in one line plus how it was checked automatically.
 
-## 💡 Summary:
-* [Description of what was done: problem statement / issue summary, implemented solution, what was actually changed, concise technical and plain explanation, and how to use the change. If relevant, include background context on the problem itself.]
+---
 
-## 🎬 Presentation:
-* If relevant, run `/present-pr <n>` to generate a visual presentation.
-
-👉 **Next Step:**
-* None — pipeline closed, ready for the next `/i-pick-issue`.
-```
+<!-- local-only:begin -->
+The chat output template for this station is `references/output-template.md`.
+Read it before writing your first report.
+<!-- local-only:end -->
 

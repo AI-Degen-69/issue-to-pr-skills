@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Deterministic grader for the v-babysit-pr-and-merge refinement loop.
+ * Deterministic grader for the pipeline-triage refinement loop.
  * Zero dependencies. Node >= 18.
  *
  * Subcommands:
@@ -18,7 +18,6 @@ const path = require('path');
 // (skills/<name>/scripts/grade.js → walk up to the skills/ root).
 const GLOBAL_SKILLS_DIR = process.env.SKILLS_ROOT ||
   path.resolve(__dirname, '..', '..');
-
 // Agent personas are a separate tree: skills/<name>/scripts/ → <home>/agents/.
 // A backticked `tdd-guide` is a real reference when agents/tdd-guide.md exists.
 const AGENTS_DIR = path.resolve(GLOBAL_SKILLS_DIR, '..', 'agents');
@@ -68,14 +67,15 @@ function audit(skillPath) {
   const findings = [];
   const add = (severity, check, detail) => findings.push({ severity, check, detail });
 
-  // 1) Phantom skill references: backticked kebab/snake tokens with no folder on disk.
+  // 1) Phantom skill references: backticked kebab/snake tokens that resolve to
+  //    neither a skill folder, an agent persona, nor the skill's own files.
   const candidates = kebabCandidates(text);
   const missing = candidates.filter((t) => !resolves(t, skillPath));
   if (missing.length) {
     add('fail', 'phantom-skill-refs',
-      `Referenced skills with no folder in ${GLOBAL_SKILLS_DIR}: ${missing.join(', ')}`);
+      `Referenced skills with no folder in ${GLOBAL_SKILLS_DIR} and no persona in ${AGENTS_DIR}: ${missing.join(', ')}`);
   } else {
-    add('pass', 'phantom-skill-refs', 'All kebab/snake-case backticked skill references resolve to real skill folders');
+    add('pass', 'phantom-skill-refs', 'All kebab/snake-case backticked skill references resolve to real skill folders or agent personas');
   }
 
   // 2) SKILL.md length (Red Hat: < ~500 lines; also flag >150 for an entry point).
@@ -84,11 +84,23 @@ function audit(skillPath) {
   else add('pass', 'skill-length', `${lines.length} lines`);
 
   // 3) L1 description specificity: must name trigger context + output, not be generic.
+  //    A description passes when it is substantial AND names either a station
+  //    context or an explicit "Use when ..." trigger. Requiring one narrow noun
+  //    (Station/issue/plan) rejects valid descriptions that trigger on user
+  //    phrasing instead, e.g. skill-workbench's "Use when the user says ...".
   const fm = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
-  const desc = fm ? (fm[1].match(/description:\s*(.+)/) || [])[1] || '' : '';
-  const specificity = /(Station|issue|plan|GitHub|tasks\/plan\.md)/i.test(desc) && desc.length > 80;
+  // `description` may be the last frontmatter key, so terminate on the next
+  // key OR the end of the block.
+  const desc = fm ? (fm[1].match(/description:\s*([\s\S]*?)\r?\n[a-zA-Z][\w-]*:/)
+    || fm[1].match(/description:\s*([^\r\n]*)/)
+    || [])[1] || '' : '';
+  const descText = desc.trim().replace(/^["']|["']$/g, '');
+  const specificity =
+    descText.length > 80 &&
+    (/(Station|issue|plan|GitHub|tasks\/plan\.md)/i.test(descText) ||
+      /(Use when|when the user|trigger)/i.test(descText));
   add(specificity ? 'pass' : 'fail', 'l1-description',
-    specificity ? 'Description names trigger context and outputs' : `Description too generic or short: "${desc.slice(0, 120)}"`);
+    specificity ? 'Description names trigger context and outputs' : `Description too generic or short: "${descText.slice(0, 120)}"`);
 
   // 4) Structured sections (Anthropic: distinct sections).
   const sections = (text.match(/^#{1,3} /gm) || []).length;
@@ -128,6 +140,30 @@ function extractTemplate(text) {
   const m = text.match(/```markdown\r?\n([\s\S]*?)\r?\n```/);
   if (!m) return null;
   return m[1];
+}
+
+/** Same as extractTemplate, but falls back to the referenced template file.
+ *
+ *  The Hebrew output contract was extracted out of SKILL.md into
+ *  references/output-template.md (local-only; the sync strips the pointer block).
+ *  A grader that only scans SKILL.md would then find no template at all and
+ *  report every max_template_lines assertion as a failure that no amount of
+ *  editing SKILL.md could fix. Resolve the pointer so the assertion measures the
+ *  template that is actually shipped.
+ */
+function extractTemplateFor(skillPath, text) {
+  const inline = extractTemplate(text);
+  if (inline) return inline;
+  const ref = text.match(/references\/output-template\.md/);
+  if (!ref) return null;
+  const p = path.join(path.dirname(skillPath), 'references', 'output-template.md');
+  try {
+    if (!fs.existsSync(p)) return null;
+    const m = fs.readFileSync(p, 'utf8').match(/```markdown\r?\n([\s\S]*?)\r?\n```/);
+    return m ? m[1] : null;
+  } catch {
+    return null;
+  }
 }
 
 function templateLines(tpl) {
@@ -211,8 +247,9 @@ function main() {
 
   if (cmd === 'case') {
     const evals = JSON.parse(read(arg('evals')));
-    const text = corpus(arg('skill'));
-    const tpl = extractTemplate(text);
+    const skillArg = arg('skill');
+    const text = corpus(skillArg);
+    const tpl = extractTemplateFor(skillArg, text);
     const wanted = arg('id');
     const cases = evals.evals.filter((e) => !wanted || e.id === wanted);
     const graded = cases.map((c) => gradeCase(c, text, tpl));

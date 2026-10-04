@@ -25,15 +25,19 @@ with an honest one-line CodeRabbit ack status. The only station that pushes.
 ## How it works (short)
 
 1. **Proof-before-review gate first** — browser gate for UI
-   (`playwright-cli` preferred; DevTools MCP for profiling only) or
-   targeted tests for backend. Failure routes back to IIIB; broken code
-   is never reviewed.
+   (`playwright-cli` **only** — no other browser tool, see Step 0.1;
+   DevTools MCP for profiling only) or targeted tests for backend. Failure
+   routes back to IIIB; broken code is never reviewed. Tooling that can't
+   verify yields an *unverified* gate, not a red one — see Step 0.1.
 2. **OCR delegation review**, then language/framework specialist
    reviewers (plus the Spec axis: diff vs issue + `tasks/plan.md`).
    Fixes applied as local commits; clean reviewers get one line.
-3. **Final verification gate**, then push + open the PR
-   (`@coderabbitai summary`, review trigger), with comment links whenever
-   the ack is anything but `Review triggered.`
+3. **Final verification gate**, then push + open the PR (CodeRabbit writes the
+   title from `auto_title_placeholder`; the body is unchanged), post
+   `@coderabbitai summary` + the review trigger, with comment links whenever
+   the ack is anything but `Review triggered.` — including a summary-only
+   review, which is the expected shape on a private Free repo and is never
+   reported as a pass.
 4. Hands off to Station V. Reports what the review changed (grouped by tag) + branch + PR link + honest CodeRabbit status — see the report template in
    `SKILL.md`. Tests are an internal gate, never mentioned in the report.
 

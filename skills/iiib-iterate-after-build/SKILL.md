@@ -42,25 +42,19 @@ For every item, in order:
 3. **Apply the minimal fix** with the routed skill. One item, one fix.
 4. **Simplify** with `code-simplification`: no dead code, no extra abstractions.
 5. **Commit locally**: `<type>(<scope>): <summary> (#<issue>)`. Never push, never open a PR.
-6. **Verify**: browser check for UI via `browser-testing-with-devtools` (live DOM, console, network — zero uncaught errors), and targeted test runner for logic via `test-driven-development` covering modified files. Do NOT run full test suites or redundant VBC sweeps per fix; the final pre-push gate in Station IV validates the overall state. Regression tests go at the seam that actually reproduces the bug (unit, integration, or e2e — whatever reaches the real pattern at the call site); when no correct seam exists, that itself is an architectural finding — record it in the commit and surface it in the report.
+6. **Verify**: browser check for UI via **`playwright-cli`** (live DOM, console, network — zero uncaught errors; no other browser tool, `browser-testing-with-devtools` only for profiling), and targeted test runner for logic via `test-driven-development` covering modified files, following `verification-before-completion` for what counts as proven. Batch all DOM checks into one `playwright-cli eval`; a tool failing twice is abandoned, not retried — tooling that cannot verify leaves the item **unverified**, which is reported, not looped on forever. Do NOT run full test suites or redundant VBC sweeps per fix; the final pre-push gate in Station IV validates the overall state. Regression tests go at the seam that actually reproduces the bug (unit, integration, or e2e — whatever reaches the real pattern at the call site); when no correct seam exists, that itself is an architectural finding — record it in the commit and surface it in the report.
 7. **Next item.** A red verification stops the loop until green.
 
 ## 4. Guardrails
 
 Respect `CONSTRAINTS.md` (no skipped tests, no new external dependencies without approval, zero regressions in touched modules). Never touch code outside the reported items. Never push to origin — `iv-review-build-and-pr` is the only station that pushes.
 
-## Chat Output Contract
+## Final check walkthrough (mandatory input to the report)
 
-Report in clean, everyday English. Write for the customer who ordered the product, never for a developer. What's-changed only: one line per fixed item — product location + what was wrong in plain words, then what works now. No skill names, no commits, no tests, no file paths. Never use the word console. Say "checked in the browser, no errors" instead.
+Build the walkthrough from the live product: real screen names, at most 3 steps, every step is where -> what to do -> what to see. Prefer visual proof. Nothing visual -> say so in one line plus how it was checked automatically.
 
-```markdown
-# 🔁 IIIB - Post-Build Iteration (Iteration Summary):
+<!-- local-only:begin -->
+The chat output template for this station is `references/output-template.md`.
+Read it before writing your first report.
+<!-- local-only:end -->
 
-## 🩹 What's Fixed?
-* **[product location]** — [Before: what was broken. Now: what works]
-
-## ➕ What's New? / ✏️ What's Changed?
-* [only if a fix added or changed something beyond the fix itself — otherwise omit section]
-
-👉 **Next Step:** `/iv-review-build-and-pr` — everything works, ready for review and shipping.
-```
