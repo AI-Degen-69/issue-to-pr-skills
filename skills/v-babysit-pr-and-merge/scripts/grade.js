@@ -19,19 +19,6 @@ const path = require('path');
 const GLOBAL_SKILLS_DIR = process.env.SKILLS_ROOT ||
   path.resolve(__dirname, '..', '..');
 
-function read(p) {
-  return fs.readFileSync(p, 'utf8');
-}
-
-function kebabCandidates(text) {
-  // Backticked tokens that look like skill names (kebab/snake case, no slash, no dot).
-  const tokens = new Set();
-  const re = /`([a-z][a-z0-9]*(?:[_-][a-z0-9]+)+)`/g;
-  let m;
-  while ((m = re.exec(text)) !== null) tokens.add(m[1]);
-  return [...tokens];
-}
-
 // Agent personas are a separate tree: skills/<name>/scripts/ → <home>/agents/.
 // A backticked `tdd-guide` is a real reference when agents/tdd-guide.md exists.
 const AGENTS_DIR = path.resolve(GLOBAL_SKILLS_DIR, '..', 'agents');
