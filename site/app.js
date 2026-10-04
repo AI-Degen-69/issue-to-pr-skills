@@ -135,6 +135,7 @@ const GROUP = {
   'create-issue': 'plan',
   'doubt-driven-development': 'plan',
   'api-and-interface-design': 'plan',
+  'quick-fix': 'plan',
 
   // #3 & #3b - Build & Iterate
   'iii-build-plan': 'build',
