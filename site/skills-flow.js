@@ -37,6 +37,7 @@ const STATIONS_FLOW = [
     startWithCommand: '/i-pick-issue',
     accent: 'from-purple-600 to-fuchsia-600',
     invoked: [
+      { id: 'quick-fix', name: 'quick-fix', title: 'The /quick-fix Skill', desc: 'Step 1a Lane Check: a 7-box gate on the selected issue — pass with operator pick diverts trivial work straight to the base branch.', gradient: 'from-amber-600 to-orange-600', icon: 'verify', kind: 'skill' },
       { id: 'context-engineering', name: 'context-engineering', title: 'The /context-engineering Skill', desc: 'Locks session scope after issue selection before opening repository files.', gradient: 'from-cyan-600 to-blue-600', icon: 'compass', kind: 'skill' },
       { id: 'using-agent-skills', name: 'using-agent-skills', title: 'The /using-agent-skills Skill', desc: 'Ad-hoc handoff: routes non-issue requests and exploratory tasks to the ad-hoc router.', gradient: 'from-violet-600 to-indigo-600', icon: 'workflow', kind: 'skill' }
     ]
@@ -51,6 +52,7 @@ const STATIONS_FLOW = [
     startWithCommand: '/ii-plan-issue',
     accent: 'from-cyan-500 to-blue-600',
     invoked: [
+      { id: 'quick-fix', name: 'quick-fix', title: 'The /quick-fix Skill', desc: 'Step 0C Lane Divert: Tiny tier plus the quick-fix label runs the 7-box gate — pass with operator pick stops this station and hands off.', gradient: 'from-amber-600 to-orange-600', icon: 'verify', kind: 'skill' },
       { id: 'code-explorer', name: 'code-explorer', title: 'The code-explorer Persona', desc: 'Step 0: traces execution paths in large, unfamiliar, or legacy code before planning.', gradient: 'from-slate-600 to-gray-700', icon: 'shield', kind: 'agent' },
       { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'Step 1 (Design/UI): accessible, responsive, production-quality UI and WCAG compliance.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
       { id: 'frontend-design', name: 'frontend-design', title: 'The /frontend-design Skill', desc: 'Step 1 (Design/UI): distinctive, intentional visual design direction before implementation.', gradient: 'from-fuchsia-600 to-pink-600', icon: 'palette', kind: 'skill' },
@@ -82,6 +84,7 @@ const STATIONS_FLOW = [
     startWithCommand: '/iii-build-plan',
     accent: 'from-emerald-600 to-teal-600',
     invoked: [
+      { id: 'quick-fix', name: 'quick-fix', title: 'The /quick-fix Skill', desc: 'Step 1c Lane Divert: on a labeled issue with a fresh XS/S plan, the 7-box gate offers the lane before the first task runs.', gradient: 'from-amber-600 to-orange-600', icon: 'verify', kind: 'skill' },
       { id: 'frontend-ui-engineering', name: 'frontend-ui-engineering', title: 'The /frontend-ui-engineering Skill', desc: 'UI/Frontend routing: accessible, responsive components and production layouts.', gradient: 'from-cyan-600 to-teal-600', icon: 'layout', kind: 'skill' },
       { id: 'tailwind-design-system', name: 'tailwind-design-system', title: 'The /tailwind-design-system Skill', desc: 'UI/Frontend routing: applies project design tokens and utility styling.', gradient: 'from-cyan-600 to-blue-600', icon: 'palette', kind: 'skill' },
       { id: 'test-driven-development', name: 'test-driven-development', title: 'The /test-driven-development Skill', desc: 'Code/Backend routing: writes the failing test first, then minimal code to pass.', gradient: 'from-emerald-600 to-green-600', icon: 'test', kind: 'skill' },
@@ -134,6 +137,7 @@ const STATIONS_FLOW = [
     startWithCommand: '/iv-review-build-and-pr',
     accent: 'from-violet-600 to-purple-600',
     invoked: [
+      { id: 'quick-fix', name: 'quick-fix', title: 'The /quick-fix Skill', desc: 'Step 0.2 Lane Divert: last chance past the proof gate — the whole diff passing the 7-box gate ships straight to the base branch.', gradient: 'from-amber-600 to-orange-600', icon: 'verify', kind: 'skill' },
       { id: 'playwright-cli', name: 'playwright-cli', title: 'The /playwright-cli Skill', desc: 'Step 0 Proof Gate: the only permitted headless browser automation for fast UI/DOM proof — capped at 8 calls, never substituted for a failing tool.', gradient: 'from-blue-600 to-indigo-600', icon: 'browser', kind: 'skill' },
       { id: 'browser-testing-with-devtools', name: 'browser-testing-with-devtools', title: 'The /browser-testing-with-devtools Skill', desc: 'Step 0 Proof Gate: live browser inspection for performance profiling and traces only.', gradient: 'from-sky-600 to-blue-600', icon: 'browser', kind: 'skill' },
       { id: 'code-review-and-quality', name: 'code-review-and-quality', title: 'The /code-review-and-quality Skill', desc: 'Step 1B: general code quality, naming, lack of dead code, and pattern adherence.', gradient: 'from-violet-600 to-purple-600', icon: 'review', kind: 'skill' },
