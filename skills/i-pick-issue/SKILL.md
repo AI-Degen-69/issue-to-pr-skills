@@ -1,6 +1,6 @@
 ---
 name: i-pick-issue
-description: Station I (Pick & Orchestrate) — The single entry point for Issue work. Always starts with Discovery. Lists open issues, groups them by domain, recommends the next logical one by dependency order, takes the operator's pick and execution mode, then orchestrates Stations II through VI through to merge and closeout.
+description: Station I (Pick & Orchestrate) — The single entry point for Issue work. Always starts with Discovery. Lists open issues, groups them by domain, recommends the next logical one by dependency order (the recommendation is the default selection unless the operator overrides it), takes the execution mode, then orchestrates Stations II through VI through to merge and closeout.
 ---
 
 # Station I: Pick Issue (`i-pick-issue`)

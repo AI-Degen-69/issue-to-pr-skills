@@ -34,7 +34,11 @@ This command supports two execution modes:
 For every task executed, follow these phases:
 
 ### Phase 1: Pre-flight & Specialized Skill Routing
-1. **Verify Plan:** Confirm `tasks/plan.md` exists. If missing, halt: "No plan found! Run `/ii-plan-issue` first."
+0. **Verify Plan:** Confirm `tasks/plan.md` exists. If missing, halt: "No plan found! Run `/ii-plan-issue` first." Nothing below can run without it.
+1. **Preconditions — verify all three before touching a file:**
+   1. **Right branch.** Run `git branch --show-current`. You must be on the plan's feature branch (`i<number>/<slug>`). On the base branch, or on a branch that is not the plan's, stop and route to `pipeline-triage` — never start a build on the wrong branch.
+   2. **Dirt has a known origin.** Run `git status --short`. Every changed file must trace to the plan's tasks. Foreign or unattributable dirt → stop and route to `pipeline-triage` for the unknown-origin stop rule. Do not absorb another stream's changes into this build, and do not stash them away silently.
+   3. **Resume an unfinished plan.** If `tasks/plan.md` has unchecked `[ ]` items, you are resuming. Take the next task from **`tasks/plan.md`** — the single source of truth for completion state. `tasks/todo.md` is a derived checklist, so read it for reporting but never select the next task from it: Phase 4 marks completion in `tasks/plan.md` only, and selecting from the checklist can replay an already-completed task. Never restart a plan from task 1, and never overwrite `tasks/plan.md` (Station II owns reconciliation).
 2. **Quality Guardrails:** Respect constraints from `CONSTRAINTS.md` (anti-cheat, forbidden edits, zero regressions).
 3. **Rule 0 — simplicity before writing:** for every task, first ask "what is the simplest thing that fully works?" The boring, shortest solution wins; complexity must justify itself before it gets written.
 4. **Risk-first order:** follow the plan's task order (risk-first from Station II); when the plan leaves freedom, take the riskiest, most-uncertain task first — while being wrong is still cheap.
@@ -71,6 +75,8 @@ For every task executed, follow these phases:
 
 At the conclusion of Station III, you MUST report to the user in clean, everyday English using this exact structured format.
 What's-changed only: report the product changes grouped by tag. Never mention commits, hashes, tree state, test commands, test counts, skill names, or file paths. The branch stays as the work ID. Omit empty groups. Max ~7 items — group beyond that.
+
+Build the walkthrough for the report from the live product: real screen names, at most 3 steps, every step is where -> what to do -> what to see. Prefer visual proof. Nothing visual -> say so in one line plus how it was checked automatically.
 
 ```markdown
 # 🔨 III - Build: Issue #<id> — <issue_title>

@@ -30,7 +30,9 @@ Word swaps to use:
 - "endpoint / API / CLI" -> "connection / screen / button you press"
 
 ## Usage Context
-- **Ad-hoc skill — no station number, never mandatory.** Station VI (`vi-close-pipeline`) suggests it after closeout; the operator may also invoke it directly at any time.
+- **Ad-hoc skill — no station number, never mandatory.** The operator may invoke it directly at any time. Station VI (`vi-close-pipeline`) suggests it after closeout — but only a **clean** one; when Station VI ends blocked or incomplete, it does not offer this skill until the folder is cleared.
+- **If Station VI has not run yet:** this skill is invoked after the merge but before closeout — run `/vi-close-pipeline` first, or state in the report that the pipeline is not closed yet.
+- **If Station VI already ran:** building the page writes a file, so re-verify the clean exit afterwards — `git status --porcelain` empty, on base branch, and push anything staged. If the page cannot be committed cleanly (foreign dirt present), report the staged path and leave the commit to the operator rather than bundling strangers.
 - **Sources:** the story is built from the merged PR, the diff, and the conversation — the issue's plan/notes are a nice-to-have, not a requirement, so this skill works even long after cleanup.
 
 ---
@@ -144,32 +146,23 @@ Example tone:
 
 ---
 
-## Chat Output Contract
+## Final verification walkthrough (mandatory input to the report)
+
+Build the walkthrough in the report from the live product, not from the presentation file:
+
+1. Name the real screen / tab / button the operator opens in the running app.
+2. Write at most 5 steps. Every step is: where → what to do → what to see.
+3. Use `→` arrows between screens and give a direct link when one exists.
+4. Say exactly what to look at (text, state, count) so the operator knows it worked.
+5. Prefer visual proof. Backend-only with nothing to see → say so in one line plus how it was checked automatically.
 
 **Strict Prohibition:** NEVER output test-runner commands (`pytest`, `npm test`, `jest`, `vitest`, or equivalents). Tests already passed earlier. Manual check is human touch-and-see only.
 **Strict Instruction on "Try it yourself":** Direct the user to try the change in the REAL APPLICATION / PROJECT itself (the running system, UI dashboard, app screen, or CLI), NEVER in the generated presentation/HTML showcase.
-**No Meta-showcase in Chat:** Do NOT output the section "🖼️ How I chose to show it" in the chat report — keep the chat report focused solely on the value, how to try it in the real application, and links/paths.
-
-```markdown
-# 🎨 PR Summary & Showcase:
-
-## 📊 Issue & PR:
-* **Issue:** [#<id> - <title>](<url>)
-* **PR:** [#<n> - <title>](<url>) 🟢 MERGED
-
-## 💡 What Changed:
-* [Before update: what wasn't working or what was missing]
-* [Now: what improved and what can be done]
-
-## 👁️ Manual Verification:
-1. **What to verify:** Open [application screen / tab / control in the live system]
-2. **What to expect:** [what the change does, or the result the user should see]
-
-## 🎨 Presentation File:
-- **Path:** [full path to generated HTML file]
-- **Open:** [start <file.html>]
+**No meta-showcase in chat:** Keep the chat report focused solely on the value, how to try it in the real application, and links/paths.
 
 ---
 
-# ➡️ Next Step: 
-- Close the issue and prepare for the next issue: **`/vi-close-pipeline`**
+<!-- local-only:begin -->
+The chat output template for this station is `references/output-template.md`.
+Read it before writing your first report.
+<!-- local-only:end -->
