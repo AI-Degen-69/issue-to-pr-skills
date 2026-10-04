@@ -3,8 +3,8 @@
 [![skills.sh](https://skills.sh/badge/AI-Degen-69/issue-to-pr-skills)](https://skills.sh/AI-Degen-69/issue-to-pr-skills)
 [![CI](https://github.com/AI-Degen-69/issue-to-pr-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/AI-Degen-69/issue-to-pr-skills/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-5.7-emerald.svg)](version.json)
-[![46 skills](https://img.shields.io/badge/skills-46-blue)](skills/)
+[![Version](https://img.shields.io/badge/version-6.7-emerald.svg)](version.json)
+[![47 skills](https://img.shields.io/badge/skills-47-blue)](skills/)
 [![17 agents](https://img.shields.io/badge/agents-17-purple)](agents/)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=social&logo=buy-me-a-coffee)](https://buymeacoffee.com/ai.degen)
 
@@ -115,7 +115,7 @@ Grouped by role. Each activates automatically when its station needs it — or i
 **Frontend:** `frontend-ui-engineering`, `frontend-design`, `tailwind-design-system`, `web-design-guidelines`, `vercel-react-best-practices`, `vercel-composition-patterns`
 **API & UX:** `api-and-interface-design`, `humanizer`
 
-Browse all 46: see [the website](https://AI-Degen-69.github.io/issue-to-pr-skills#catalog) or run `npx skills add AI-Degen-69/issue-to-pr-skills --list`.
+Browse all 47: see [the website](https://AI-Degen-69.github.io/issue-to-pr-skills#catalog) or run `npx skills add AI-Degen-69/issue-to-pr-skills --list`.
 
 ## Reviewer agents (17)
 
@@ -147,7 +147,7 @@ See [docs/agents.md](docs/agents.md) for dispatch rules.
 
 | Layer | Paths | Purpose |
 |---|---|---|
-| Shared core | `skills/` (46) | Portable `SKILL.md` workflows |
+| Shared core | `skills/` (47) | Portable `SKILL.md` workflows |
 | Reviewers | `agents/` (17) | Specialist personas |
 | References | `references/` (4) | Checklists loaded on demand |
 | Docs | `docs/` | Getting started, pipeline, skill anatomy |

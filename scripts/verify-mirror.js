@@ -57,6 +57,7 @@ const EXPECTED_SKILLS = [
   "ci-cd-and-automation",
   "interview-me",
   "shipping-and-launch",
+  "quick-fix",
 ];
 
 const RETIRED_SKILLS = [
@@ -181,8 +182,12 @@ for (const skill of EXPECTED_SKILLS) {
     continue;
   }
 
-  const srcFiles = walkDir(srcSkillDir);
-  const tgtFiles = walkDir(tgtSkillDir);
+  // Local-only Hebrew report templates are never published (see EXCLUDE in
+  // scripts/sync-from-canonical.js) - skip them on both sides so their
+  // deliberate absence from the pack is not reported as drift.
+  const isPublished = (f) => f !== "references/output-template.md";
+  const srcFiles = walkDir(srcSkillDir).filter(isPublished);
+  const tgtFiles = walkDir(tgtSkillDir).filter(isPublished);
 
   const srcFileSet = new Set(srcFiles);
   const tgtFileSet = new Set(tgtFiles);

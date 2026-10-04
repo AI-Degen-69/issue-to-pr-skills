@@ -91,7 +91,7 @@ The chat reports **what changed in the product — never how it was saved.** No 
 
 Every external skill and reviewer persona each pipeline station invokes, read off the stations' own `SKILL.md` and `references/` files rather than a hand-maintained list. Station-to-station routing lives in the architecture diagram above; this table covers only the helper skills and personas a station delegates to. A name absent from a station's row is not invoked by that station.
 
-**Coverage: 46 skills (10 pipeline + 33 first-order + 3 second-order) and all 17 personas.**
+**Coverage: 47 skills (10 pipeline + 34 first-order + 3 second-order) and all 17 personas.**
 
 | Station | Invokes | When |
 |---|---|---|
@@ -162,7 +162,7 @@ Three skills are not invoked by a station directly but by a skill a station alre
 | `interview-me` | `constraint-driven-development` |
 | `shipping-and-launch` | `git-workflow-and-versioning`, `observability-and-instrumentation`, `using-agent-skills` |
 
-**Shipped set: 46 skills = 10 pipeline + 33 first-order + 3 second-order.**
+**Shipped set: 47 skills = 10 pipeline + 34 first-order + 3 second-order.**
 
 ---
 

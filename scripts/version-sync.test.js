@@ -46,9 +46,9 @@ function restore(snap) {
   }
 }
 
-test('extractSkillsData returns all 46 skills with descriptions', () => {
+test('extractSkillsData returns all 47 skills with descriptions', () => {
   const skills = extractSkillsData();
-  assert.equal(skills.length, 46, 'Should extract exactly 46 skills');
+  assert.equal(skills.length, 47, 'Should extract exactly 47 skills');
   for (const s of skills) {
     assert.ok(s.name, 'Skill must have a name');
     assert.ok(s.desc && s.desc.length > 5, `Skill ${s.name} must have a non-empty description`);

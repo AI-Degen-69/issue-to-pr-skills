@@ -1,7 +1,7 @@
 // Localized pipeline stations are hand-maintained English in this pack:
 // `npm run sync` refuses to copy their canonical counterparts, so nothing keeps
 // them in step. `verify-mirror.js` cannot see it (a hand-maintained file is
-// always byte-consistent with itself), `version:check` reports 46/46 aligned,
+// always byte-consistent with itself), `version:check` reports 47/47 aligned,
 // and `sync:check` files the file under `stale` without saying why. So Station
 // IV shipped "playwright-cli preferred" long after canonical pinned the browser
 // gate to "only" — and `site/skills.json` regenerated the wrong wording for

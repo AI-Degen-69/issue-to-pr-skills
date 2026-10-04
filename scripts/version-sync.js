@@ -200,6 +200,7 @@ export function checkSync() {
 
   // Check catalog diffs
   let catalogDiffs = [];
+  const totalSkills = extractSkillsData().length;
   if (fs.existsSync(SITE_SKILLS_JSON)) {
     try {
       const siteSkills = JSON.parse(fs.readFileSync(SITE_SKILLS_JSON, 'utf8'));
@@ -230,7 +231,7 @@ export function checkSync() {
   console.log('╠════════════════════════════════════════════════════════════════════════════╣');
   console.log(`║  Folder Version : Version: ${folderVer.padEnd(8)} [Content Hash: ${folderHash}]             ║`);
   console.log(`║  Site Version   : Version: ${siteVer.padEnd(8)} [Content Hash: ${siteHash.padEnd(10)}]       ║`);
-  console.log(`║  Skills In Sync : ${catalogClean ? '46/46 skills aligned' : `${46 - catalogDiffs.length}/46 aligned (${catalogDiffs.length} differ)`.padEnd(20)}                         ║`);
+  console.log(`║  Skills In Sync : ${catalogClean ? `${totalSkills}/${totalSkills} skills aligned` : `${totalSkills - catalogDiffs.length}/${totalSkills} aligned (${catalogDiffs.length} differ)`.padEnd(20)}                         ║`);
   console.log('╠════════════════════════════════════════════════════════════════════════════╣');
   if (inSync) {
     console.log('║  STATUS         : ✓ IN SYNC — The site accurately reflects the folder!    ║');
@@ -310,7 +311,7 @@ export function bumpVersion(typeArg) {
     version: newVer,
     label: `Version: ${newVer}`,
     contentHash,
-    skillsCount: 46,
+    skillsCount: 47,
     lastUpdated: timestamp,
     lastChangeType: bumpType
   };
@@ -400,7 +401,7 @@ export function syncSite() {
     let readme = fs.readFileSync(README_MD, 'utf8');
     if (!readme.includes('badge/version-')) {
       readme = readme.replace(
-        /(\[!\[46 skills\])/,
+        /(\[!\[47 skills\])/,
         `[![Version](https://img.shields.io/badge/version-${folderVer}-emerald.svg)](version.json)\n$1`
       );
     } else {
@@ -455,7 +456,7 @@ if (isMain) {
         version: v,
         label: `Version: ${v}`,
         contentHash: hash,
-        skillsCount: 46,
+        skillsCount: 47,
         lastUpdated: new Date().toISOString(),
         lastChangeType: 'init'
       }, null, 2) + '\n', 'utf8');
