@@ -12,7 +12,7 @@ This skill implements **Station II (Define & Plan)** of the 6-station pipeline (
 ## Pipeline Position
 - **Station:** II of VI
 - **Previous Station:** `i-pick-issue` (Station I — or the `create-issue` intake branch)
-- **Next Station:** `iii-build-plan auto` (Build)
+- **Next Station:** `quick-fix` (only on a Step 0C divert — which itself requires a `quick-fix`-labeled Tiny issue, the gate passing, and the operator's choice) or `iii-build-plan auto` (Build)
 
 ---
 
@@ -46,6 +46,34 @@ Stop the issue-dependent steps. Say in plain language exactly what failed, and a
    - **Standard** — 2–5 files, internal module changes, a single architectural decision.
    - **Large** — cross-cutting changes, a new external dependency, public API or database schema change.
 3. **Task type** — classify into one or more primary categories (combinations allowed): **Code** (default), **Design**, **Debug**, **Performance**, **Security**, **Docs**, **UX / Copy**, **Research**. Classify *before* planning: downstream stations (`iii-build-plan`, `iv-review-build-and-pr`) pick reviewers and test suites from this tag.
+
+### Step 0C: Quick-Fix Lane Divert (after the tier and task type, before Step 0A)
+
+**Tiny tier and the `quick-fix` label are both required** — the label is a precondition for
+evaluation. Read the linked issue's current labels (`gh issue view <number> --json labels`);
+Station II must not rely on a label status carried forward from Station I.
+
+Three outcomes:
+
+1. **Not `quick-fix`-labeled, any tier** (whether or not it carries other labels such as
+   `ready-for-agent`) → continue to Step 0A. Run no gate, print no gate text, offer no lane.
+2. **Labeled but not Tiny** → remove the label
+   (`gh issue edit <number> --remove-label "quick-fix"`) and continue to Step 0A. Right-sizing
+   here is the **authority** the label only guessed at: the label was wrong, and a stale one
+   cannot mislead a later session.
+3. **Labeled and Tiny** → run the **7-box gate** in `quick-fix`. A Tiny issue may still be the
+   wrong lane: right-sizing measures size, the gate measures risk. All 7 pass → tell the operator
+   in one line that this looks like a quick fix (push straight to `main`, no PR, no reviews, no
+   CodeRabbit) and ask whether to take it. They choose: **yes** → switch back to a clean,
+   synced base branch first (`git stash push` any planning scratch or leave it committed on the
+   feature branch — never carry it onto base), then hand off to `quick-fix`
+   **with your 7-box verdict** so it re-checks only size and its own diff instead of re-reading
+   the issue, and stop this station; **no, or any box fails** → continue to Step 0A as normal,
+   and if any box failed remove the label so a later session is not misled.
+
+Three things are deliberately still not offered here, because at this point the full chain costs
+almost nothing: a new test required, no runnable verification command, or an undecided approach.
+Those are boxes 5, 6, and 7 — failing them is not a near miss.
 
 ### Step 0A: Resolve Open Questions from Code & Consult CodeRabbit Plan
 1. **Check for CodeRabbit Plan in comments:** Look at the discussion comments fetched via `gh issue view <number> --comments`. If a plan comment from `coderabbitai` exists:

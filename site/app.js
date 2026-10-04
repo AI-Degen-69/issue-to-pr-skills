@@ -32,6 +32,16 @@ const SYSTEM_SKILLS = [
     command: '/create-issue <idea>'
   },
   {
+    id: 'quick-fix',
+    label: 'Fast Lane',
+    title: 'Quick Fix',
+    desc: 'Escape hatch for trivial work: a 7-box gate at Stations #1–#4 diverts typos, one-liners and broken links straight to the base branch — no branch, no PR, no reviews.',
+    roleBadge: 'Fast Lane',
+    roleClass: 'bg-white/5 text-zinc-300 border-white/15',
+    timing: 'Diverts from Stations #1–#4',
+    command: '/quick-fix'
+  },
+  {
     id: 'present-pr',
     label: 'Ad-hoc Showcase',
     title: 'Present Showcase',
@@ -135,6 +145,7 @@ const GROUP = {
   'create-issue': 'plan',
   'doubt-driven-development': 'plan',
   'api-and-interface-design': 'plan',
+  'quick-fix': 'plan',
 
   // #3 & #3b - Build & Iterate
   'iii-build-plan': 'build',

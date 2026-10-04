@@ -132,6 +132,10 @@
     "desc": "Present PR & Visual Showcase (ad-hoc skill, not a pipeline station) — Builds a dynamic, customer-simple HTML page that explains what was done. Picks the best visual for the job (flow, timeline, before/after, map, numbers, demo) based on session context. No fixed template. Plain words, no dev jargon. Also handles explain-mode for any question or design."
   },
   {
+    "name": "quick-fix",
+    "desc": "Quick-fix lane — the fast path for trivial work. Use when a task is a typo, a one-line correction, a broken link, a wrong constant, a stale comment, a missing doc line, or any change to at most 2 files that adds no behavior and needs no new tests. Verifies, commits, and pushes straight to the base branch — no branch, no PR, no ECC reviewers, no CodeRabbit. Any failed checklist criterion sends the work back to the normal pipeline instead."
+  },
+  {
     "name": "security-and-hardening",
     "desc": "Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved."
   },

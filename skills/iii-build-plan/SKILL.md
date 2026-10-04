@@ -10,7 +10,7 @@ This skill implements **Station III (Build)** of the 6-station pipeline (numbere
 ## Pipeline Position
 - **Station:** Station III of VI (numbered stations `i`–`vi`)
 - **Previous Station:** `ii-plan-issue` (Plan)
-- **Next Station:** `iv-review-build-and-pr` (Review & Verify)
+- **Next Station:** `quick-fix` (only on a Step 1c divert — which itself requires a `quick-fix`-labeled issue, the gate passing, and the operator's choice) or `iv-review-build-and-pr` (Review & Verify)
 
 ---
 
@@ -49,6 +49,29 @@ For every task executed, follow these phases:
    - **Performance:** Activate `performance-optimization`.
    - **Security:** Activate `security-and-hardening`.
    - **Docs:** Activate `documentation-and-adrs`.
+
+#### 1c. Quick-Fix Lane Divert (fresh plan only, before the first task runs)
+
+Runs last in Phase 1, once items 1-5 are read: the lane replaces this station, so it only makes
+sense **before any task is implemented**. Once the first task is committed locally, finish the
+build as planned — a half-built plan shipped straight to `main` is not a quick fix.
+
+The **label precondition** comes first: read the current labels of the issue named in the plan
+header (`gh issue view <number> --json labels`). If no issue is linked, or the issue does not carry the `quick-fix` label,
+skip the gate entirely — continue into Phase 2 and build as planned, with no gate text and no lane
+offer.
+
+On a labeled issue with a fresh plan and nothing implemented yet: if every task in `tasks/plan.md`
+is XS or S, the plan touches at most 2 files, adds no behavior, and needs no new test — run the
+**7-box gate** in `quick-fix`. All 7 pass → offer the operator the lane in one line (push straight
+to `main`, no PR, no reviews, no CodeRabbit). **Yes** → hand off to `quick-fix` **with your 7-box
+verdict** so it re-checks only size and its own diff, which works on the base branch — switch off
+this feature branch first (commit or stash `tasks/plan.md` / `tasks/todo.md` changes on the feature
+branch so the handoff is clean, without discarding them and without carrying them onto base),
+or the lane's own base-branch precondition fails and it routes to
+`pipeline-triage`. **No, or any box fails** → continue into Phase 2 and build as planned, and
+remove the label (`gh issue edit <number> --remove-label "quick-fix"`) — a plan being built here
+has already disproved the lane.
 
 ### Phase 2: Implementation (Type-Aware Build)
 - **Code Tasks:** Follow TDD — write minimal clean code to fulfill the requirement. Run only the targeted test file for the touched module during the TDD cycle. Do NOT run the full repository test suite here; full regression testing is deferred to CI on push.

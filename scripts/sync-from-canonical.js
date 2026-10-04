@@ -13,8 +13,8 @@
 //
 // Rules (see AGENTS.md and CONSTRAINTS.md):
 //   - Canonical is authoritative. Never hand-edit a mirrored skill to differ.
-//   - All 46 mirrored skills are covered - the 10 pipeline/system stations AND
-//     the 36 supporting skills. This list must stay identical to
+//   - All 47 mirrored skills are covered - the 10 pipeline/system stations AND
+//     the 37 supporting skills. This list must stay identical to
 //     EXPECTED_SKILLS in verify-mirror.js, or `npm run check` fails.
 //   - Eval snapshots (evals/snapshots, evals/iteration-*) are historical
 //     baselines and are NOT synced.
@@ -79,12 +79,19 @@ const STATIONS = [
   "ci-cd-and-automation",
   "interview-me",
   "shipping-and-launch",
+  "quick-fix",
 ];
 
 // Never synced: historical eval baselines and local grading artifacts.
+// Local-only Hebrew report templates are never published either - the pack
+// keeps English-only contracts, so references/output-template.md stays out
+// for every skill (the 10 localized stations were already skipped by the
+// Hebrew guard; this makes the rule explicit and covers non-localized
+// skills like quick-fix the same way).
 const EXCLUDE = [
   (rel) => rel.startsWith("evals/snapshots/") || rel.startsWith("evals/iteration-"),
   (rel) => rel === "results.json",
+  (rel) => rel === "references/output-template.md",
 ];
 
 // Mirror-specific rewrites applied AFTER copying. Canonical is authoritative for

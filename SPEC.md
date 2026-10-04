@@ -277,3 +277,48 @@ needs a canonical home this repo does not publish.
 3. `npm run check` covers link validation and stays cross-shell safe (plain `&&`).
 4. CI matrixes the declared floor, not only a newer one.
 5. `npm run check` → exit 0; `npm test` green; the drift buckets stay `21` / `19`.
+
+---
+
+# Addendum — Operator brief (no issue): quick-fix lane site integration
+
+## Goal
+
+The quick-fix lane (mirrored into the pack as the 47th skill) reads as a
+first-class escape hatch everywhere a visitor meets it: the skills catalog
+card renders from data like every other skill, the home page counts say 47,
+the carousel/flow/lifecycle surfaces name the lane beside (never inside)
+the #1–#6 chain, the pipeline doc's call-map rows list it where stations
+divert to it, and the 4 connected stations (I, II, III, IV) carry the
+divert wiring in the pack's English — ported from canonical, behavior
+unchanged. Station count stays 7.
+
+## Acceptance criteria
+
+- [ ] `skills/i-pick-issue`, `ii-plan-issue`, `iii-build-plan`,
+  `iv-review-build-and-pr` each name the quick-fix divert; `npm run
+  validate` and `npm run validate:mirror` green.
+- [ ] No hardcoded 46 remains in `site/index.html` (og:description,
+  JSON-LD, CTA, stats bento, both catalog badges, install line, layer
+  table); quick-fix card renders on `site/skills/`.
+- [ ] `site/app.js` SYSTEM_SKILLS lists the lane; `site/skills-flow.js`
+  shows it on the i/ii/iii/iv nodes; lifecycle names it under System &
+  Ad-hoc; home carousel + flow + `#lifecycle` verified in browser
+  preview with zero console errors.
+- [ ] `docs/pipeline.md` call-map rows I–IV list quick-fix, read off the
+  ported pack files. `npm run check` + `npm test` 30/30 green.
+
+## Edge cases
+
+- Catalog card with the 441-char lane description must not break card
+  layout (length is inside the observed range — verify, don't assume).
+- `sync:site` owns badges/footers/skills.json: regen, never hand-edit.
+- Port wording follows canonical divert blocks; any conflict between a
+  pack station and canonical is resolved in favor of canonical semantics
+  in plain English, recorded in `tasks/plan.md`.
+
+## Out of scope
+
+- Skill behavior changes (canonical owns behavior). Re-translating other
+  stale stations. Site restyling. Generator changes (the syncSite
+  count-spot proposal is opt-in only). New issues or sub-issues.

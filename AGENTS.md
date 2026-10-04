@@ -1,10 +1,10 @@
-# AGENTS.md — working in this repo (Version: 5.7)
+# AGENTS.md — working in this repo (Version: 6.7)
 
 ## What this repo is
 
-Public skill pack: 10 pipeline station skills (`skills/`), 36 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
+Public skill pack: 10 pipeline station skills (`skills/`), 37 supporting skills, 17 reviewer personas (`agents/`), guides (`docs/`). Consumers install it read-only — keep files portable (relative paths, no machine specifics).
 
-Counts are exact and must stay true: `skills/` = 46 directories (10 stations + 36 supporting), `agents/` = 17 personas. `scripts/verify-mirror.js` checks the skill set and is the source of truth for that number.
+Counts are exact and must stay true: `skills/` = 47 directories (10 stations + 37 supporting), `agents/` = 17 personas. `scripts/verify-mirror.js` checks the skill set and is the source of truth for that number.
 
 ## Rules for changes here
 
@@ -36,19 +36,19 @@ This repository enforces a strict two-value version synchronization system:
   the 10 localized stations. Use before a release.
 - `npm test` — Runs the test suite (`scripts/version-sync.test.js`).
 
-## The 46 mirrored skills are a copy — never hand-edit them
+## The 47 mirrored skills are a copy — never hand-edit them
 
 Every skill in `skills/` is **copied** from the canonical agent home
 (`~/.agents/skills/`): the 10 pipeline/system stations (`pipeline-triage`,
 `i-pick-issue`, `create-issue`, `ii-plan-issue`, `iii-build-plan`,
 `iiib-iterate-after-build`, `iv-review-build-and-pr`, `v-babysit-pr-and-merge`,
-`vi-close-pipeline`, `present-pr`) plus the 36 supporting skills. Canonical is
+`vi-close-pipeline`, `present-pr`) plus the 37 supporting skills. Canonical is
 authoritative for all of them.
 
 Change the skill at the source, then re-sync:
 
 ```bash
-npm run sync      # copy all 46 into this pack
+npm run sync      # copy all 47 into this pack
 npm run check         # validate + verify byte-identical + report drift
 ```
 
