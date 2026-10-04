@@ -210,9 +210,16 @@ window.GROUP_LABEL = GROUP_LABEL;
 let allSkills=[];
 
 function fetchSkillsJson(){
-  // works from / and /skills/ etc
-  const tries=['./skills.json','../skills.json','skills.json'];
-  return tries.reduce((p,url)=>p.catch(()=>fetch(url).then(r=>{if(!r.ok) throw new Error(url); return r.json()})), Promise.reject());
+  // Resolve against this script's own URL, not the page URL: app.js is loaded
+  // as ./app.js from / and ../app.js from /skills/, so a sibling fetch is one
+  // request from either page depth — no probing chain, no 404 in the console.
+  const here = (document.currentScript && document.currentScript.src)
+    || [...document.scripts].map(s => s.src).find(src => /\/app\.js(\?|$)/.test(src))
+    || document.baseURI;
+  return fetch(new URL('skills.json', here).href).then(r => {
+    if (!r.ok) throw new Error('skills.json ' + r.status);
+    return r.json();
+  });
 }
 
 function copyCmd(triggerBtn){
