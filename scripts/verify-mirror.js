@@ -4,7 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { contentViolation } from "./content-rules.js";
+import { contentViolation, stripLocalOnly } from "./content-rules.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TARGET_DIR = path.join(ROOT, "skills");
@@ -110,7 +110,10 @@ const REWRITE = [
 ];
 
 function sha256(filePath) {
-  let content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
+  // The same strip the writer applies, or every file carrying a local-only
+  // marker would hash differently here than in the pack - a mismatch invented
+  // by the comparison rather than found in the content.
+  let content = stripLocalOnly(fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n"));
   for (const [re, to] of REWRITE) content = content.replace(re, to);
   return crypto.createHash("sha256").update(content).digest("hex");
 }
