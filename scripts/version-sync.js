@@ -171,17 +171,28 @@ export function getSiteVersion() {
  * nothing ever read it back: the gate compared the SITE hash against the
  * freshly computed folder hash and declared the pair verified. A stale value
  * could therefore sit in the committed file indefinitely - which is exactly
- * what had happened. Returns null when version.json is absent or unreadable, so
- * a missing file is "nothing to compare", never a confident wrong answer.
+ * what had happened.
+ *
+ * Only an ABSENT file is "nothing to compare". A file that is present but
+ * unreadable, or that carries no contentHash, is a broken artifact and has to
+ * fail: folding those into the same null made every one of them a silent pass.
  */
-export function getDeclaredFolderHash() {
-  if (!fs.existsSync(VERSION_JSON)) return null;
+export function readDeclaredFolderHash() {
+  if (!fs.existsSync(VERSION_JSON)) return { state: 'absent', hash: null, reason: null };
+  let data;
   try {
-    const data = JSON.parse(fs.readFileSync(VERSION_JSON, 'utf8'));
-    return data.contentHash || null;
-  } catch {
-    return null;
+    data = JSON.parse(fs.readFileSync(VERSION_JSON, 'utf8'));
+  } catch (e) {
+    return { state: 'unreadable', hash: null, reason: `invalid JSON (${e.message})` };
   }
+  if (!data || typeof data.contentHash !== 'string' || !data.contentHash) {
+    return { state: 'malformed', hash: null, reason: 'no contentHash field' };
+  }
+  return { state: 'declared', hash: data.contentHash, reason: null };
+}
+
+export function getDeclaredFolderHash() {
+  return readDeclaredFolderHash().hash;
 }
 
 export function getSiteHash() {
@@ -227,7 +238,21 @@ export function checkSync() {
   if (fs.existsSync(SITE_SKILLS_JSON)) {
     try {
       const siteSkills = JSON.parse(fs.readFileSync(SITE_SKILLS_JSON, 'utf8'));
-      const siteMap = new Map(siteSkills.map((s) => [s.name, s.desc]));
+      // Build the lookup by hand so a repeated name is reported instead of
+      // silently collapsing: `new Map(entries)` keeps the last value for a
+      // repeated key, which let a contradictory duplicate hide behind a
+      // correct one.
+      const siteMap = new Map();
+      const duplicated = new Set();
+      for (const entry of siteSkills) {
+        if (!entry || typeof entry.name !== 'string' || !entry.name) {
+          catalogDiffs.push('malformed site catalog entry');
+          continue;
+        }
+        if (siteMap.has(entry.name)) duplicated.add(entry.name);
+        siteMap.set(entry.name, entry.desc);
+      }
+      for (const name of duplicated) catalogDiffs.push(`${name} (duplicated on site)`);
       const folderNames = new Set(folderSkills.map((s) => s.name));
 
       for (const skill of folderSkills) {
@@ -258,8 +283,8 @@ export function checkSync() {
   const sourcesClean = sourceDrift.length === 0;
   // version.json's own record of the folder is part of "is this true?", not
   // just bookkeeping. It was written on every bump and verified never.
-  const declaredHash = getDeclaredFolderHash();
-  const declaredClean = declaredHash === null || declaredHash === folderHash;
+  const declared = readDeclaredFolderHash();
+  const declaredClean = declared.state === 'absent' || (declared.state === 'declared' && declared.hash === folderHash);
   const inSync = versionsMatch && hashesMatch && catalogClean && sourcesClean && declaredClean;
 
   console.log('╔════════════════════════════════════════════════════════════════════════════╗');
@@ -284,12 +309,22 @@ export function checkSync() {
       console.log(`║    - Skill catalog differs: ${catalogDiffs.slice(0, 3).join(', ')}${catalogDiffs.length > 3 ? '...' : ''}`.padEnd(77) + '║');
     }
     if (!declaredClean) {
-      console.log(`║    - version.json declares a stale content hash: ${declaredHash} (folder is ${folderHash})`.padEnd(77) + '║');
+      const detail = declared.reason
+        ? `version.json is unusable: ${declared.reason}`
+        : `version.json hash is stale: ${declared.hash} (folder ${folderHash})`;
+      // Truncate rather than pad: a long hash pair used to run past the frame
+      // and the closing border landed in the wrong column.
+      console.log(`║    - ${detail}`.slice(0, 77).padEnd(77) + '║');
     }
     if (!sourcesClean) {
       console.log(`║    - Version source drift: ${sourceDrift.map(([f, v]) => `${f}=${v}`).join(', ')} (folder=${folderVer})`.padEnd(77) + '║');
     }
-    console.log('║  Action Needed  : Run "npm run sync:site" to bring site into sync.        ║');
+    // syncSite() rewrites site/* and never version.json, so the old fixed advice
+    // sent a maintainer in a circle on a stale declared hash: run it, stay red.
+    const action = !declaredClean
+      ? 'Run "npm run version:bump" then "npm run sync:site".'
+      : 'Run "npm run sync:site" to bring site into sync.';
+    console.log(`║  Action Needed  : ${action}`.padEnd(77) + '║');
   }
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
 

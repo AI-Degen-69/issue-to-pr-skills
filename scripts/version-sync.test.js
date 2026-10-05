@@ -191,6 +191,112 @@ test('the committed version.json declares this folder\'s real hash', () => {
   assert.equal(declared, computeFolderHash(), 'version.json contentHash is stale - run npm run version:bump');
 });
 
+// Runs checkSync with console captured, returning both its verdict and its output.
+function withCapturedCheckSync() {
+  const log = console.log;
+  let output = '';
+  console.log = (...args) => { output += args.join(' ') + '\n'; };
+  try {
+    return { inSync: checkSync(), output };
+  } finally {
+    console.log = log;
+  }
+}
+
+test('checkSync rejects a name duplicated in the site catalog', () => {
+  // `new Map(siteSkills.map(...))` keeps the LAST entry for a repeated name and
+  // drops the rest without a word. Two entries for one skill, the second one
+  // correct, passed the gate while the published file carried a contradiction.
+  const snap = snapshot();
+  const file = path.join(ROOT, 'site', 'skills.json');
+  try {
+    const siteSkills = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const at = siteSkills.findIndex((s) => s.name === 'quick-fix');
+    assert.ok(at !== -1, 'quick-fix must be in the site catalog for this test to mean anything');
+    // Insert the contradictory copy BEFORE the real one. A Map keeps the last
+    // entry for a repeated name, so the correct description wins the lookup and
+    // the pre-existing desc comparison sees nothing wrong - which is the exact
+    // hole duplicate detection has to close.
+    siteSkills.splice(at, 0, { ...siteSkills[at], desc: 'A contradictory first entry.' });
+    fs.writeFileSync(file, JSON.stringify(siteSkills, null, 2) + '\n', 'utf8');
+
+    const { inSync, output } = withCapturedCheckSync();
+    assert.equal(inSync, false, 'a duplicated site catalog name must fail version:check');
+    assert.match(output, /quick-fix/, 'the gate must name the duplicated entry');
+    assert.match(output, /duplicat/i, 'the gate must say the name was duplicated, not merely mismatched');
+  } finally {
+    restore(snap);
+  }
+  assert.equal(checkSync(), true, 'restored catalog is in sync again');
+});
+
+test('checkSync rejects an unreadable version.json instead of tolerating it', () => {
+  // The missing-file tolerance became a vacuous pass: invalid JSON hit the same
+  // catch as "no such file" and was reported as "nothing to compare".
+  const snap = snapshot();
+  const file = path.join(ROOT, 'version.json');
+  try {
+    fs.writeFileSync(file, '{ this is not json', 'utf8');
+
+    const { inSync, output } = withCapturedCheckSync();
+    assert.equal(inSync, false, 'invalid JSON in version.json must fail version:check');
+    assert.match(output, /version\.json/, 'the gate must name the file it could not read');
+  } finally {
+    restore(snap);
+  }
+  assert.equal(checkSync(), true, 'restored version.json is in sync again');
+});
+
+test('checkSync rejects a version.json with no contentHash', () => {
+  const snap = snapshot();
+  const file = path.join(ROOT, 'version.json');
+  try {
+    const v = JSON.parse(fs.readFileSync(file, 'utf8'));
+    delete v.contentHash;
+    fs.writeFileSync(file, JSON.stringify(v, null, 2) + '\n', 'utf8');
+
+    const { inSync, output } = withCapturedCheckSync();
+    assert.equal(inSync, false, 'a version.json without contentHash must fail version:check');
+    assert.match(output, /contentHash/, 'the gate must name the missing field');
+  } finally {
+    restore(snap);
+  }
+  assert.equal(checkSync(), true, 'restored version.json is in sync again');
+});
+
+test('a missing version.json stays tolerated', () => {
+  // The counterpart to the two above: a repo that has never bumped has no
+  // version.json to compare against, and inventing a failure there would make
+  // the gate unusable on a fresh clone.
+  const snap = snapshot();
+  try {
+    fs.rmSync(path.join(ROOT, 'version.json'));
+
+    const { inSync } = withCapturedCheckSync();
+    assert.equal(inSync, true, 'an absent version.json is "nothing to compare", not a failure');
+  } finally {
+    restore(snap);
+  }
+  assert.equal(checkSync(), true, 'repo back in sync after restore');
+});
+
+test('the stale-hash guidance names the command that actually repairs it', () => {
+  // The fixed "Action Needed" line told every failure to run sync:site, which
+  // rewrites site/* only and never version.json. Following it left the gate red
+  // with nothing done.
+  const snap = snapshot();
+  const file = path.join(ROOT, 'version.json');
+  try {
+    const v = JSON.parse(fs.readFileSync(file, 'utf8'));
+    fs.writeFileSync(file, JSON.stringify({ ...v, contentHash: 'deadbeefff' }, null, 2) + '\n', 'utf8');
+
+    const { output } = withCapturedCheckSync();
+    assert.match(output, /version:bump/, 'a stale declared hash must point at npm run version:bump');
+  } finally {
+    restore(snap);
+  }
+});
+
 function snapInitial(snap) {
   const v = snap.find((f) => f.rel === 'version.json');
   if (v && v.existed) {
