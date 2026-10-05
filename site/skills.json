@@ -105,7 +105,7 @@
   },
   {
     "name": "iv-review-build-and-pr",
-    "desc": "Station IV (Review, Verify & Ship) — Universal shipping flow. Runs OCR delegation (deterministic file scope + rules, host-agent review, no LLM key), then ECC language/framework reviewers, applies fixes, executes the post-review Browser Gate (UI, fast-first, playwright-cli only — see Step 0.1 tool allowlist; DevTools MCP for profiling only) or targeted test gate (backend), pushes branch, and opens GitHub PR with @coderabbitai summary."
+    "desc": "Station IV (Review, Verify & Ship) — Universal shipping flow. Runs OCR delegation (deterministic file scope + rules, host-agent review, no LLM key), then stack-matched language/framework reviewers, applies fixes, executes the post-review Browser Gate (UI, fast-first, playwright-cli only — see Step 0.1 tool allowlist; DevTools MCP for profiling only) or targeted test gate (backend), pushes branch, and opens GitHub PR with @coderabbitai summary."
   },
   {
     "name": "observability-and-instrumentation",
@@ -133,7 +133,7 @@
   },
   {
     "name": "quick-fix",
-    "desc": "Quick-fix lane — the fast path for trivial work. Use when a task is a typo, a one-line correction, a broken link, a wrong constant, a stale comment, a missing doc line, or any change to at most 2 files that adds no behavior and needs no new tests. Verifies, commits, and pushes straight to the base branch — no branch, no PR, no ECC reviewers, no CodeRabbit. Any failed checklist criterion sends the work back to the normal pipeline instead."
+    "desc": "Quick-fix lane — the fast path for trivial work. Use when a task is a typo, a one-line correction, a broken link, a wrong constant, a stale comment, a missing doc line, or any change to at most 2 files that adds no behavior and needs no new tests. Verifies, commits, and pushes straight to the base branch — no branch, no PR, no reviewers, no CodeRabbit. Any failed checklist criterion sends the work back to the normal pipeline instead."
   },
   {
     "name": "security-and-hardening",

@@ -34,6 +34,49 @@ export function reportsInHebrew(text) {
 }
 
 /**
+ * A canonical file that ORDERS output in Hebrew, written in English words with
+ * no Hebrew characters at all - "report to the user in clean, everyday Hebrew".
+ *
+ * This is the gap that let `npm run sync` overwrite the pack's English output
+ * contracts with Hebrew ones: blocksSync() only tested for Hebrew CHARACTERS,
+ * so a file carrying the instruction in plain ASCII sailed through the guard.
+ * Every station hit this at once, and the corrupted English contracts were only
+ * caught because the drift was noticed by hand afterwards.
+ *
+ * Deliberately narrower than reportsInHebrew(), which is why this can be a
+ * write-block when that one cannot (#50): it matches the word "Hebrew" only
+ * when a reporting verb governs it within the same sentence. Prose that merely
+ * *mentions* Hebrew - a note that the pack is translated, a voice-note intake
+ * description, a reviewer persona's provenance - does not match, so the ~20
+ * legitimately translated files keep importing.
+ */
+const HEBREW_OUTPUT_ORDER =
+  /(?:report|reporting|answer|answers|respond|responds|reply|replies|closeout|output|outputs)\b[^.\n]{0,60}\bHebrew\b/i;
+
+/** The local-only block: canonical-only content the pack must never publish. */
+export const LOCAL_ONLY_BLOCK = /[ \t]*<!--\s*local-only:begin\s*-->[\s\S]*?<!--\s*local-only:end\s*-->\n?/g;
+
+/**
+ * Remove local-only blocks. Canonical marks its machine-local sections (chiefly
+ * the pointer to references/output-template.md, the Hebrew chat contract that
+ * is deliberately NOT published) with these markers so a consumer can strip
+ * them mechanically. Stripping is what keeps those pointers - which name a file
+ * this pack does not ship - from becoming dangling links on import.
+ */
+export function stripLocalOnly(text) {
+  return text.replace(LOCAL_ONLY_BLOCK, "");
+}
+
+/**
+ * A canonical file whose English output contract cannot be published: it either
+ * contains Hebrew characters, names a machine-specific home path, or orders its
+ * output in Hebrew in plain ASCII.
+ */
+export function blocksPublication(text) {
+  return blocksSync(stripLocalOnly(text)) ?? (HEBREW_OUTPUT_ORDER.test(stripLocalOnly(text)) ? "orders its output in Hebrew (pack is English-only)" : null);
+}
+
+/**
  * Returns a short, quotable reason string when `text` may not be published, or
  * null when it is fine. Used to name the offending file in sync reports.
  */
