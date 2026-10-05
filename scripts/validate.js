@@ -1,11 +1,25 @@
 #!/usr/bin/env node
-// Minimal validator: frontmatter name matches folder, description non-empty, relative links + backticked skill/agent refs resolve.
+// Frontmatter validator: the declared name matches its folder and the
+// description is usable.
+//
+// Relative link resolution is NOT done here. It used to be - the same regex,
+// the same <dest> unwrap, the same skip rules as validate-links.js, but scoped
+// to skills/<dir>/SKILL.md and only warning. validate-links.js scans that set
+// plus docs/*.md, README.md, CONTRIBUTING.md and AGENTS.md, and fails, so the
+// copy reached nothing the gate had not already covered while giving the two
+// scanners a second place to drift apart. `npm run validate:links` owns it.
+//
+// A backticked `some-skill` reference check also used to sit here. It iterated
+// 537 tokens across the 47 skills and discarded every one: both branches were
+// no-ops and the warn was commented out. Measured across this pack, 196 of the
+// distinct tokens are not skill or agent names at all (main, open, name,
+// pytest, curl, master...), so turning it back on would be noise, not a gate.
+// See scripts/validate-coverage.test.js for what guards this file now.
 import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const SKILLS_DIR = path.join(ROOT, "skills");
-const AGENTS_DIR = path.join(ROOT, "agents");
 
 function readFrontmatter(file) {
   const text = fs.readFileSync(file, "utf8");
@@ -61,9 +75,6 @@ if (target && target !== "skills") {
   skillDirs = fs.readdirSync(SKILLS_DIR).map((d) => path.join(SKILLS_DIR, d)).filter((p) => fs.statSync(p).isDirectory());
 }
 
-const skillNames = new Set(fs.readdirSync(SKILLS_DIR));
-const agentNames = new Set(fs.readdirSync(AGENTS_DIR).map((f) => f.replace(/\.md$/, "")));
-
 for (const dir of skillDirs) {
   const folder = path.basename(dir);
   const md = path.join(dir, "SKILL.md");
@@ -86,38 +97,6 @@ for (const dir of skillDirs) {
     fail(`${folder}: description empty or too short`);
     errors++;
   } else ok(`${folder}: description ok (${fm.description.length} chars)`);
-
-  const body = fs.readFileSync(md, "utf8");
-  // relative file refs: check markdown links like ](../ or ](./
-  const linkRe = /\[.*?\]\(([^)]+)\)/g;
-  let m;
-  while ((m = linkRe.exec(body))) {
-    const href = m[1];
-    // Unwrap <dest> forms; skip template placeholders like <url> (no extension)
-    const wrapped = href.match(/^<(.*)>$/);
-    const dest = wrapped ? wrapped[1] : href;
-    if (wrapped && !/^https?:|\.[a-z0-9]+($|[?#])/i.test(dest)) continue;
-    if (dest.startsWith("http") || dest.startsWith("#") || dest.startsWith("/") || dest.startsWith("mailto:")) continue;
-    // relative path — resolve from skill dir
-    const targetPath = path.resolve(dir, dest.split("#")[0].split("?")[0]);
-    if (!fs.existsSync(targetPath)) {
-      // allow links to docs that may be resolved from root? try ROOT-relative
-      const alt = path.resolve(ROOT, href);
-      if (!fs.existsSync(alt)) {
-        console.warn(`  ⚠ ${folder}: link "${href}" does not resolve`);
-      }
-    }
-  }
-  // backticked skill/agent refs: `some-skill`
-  const tickRe = /`([a-z0-9-]{3,})`/g;
-  while ((m = tickRe.exec(body))) {
-    const ref = m[1];
-    if (skillNames.has(ref) || agentNames.has(ref)) continue;
-    // ignore common non-skill ticks (e.g., `ready-for-agent`)
-    if (["ready-for-agent", "tasks", "plan", "main", "gh", "git"].includes(ref)) continue;
-    // don't error, just warn for now
-    // console.warn(`  ⚠ ${folder}: backticked ref \`${ref}\` not found as skill/agent`);
-  }
 }
 
 if (errors > 0) {
