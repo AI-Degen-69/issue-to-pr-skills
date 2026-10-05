@@ -1,4 +1,4 @@
-# AGENTS.md — working in this repo (Version: 6.8)
+# AGENTS.md — working in this repo (Version: 7.8)
 
 ## What this repo is
 
