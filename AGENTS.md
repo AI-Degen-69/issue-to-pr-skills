@@ -8,7 +8,7 @@ Counts are exact and must stay true: `skills/` = 47 directories (10 stations + 3
 
 ## Rules for changes here
 
-1. **Portability first.** No absolute paths, no usernames, no OS-specific homes. Agent homes are referenced as "this repo's `agents/` directory".
+1. **Portability first.** No absolute paths, no usernames, no OS-specific homes. Agent homes are referenced as "this repo's `agents/` directory". Line endings are LF everywhere, enforced by `.gitattributes` — never commit CRLF, and never let a working copy's line endings turn into a diff (see `CONTRIBUTING.md`).
 2. **English only** in skill content and reports. (Translations live in forks, not here.)
 3. **One router owns a request** — the pipeline's own triage rule applies to issues filed here too: bug reports and feature asks become GitHub issues, small fixes go direct.
 4. **Verify, don't assume.** Every skill change must pass the validator (`node scripts/validate.js skills/<name>` — see `scripts/` once added, or validate frontmatter + relative links by hand): `name` matches folder, description non-empty, every relative file ref and backticked skill ref resolves.

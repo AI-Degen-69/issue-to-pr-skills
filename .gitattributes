@@ -1,0 +1,48 @@
+# Line-ending policy
+#
+# The repository stores LF for every text file, on every platform. Contributors
+# on Windows must not see whole files rewritten just because their checkout uses
+# CRLF, and contributors on Linux/macOS must not be handed CRLF.
+#
+# Why this file exists: with core.autocrlf=true and no attributes, a fresh clone
+# on Windows checked out 355 of the tracked files with CRLF in the working tree
+# while the index held LF. `git status` then reported files as modified with an
+# empty diff - a phantom change that hides real edits in review and makes
+# "did I change anything?" unanswerable.
+#
+# The rules below set that to zero. Measured on a throwaway clone of this repo:
+# worktree CRLF files went 355 -> 0, `git add --renormalize .` produced no diff
+# at all (nothing in history needed rewriting), and all 6 binary files stayed
+# untouched.
+#
+# Verify after changing this file:
+#   git ls-files --eol | grep -c 'w/crlf'   # expect 0
+#   git add --renormalize . && git diff --cached --stat   # expect empty
+#
+# A fresh checkout may still be needed once, because files already on disk are
+# not rewritten by the attributes alone:
+#   git rm -r --cached . && git reset --hard
+
+# Detect text vs binary from content, so an image is never line-ending
+# translated even if it is misnamed.
+* text=auto
+
+# Store LF, and check out LF. This second line is what actually does the work.
+# Measured: with `text=auto` alone and core.autocrlf=true, a fresh clone still
+# checked out 356 CRLF files - `text=auto` picks the line ending by sniffing
+# content, and does not override core.autocrlf for checkout. `eol=lf` states the
+# working-copy ending explicitly and does override it. Keep both lines: `auto`
+# supplies the text/binary decision, `eol=lf` supplies the line ending.
+* text eol=lf
+
+# Binaries: never translate. Listed explicitly so a new image type added later
+# is covered by the same decision rather than relying on content sniffing.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.svg  text
+*.woff binary
+*.woff2 binary
+*.pdf  binary

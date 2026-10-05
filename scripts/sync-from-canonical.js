@@ -24,7 +24,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { classifyDrift, driftExitCode } from "./drift-policy.js";
-import { blocksSync } from "./content-rules.js";
+import { blocksPublication, contentViolation, stripLocalOnly } from "./content-rules.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -141,6 +141,18 @@ const isActiveLocalized = (skill, rel) =>
   !rel.startsWith("evals/snapshots/") &&
   !rel.startsWith("evals/iteration-");
 
+// The files verify-mirror.js actually runs its content gate over: localized
+// .md and evals/evals.json. A file in this set must clear the FULL rule set
+// before it is copied, because the gate will judge the copy by exactly these
+// rules and reject it afterwards otherwise - the "sync reported success, npm
+// run check failed later" shape this pair of scripts exists to prevent.
+//
+// Outside this set the writer keeps the narrower rule (blocksSync via
+// blocksPublication): a localized .js is published without the word-level gate,
+// so blocking it on that gate would stop imports the verifier will never
+// complain about.
+const GATE_SCANNED = (rel) => rel.endsWith(".md") || rel === "evals/evals.json";
+
 // Hebrew characters only. A word-level "Hebrew" test was also tried and
 // reverted: it matched English prose that merely *mentions* the reporting
 // language (e.g. "// The Hebrew report template = ..." or docs prose saying
@@ -161,7 +173,7 @@ const STRICT = process.argv.includes("--strict");
 // drift report and the writer can never disagree about a single file.
 const canonicalIsBlocked = (station, rel) => {
   const src = path.join(CANONICAL, station, rel);
-  return fs.existsSync(src) && blocksSync(read(src)) !== null;
+  return fs.existsSync(src) && blocksPublication(read(src)) !== null;
 };
 
 function walk(dir, base = dir, out = {}) {
@@ -176,8 +188,12 @@ function walk(dir, base = dir, out = {}) {
 }
 
 const read = (f) => fs.readFileSync(f, "utf8").replace(/\r\n/g, "\n");
+// Canonical marks its machine-local sections - chiefly the pointer to
+// references/output-template.md, the Hebrew chat contract this pack does not
+// publish - with local-only markers. They are stripped on the way in, so the
+// import never lands a dangling pointer at a file the pack does not ship.
 const rewrite = (text) =>
-  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), text);
+  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), stripLocalOnly(text));
 
 // What this pack SHOULD contain for a file, after rewrites.
 const expected = (src) => rewrite(read(src));
@@ -240,7 +256,16 @@ for (const station of STATIONS) {
     // verify-mirror.js - otherwise the copy lands first and is rejected later,
     // which is the same "sync succeeded, npm run check failed" shape as the
     // Hebrew leak, one rule narrower (#52).
-    const violation = isActiveLocalized(station, rel) ? blocksSync(read(src)) : null;
+    //
+    // blocksPublication, not blocksSync: the character test alone let through
+    // files that ORDER output in Hebrew in plain ASCII ("report in clean,
+    // everyday Hebrew"), and copying those replaced the pack's English output
+    // contracts with Hebrew ones across every station at once.
+    const violation = isActiveLocalized(station, rel)
+      ? GATE_SCANNED(rel)
+        ? contentViolation(stripLocalOnly(read(src)))
+        : blocksPublication(read(src))
+      : null;
     if (violation) {
       untranslated.push(`skills/${station}/${rel}`);
       continue;
@@ -271,7 +296,7 @@ for (const s of missing) console.warn(`  ⚠ station missing from canonical: ${s
 function reportUntranslated() {
   if (!untranslated.length) return;
   console.warn(
-    `\n⚠ ${untranslated.length} file(s) skipped: canonical content cannot be published as-is (Hebrew characters, or a machine-specific home path).`
+    `\n⚠ ${untranslated.length} file(s) skipped: canonical content cannot be published as-is (Hebrew characters, a machine-specific home path, or an output contract that orders Hebrew reports).`
   );
   console.warn("  These were NOT overwritten. Fix or adapt them in canonical by hand:");
   untranslated.forEach((f) => console.warn(`  ⚠ ${f}`));
