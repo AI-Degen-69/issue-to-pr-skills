@@ -1,8 +1,8 @@
 {
-  "version": "6.7",
-  "label": "Version: 6.7",
-  "contentHash": "39dc5ac86c",
+  "version": "6.8",
+  "label": "Version: 6.8",
+  "contentHash": "49d41fa2ed",
   "skillsCount": 47,
-  "lastUpdated": "2026-10-04T18:44:55.014Z",
-  "lastChangeType": "--skill"
+  "lastUpdated": "2026-10-05T01:43:54.454Z",
+  "lastChangeType": "--doc"
 }
