@@ -166,6 +166,35 @@ export function getSiteVersion() {
   return 'unknown';
 }
 
+/**
+ * The contentHash version.json records about the folder. `bump` writes it, but
+ * nothing ever read it back: the gate compared the SITE hash against the
+ * freshly computed folder hash and declared the pair verified. A stale value
+ * could therefore sit in the committed file indefinitely - which is exactly
+ * what had happened.
+ *
+ * Only an ABSENT file is "nothing to compare". A file that is present but
+ * unreadable, or that carries no contentHash, is a broken artifact and has to
+ * fail: folding those into the same null made every one of them a silent pass.
+ */
+export function readDeclaredFolderHash() {
+  if (!fs.existsSync(VERSION_JSON)) return { state: 'absent', hash: null, reason: null };
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(VERSION_JSON, 'utf8'));
+  } catch (e) {
+    return { state: 'unreadable', hash: null, reason: `invalid JSON (${e.message})` };
+  }
+  if (!data || typeof data.contentHash !== 'string' || !data.contentHash) {
+    return { state: 'malformed', hash: null, reason: 'no contentHash field' };
+  }
+  return { state: 'declared', hash: data.contentHash, reason: null };
+}
+
+export function getDeclaredFolderHash() {
+  return readDeclaredFolderHash().hash;
+}
+
 export function getSiteHash() {
   if (fs.existsSync(SITE_VERSION_JSON)) {
     try {
@@ -198,23 +227,51 @@ export function checkSync() {
   }
   const sourceDrift = versionSources.filter(([, v]) => v !== folderVer);
 
-  // Check catalog diffs
-  let catalogDiffs = [];
-  const totalSkills = extractSkillsData().length;
+  // Check catalog diffs. Both directions: a site entry with no folder
+  // counterpart is as wrong as a stale description, and diffing only the folder
+  // forward let checkSync print "47/47 skills aligned" and exit 0 while the
+  // public site advertised a skill this pack never shipped.
+  const folderSkills = extractSkillsData();
+  const totalSkills = folderSkills.length;
+  const catalogDiffs = [];
+  let alignedSkills = 0;
   if (fs.existsSync(SITE_SKILLS_JSON)) {
     try {
       const siteSkills = JSON.parse(fs.readFileSync(SITE_SKILLS_JSON, 'utf8'));
-      const siteMap = new Map(siteSkills.map((s) => [s.name, s.desc]));
-      const folderSkills = extractSkillsData();
+      // Build the lookup by hand so a repeated name is reported instead of
+      // silently collapsing: `new Map(entries)` keeps the last value for a
+      // repeated key, which let a contradictory duplicate hide behind a
+      // correct one.
+      const siteMap = new Map();
+      const duplicated = new Set();
+      for (const entry of siteSkills) {
+        if (!entry || typeof entry.name !== 'string' || !entry.name) {
+          catalogDiffs.push('malformed site catalog entry');
+          continue;
+        }
+        if (siteMap.has(entry.name)) duplicated.add(entry.name);
+        siteMap.set(entry.name, entry.desc);
+      }
+      for (const name of duplicated) catalogDiffs.push(`${name} (duplicated on site)`);
+      const folderNames = new Set(folderSkills.map((s) => s.name));
 
       for (const skill of folderSkills) {
         const sDesc = siteMap.get(skill.name);
         if (sDesc !== skill.desc) {
           catalogDiffs.push(skill.name);
+        } else {
+          alignedSkills++;
+        }
+      }
+
+      for (const name of siteMap.keys()) {
+        if (!folderNames.has(name)) {
+          catalogDiffs.push(`${name} (site only)`);
         }
       }
     } catch (e) {
       catalogDiffs.push(`Error reading site/skills.json: ${e.message}`);
+      alignedSkills = 0;
     }
   } else {
     catalogDiffs.push('site/skills.json missing');
@@ -224,14 +281,18 @@ export function checkSync() {
   const hashesMatch = folderHash === siteHash;
   const catalogClean = catalogDiffs.length === 0;
   const sourcesClean = sourceDrift.length === 0;
-  const inSync = versionsMatch && hashesMatch && catalogClean && sourcesClean;
+  // version.json's own record of the folder is part of "is this true?", not
+  // just bookkeeping. It was written on every bump and verified never.
+  const declared = readDeclaredFolderHash();
+  const declaredClean = declared.state === 'absent' || (declared.state === 'declared' && declared.hash === folderHash);
+  const inSync = versionsMatch && hashesMatch && catalogClean && sourcesClean && declaredClean;
 
   console.log('╔════════════════════════════════════════════════════════════════════════════╗');
   console.log('║                     VERSIONING SYNCHRONIZATION STATUS                      ║');
   console.log('╠════════════════════════════════════════════════════════════════════════════╣');
   console.log(`║  Folder Version : Version: ${folderVer.padEnd(8)} [Content Hash: ${folderHash}]             ║`);
   console.log(`║  Site Version   : Version: ${siteVer.padEnd(8)} [Content Hash: ${siteHash.padEnd(10)}]       ║`);
-  console.log(`║  Skills In Sync : ${catalogClean ? `${totalSkills}/${totalSkills} skills aligned` : `${totalSkills - catalogDiffs.length}/${totalSkills} aligned (${catalogDiffs.length} differ)`.padEnd(20)}                         ║`);
+  console.log(`║  Skills In Sync : ${catalogClean ? `${alignedSkills}/${totalSkills} skills aligned` : `${alignedSkills}/${totalSkills} aligned (${catalogDiffs.length} differ)`.padEnd(20)}                         ║`);
   console.log('╠════════════════════════════════════════════════════════════════════════════╣');
   if (inSync) {
     console.log('║  STATUS         : ✓ IN SYNC — The site accurately reflects the folder!    ║');
@@ -245,12 +306,25 @@ export function checkSync() {
       console.log(`║    - Content hash mismatch: Folder=${folderHash} vs Site=${siteHash}`.padEnd(77) + '║');
     }
     if (!catalogClean) {
-      console.log(`║    - Out-of-date skill descriptions: ${catalogDiffs.slice(0, 3).join(', ')}${catalogDiffs.length > 3 ? '...' : ''}`.padEnd(77) + '║');
+      console.log(`║    - Skill catalog differs: ${catalogDiffs.slice(0, 3).join(', ')}${catalogDiffs.length > 3 ? '...' : ''}`.padEnd(77) + '║');
+    }
+    if (!declaredClean) {
+      const detail = declared.reason
+        ? `version.json is unusable: ${declared.reason}`
+        : `version.json hash is stale: ${declared.hash} (folder ${folderHash})`;
+      // Truncate rather than pad: a long hash pair used to run past the frame
+      // and the closing border landed in the wrong column.
+      console.log(`║    - ${detail}`.slice(0, 77).padEnd(77) + '║');
     }
     if (!sourcesClean) {
       console.log(`║    - Version source drift: ${sourceDrift.map(([f, v]) => `${f}=${v}`).join(', ')} (folder=${folderVer})`.padEnd(77) + '║');
     }
-    console.log('║  Action Needed  : Run "npm run sync:site" to bring site into sync.        ║');
+    // syncSite() rewrites site/* and never version.json, so the old fixed advice
+    // sent a maintainer in a circle on a stale declared hash: run it, stay red.
+    const action = !declaredClean
+      ? 'Run "npm run version:bump" then "npm run sync:site".'
+      : 'Run "npm run sync:site" to bring site into sync.';
+    console.log(`║  Action Needed  : ${action}`.padEnd(77) + '║');
   }
   console.log('╚════════════════════════════════════════════════════════════════════════════╝');
 
@@ -311,7 +385,9 @@ export function bumpVersion(typeArg) {
     version: newVer,
     label: `Version: ${newVer}`,
     contentHash,
-    skillsCount: 47,
+    // Derived, never a literal: a hardcoded 47 outlives a skill being added or
+    // retired and turns the published count into a claim nothing checks.
+    skillsCount: extractSkillsData().length,
     lastUpdated: timestamp,
     lastChangeType: bumpType
   };
@@ -456,7 +532,7 @@ if (isMain) {
         version: v,
         label: `Version: ${v}`,
         contentHash: hash,
-        skillsCount: 47,
+        skillsCount: extractSkillsData().length,
         lastUpdated: new Date().toISOString(),
         lastChangeType: 'init'
       }, null, 2) + '\n', 'utf8');
