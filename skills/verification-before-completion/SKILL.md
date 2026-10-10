@@ -41,7 +41,7 @@ Skip any step = lying, not verifying
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Tests pass | Targeted test command for touched modules: 0 failures (full suite is CI's job — never a local gate) | Full-suite run, previous run, "should pass" |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
@@ -113,6 +113,10 @@ From 24 failure memories:
 - Missing requirements shipped - incomplete features
 - Time wasted on false completion → redirect → rework
 - Violates: "Honesty is a core value. If you lie, you'll be replaced."
+
+## Scope: commands, never browser sessions
+
+"Verification command" above means a deterministic local command: test runner, linter, typechecker, or build. This skill never requires launching a browser session (CDP connection, DevTools MCP, Playwright, DOM scraping, screenshots) — browser audits belong exclusively to the pipeline station that orders them (Station IIIB fix loop, Station IV gates), or to an explicit operator request. An explicit opt-out ("just build", "no browser check") is honored immediately: run the build/tests only, report browser verification as skipped, and move on.
 
 ## When To Apply
 

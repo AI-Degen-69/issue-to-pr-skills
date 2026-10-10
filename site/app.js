@@ -1,12 +1,12 @@
 // Canonical Pipeline Stations (Sequential #1 to #6)
 const STATIONS = [
-  {id:'i-pick-issue', label:'#1', title:'Map & Pick', desc:'Station #1 (Claim & Pick): Issue work entry. Runs the triage gate itself, then maps open-issue backlog by domain with recommended order and highlighted pick. With an issue ID, routes straight to Station #2.', color:'cyan'},
-  {id:'ii-plan-issue', label:'#2', title:'Plan & Constraints', desc:'Station #2 (Plan): Define & plan. Right-sizes (Tiny→Large), detects stack, locks CONSTRAINTS.md (zero regressions), writes tasks/plan.md as atomic vertical slices.', color:'sky'},
-  {id:'iii-build-plan', label:'#3', title:'Build with TDD', desc:'Station #3 (Build): TDD per slice, type-aware (frontend/TDD/debug), atomic commits, code simplification. Never pushes untested code. Proof before review.', color:'emerald'},
-  {id:'iiib-iterate-after-build', label:'#3b', title:'Iterate Human Feedback', desc:'Station #3b (Iterate): Fast fix loop for operator corrections on fresh build. Classifies each comment (bug, dead button, CSS, slowness, security), routes to specialist, fixes minimally.', color:'emerald'},
-  {id:'iv-review-build-and-pr', label:'#4', title:'Review, Ship & PR', desc:'Station #4 (Review, Verify & Ship): Proof-before-review gate (live browser pass or tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → push, PR, @coderabbitai.', color:'violet'},
-  {id:'v-babysit-pr-and-merge', label:'#5', title:'Babysit PR & Merge', desc:'Station #5 (Babysit & Merge): Consumes IV’s trigger status, adaptive countdown (5m→1m), focused review round, triages comments, squash-merges green.', color:'amber'},
-  {id:'vi-close-pipeline', label:'#6', title:'Close Pipeline', desc:'Station #6 (Close Pipeline): Issue closeout, signal-based artifact sweep in any project layout, dead-code exception with zero-ref proof, Clean Exit Gate.', color:'rose'},
+  {id:'i-pick-issue', label:'#1', title:'Map & Pick', desc:'Station #1 (Pick & Orchestrate): the single entry point for Issue work. Always starts with Discovery — even with an issue ID — listing open issues, grouping them by domain, and recommending the next one by dependency order. The recommendation is the default selection unless the operator overrides it. On a quick-fix-labeled issue it runs the 7-box lane gate, then the mandatory execution-mode gate (step-by-step vs. full orchestration) before driving Stations II–VI to merge and closeout.', color:'cyan'},
+  {id:'ii-plan-issue', label:'#2', title:'Plan & Constraints', desc:'Station #2 (Plan): fetches the issue via gh, right-sizes it (Trivial→Large), locks CONSTRAINTS.md (zero regressions), maps interfaces, and writes tasks/plan.md as atomic vertical slices. A Tiny + quick-fix-labeled issue first hits the Step 0C lane divert. Reports issue-first.', color:'sky'},
+  {id:'iii-build-plan', label:'#3', title:'Build with TDD', desc:'Station #3 (Build): executes tasks/plan.md one task at a time with type-aware routing (frontend/TDD/debug), official docs grounding, atomic local commits, and code simplification. Never pushes — shipping is Station IV’s job. A fresh quick-fix-labeled plan can divert at §1c before the first task.', color:'emerald'},
+  {id:'iiib-iterate-after-build', label:'#3b', title:'Iterate Human Feedback', desc:'Station #3b (Iterate): fix loop for operator corrections on a fresh build. Classifies each comment (bug, dead button, CSS, slowness, security), routes to the right specialist, fixes minimally with atomic commits and no push, verifies UI via playwright-cli only, and loops until the operator calls the build clean.', color:'emerald'},
+  {id:'iv-review-build-and-pr', label:'#4', title:'Review, Ship & PR', desc:'Station #4 (Review, Verify & Ship): proof-before-review gate (live browser pass or targeted tests — a trivial diff can divert to quick-fix at Step 0.2) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → fixes → post-review verification → push, PR, @coderabbitai summary.', color:'violet'},
+  {id:'v-babysit-pr-and-merge', label:'#5', title:'Babysit PR & Merge', desc:'Station #5 (Babysit & Merge): consumes IV’s trigger status, runs exactly one focused review round on a 5m→4m→3m→2m→1m countdown (a summary-only review is not a pass), triages every comment, falls back to agent review when CodeRabbit is rate-limited, and squash-merges on green CI.', color:'amber'},
+  {id:'vi-close-pipeline', label:'#6', title:'Close Pipeline', desc:'Station #6 (Close Pipeline): verifies the issue is closed, sweeps per-issue artifacts via signal-based discovery in any layout, handles dead code as the pipeline’s one approved code-change exception (zero-ref proof + tests), resolves the NOTICED-BUT-NOT-TOUCHING ledger, and ends on the Clean Exit Gate — or reports blocked, never a fake pass.', color:'rose'},
 ];
 
 // Supporting System & Ad-hoc Skills (Outside linear #1→#6 pipeline chain)
@@ -15,7 +15,7 @@ const SYSTEM_SKILLS = [
     id: 'pipeline-triage',
     label: 'State Gate',
     title: 'Pipeline Triage',
-    desc: 'Pre-flight check before Station #1: read-only triage inspects git state (dirty tree, unpushed commits, open PR) and routes to the one station that resumes or closes work.',
+    desc: 'Read-only state gate before Station I: classifies the request, inspects git state (dirty tree, unpushed commits, open PR, stashes) and routes to the one station that resumes or closes work. Foreign dirt of unknown origin stops here and asks, never routes by size.',
     roleBadge: 'State Gate',
     roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Attached before Station #1',
@@ -25,7 +25,7 @@ const SYSTEM_SKILLS = [
     id: 'create-issue',
     label: 'Intake Branch',
     title: 'Create Researched Issue',
-    desc: 'Intake branch when there is nothing to pick in Station #1. Turns a raw idea into a researched GitHub issue labeled ready-for-agent with concrete file paths and line numbers.',
+    desc: 'Intake branch when Station I finds nothing worth picking: turns a raw operator idea into a researched GitHub issue labeled ready-for-agent with concrete file paths, line numbers, and an explicit quick-fix screen. The label is a precondition for evaluation, never a bypass.',
     roleBadge: 'Intake Branch',
     roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Branches off Station #1',
@@ -35,7 +35,7 @@ const SYSTEM_SKILLS = [
     id: 'quick-fix',
     label: 'Fast Lane',
     title: 'Quick Fix',
-    desc: 'Escape hatch for trivial work: a 7-box gate at Stations #1–#4 diverts typos, one-liners and broken links straight to the base branch — no branch, no PR, no reviews.',
+    desc: 'Escape hatch for trivial work: a 7-box gate (size, tier, no new behavior, no contract surface, no new test, runnable verification, speed asked) diverts typos, one-liners and broken links straight to the base branch — no branch, no PR, no reviewers, no CodeRabbit. Any failed box routes back into the pipeline.',
     roleBadge: 'Fast Lane',
     roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Diverts from Stations #1–#4',
@@ -45,7 +45,7 @@ const SYSTEM_SKILLS = [
     id: 'present-pr',
     label: 'Ad-hoc Showcase',
     title: 'Present Showcase',
-    desc: 'Ad-hoc presentation run on request after Station #6 or at any time. Standalone zero-dependency HTML showcase with customer-simple explanation and dynamic visual.',
+    desc: 'Ad-hoc showcase run on request after a clean Station VI or any time. Builds one standalone zero-dependency HTML page that explains the change in customer-simple words, with a visual picked after understanding the story (flow, timeline, before/after, map, numbers, demo) — never the same page twice. Also handles explain-mode. “Try it” always points at the real application, never the page itself.',
     roleBadge: 'Ad-hoc Showcase',
     roleClass: 'bg-white/5 text-zinc-300 border-white/15',
     timing: 'Suggested after Station #6 · Runnable any time',
@@ -389,16 +389,16 @@ function renderChatBubbleContent(idx) {
 
   // Specific quality gate descriptions per station
   const GATES = {
-    'pipeline-triage': 'Session pre-flight check: read-only analysis of git working tree & status. No code modifications until target station is locked.',
+    'pipeline-triage': 'Classify gate: the message is classified before any git check — new work, continuation, or ad-hoc — then exactly one route is chosen. Unknown-origin dirt stops the router and asks whose work it is.',
     'create-issue': 'Research-first gate: extracts concrete file paths with line numbers; captures open questions with explicit default assumptions before marking ready-for-agent.',
-    'i-pick-issue': 'Mapping gate: maps the backlog by domain with a recommended order and one highlighted pick, then halts for the operator. It never auto-selects silently.',
-    'ii-plan-issue': 'Constraint gate: locks CONSTRAINTS.md (zero regressions rule) and breaks feature into atomic vertical slices in tasks/plan.md before any coding.',
-    'iii-build-plan': 'Proof-before-next gate: strictly runs TDD per slice; requires passing unit tests or interactive browser verification before proceeding.',
-    'iiib-iterate-after-build': 'Minimal diff fix gate: classifies human feedback (bug, dead button, CSS, or speed) and verifies against CONSTRAINTS.md.',
-    'iv-review-build-and-pr': 'Multi-axis verification gate: automated test suites + visual proof + OCR delegation scan before generating the PR title & description.',
-    'v-babysit-pr-and-merge': 'Autonomous CI gate: monitors workflow status with 5m→1m adaptive polling; resolves reviewer feedback & squash-merges on clean green.',
-    'vi-close-pipeline': 'Pipeline closeout gate: verifies issue is closed, sweeps stale per-issue artifacts via signal-based discovery, dead-code exception with zero-ref proof + tests, Clean Exit Gate.',
-    'present-pr': 'Zero-dependency showcase gate: builds a self-contained single-file HTML presentation with live visuals, try-it guide, and zero external CDN scripts.'
+    'i-pick-issue': 'Discovery gate: every run starts by mapping the backlog by domain with a recommended order; the highlighted recommendation is the default pick unless the operator overrides it. Never skips Discovery, even with an issue ID.',
+    'ii-plan-issue': 'Constraint gate: locks CONSTRAINTS.md (zero regressions rule) and breaks the issue into atomic vertical slices in tasks/plan.md before any coding. Tier decides everything downstream.',
+    'iii-build-plan': 'Proof-before-next gate: each slice runs the failing test first; nothing advances until targeted tests or live browser verification pass. Nothing is ever pushed from here.',
+    'iiib-iterate-after-build': 'Minimal diff fix gate: classifies each correction into a specialist lane (bug, dead button, UI, slow, security) and verifies the live build with playwright-cli only — a red check stops the loop.',
+    'iv-review-build-and-pr': 'Multi-axis verification gate: proof-before-review (browser or targeted tests) → OCR delegation scan → diff-matched specialist reviewers + Spec axis → post-review re-verification before the PR is opened.',
+    'v-babysit-pr-and-merge': 'Autonomous CI gate: verifies the trigger, runs one focused review round on the 5m→1m countdown (summary-only is not a pass), triages every comment, and squash-merges only on green CI.',
+    'vi-close-pipeline': 'Closeout gate: two-gate obsolescence test on every sweep candidate, zero-ref proof before dead code is touched, NOTICED-BUT-NOT-TOUCHING ledger resolved, then the Clean Exit Gate — or an honest blocked report.',
+    'present-pr': 'Standalone showcase gate: one self-contained HTML file, visual chosen after the story is understood, “try it yourself” directed at the real application — never the presentation itself.'
   };
 
   const gateText = GATES[s.id] || 'Narrow contract gate: verification evidence required at every station handoff.';
