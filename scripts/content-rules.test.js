@@ -282,6 +282,25 @@ test('neutralizeLanguage leaves non-removed text byte-identical', () => {
   );
 });
 
+test('neutralizeLanguage never eats line breaks or reshapes other lines', () => {
+  // A removed phrase must not swallow the newline after it (a paragraph
+  // joined into its heading), and cleanup must not touch lines where no
+  // removal fired (indentation inside an unrelated code block).
+  assert.equal(
+    neutralizeLanguage('Answer in Hebrew\n\n## Checks'),
+    'Answer\n\n## Checks'
+  );
+  const twoLines = '    code();\nAnswer in Hebrew here.';
+  assert.equal(
+    neutralizeLanguage(twoLines),
+    '    code();\nAnswer here.'
+  );
+  assert.equal(
+    neutralizeLanguage('The final report is in Hebrew and points to X'),
+    'The final report points to X'
+  );
+});
+
 test('neutralizeLanguage is a no-op without a language mention', () => {
   const plain = 'Personas live in this repo\'s `agents/` directory.\n\n| a  | b  |\n';
   assert.equal(neutralizeLanguage(plain), plain, 'whitespace must not invent drift');

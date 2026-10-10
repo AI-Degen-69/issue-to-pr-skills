@@ -41,10 +41,10 @@ Stop the issue-dependent steps. Say in plain language exactly what failed, and a
 ### Step 0: Environment Auto-Detection & Size Classification (Right-Sizing)
 1. **Auto-detect stack:** language, runtime, frameworks, and the test runner (`pytest`, `vitest`/`jest`, `cargo test`, `go test`, ...).
 2. **Size tier** — state the tier plus a one-line rationale in the output:
- - **Tiny** — docs/typo/comment-level change; no code behavior change; zero ambiguity.
- - **Small** — one file or one function; straightforward once the code is read.
- - **Standard** — 2–5 files, internal module changes, a single architectural decision.
- - **Large** — cross-cutting changes, a new external dependency, public API or database schema change.
+   - **Tiny** — docs/typo/comment-level change; no code behavior change; zero ambiguity.
+   - **Small** — one file or one function; straightforward once the code is read.
+   - **Standard** — 2–5 files, internal module changes, a single architectural decision.
+   - **Large** — cross-cutting changes, a new external dependency, public API or database schema change.
 3. **Task type** — classify into one or more primary categories (combinations allowed): **Code** (default), **Design**, **Debug**, **Performance**, **Security**, **Docs**, **UX / Copy**, **Research**. Classify *before* planning: downstream stations (`iii-build-plan`, `iv-review-build-and-pr`) pick reviewers and test suites from this tag.
 
 ### Step 0C: Quick-Fix Lane Divert (after the tier and task type, before Step 0A)
@@ -56,18 +56,18 @@ Station II must not rely on a label status carried forward from Station I.
 Three outcomes:
 
 1. **Not `quick-fix`-labeled, any tier** (whether or not it carries other labels such as
- `ready-for-agent`) → continue to Step 0A. Run no gate, print no gate text, offer no lane.
+   `ready-for-agent`) → continue to Step 0A. Run no gate, print no gate text, offer no lane.
 2. **Labeled but not Tiny** → remove the label
- (`gh issue edit <number> --remove-label "quick-fix"`) and continue to Step 0A. Right-sizing
- here is the **authority** the label only guessed at: the label was wrong, and a stale one
- cannot mislead a later session.
+   (`gh issue edit <number> --remove-label "quick-fix"`) and continue to Step 0A. Right-sizing
+   here is the **authority** the label only guessed at: the label was wrong, and a stale one
+   cannot mislead a later session.
 3. **Labeled and Tiny** → run the **7-box gate** in `quick-fix`. A Tiny issue may still be the
- wrong lane: right-sizing measures size, the gate measures risk. All 7 pass → tell the operator
- in one line that this looks like a quick fix (push straight to `main`, no PR, no reviews, no
- CodeRabbit) and ask whether to take it. They choose: **yes** → hand off to `quick-fix`
- **with your 7-box verdict** so it re-checks only size and its own diff instead of re-reading
- the issue, and stop this station; **no, or any box fails** → continue to Step 0A as normal,
- and if any box failed remove the label so a later session is not misled.
+   wrong lane: right-sizing measures size, the gate measures risk. All 7 pass → tell the operator
+   in one line that this looks like a quick fix (push straight to `main`, no PR, no reviews, no
+   CodeRabbit) and ask whether to take it. They choose: **yes** → hand off to `quick-fix`
+   **with your 7-box verdict** so it re-checks only size and its own diff instead of re-reading
+   the issue, and stop this station; **no, or any box fails** → continue to Step 0A as normal,
+   and if any box failed remove the label so a later session is not misled.
 
 Three things are deliberately still not offered here, because at this point the full chain costs
 almost nothing: a new test required, no runnable verification command, or an undecided approach.
@@ -75,19 +75,19 @@ Those are boxes 5, 6, and 7 — failing them is not a near miss.
 
 ### Step 0A: Resolve Open Questions from Code & Consult CodeRabbit Plan
 1. **Check for CodeRabbit Plan in comments:** Look at the discussion comments fetched via `gh issue view <number> --comments`. If a plan comment from `coderabbitai` exists:
- - **Read it once, not twice:** the comment carries the plan twice — a rendered copy first, then a byte-identical echo inside an HTML comment (`<!-- <rawResChunk><planningResult> … -->`). Ignore the echo; it only doubles context cost.
- - **Map CodeRabbit's layout to ours:** it keeps its own template (Summary / Design Choices / Implementation Steps with Phases+Tasks / Ticket Summary / Codebase Summary / File-Level Change Summary / Notes for follow-up agents). Mine those sections; do not wait for our section names to appear.
- - **Extract skeleton & seams:** treat its task phases, affected files, and seam pointers as scaffolding to save discovery time.
- - **Resolve assumptions & drift:** read its Assumptions/Risks or Design-Choice rationales. Anything it flagged as uncertain, any reference it left dangling (e.g. "Apply Assumption 1" with no Assumption 1 defined), and any contradiction it found between the issue text and the code is an **open question to resolve from the code — treat it as `[UNVERIFIED]`, never as fact.**
- - **Borrow test cases:** note the exact test assertions and regression test files it specified for use in Step 3 (`CONSTRAINTS.md`) and Step 6 (`tasks/plan.md`).
- - **Enforce simplicity (Rule 4):** its suggestions are non-binding. It usually over-splits — merge its task list into 3–4 atomic tasks and drop invented abstractions or new files nothing requires.
- - **Verify, don't assume (Rule 6):** spot-check every file path, symbol, and line number it cites against the live codebase before adopting any of it.
- - **Cost the intake once:** record a three-line note in `tasks/plan.md` — what was adopted from its plan, what was rejected and why, and what stayed `[UNVERIFIED]` — so Stations III–V never re-read that comment.
+   - **Read it once, not twice:** the comment carries the plan twice — a rendered copy first, then a byte-identical echo inside an HTML comment (`<!-- <rawResChunk><planningResult> … -->`). Ignore the echo; it only doubles context cost.
+   - **Map CodeRabbit's layout to ours:** it keeps its own template (Summary / Design Choices / Implementation Steps with Phases+Tasks / Ticket Summary / Codebase Summary / File-Level Change Summary / Notes for follow-up agents). Mine those sections; do not wait for our section names to appear.
+   - **Extract skeleton & seams:** treat its task phases, affected files, and seam pointers as scaffolding to save discovery time.
+   - **Resolve assumptions & drift:** read its Assumptions/Risks or Design-Choice rationales. Anything it flagged as uncertain, any reference it left dangling (e.g. "Apply Assumption 1" with no Assumption 1 defined), and any contradiction it found between the issue text and the code is an **open question to resolve from the code — treat it as `[UNVERIFIED]`, never as fact.**
+   - **Borrow test cases:** note the exact test assertions and regression test files it specified for use in Step 3 (`CONSTRAINTS.md`) and Step 6 (`tasks/plan.md`).
+   - **Enforce simplicity (Rule 4):** its suggestions are non-binding. It usually over-splits — merge its task list into 3–4 atomic tasks and drop invented abstractions or new files nothing requires.
+   - **Verify, don't assume (Rule 6):** spot-check every file path, symbol, and line number it cites against the live codebase before adopting any of it.
+   - **Cost the intake once:** record a three-line note in `tasks/plan.md` — what was adopted from its plan, what was rejected and why, and what stayed `[UNVERIFIED]` — so Stations III–V never re-read that comment.
 
 2. **Resolve Open Questions (needs-answers flag):** If the issue carries the `needs-answers` label or an **Open questions** section:
- - For each open question, first try to resolve it **from the code** (and CodeRabbit's codebase analysis) — read the relevant paths, check how similar cases are handled in the repo.
- - Fold each resolved answer into the plan as planning input; record the resolved answers in `tasks/plan.md` so the reasoning survives the session.
- - Ask the operator **only what is genuinely unresolvable from code** — one focused batch, before Step 1. Never re-ask what the issue already answers.
+   - For each open question, first try to resolve it **from the code** (and CodeRabbit's codebase analysis) — read the relevant paths, check how similar cases are handled in the repo.
+   - Fold each resolved answer into the plan as planning input; record the resolved answers in `tasks/plan.md` so the reasoning survives the session.
+   - Ask the operator **only what is genuinely unresolvable from code** — one focused batch, before Step 1. Never re-ask what the issue already answers.
 3. **Large or unfamiliar/legacy code:** before answering, deploy the `code-explorer` agent persona (from this repo's `agents/` directory) to trace the relevant execution paths and map the affected architecture layers; fold its findings into the plan. Persona file not found on disk → skip and record the skip — never simulate a missing reviewer persona (do not invent).
 
 ### Step 0B: Confirm Feature Branch (canonical rule for Section 1)
@@ -136,8 +136,8 @@ For Standard/Large work with a non-trivial domain model, run the `type-design-an
 Propose **at most one** concrete improvement to the issue's approach — an architectural simplification, a forgotten edge case, or a better fit to existing repo patterns.
 1. **Ground it in evidence:** quote the motivating evidence **verbatim** — the exact issue text, issue comment, or code lines — not just a file/line pointer. **No evidence ⇒ no proposal**; never invent filler to satisfy this step; say so and skip instead (do not invent).
 2. **Classify the proposal:**
- - **Simplification / edge-case hardening** → adopt-by-default: folded into `tasks/plan.md` after the evidence check passes.
- - **Scope expansion** (new behavior the issue never asked for) → **opt-in only**: presented as a question, enters the plan solely on explicit operator approval.
+   - **Simplification / edge-case hardening** → adopt-by-default: folded into `tasks/plan.md` after the evidence check passes.
+   - **Scope expansion** (new behavior the issue never asked for) → **opt-in only**: presented as a question, enters the plan solely on explicit operator approval.
 3. **Rejection is recorded** in `tasks/plan.md` with its reason, so the same proposal does not resurface next session.
 4. Present the proposal in the report in one sentence so the operator can reject before build.
 

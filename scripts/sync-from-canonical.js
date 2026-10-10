@@ -202,16 +202,24 @@ const STRICT = process.argv.includes("--strict");
 
 // Would the guard above block this canonical file? Same shared rule, so the
 // drift report and the writer can never disagree about a single file.
-// Judged on the rewritten text (what would actually land in the pack) with
-// the SAME rule the writer applies: the broad content gate for published
-// prose (.md, evals.json), the narrow publication block otherwise. A pure
-// language order is neutralized away, a home install is renamed to its
-// portable pack path; Hebrew script still blocks everywhere.
+// Judged on the SHIPPED bytes (what the writer below actually publishes):
+// text files go through the rewrite pipeline, anything else is byte-copied,
+// so the gate checks rewritten text for the former and raw text for the
+// latter. The broad content gate covers published prose (.md, evals.json),
+// the narrow publication block everything else. A pure language order is
+// neutralized away, a home install is renamed to its portable pack path;
+// Hebrew script still blocks everywhere.
+const shippedText = (src, rel) =>
+  (rel && !TEXT_REWRITE.test(rel) ? read(src) : rewrite(read(src)));
+const shippedViolation = (station, rel) => {
+  if (!isActiveLocalized(station, rel)) return null;
+  const shipped = shippedText(path.join(CANONICAL, station, rel), rel);
+  return (GATE_SCANNED(rel) ? contentViolation(shipped) : blocksPublication(shipped));
+};
 const canonicalIsBlocked = (station, rel) => {
   const src = path.join(CANONICAL, station, rel);
   if (!fs.existsSync(src)) return false;
-  const rewritten = rewrite(read(src));
-  return (GATE_SCANNED(rel) ? contentViolation(rewritten) : blocksPublication(rewritten)) !== null;
+  return shippedViolation(station, rel) !== null;
 };
 
 function walk(dir, base = dir, out = {}) {
@@ -295,17 +303,13 @@ for (const station of STATIONS) {
     const dest = path.join(to, rel);
     if (fs.existsSync(dest) && same(src, dest, rel)) continue;
 
-    // Block only what survives the rewrite pipeline: Hebrew script. A pure
-    // language order ("Answer in Hebrew") is neutralized away, a home
-    // persona/skill install is renamed to its portable pack path - so neither
-    // blocks. The pack copy is the same text minus the language choice and
-    // with portable paths, differing from canonical only by the stripped
-    // local template pointer.
-    const violation = isActiveLocalized(station, rel)
-      ? GATE_SCANNED(rel)
-        ? contentViolation(rewrite(read(src)))
-        : blocksPublication(rewrite(read(src)))
-      : null;
+    // Block only what would actually ship unpublishable - judged on the
+    // shipped bytes via shippedViolation, so writer and report agree. A pure
+    // language order ("Answer in Hebrew") is neutralized away, a home install
+    // is renamed to its portable pack path - so neither blocks. The pack copy
+    // is the same text minus the language choice and with portable paths,
+    // differing from canonical only by the stripped local template pointer.
+    const violation = shippedViolation(station, rel);
     if (violation) {
       untranslated.push(`skills/${station}/${rel}`);
       continue;

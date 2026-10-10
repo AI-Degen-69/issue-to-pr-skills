@@ -34,7 +34,8 @@ Do not add workflows that depend on plan-gated CodeRabbit features merely becaus
    "Raw idea intake → Intake template".
 2. **Research before drafting.** Scan the repo for relevant files (search for
    symbols, render sites, config) so Relevant files names real paths with line
-   numbers. An issue written without research is not ready-for-agent.3. **Capture open questions in the issue.** If the operator's intent is
+   numbers. An issue written without research is not ready-for-agent.
+3. **Capture open questions in the issue.** If the operator's intent is
 ambiguous, do NOT stop to interrogate: write each unclear point into the
 issue under **Open questions** (what is unclear + why it matters + the
 default assumption the next station should work with). Ask the operator only

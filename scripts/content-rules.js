@@ -103,53 +103,62 @@ const NEUTRALIZE_KEEP = /(never Hebrew[^.\n"]*|Hebrew-only|Hebrew voice-notes|He
 export function neutralizeLanguage(text) {
   const original = String(text);
   // Fast path: no language mention, no rewrite - keeps supporting skills
-  // byte-identical so whitespace cleanup can never invent drift.
+  // byte-identical so cleanup can never invent drift.
   if (!/hebrew/i.test(original)) return original;
-  const keeps = [];
-  let out = String(text).replace(NEUTRALIZE_KEEP, (m) => {
-    keeps.push(m);
-    return `\u0000KEEP${keeps.length - 1}\u0000`;
-  });
-  // Full qualifiers first (include the governing "in" so no dangling "in" survives).
-  // These removals (to "") are the only step that can strand double spaces or
-  // split phrases, so the cosmetic cleanup below runs only when one of them
-  // fired - swaps (IDs, noun keeps) preserve spacing by construction.
-  const preRemovals = out;
-  out = out
-    .replace(/\bin\s+clean,\s*everyday\s+Hebrew\b,?\s*/gi, "")
-    .replace(/\bin\s+everyday\s+Hebrew\b,?\s*/gi, "")
-    .replace(/\bin\s+plain[-\s]?Hebrew\b,?\s*/gi, "")
-    .replace(/\bclean,\s*everyday\s+Hebrew\b,?\s*/gi, "")
-    .replace(/\beveryday\s+Hebrew\b,?\s*/gi, "")
-    .replace(/\bplain[-\s]?Hebrew\b,?\s*/gi, "")
-    .replace(/\bin\s+Hebrew\b,?\s*/gi, "");
-  const removed = out !== preRemovals;
-  // IDs and compound names (evals testing the Hebrew contract -> neutral IDs).
-  out = out
-    .replace(/\bhebrew-report-contract\b/gi, "report-contract")
-    .replace(/\bhebrew-report\b/gi, "report")
-    .replace(/\bhebrew-template\b/gi, "template");
-  // Reporting nouns: "Hebrew report" -> "report". Targeted only - bare
-  // "Hebrew" elsewhere (RTL tables, "Hebrew word", input descriptions) is
-  // left alone so supporting skills stay byte-identical.
-  out = out.replace(/\bHebrew\s+Chat\s+Output\s+Contract\b/gi, "Chat Output Contract");
-  out = out.replace(/\bHebrew\s+(output\s+contracts?|output\s+templates?|output\s+shape|reports?|closeout|summary|summaries|sections?|contracts?|templates?|backlog maps?|status reports?|station reports?)\b/gi, "$1");
-  // Restore input meanings.
-  out = out.replace(/\u0000KEEP(\d+)\u0000/g, (_, i) => keeps[Number(i)]);
-  // Cosmetic cleanup for stranded spacing ("in  following", "Answer in the").
-  // Gated on an actual removal above, so files that merely mention Hebrew
-  // (voice-note intake, slug rules, code comments) keep their bytes.
-  if (removed) {
-    out = out
-      .replace(/[ \t]{2,}/g, " ")
-      .replace(/\bin\s+in\b/gi, "in")
-      .replace(/\bis\s+with\b/gi, "with")
-      .replace(/\(\s+/g, "(")
-      .replace(/\s+\)/g, ")")
-      .replace(/\s+,/g, ",")
-      .replace(/\s+\./g, ".");
-  }
-  return out;
+  // Per line, not file-wide: a removal must only ever affect its own line.
+  // (A file-wide pass collapsed indentation inside unrelated code blocks and
+  // joined a paragraph into its heading by eating newlines.) Placeholders
+  // carry no newlines, and every pattern below is single-line, so per-line
+  // processing matches file-wide on removals and is strictly safer after.
+  // Trailing runs use [ \t]* (never \s*): a removed phrase must not eat the
+  // line break after it.
+  return original.split("\n").map((line) => {
+    if (!/hebrew/i.test(line)) return line;
+    const keeps = [];
+    let l = line.replace(NEUTRALIZE_KEEP, (m) => {
+      keeps.push(m);
+      return `\u0000KEEP${keeps.length - 1}\u0000`;
+    });
+    // Full qualifiers first (include the governing "in" so no dangling "in"
+    // survives). "is in Hebrew and <verb>" goes whole, or "is and" survives.
+    const preRemovals = l;
+    l = l
+      .replace(/\bin\s+clean,\s*everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bin\s+everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bin\s+plain[-\s]?Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bclean,\s*everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\beveryday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bplain[-\s]?Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bis\s+in\s+Hebrew\s+and\b\s*/gi, "")
+      .replace(/\bin\s+Hebrew\b,?[ \t]*/gi, "");
+    const removed = l !== preRemovals;
+    // IDs and compound names (evals testing the Hebrew contract -> neutral IDs).
+    l = l
+      .replace(/\bhebrew-report-contract\b/gi, "report-contract")
+      .replace(/\bhebrew-report\b/gi, "report")
+      .replace(/\bhebrew-template\b/gi, "template");
+    // Reporting nouns: "Hebrew report" -> "report". Targeted only - bare
+    // "Hebrew" elsewhere (RTL tables, "Hebrew word", input descriptions) is
+    // left alone so supporting skills stay byte-identical.
+    l = l.replace(/\bHebrew\s+Chat\s+Output\s+Contract\b/gi, "Chat Output Contract");
+    l = l.replace(/\bHebrew\s+(output\s+contracts?|output\s+templates?|output\s+shape|reports?|closeout|summary|summaries|sections?|contracts?|templates?|backlog maps?|status reports?|station reports?)\b/gi, "$1");
+    // Restore input meanings.
+    l = l.replace(/\u0000KEEP(\d+)\u0000/g, (_, i) => keeps[Number(i)]);
+    // Cosmetic cleanup for stranded spacing ("in  following", "reported .").
+    // Gated on an actual removal on THIS line, so untouched lines keep bytes.
+    if (removed) {
+      l = l
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/[ \t]+$/, "")
+        .replace(/\bin\s+in\b/gi, "in")
+        .replace(/\bis\s+with\b/gi, "with")
+        .replace(/\(\s+/g, "(")
+        .replace(/\s+\)/g, ")")
+        .replace(/\s+,/g, ",")
+        .replace(/\s+\./g, ".");
+    }
+    return l;
+  }).join("\n");
 }
 
 /**

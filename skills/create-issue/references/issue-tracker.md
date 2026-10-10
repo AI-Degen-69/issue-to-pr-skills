@@ -7,7 +7,7 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Pre-flight**: run `gh auth status` first. If unauthenticated, stop and run `gh auth login` — do not fall back to unauthenticated API calls.
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Multi-line bodies use a body file: write the markdown to a temp file and pass `--body-file <path>` (this avoids all shell quoting pitfalls on both bash and PowerShell — do not inline heredocs or `"$(cat ...)"`).
 - **Read an issue**: `gh issue view <number> --comments` for a human view, or structured:
- `gh issue view <number> --json number,title,body,labels,comments --jq '{number, title, body, labels: [.labels[].name], comments: [.comments[].body]}'`
+  `gh issue view <number> --json number,title,body,labels,comments --jq '{number, title, body, labels: [.labels[].name], comments: [.comments[].body]}'`
 - **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
 - **Comment on an issue**: `gh issue comment <number> --body "..."`
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`. Use only labels that exist — check with `gh label list` first. If a wanted label does not exist, skip it and name it in the closeout; never create or invent labels.
