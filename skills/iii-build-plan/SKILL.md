@@ -44,7 +44,7 @@ For every task executed, follow these phases:
 4. **Risk-first order:** follow the plan's task order (risk-first from Station II); when the plan leaves freedom, take the riskiest, most-uncertain task first — while being wrong is still cheap.
 5. **Route & Invoke Domain Skill:** Inspect the task's domain tag in `tasks/plan.md` and invoke the matching specialized skill (full matrix in `references/routing.md`):
    - **UI / Frontend / Design:** Activate `frontend-ui-engineering` (and `tailwind-design-system` if applicable). Identify what visual components, styling, or layouts are missing or broken, and implement them across the project according to modern standards.
-   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from this repo's `agents/` directory): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent).
+   - **Code / Backend / API:** Activate `test-driven-development`, `source-driven-development`, and `api-and-interface-design`. When the task is test-writing-heavy, deploy the `tdd-guide` agent persona (from this repo's `agents/` directory): write-tests-first, ~80%+ coverage on touched code. Persona not found on disk → skip and record the skip (never invent — do not invent).
    - **Debug / Defect:** Activate `debugging-and-error-recovery` (investigate root cause before writing fixes).
    - **Performance:** Activate `performance-optimization`.
    - **Security:** Activate `security-and-hardening`.
@@ -66,9 +66,7 @@ is XS or S, the plan touches at most 2 files, adds no behavior, and needs no new
 **7-box gate** in `quick-fix`. All 7 pass → offer the operator the lane in one line (push straight
 to `main`, no PR, no reviews, no CodeRabbit). **Yes** → hand off to `quick-fix` **with your 7-box
 verdict** so it re-checks only size and its own diff, which works on the base branch — switch off
-this feature branch first (commit or stash `tasks/plan.md` / `tasks/todo.md` changes on the feature
-branch so the handoff is clean, without discarding them and without carrying them onto base),
-or the lane's own base-branch precondition fails and it routes to
+this feature branch first, or the lane's own base-branch precondition fails and it routes to
 `pipeline-triage`. **No, or any box fails** → continue into Phase 2 and build as planned, and
 remove the label (`gh issue edit <number> --remove-label "quick-fix"`) — a plan being built here
 has already disproved the lane.
@@ -78,7 +76,7 @@ has already disproved the lane.
 - **Design & UI Tasks:** Ground styles in existing project tokens and components; implement accessible, responsive UI structure.
 - **Official Docs Grounding:** When using modern or external libraries, consult official documentation (`source-driven-development`) to ensure correct API usage.
 - **Build Error Resolution (build resolvers):** If compiler, syntax, or import failures occur, deploy the matching `<stack>-build-resolver` agent persona from this repo's `agents/` directory (`build-error-resolver` generic; `react-build-resolver` / `go-build-resolver` / `rust-build-resolver` when the diff touches React / Go / Rust): minimal diffs only — no architectural edits — get the build green, then resume the task. Persona not found on disk → apply the generic surgical-fix loop and record the skip.
-- **NOTICED-BUT-NOT-TOUCHING:** anything spotted mid-build that is out of scope — a bug in adjacent code, a tempting refactor, a quick win — is never touched. Capture it as a one-line future Issue candidate and surface it in the closing report; the operator decides whether it becomes an Issue.
+- **NOTICED-BUT-NOT-TOUCHING:** anything spotted mid-build that is out of scope — a bug in adjacent code, a tempting refactor, a quick win — is never touched. Capture it as a one-line future Issue candidate and surface it in the closing report; the operator decides whether it becomes an Issue. Record each candidate as an `open` row in `docs/issues/<id>-noticed-but-not-touching.md` (`N1… | candidate | discovering station | evidence path:line | open | —`); only Station VI (`vi-close-pipeline`) resolves rows.
 - **Feature flags / safe defaults / rollback:** for risky behavior changes, prefer a feature flag or a safe default that keeps the old behavior reachable; keep every task rollback-friendly (atomic commits, no destructive data changes without a path back). `git-workflow-and-versioning` governs commit discipline: atomic commits, ~100-line change sizing, commit-as-save-point.
 - **Observability touchpoint:** when a task changes production-facing behavior (API responses, background jobs, integrations), add — or note in the report as a follow-up — the instrumentation it needs (structured log, metric) per `observability-and-instrumentation`.
 
@@ -94,29 +92,8 @@ has already disproved the lane.
 
 ---
 
-## Chat Output Contract
+## Final check walkthrough (mandatory input to the report)
 
-At the conclusion of Station III, you MUST report to the user in clean, everyday English using this exact structured format.
-What's-changed only: report the product changes grouped by tag. Never mention commits, hashes, tree state, test commands, test counts, skill names, or file paths. The branch stays as the work ID. Omit empty groups. Max ~7 items — group beyond that.
+Pre-IV verification gate — after the build, guide the operator through seeing the change with their own eyes so they can catch anything to iterate on via `/iiib-iterate-after-build` before advancing to Station IV. Build the walkthrough from the live product: name the real screen / tab / button, use as many short steps as it takes for clarity — no step cap — each step one quick action in the shape where → what to do → what to see, with `→` arrows and a direct link when one exists. Plain words, no jargon. Say exactly what to look at (text, state, count). Prefer visual proof. Backend-only with nothing to see → one line saying so plus how it was checked automatically.
 
-Build the walkthrough for the report from the live product: real screen names, at most 3 steps, every step is where -> what to do -> what to see. Prefer visual proof. Nothing visual -> say so in one line plus how it was checked automatically.
 
-```markdown
-# 🔨 III - Build: Issue #<id> — <issue_title>
-
-Branch: `i<id>/<slug>`
-
-## ➕ What's New?
-- [product location (page/tab/section) + what was created — only groups with content]
-
-## ✏️ What's Changed?
-- [product location + what changed]
-
-## ❌ What's Removed?
-- [product location + what was removed]
-
-## 🩹 What's Fixed?
-- [product location + what was broken and what works now]
-
-👉 **Next:** `/iv-review-build-and-pr` — review and ship.
-```

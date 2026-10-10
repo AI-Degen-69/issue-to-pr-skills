@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { contentViolation, blocksSync, blocksPublication, stripLocalOnly } from './content-rules.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { contentViolation, blocksSync, blocksPublication, stripLocalOnly, localizeToEnglish, neutralizeLanguage } from './content-rules.js';
 
 test('plain English passes', () => {
   assert.equal(contentViolation('Nothing wrong here.\n'), null);
@@ -170,4 +172,140 @@ test('a Hebrew order outside the markers still blocks', () => {
     '8. You MUST report to the user in clean, everyday Hebrew.',
   ].join('\n');
   assert.ok(blocksPublication(marked), 'stripping must not launder a real contract');
+});
+
+// localizeToEnglish produces the English copy of a localized file. The pack has
+// always carried this translation by hand; every phrase below is taken from a
+// real canonical file, and the hand-written copy is what it must reproduce.
+test('localizeToEnglish rewrites reporting-language mentions', () => {
+  const cases = [
+    ['Reports in Hebrew per the output contract in `SKILL.md`.', 'Reports in English per the output contract in `SKILL.md`.'],
+    ['Reports back in everyday Hebrew per the output contract in `SKILL.md`.', 'Reports back in everyday English per the output contract in `SKILL.md`.'],
+    ['orchestration steps, Hebrew output contract).', 'orchestration steps, English output contract).'],
+    ['Hebrew output contracts.', 'English output contracts.'],
+    ['the Hebrew report names the PR', 'the English report names the PR'],
+    ['Two reports in Hebrew from the template', 'Two reports in English from the template'],
+    ['introduce yourself in plain Hebrew', 'introduce yourself in plain English'],
+    ['reports back in Hebrew with link', 'reports back in English with link'],
+  ];
+  for (const [from, to] of cases) {
+    assert.equal(localizeToEnglish(from), to, `must localize: ${from}`);
+  }
+});
+
+test('localizeToEnglish preserves Hebrew that describes INPUT, not output', () => {
+  // A bare word swap would turn these into nonsense ("English voice-notes").
+  const keep = [
+    'The operator drops raw thoughts (Hebrew voice-notes style, bullet fragments).',
+    'Branch slugs are never Hebrew.',
+    'Accepts Hebrew-only voice-notes.',
+  ];
+  for (const k of keep) {
+    assert.equal(localizeToEnglish(k), k, `must NOT localize: ${k}`);
+  }
+});
+
+test('a localized file is publishable only after localizeToEnglish', () => {
+  // This is the condition that keeps the 12 localized READMEs out of the
+  // "blocked" bucket: the bytes that land are the rewritten ones, so the
+  // content gate must judge those, not the canonical original.
+  const canonical = '4. Reports in Hebrew per the output contract in `SKILL.md`.';
+  assert.ok(contentViolation(canonical), 'the canonical original is still unpublishable');
+  assert.equal(contentViolation(localizeToEnglish(canonical)), null, 'its English copy is fine');
+});
+
+test('Hebrew characters survive localization - only the English word is swapped', () => {
+  // blocksSync's character test must keep working after the rewrite.
+  assert.ok(blocksSync(localizeToEnglish('דוח סיכום')), 'Hebrew script is still blocked');
+});
+
+test('stripLocalOnly removes named local-only markers', () => {
+  const marked = [
+    'Before.',
+    '<!-- local-only:pipeline-triage:output-template-begin -->',
+    'The chat output template is `references/output-template.md`.',
+    '<!-- local-only:pipeline-triage:output-template-end -->',
+    'After.',
+  ].join('\n');
+  const out = stripLocalOnly(marked);
+  assert.equal(out.includes('output-template.md'), false, 'the named local-only pointer must go');
+  assert.equal(out.includes('Before.'), true);
+  assert.equal(out.includes('After.'), true);
+  assert.equal(out.includes('local-only'), false, 'no marker residue may survive');
+});
+
+test('neutralizeLanguage removes reporting orders, keeps input meanings', () => {
+  assert.equal(
+    neutralizeLanguage('Answer in Hebrew in the chat only.'),
+    'Answer in the chat only.'
+  );
+  assert.equal(
+    neutralizeLanguage('8. You MUST report to the user in clean, everyday Hebrew following the contract.'),
+    '8. You MUST report to the user following the contract.'
+  );
+  assert.equal(
+    neutralizeLanguage('Two short Hebrew sections routing to i-pick-issue.'),
+    'Two short sections routing to i-pick-issue.'
+  );
+  assert.equal(
+    neutralizeLanguage('## Hebrew Chat Output Contract (x)'),
+    '## Chat Output Contract (x)'
+  );
+  assert.equal(
+    neutralizeLanguage('the header lives in the Hebrew output template'),
+    'the header lives in the output template'
+  );
+  // Input meanings survive untouched.
+  assert.equal(
+    neutralizeLanguage('Branch slugs are never Hebrew - Hebrew chars are stripped.'),
+    'Branch slugs are never Hebrew - Hebrew chars are stripped.'
+  );
+  assert.equal(
+    neutralizeLanguage('Accepts Hebrew-only voice-notes.'),
+    'Accepts Hebrew-only voice-notes.'
+  );
+  // Neutralized reporting orders are publishable; paths and script still block.
+  assert.equal(contentViolation(neutralizeLanguage('Answer in Hebrew in the chat only.')), null);
+  assert.ok(contentViolation(neutralizeLanguage('See ~/.agents/agents/x.md')), 'home path still blocks');
+  assert.ok(blocksSync(neutralizeLanguage('דוח סיכום')), 'Hebrew script still blocks');
+});
+
+test('neutralizeLanguage leaves non-removed text byte-identical', () => {
+  // The cosmetic cleanup (space collapsing, "is with" join) runs only when a
+  // removal fired. A line that merely mentions Hebrew keeps every byte, so a
+  // double space or an "is with" elsewhere in the file can never be rewritten.
+  const untouched = 'Accepts Hebrew-only voice-notes.  The issue is with login.';
+  assert.equal(neutralizeLanguage(untouched), untouched);
+  assert.equal(
+    neutralizeLanguage('reports the issue number in everyday Hebrew.'),
+    'reports the issue number.'
+  );
+});
+
+test('neutralizeLanguage is a no-op without a language mention', () => {
+  const plain = 'Personas live in this repo\'s `agents/` directory.\n\n| a  | b  |\n';
+  assert.equal(neutralizeLanguage(plain), plain, 'whitespace must not invent drift');
+});
+
+test('the writer and the mirror gate apply the same rewrite table', () => {
+  // The home-to-portable renames live in two files by hand (sync writes with
+  // its table, the gate hashes with its own). If they ever disagree, every
+  // renamed file becomes a false mismatch, so the tables must be identical.
+  const here = path.resolve(import.meta.dirname);
+  const table = (file) => {
+    const text = fs.readFileSync(path.join(here, file), 'utf8');
+    const block = text.match(/const REWRITE = \[([\s\S]*?)\n\];/);
+    assert.ok(block, `${file} no longer declares a REWRITE table`);
+    // Compare (pattern, replacement) pairs, not formatting: the two files lay
+    // the same table out differently (expanded vs compact entries).
+    const pairs = [...block[1].matchAll(/\[\s*(\/(?:[^/\n\\]|\\.)+\/[a-z]*)\s*,\s*("(?:[^"\n\\]|\\.)*")\s*,?\s*\]/g)]
+      .map((m) => [m[1], JSON.parse(m[2])]);
+    assert.ok(pairs.length > 0, `${file} REWRITE table parsed to zero entries`);
+    return pairs;
+  };
+  assert.deepEqual(
+    table('verify-mirror.js'),
+    table('sync-from-canonical.js'),
+    'REWRITE tables disagree - copy the change to both files'
+  );
 });

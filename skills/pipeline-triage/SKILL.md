@@ -70,41 +70,14 @@ Pick exactly one row. First matching row wins.
 
 ## Output format
 
-Answer in English in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
+Answer in the chat only. Always use this exact markdown shape with headings, bold, and emojis. Two sections only, short. No approval line. No explanation of what the station does.
 
 After the status line, always list every changed file by category with a one-line classification of what it is (which issue/PR it belongs to, or "unknown origin"). Omit a category only when its count is 0. Also list each stash with its number, age, branch, and a one-line classification of its contents.
 
-```markdown
-# 📊 Pipeline Triage
-**Branch:** `name` | **Ahead/Behind:** X/Y | **Staged:** X | **Unstaged:** X | **Untracked:** X | **PR:** state | **Stashes:** X
+Report order: title, then folder state, then GitHub checks, then what was asked, then what was found. Issues and PRs are hyperlinks. The station name stays in English in the title. A `---` separator line comes before the What-now section.
 
-**Staged (X):**
-- `path/to/file` — classification
-
-**Unstaged (X):**
-- `path/to/file` — classification
-
-**Untracked (X):**
-- `path/to/file` — classification
-
-**Stashes (X):**
-- `stash@{0}` — date, branch, what it holds in one line
-
-## Status Assessment:
-- [Assessment of files: what changed, where from, whether they are work-in-progress, critical, or scratch to discard]
-- [Assessment of stashes: whether they hold active work, stale experiments, or can be dropped]
-- [Assessment of branches: whether active, merged, or stale]
-- [Assessment of PR: PR status, review comments, whether action is required]
-
-## 🎯 Conclusions:
-- [Concise summary of state and rational approach to resolve it]
 
 ---
-
-## ➡️ Next Step:
-- [Decision on where to route work from here, which station skill to invoke based on state]
-- Selected route: **`<station>`**
-```
 
 ## Safety rules
 

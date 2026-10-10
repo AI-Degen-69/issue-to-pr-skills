@@ -19,7 +19,7 @@ chain.
 
 - **Station:** Station I of VI (single entry point for Issue work)
 - **Previous Station:** `pipeline-triage` (state gate — only when the tree is dirty, commits are unpushed, or a PR is open)
-- **Next Station:** `quick-fix` (only when the selected issue is `quick-fix`-labeled or the operator explicitly requested the lane, **and** the §1a gate passes, **and** the operator picks it) or `ii-plan-issue <issue-id>` (Plan)
+- **Next Station:** `quick-fix` (only when the recommendation is `quick-fix`-labeled or the operator explicitly requested the lane, **and** the §1a gate passes, **and** the operator picks it) or `ii-plan-issue <issue-id>` (Plan)
 
 ---
 
@@ -38,20 +38,20 @@ Every invocation of this skill begins with the **Discovery Station**, regardless
 2. **Categorize and group:**
    Group them logically by domain area, risk, architectural component, or dependency chain.
 3. **Recommend an execution sequence:**
-   Propose a concrete order of work (unblockers and core infrastructure before dependent features, quick wins vs. deep changes), and explicitly highlight the single recommended issue to start.
-4. **Halt for user selection:**
-   Stop and ask the operator which issue to proceed with. Do NOT pick silently.
+   Propose a concrete order of work (unblockers and core infrastructure before dependent features, quick wins vs. deep changes), and explicitly highlight the single recommended issue to start. By default the recommended issue IS the selected one — the run proceeds with it unless the operator overrides. The report header and wording follow `references/output-template.md`. No separate recommendation screen, and no separate "pick a number" menu: the alternatives are one line under the recommendation.
+4. **Confirm or override:**
+   Present the recommended (auto-selected) issue and proceed with it. The operator may override with another issue number at any point before Station II starts.
 5. **Route non-issue states:** no open issues and the operator has a brand-new idea → `create-issue`. No open issues and nothing new → say so and route to `pipeline-triage`.
 
-### 1a. Quick-Fix Lane Check (run after issue selection, before the execution-mode gate)
+### 1a. Quick-Fix Lane Check (run before the execution-mode gate)
 
-Before offering step-by-step vs. full orchestration, test the selected issue against the
+Before offering step-by-step vs. full orchestration, test the confirmed issue against the
 **7-box gate** in `quick-fix`. This is the one place the lane is cheapest to catch: here it costs
 a read, later it costs a plan.
 
 **The label precondition.** Run the gate in exactly two cases:
 
-1. The selected issue carries the `quick-fix` label (applied by `create-issue` at intake), or
+1. The confirmed issue carries the `quick-fix` label (applied by `create-issue` at intake), or
 2. the operator explicitly asks to consider it for the fast lane.
 
 The label is a **precondition for evaluation, never a bypass.** When it is present, run all 7
@@ -61,7 +61,7 @@ one-sentence idea, and a stale or optimistic one is exactly the case the gate ex
 **Not `quick-fix`-labeled and not explicitly requested → skip the gate entirely.** Print no gate block, offer
 no quick-fix option, and continue to the execution-mode gate (§1b) directly.
 
-- **All 7 boxes pass** → present the selected issue as the quick option and let the operator choose: **quick fix** (push straight to `main`, no PR, no reviews, no CodeRabbit) or the **full pipeline**. If the operator changes the issue after this check, rerun §1a for the newly selected issue before offering or handing off. If they choose quick, hand off the selected issue ID **with its 7-box verdict** so `quick-fix` re-checks only size and its own diff instead of re-reading the issue — and skip the execution-mode gate entirely, there are no stations to step through.
+- **All 7 boxes pass** → present the confirmed issue as the quick option and let the operator choose: **quick fix** (push straight to `main`, no PR, no reviews, no CodeRabbit) or the **full pipeline**. If the operator changes the issue after this check, rerun §1a for the newly confirmed issue before offering or handing off. If they choose quick, hand off the confirmed issue ID **with its 7-box verdict** so `quick-fix` re-checks only size and its own diff instead of re-reading the issue — and skip the execution-mode gate entirely, there are no stations to step through.
 - **Any box fails** → the full pipeline runs as usual, and remove the label so a later session is not misled:
   `gh issue edit <number> --remove-label "quick-fix"`.
 
@@ -86,13 +86,16 @@ Only after the operator selected an issue (step 4) AND an execution mode (step 1
 ### Step 1: Assignment & Setup
 
 - Read the issue details: `gh issue view <number> --comments`
-- Claim the issue: `gh issue edit <number> --add-assignee @me`
+- **Do not claim the issue here.** Station II (`ii-plan-issue`) owns the first write —
+  it checks the tree is clean *before* claiming and branching, so the assignee signal
+  never lands on a dirty checkout. Claiming twice races the two stations; claiming
+  early marks work started over a tree that may hold someone else's changes.
 - Apply `context-engineering` principles to lock session scope before opening files.
 
 ### Step 2: Station II — Plan (`ii-plan-issue <number>`)
 
 - Hand off to `ii-plan-issue` to perform scope right-sizing (Trivial/Small/Standard/Large), auto-detect stack, lock `CONSTRAINTS.md`, specify interfaces, and write `tasks/plan.md`.
-- Report plan summary in plain English to the user.
+- Report plan summary to the user.
 
 ### Step 3: Station III — Build (`iii-build-plan auto`)
 
@@ -118,40 +121,3 @@ Only after the operator selected an issue (step 4) AND an execution mode (step 1
 
 ---
 
-## Chat Output Contract
-
-### In Discovery Mode (no arguments):
-
-```markdown
-# 🗺️ I - Task Mapping & Backlog Selection:
-
-## 📋 Open Issues by Domain:
-* **[Domain / Group 1]:**
-  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
-* **[Domain / Group 2]:**
-  - [#<id> - <title>](<link>) `[labels]` — <one-sentence summary of the task>
-
-## 🎯 Recommended Execution Order (Dependencies & Impact):
-1. **#<id>** — [Rationale: foundational/infrastructure task blocking others]
-2. **#<id>** — [Rationale: direct follow-up task]
-3. **#<id>** — [Rationale: independent or secondary]
-
----
-
-## 📊 Selected Next Issue to Start:
-* **Lead Issue:** [#<id> - <title>](<link>)
-* **Selection Reason:** Removes blockers and enables smooth progress for the rest of the backlog.
-
-## 🧠 Summary:
-In a few plain English sentences: the overall picture of open issues, and why this execution order avoids breakage and rework.
-
-👉 **Next Step:** Select an issue to start with, then choose execution mode:
-* **🚶 Step-by-Step Mode (Recommended):** One station at a time — pauses for your review between stations.
-* **🚀 Full Orchestration Mode:** Continuous execution from planning (II) through build, review, merge, sweep, and closeout (VI) — with updates at each station.
-
-Only proceed to `/ii-plan-issue <id>` after issue + mode selection.
-```
-
-### In Orchestration Mode (End-to-End Orchestration):
-
-Report concisely in English on each completed station matching its output contract, showing current progress and the next station in line.

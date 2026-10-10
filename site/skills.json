@@ -85,7 +85,7 @@
   },
   {
     "name": "ii-plan-issue",
-    "desc": "Station II (Define & Plan) of the 6-station pipeline (I–VI). Use when a GitHub issue needs to become an executable plan — fetches the issue via gh, right-sizes it, locks CONSTRAINTS.md, maps interfaces, writes tasks/plan.md, and hands off to /iii-build-plan auto. Reports in English, issue-first."
+    "desc": "Station II (Define & Plan) of the 6-station pipeline (I–VI). Use when a GitHub issue needs to become an executable plan — fetches the issue via gh, right-sizes it, locks CONSTRAINTS.md, maps interfaces, writes tasks/plan.md, and hands off to /iii-build-plan auto. Reports issue-first."
   },
   {
     "name": "iii-build-plan",
