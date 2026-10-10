@@ -42,14 +42,15 @@ const LOCALIZED = [
   'present-pr',
 ];
 
-// The ONLY difference a localized description may carry: the English-only
-// reporting contract. Canonical reports in Hebrew; this pack must not. Anything
-// else is drift, and drift is the bug this test exists for.
-//
-// A new entry here is a claim that a difference is intentional. Give it a
-// reason, and expect the "whitelist stays live" test below to demand its
-// removal the moment it stops being true.
-const ALLOWED_LOCALIZED_SUBSTITUTIONS = [['Reports in Hebrew', 'Reports in English']];
+// Localized descriptions must match canonical EXACTLY. Canonical carries no
+// reporting language at all (neutral wording; Hebrew lives only in the
+// local-only output-template pointer, which never ships), so there is no
+// tolerated difference left. Anything else is drift, and drift is the bug
+// this test exists for. The substitution machinery below stays with an empty
+// list: if an intentional difference ever appears again, add it here with a
+// reason, and the "whitelist stays live" test will demand its removal the
+// moment it stops being true.
+const ALLOWED_LOCALIZED_SUBSTITUTIONS = [];
 
 const read = (file) => fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 
@@ -61,7 +62,7 @@ const description = (file) => {
   return value[1].trim();
 };
 
-/** Canonical text with the pack's intended English-only substitutions applied. */
+/** Canonical text with the pack's intended substitutions applied (none remain). */
 const localized = (text) =>
   ALLOWED_LOCALIZED_SUBSTITUTIONS.reduce((acc, [from, to]) => acc.replace(from, to), text);
 
@@ -130,8 +131,8 @@ test('the whitelist stays live', { skip: !canonicalAvailable && 'no canonical ho
 
 test('the comparison actually detects drift', () => {
   // Anti-vacuity: prove the check is not green by construction.
-  const canonical = 'Station II ... hands off to /iii-build-plan auto. Reports in Hebrew, issue-first.';
-  assert.equal(localized(canonical), 'Station II ... hands off to /iii-build-plan auto. Reports in English, issue-first.');
-  assert.notEqual(localized(canonical), 'Station II ... hands off to /iii-build-plan auto. Reports in English, and in French.');
+  const canonical = 'Station II ... hands off to /iii-build-plan auto. Reports issue-first.';
+  assert.equal(localized(canonical), 'Station II ... hands off to /iii-build-plan auto. Reports issue-first.');
+  assert.notEqual(localized(canonical), 'Station II ... hands off to /iii-build-plan auto. Reports daily.');
   assert.notEqual(localized('Station IV ... playwright-cli only.'), 'Station IV ... playwright-cli preferred.');
 });

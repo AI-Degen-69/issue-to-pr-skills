@@ -32,8 +32,9 @@ with an honest one-line CodeRabbit ack status. The only station that pushes.
 2. **OCR delegation review**, then language/framework specialist
    reviewers (plus the Spec axis: diff vs issue + `tasks/plan.md`).
    Fixes applied as local commits; clean reviewers get one line.
-3. **Final verification gate**, then push + open the PR (CodeRabbit writes the
-   title from `auto_title_placeholder`; the body is unchanged), post
+3. **Final verification gate**, then push + open the PR (title is exactly
+   `@coderabbitai` — CodeRabbit's effective configuration generates the
+   final title from the root `.coderabbit.yaml`; the body is unchanged), post
    `@coderabbitai summary` + the review trigger, with comment links whenever
    the ack is anything but `Review triggered.` — including a summary-only
    review, which is the expected shape on a private Free repo and is never
@@ -45,7 +46,7 @@ with an honest one-line CodeRabbit ack status. The only station that pushes.
 
 | Path | What it is |
 |---|---|
-| `SKILL.md` | Agent contract (gates, review protocol, push + PR, English output contract). |
+| `SKILL.md` | Agent contract (gates, review protocol, push + PR, output contract). |
 | `references/ocr-delegation.md` | OCR delegation procedure, embedded from the upstream `open-code-review-delegate` skill (flags, file scope, host-agent review, gotchas). |
 | `evals/` | Eval set + pre-workbench snapshot. |
 

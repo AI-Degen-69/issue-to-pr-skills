@@ -4,7 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
-import { contentViolation, stripLocalOnly } from "./content-rules.js";
+import { contentViolation, stripLocalOnly, neutralizeLanguage } from "./content-rules.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TARGET_DIR = path.join(ROOT, "skills");
@@ -107,14 +107,29 @@ if (!fs.existsSync(TARGET_DIR)) {
 const REWRITE = [
   // Canonical: docs/issue-to-pr-skill-workflow.md. This pack: docs/pipeline.md.
   [/docs\/issue-to-pr-skill-workflow\.md/g, "docs/pipeline.md"],
+  // Home persona install (~/.agents/agents/) becomes this repo's agents/
+  // directory - same 17 personas in both places (see sync-from-canonical.js,
+  // which applies the same table; the local copy keeps its home path).
+  [/`\.agents\/agents\/`,\s*`~\/\.agents\/agents\/`/g, "this repo's `agents/` directory"],
+  [/`~\/\.agents\/agents\/`/g, "this repo's `agents/` directory"],
+  // Home skill install (~/.agents/skills/<name>) becomes the pack path.
+  [/`~\/\.agents\/skills\//g, "`skills/"],
+  // Absolute Windows pointer at a canonical skill becomes the pack skill.
+  [/`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`\s*\(global copy is the single source of truth\)\.?/g, "the `$1` skill in this pack."],
+  [/`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`/g, "`skills/$1` in this pack"],
 ];
 
-function sha256(filePath) {
-  // The same strip the writer applies, or every file carrying a local-only
-  // marker would hash differently here than in the pack - a mismatch invented
-  // by the comparison rather than found in the content.
-  let content = stripLocalOnly(fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n"));
-  for (const [re, to] of REWRITE) content = content.replace(re, to);
+function sha256(filePath, rel = "") {
+  // The same strip + neutralize the writer applies to text files, or every
+  // file carrying a local-only marker or a reporting-language order would hash
+  // differently here than in the pack - a mismatch invented by the comparison
+  // rather than found in the content. Non-text extensions are byte-copied, so
+  // compare them raw (normalized line endings only).
+  let content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
+  if (/\.(md|json|ya?ml)$/i.test(rel)) {
+    content = neutralizeLanguage(stripLocalOnly(content));
+    for (const [re, to] of REWRITE) content = content.replace(re, to);
+  }
   return crypto.createHash("sha256").update(content).digest("hex");
 }
 
@@ -225,8 +240,8 @@ for (const skill of EXPECTED_SKILLS) {
           }
         }
       } else {
-        const srcHash = sha256(path.join(srcSkillDir, f));
-        const tgtHash = sha256(tgtFilePath);
+        const srcHash = sha256(path.join(srcSkillDir, f), f);
+        const tgtHash = sha256(tgtFilePath, f);
         if (srcHash !== tgtHash) {
           fail(`${skill}/${f}: hash mismatch (source=${srcHash.slice(0, 8)}, target=${tgtHash.slice(0, 8)})`);
         }

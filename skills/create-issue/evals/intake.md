@@ -2,33 +2,32 @@
 
 ## Skill pointer
 
-- `skills/create-issue` in this repo.
+- the `create-issue` skill in this pack.
 
 ## What the skill does
 
-Intake branch of the issue→PR pipeline: one raw operator idea becomes one researched, publishable GitHub issue labeled `ready-for-agent`, plus a posted CodeRabbit plan request — without a draft-approval pause.
+Intake branch of the issue→PR pipeline: one raw operator idea becomes one researched, publishable GitHub issue with a `[TAG]` title and only relevant existing labels, plus a posted CodeRabbit plan request — without a draft-approval pause.
 
 ## What "good" looks like
 
 1. Real repo research before drafting (paths with line numbers), never invented.
-2. Open questions land in the issue body with `needs-answers` — publication is never blocked.
+2. Open questions land in the issue body (`needs-answers` only when that label exists) — publication is never blocked.
 3. Splits are wired as one family (`Part of #` / `Related:` / native dependency edges).
-4. The CodeRabbit plan request is posted as its own comment, body only, skipped for trivial docs-only issues, retried once on silence.
-5. Closeout is everyday English per the output contract.
+4. The CodeRabbit plan request is posted as its own comment, body only, skipped only for genuinely trivial work — no wait, no retry.
+5. Closeout is per the output contract.
 
 ## Success definition (measurable)
 
 | Dimension | Check | Deterministic? |
 |---|---|---|
-| Outcome | Prescribes `gh issue create ... --label ready-for-agent` | Yes (regex) |
+| Outcome | Runs `gh label list`, then `gh issue create` with a `[TAG]` title and only relevant existing labels | Yes (regex) |
 | Outcome | Prescribes posting the CodeRabbit prompt body, not the reference file | Yes (regex) |
 | Outcome | Skips the plan request for docs/typo-only issues | Yes (regex) |
-| Outcome | Retries the request with the lowercase mention when no reply lands | Yes (regex) |
 | Style | Ambiguity goes to `Open questions`, never to a blocking interview | Yes (regex) |
-| Style | Closeout follows the English contract | Yes (regex) |
+| Style | Closeout follows the contract | Yes (regex) |
 | Negative | No catch-all trigger wording that would convert remarks into issues | Yes (not_regex) |
 
-Behavioral (live-run, needs a real repo + `gh`): research quality, the actual publish, the actual comment, the actual English report — recorded as `not-run`.
+Behavioral (live-run, needs a real repo + `gh`): research quality, the actual publish, the actual comment, the actual report — recorded as `not-run`.
 
 ## Loop config
 

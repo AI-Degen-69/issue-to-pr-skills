@@ -54,7 +54,7 @@ const HEBREW_OUTPUT_ORDER =
   /(?:report|reporting|answer|answers|respond|responds|reply|replies|closeout|output|outputs)\b[^.\n]{0,60}\bHebrew\b/i;
 
 /** The local-only block: canonical-only content the pack must never publish. */
-export const LOCAL_ONLY_BLOCK = /[ \t]*<!--\s*local-only:begin\s*-->[\s\S]*?<!--\s*local-only:end\s*-->\n?/g;
+export const LOCAL_ONLY_BLOCK = /[ \t]*<!--\s*local-only\b[^\n]*?begin\s*-->[\s\S]*?<!--\s*local-only\b[^\n]*?end\s*-->\n?/g;
 
 /**
  * Remove local-only blocks. Canonical marks its machine-local sections (chiefly
@@ -65,6 +65,100 @@ export const LOCAL_ONLY_BLOCK = /[ \t]*<!--\s*local-only:begin\s*-->[\s\S]*?<!--
  */
 export function stripLocalOnly(text) {
   return text.replace(LOCAL_ONLY_BLOCK, "");
+}
+
+/**
+ * Rewrite the reporting language from Hebrew to English on the way into the
+ * pack. This is the translation the pack has always carried by hand: canonical
+ * says "Reports in Hebrew", the published copy says "Reports in English".
+ * localized-descriptions.test.js already asserts exactly this substitution for
+ * station descriptions; this extends the same rule to every localized file, so
+ * the writer can produce the English copy instead of refusing to sync.
+ *
+ * A bare word swap would corrupt the other sense of "Hebrew" - the INPUT the
+ * station accepts. So the alternation puts the input meanings first and leaves
+ * them untouched; everything else is a reporting-language mention and becomes
+ * English.
+ */
+const HEBREW_LOCALIZE =
+  /(never Hebrew[^.\n"]*|Hebrew-only|Hebrew voice-notes|Hebrew-named)|\bHebrew\b/g;
+
+export function localizeToEnglish(text) {
+  return text.replace(HEBREW_LOCALIZE, (match, keepMeaning) => keepMeaning || "English");
+}
+
+/**
+ * Neutralize reporting-language preferences so the public pack carries no
+ * language choice at all. Canonical stays authoritative for Hebrew (via its
+ * local-only output-template pointer); the pack copy is the same text minus
+ * the language order, e.g. "Answer in Hebrew in the chat" -> "Answer in the
+ * chat", "Two short Hebrew sections" -> "Two short sections".
+ *
+ * Input-meaning mentions (voice-note intake, branch-slug stripping) are
+ * preserved via placeholders. Hebrew script and machine paths are NOT touched
+ * here - those still block via blocksSync/blocksPublication.
+ */
+const NEUTRALIZE_KEEP = /(never Hebrew[^.\n"]*|Hebrew-only|Hebrew voice-notes|Hebrew-named)/gi;
+
+export function neutralizeLanguage(text) {
+  const original = String(text);
+  // Fast path: no language mention, no rewrite - keeps supporting skills
+  // byte-identical so cleanup can never invent drift.
+  if (!/hebrew/i.test(original)) return original;
+  // Per line, not file-wide: a removal must only ever affect its own line.
+  // (A file-wide pass collapsed indentation inside unrelated code blocks and
+  // joined a paragraph into its heading by eating newlines.) Placeholders
+  // carry no newlines, and every pattern below is single-line, so per-line
+  // processing matches file-wide on removals and is strictly safer after.
+  // Trailing runs use [ \t]* (never \s*): a removed phrase must not eat the
+  // line break after it.
+  return original.split("\n").map((line) => {
+    if (!/hebrew/i.test(line)) return line;
+    const keeps = [];
+    let l = line.replace(NEUTRALIZE_KEEP, (m) => {
+      keeps.push(m);
+      return `\u0000KEEP${keeps.length - 1}\u0000`;
+    });
+    // Full qualifiers first (include the governing "in" so no dangling "in"
+    // survives). "is in Hebrew and <verb>" goes whole, or "is and" survives.
+    const preRemovals = l;
+    l = l
+      .replace(/\bin\s+clean,\s*everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bin\s+everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bin\s+plain[-\s]?Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bclean,\s*everyday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\beveryday\s+Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bplain[-\s]?Hebrew\b,?[ \t]*/gi, "")
+      .replace(/\bis\s+in\s+Hebrew\s+and\b\s*/gi, "")
+      .replace(/\bin\s+Hebrew\b,?[ \t]*/gi, "");
+    const removed = l !== preRemovals;
+    // IDs and compound names (evals testing the Hebrew contract -> neutral IDs).
+    l = l
+      .replace(/\bhebrew-report-contract\b/gi, "report-contract")
+      .replace(/\bhebrew-report\b/gi, "report")
+      .replace(/\bhebrew-template\b/gi, "template");
+    // Reporting nouns: "Hebrew report" -> "report". Targeted only - bare
+    // "Hebrew" elsewhere (RTL tables, "Hebrew word", input descriptions) is
+    // left alone so supporting skills stay byte-identical.
+    l = l.replace(/\bHebrew\s+Chat\s+Output\s+Contract\b/gi, "Chat Output Contract");
+    l = l.replace(/\bHebrew\s+(output\s+contracts?|output\s+templates?|output\s+shape|reports?|closeout|summary|summaries|sections?|contracts?|templates?|backlog maps?|status reports?|station reports?)\b/gi, "$1");
+    // Restore input meanings.
+    l = l.replace(/\u0000KEEP(\d+)\u0000/g, (_, i) => keeps[Number(i)]);
+    // Cosmetic cleanup for stranded spacing ("in  following", "reported .").
+    // Gated on an actual removal on THIS line, so untouched lines keep bytes.
+    if (removed) {
+      l = l
+        .replace(/[ \t]{2,}/g, " ")
+        .replace(/[ \t]+$/, "")
+        .replace(/\bin\s+in\b/gi, "in")
+        .replace(/\bis\s+with\b/gi, "with")
+        .replace(/\(\s+/g, "(")
+        .replace(/\s+\)/g, ")")
+        .replace(/\s+,/g, ",")
+        .replace(/\s+\./g, ".");
+    }
+    return l;
+  }).join("\n");
 }
 
 /**

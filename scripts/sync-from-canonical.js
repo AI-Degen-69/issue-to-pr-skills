@@ -24,7 +24,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { classifyDrift, driftExitCode } from "./drift-policy.js";
-import { blocksPublication, contentViolation, stripLocalOnly } from "./content-rules.js";
+import { blocksPublication, contentViolation, stripLocalOnly, neutralizeLanguage } from "./content-rules.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -103,6 +103,37 @@ const REWRITE = [
     /docs\/issue-to-pr-skill-workflow\.md/g,
     "docs/pipeline.md",
   ],
+  // Canonical points personas at the operator home (~/.agents/agents/), which
+  // is correct where the skill runs locally. This pack is portable (AGENTS.md
+  // rule 1: no machine specifics), so the pointer is rewritten to this repo's
+  // agents/ directory - the same 17 personas live in both places. The local
+  // copy keeps working; only the published copy is renamed. Paired list first
+  // (Station IV names both the project dir and the home), then standalones.
+  [
+    /`\.agents\/agents\/`,\s*`~\/\.agents\/agents\/`/g,
+    "this repo's `agents/` directory",
+  ],
+  [
+    /`~\/\.agents\/agents\/`/g,
+    "this repo's `agents/` directory",
+  ],
+  // Same idea for skill installs: ~/.agents/skills/<name> is home-local, the
+  // pack path is skills/<name>.
+  [
+    /`~\/\.agents\/skills\//g,
+    "`skills/",
+  ],
+  // Absolute Windows pointer at a canonical skill (the "Skill pointer"
+  // sections in evals/intake.md): home-local, rewritten to the pack skill.
+  // Specific shape first, generic fallback second.
+  [
+    /`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`\s*\(global copy is the single source of truth\)\.?/g,
+    "the `$1` skill in this pack.",
+  ],
+  [
+    /`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`/g,
+    "`skills/$1` in this pack",
+  ],
 ];
 
 // --- Hebrew guard -----------------------------------------------------------
@@ -171,9 +202,24 @@ const STRICT = process.argv.includes("--strict");
 
 // Would the guard above block this canonical file? Same shared rule, so the
 // drift report and the writer can never disagree about a single file.
+// Judged on the SHIPPED bytes (what the writer below actually publishes):
+// text files go through the rewrite pipeline, anything else is byte-copied,
+// so the gate checks rewritten text for the former and raw text for the
+// latter. The broad content gate covers published prose (.md, evals.json),
+// the narrow publication block everything else. A pure language order is
+// neutralized away, a home install is renamed to its portable pack path;
+// Hebrew script still blocks everywhere.
+const shippedText = (src, rel) =>
+  (rel && !TEXT_REWRITE.test(rel) ? read(src) : rewrite(read(src)));
+const shippedViolation = (station, rel) => {
+  if (!isActiveLocalized(station, rel)) return null;
+  const shipped = shippedText(path.join(CANONICAL, station, rel), rel);
+  return (GATE_SCANNED(rel) ? contentViolation(shipped) : blocksPublication(shipped));
+};
 const canonicalIsBlocked = (station, rel) => {
   const src = path.join(CANONICAL, station, rel);
-  return fs.existsSync(src) && blocksPublication(read(src)) !== null;
+  if (!fs.existsSync(src)) return false;
+  return shippedViolation(station, rel) !== null;
 };
 
 function walk(dir, base = dir, out = {}) {
@@ -192,12 +238,20 @@ const read = (f) => fs.readFileSync(f, "utf8").replace(/\r\n/g, "\n");
 // references/output-template.md, the Hebrew chat contract this pack does not
 // publish - with local-only markers. They are stripped on the way in, so the
 // import never lands a dangling pointer at a file the pack does not ship.
+// Reporting-language orders ("Answer in Hebrew", "report in everyday Hebrew")
+// are neutralized at the same time: the pack carries no language choice, the
+// only difference from canonical is the stripped local template pointer.
 const rewrite = (text) =>
-  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), stripLocalOnly(text));
+  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), neutralizeLanguage(stripLocalOnly(text)));
 
-// What this pack SHOULD contain for a file, after rewrites.
-const expected = (src) => rewrite(read(src));
-const same = (src, dest) => read(dest) === expected(src);
+// What this pack SHOULD contain for a file, after rewrites. Text rewrites
+// (marker strip, language neutralize, path rename) apply only to the files
+// the writer rewrites (.md/.json/.yaml); other extensions are byte-copied,
+// so comparing them against a neutralized expectation would invent drift
+// (e.g. a .js comment mentioning the Hebrew template).
+const TEXT_REWRITE = /\.(md|json|ya?ml)$/i;
+const expected = (src, rel) => (rel && !TEXT_REWRITE.test(rel) ? read(src) : rewrite(read(src)));
+const same = (src, dest, rel) => read(dest) === expected(src, rel);
 
 if (!fs.existsSync(CANONICAL)) {
   console.error(`✗ canonical skills root not found: ${CANONICAL}`);
@@ -247,25 +301,15 @@ for (const station of STATIONS) {
 
   for (const [rel, src] of srcFiles) {
     const dest = path.join(to, rel);
-    if (fs.existsSync(dest) && same(src, dest)) continue;
+    if (fs.existsSync(dest) && same(src, dest, rel)) continue;
 
-    // Block canonical content that must not be published verbatim from the
-    // hand-maintained translation (see the Hebrew guard above). Report it,
-    // write nothing, and keep whatever English version is already in the pack.
-    // Portability is checked here too, not only after the fact in
-    // verify-mirror.js - otherwise the copy lands first and is rejected later,
-    // which is the same "sync succeeded, npm run check failed" shape as the
-    // Hebrew leak, one rule narrower (#52).
-    //
-    // blocksPublication, not blocksSync: the character test alone let through
-    // files that ORDER output in Hebrew in plain ASCII ("report in clean,
-    // everyday Hebrew"), and copying those replaced the pack's English output
-    // contracts with Hebrew ones across every station at once.
-    const violation = isActiveLocalized(station, rel)
-      ? GATE_SCANNED(rel)
-        ? contentViolation(stripLocalOnly(read(src)))
-        : blocksPublication(read(src))
-      : null;
+    // Block only what would actually ship unpublishable - judged on the
+    // shipped bytes via shippedViolation, so writer and report agree. A pure
+    // language order ("Answer in Hebrew") is neutralized away, a home install
+    // is renamed to its portable pack path - so neither blocks. The pack copy
+    // is the same text minus the language choice and with portable paths,
+    // differing from canonical only by the stripped local template pointer.
+    const violation = shippedViolation(station, rel);
     if (violation) {
       untranslated.push(`skills/${station}/${rel}`);
       continue;
@@ -275,7 +319,7 @@ for (const station of STATIONS) {
     if (CHECK_ONLY) continue;
     fs.mkdirSync(path.dirname(dest), { recursive: true });
     if (/\.(md|json|ya?ml)$/i.test(rel)) {
-      fs.writeFileSync(dest, expected(src), "utf8");
+      fs.writeFileSync(dest, expected(src, rel), "utf8");
     } else {
       fs.copyFileSync(src, dest);
     }

@@ -50,6 +50,12 @@ gh api graphql -f query='
 Map each `databaseId` back to the REST comment `id` to build the working triage table:
 `(id, threadId, path, start_line, line, body, verdict)`.
 
+**Zero extracted comments is not a verdict.** When extraction returns nothing, do not report a
+clean pass. Check whether the review was `SUMMARY_ONLY` (see `review-loop.md` Step 1 item 6): on a
+private repo on the Free plan that is the expected summary-only shape, and it routes to the Step 2B
+reuse path — Station IV's recorded evidence plus a delta check — not to "the code is approved as
+is". State which case you are in.
+
 #### 2.2 — Single Review Round (Quota-Conscious)
 
 This habit executes **exactly one focused review round** to conserve CodeRabbit quota and prevent indefinite review churn. All valid comments in this single round are triaged, fixed, tested, and resolved, followed directly by CI verification and merge.
@@ -82,13 +88,30 @@ gh api graphql -f query='mutation($t:ID!) { resolveReviewThread(input: {threadId
 
 Rationale must be specific and falsifiable — name the constant, the exception, the file, or the spec/domain rule. NEVER resolve a thread silently without an inline reply, and never leave a rejected comment open.
 
+**Config contradiction → probe resolved config FIRST (before blaming the repo file or re-reviewing).**
+When CodeRabbit's behaviour contradicts the committed `.coderabbit.yaml`, run the configuration
+probe as the first diagnostic step and quote the resolved output in the report:
+
+```bash
+gh pr comment <pr_number> --body "@coderabbitai configuration"
+```
+
+The reply prints the fully resolved config annotated with the **source of every value** (repository
+YAML, central configuration, UI settings, defaults, global overrides), which answers "why is
+CodeRabbit not doing what I configured?" in one command. Compare it against `.coderabbit.yaml`
+before concluding a setting is broken — sources do not merge by default and global overrides win
+everywhere. This command is **chat-gated**: on the Free plan it is refused with the "upgrade to
+CodeRabbit Essentials" notice. Record that refusal as a plan gate and fall back to the reuse path's
+Station IV evidence plus the delta check — never treat the refusal as "config is fine".
+
+### Step 2B — Agent Fallback Review (When CodeRabbit Limit Reached or Silent)
 ---
 
 ### Step 2B — Agent Fallback Review (When CodeRabbit Limit Reached or Silent)
 
 Trigger this step when CodeRabbit reached its review limit, asks to wait 1 hour, or failed to review after the countdown. **The reuse path (item 0) comes first — the full subagent review is the exception, not the default.** Items 1–4 apply to the full fallback only; on the reuse path, skip to its last bullet (delta check → Step 4) and post the honest PR comment with the reuse variant (Station IV review + delta check, not a fresh review).
 
-0. **Reuse Station IV's review before re-reviewing (anti-duplication rule):** If this PR came through `iv-review-build-and-pr`, the diff has ALREADY been through OCR delegation review + stack-matched stack-matched reviewers + the Spec axis, with findings fixed and the final verification gate green. Do NOT invoke a fresh full review of already-reviewed code. Instead:
+0. **Reuse Station IV's review before re-reviewing (anti-duplication rule):** If this PR came through `iv-review-build-and-pr`, the diff has ALREADY been through OCR delegation review + stack-matched reviewers + the Spec axis, with findings fixed and the final verification gate green. Do NOT invoke a fresh full review of already-reviewed code. Instead:
    - Pull Station IV's recorded review findings (the review report / fix commit history: `fix(review): address review feedback` commits, `gh pr view <pr-number> --json commits`), and treat them as the review evidence for this round.
    - Run only a **lightweight delta check**: confirm the pushed diff matches what Station IV reviewed (no commits added after the final gate), re-run the targeted test suite as the evidence of health, and spot-check any area Station IV flagged as low-confidence or skipped (cover exactly that gap with the matching reviewer).
    - Proceed to Step 4 application/merge path with the status carried honestly (`RATE_LIMITED — covered by Station IV review + delta check`).
@@ -97,12 +120,12 @@ Trigger this step when CodeRabbit reached its review limit, asks to wait 1 hour,
    - Launch the dedicated subagent with clean context:
      `invoke_subagent(TypeName="code-reviewer", Role="Code Reviewer", Prompt="Perform multi-axis review of PR <pr-number> diff across correctness, readability, architecture, security, and performance. List concrete actionable findings.")`
    - Review across five axes: correctness/logic bugs, edge cases, performance/limits, security/safety, and test coverage.
-2. **Findings in chat** (English, never a code block — real `##` heading, one bold sentence with the file in backticks, short free quote body with the fix):
-   ## 🎯 Functional Correctness | 🟡 Minor | ⚡ Quick fix
-   **Capture tail and offset from the same file state in `scripts/filter_loop.py`.**
-   > - A line appended during read is quietly lost; take offset before read so ranges overlap.
-   - Vocab (match `docs.coderabbit.ai/change-stack/findings`) — Category: 🎯 Functional Correctness, 🔒 Security & Privacy, 🗄️ Data Integrity & Integration, ⚡ Performance & Scale, 🩺 Reliability & Availability, 📐 Maintainability & Code Quality. Severity: 🔴 Critical, 🟠 Major, 🟡 Minor, ⚪ Trivial. Effort: ⚡ Quick fix, 🏗️ Heavy effort, 🪙 Low value fix, 🚫 Not worth it.
-3. **Decide per finding:** critical/major block merge; minor when cheap; trivial/low-value only when touching that code, else declined with reason; poor tradeoffs declined; drop lows unless clearly useful. End chat with a single next-step line naming `vi-close-pipeline <id>` — no test counts, no process narration; the agent pushes and merges itself.
+2. **Findings in chat** (never a code block — real `##` heading, one bold sentence with the file in backticks, short free quote body with the fix):
+   ## 🎯 Functional correctness | 🟡 Minor | ⚡ Quick fix
+   **Catch the tail and the offset from the same file state in `scripts/filter_loop.py`.**
+   > - A line added mid-read is silently lost; take the offset before reading so the ranges overlap.
+   - Vocab (match `docs.coderabbit.ai/change-stack/findings`) — Category: 🎯 Functional correctness, 🔒 Security & privacy, 🗄️ Data integrity & integration, ⚡ Performance & scale, 🩺 Stability & availability, 📐 Maintenance & code quality. Severity: 🔴 Critical, 🟠 Major, 🟡 Minor, ⚪ Trivial. Effort: ⚡ Quick fix, 🏗️ Heavy lift, 🪙 Cheap high-value fix, 🚫 Not worth it.
+3. **Decide per finding:** critical/major block merge; minor when cheap; trivial/low-value only when touching that code, else declined with reason; poor tradeoffs declined; drop lows unless clearly useful. End chat with a single Next line naming `vi-close-pipeline <id>` — no test counts, no process narration; the agent pushes and merges itself.
 4. **Document & Triage:**
    - Note any real issues found as **ACCEPT** items and apply fixes immediately via Step 4.
    - Post a concise review comment to the PR — pick the honest reason, never a generic one. Variants: timeout (PR #244 case), rate-limit, and reuse (Station IV coverage + delta check, no fresh review):
@@ -184,7 +207,7 @@ git commit -m "fix(review): apply CodeRabbit review fixes [accepted items]"
 git push origin <branch-name>
 ```
 
-Do NOT re-trigger `@coderabbitai review` or wait for a secondary review pass. Advance immediately to Step 4.4 and CI verification.
+**HARD RULE — no second trigger, ever:** do NOT re-post `@coderabbitai review` and do NOT wait for a secondary review pass. The PR is trigger-locked for the rest of the pipeline: the earlier trigger already consumed the review, and any new trigger would only hit the rate limit. Push the commit, then advance immediately to Step 4.4 and CI verification — if the `CodeRabbit` check is still `PENDING`, that is expected and is excluded from the merge gate (see the timeout-merge rule in `SKILL.md`).
 
 #### 4.4 — Actively Reply and Resolve Addressed Threads (MANDATORY: Reply First, Never Resolve Blindly)
 
