@@ -25,6 +25,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { classifyDrift, driftExitCode } from "./drift-policy.js";
 import { blocksPublication, contentViolation, stripLocalOnly, neutralizeLanguage } from "./content-rules.js";
+import { walkFiles as walk } from "./walk.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -221,17 +222,6 @@ const canonicalIsBlocked = (station, rel) => {
   if (!fs.existsSync(src)) return false;
   return shippedViolation(station, rel) !== null;
 };
-
-function walk(dir, base = dir, out = {}) {
-  if (!fs.existsSync(dir)) return out;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === "node_modules" || entry.name === ".git") continue;
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, base, out);
-    else out[path.relative(base, full).split(path.sep).join("/")] = full;
-  }
-  return out;
-}
 
 const read = (f) => fs.readFileSync(f, "utf8").replace(/\r\n/g, "\n");
 // Canonical marks its machine-local sections - chiefly the pointer to
