@@ -24,6 +24,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { walkFiles } from './walk.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const VERSION_FILE = path.join(ROOT, 'VERSION');
@@ -43,17 +44,6 @@ const SITE_DOCS_HTML = path.join(SITE_DIR, 'docs', 'index.html');
 const SKILLS_DIR = path.join(ROOT, 'skills');
 
 // --- Helper Functions ---
-
-function walkFiles(dir, base = dir, out = {}) {
-  if (!fs.existsSync(dir)) return out;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === 'node_modules' || entry.name === '.git') continue;
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) walkFiles(full, base, out);
-    else out[path.relative(base, full).split(path.sep).join('/')] = full;
-  }
-  return out;
-}
 
 function parseFrontmatter(fileContent) {
   const cleanContent = fileContent.replace(/\r\n/g, '\n');
