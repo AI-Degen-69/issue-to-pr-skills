@@ -601,6 +601,7 @@ function renderStations(){
           <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${s.id}</div>
           <div class="mt-1 text-xs font-medium text-white/50">${s.title}</div>
           <p class="mt-2.5 text-sm leading-relaxed text-white/70">${s.desc}</p>
+          ${plainBlockHtml(s)}
         </div>
         <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${s.id}" target="_blank" class="mt-3.5 inline-flex text-xs font-semibold ${cfg.openLinkClass}">View SKILL.md ↗</a>
       </div>
@@ -619,6 +620,7 @@ function renderStations(){
           <div class="font-mono text-sm font-semibold text-white whitespace-nowrap truncate">/${sys.id}</div>
           <div class="text-[11px] text-amber-300/80 font-mono mt-0.5">${sys.command}</div>
           <p class="mt-2.5 text-sm leading-relaxed text-white/70">${sys.desc}</p>
+          ${plainBlockHtml(sys)}
         </div>
         <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/tree/main/skills/${sys.id}" target="_blank" class="mt-4 inline-flex text-xs font-semibold text-zinc-200 hover:text-white">View SKILL.md ↗</a>
       </div>
@@ -699,8 +701,25 @@ function renderSkillCardHtml(s){
     </div>
     <div class="mt-3 font-mono text-[13px] font-semibold text-white">${s.name}</div>
     <div class="mt-1 text-sm leading-6 text-white/60 line-clamp-3">${s.desc}</div>
+    ${plainBlockHtml(s)}
     <div class="mt-3 text-xs font-semibold ${linkColor}">Open SKILL.md →</div>
   </a>`;
+}
+
+// Plain-language line for a skill card. Falls back to the technical
+// description when no translation exists, so a skill added without one
+// degrades to today's behaviour instead of rendering an empty box.
+// Station and system-skill objects carry `id`; catalog entries carry `name`.
+function plainBlockHtml(s){
+  const key = s.name || s.id;
+  const p = (window.PLAIN_SKILLS && key && window.PLAIN_SKILLS[key]) || null;
+  if(!p || !p.plain) return '';
+  return `
+    <div class="mt-3 pt-3 border-t border-white/10">
+      <div class="text-[10px] uppercase tracking-widest text-amber-200/70 font-semibold">In plain words</div>
+      <p class="mt-1 text-sm leading-6 text-white/80">${p.plain}</p>
+      ${p.analogy ? `<p class="mt-1.5 text-xs leading-5 text-white/45 italic">Think of it as: ${p.analogy}</p>` : ''}
+    </div>`;
 }
 
 function setStationFilter(f){

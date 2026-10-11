@@ -424,6 +424,19 @@ function getSkillIconSvg(iconType) {
   }
 }
 
+// Plain-language line for a skill card in the flow view.
+// Looks up the skill by id, then by name (some entries use one for the other).
+function plainSkillLineHtml(skillId, skillName){
+  const p = (window.PLAIN_SKILLS && (window.PLAIN_SKILLS[skillId] || window.PLAIN_SKILLS[skillName])) || null;
+  if(!p || !p.plain) return '';
+  return `
+    <div class="mt-2 pt-2 border-t border-white/10">
+      <div class="text-[9px] uppercase tracking-widest text-amber-200/70 font-semibold">In plain words</div>
+      <p class="mt-0.5 text-xs sm:text-sm text-white/80 leading-relaxed">${p.plain}</p>
+      ${p.analogy ? `<p class="mt-1 text-[11px] text-white/45 italic">Think of it as: ${p.analogy}</p>` : ''}
+    </div>`;
+}
+
 // Render the station flow view
 function renderStationsFlow() {
   const container = document.getElementById('stationsFlowContainer');
@@ -477,6 +490,7 @@ function renderStationsFlow() {
           <div class="flex-1 min-w-0">
             <div class="font-bold text-white text-[15px] sm:text-[16px] leading-snug group-hover:text-amber-100 transition-colors">${HUMAN_TITLES[skill.id] || HUMAN_TITLES[skill.name] || skill.title}</div>
             <div class="text-xs sm:text-sm text-white/60 mt-1 line-clamp-2 leading-relaxed">${skill.desc}</div>
+            ${plainSkillLineHtml(skill.id, skill.name)}
           </div>
         </div>
         <div class="shrink-0">${isAgent ? '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-md shrink-0" style="color:#fcd34d;background:rgba(245,158,11,.15);border:1px solid rgba(251,191,36,.45)">AGENT →</span>' : '<span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full shrink-0" style="color:#67e8f9;background:rgba(6,182,212,.12);border:1px solid rgba(34,211,238,.4)">SKILL →</span>'}
@@ -620,6 +634,18 @@ function openSkillModal(skillId, stationId) {
     <div class="mt-6 text-[15px] leading-relaxed text-white/80">
       ${foundSkill.desc}
     </div>
+
+    <!-- Plain-language explanation (first, before the technical line) -->
+    ${(() => {
+      const p = (window.PLAIN_SKILLS && (window.PLAIN_SKILLS[foundSkill.id] || window.PLAIN_SKILLS[foundSkill.name])) || null;
+      if(!p || !p.plain) return '';
+      return `
+      <div class="mt-5 rounded-xl border border-amber-200/20 bg-amber-400/[.06] p-4">
+        <div class="text-[10px] uppercase tracking-widest text-amber-200/80 font-semibold">In plain words</div>
+        <p class="mt-1.5 text-[15px] leading-relaxed text-white/90">${p.plain}</p>
+        ${p.analogy ? `<p class="mt-2 text-xs text-white/50 italic">Think of it as: ${p.analogy}</p>` : ''}
+      </div>`;
+    })()}
 
     <!-- Invoked by stations -->
     <div class="mt-6 pt-5 border-t border-white/10">
