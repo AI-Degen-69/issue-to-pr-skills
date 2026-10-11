@@ -24,6 +24,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { parseFrontmatter } from './frontmatter.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const VERSION_FILE = path.join(ROOT, 'VERSION');
@@ -55,37 +56,14 @@ function walkFiles(dir, base = dir, out = {}) {
   return out;
 }
 
-function parseFrontmatter(fileContent) {
-  const cleanContent = fileContent.replace(/\r\n/g, '\n');
-  if (!cleanContent.startsWith('---')) return {};
-  const end = cleanContent.indexOf('\n---', 3);
-  if (end === -1) return {};
-  const fm = cleanContent.slice(3, end);
-  const lines = fm.split('\n');
-  const res = {};
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trimEnd();
-    const m = line.match(/^(\w+):\s*(.*)$/);
-    if (m) {
-      const key = m[1];
-      let val = m[2].trim().replace(/^['"]|['"]$/g, '');
-      if (!val || /^(\||>)[+-]?$/.test(val)) {
-        const buf = [];
-        for (let j = i + 1; j < lines.length; j++) {
-          const nxt = lines[j];
-          if (/^\s{2,}\S/.test(nxt) || /^\t+\S/.test(nxt)) {
-            buf.push(nxt.trim());
-          } else {
-            break;
-          }
-        }
-        val = buf.join(' ');
-      }
-      res[key] = val;
-    }
-  }
-  return res;
-}
+/**
+ * Parse a SKILL.md-style frontmatter block into a flat object.
+ *
+ * The single shared implementation lives in scripts/frontmatter.js (tested by
+ * scripts/frontmatter.test.js). It replaced a copy that used to live here;
+ * keeping a second one would let the validator and this hash gate disagree
+ * about a skill's description.
+ */
 
 export function extractSkillsData() {
   const list = [];
