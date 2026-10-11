@@ -49,6 +49,7 @@
     <div>
       <h2 class="text-[24px] font-bold">All 17 agents</h2>
       <p class="text-white/60 text-sm">Plain description + when they run. Click to open the persona.</p>
+      <p class="text-white/50 text-xs mt-1">Each one carries an <span class="text-amber-200/80">"In plain words"</span> line — what it checks, without the jargon.</p>
     </div>
 
     <!-- Search Input Component -->
@@ -95,7 +96,8 @@
 
   <div id="agentGrid" class="mt-6 grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
 </section>
-<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · <span id="siteVersionFooter">Version: 13.9</span> · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · <span id="siteVersionFooter">Version: 14.0</span> · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+<script src="../plain-agents.js"></script>
 <script>
 const AGENTS=[
   ['code-reviewer','General','Checks overall quality: would a senior engineer approve?',true],
@@ -242,6 +244,19 @@ function getAgentIconHtml(id, role){
   </div>`;
 }
 
+// Plain-language block for an agent card. Falls back to nothing when no
+// translation exists, so a persona added without one keeps today's layout.
+function plainAgentBlockHtml(id){
+  const p = (window.PLAIN_AGENTS && window.PLAIN_AGENTS[id]) || null;
+  if(!p || !p.plain) return '';
+  return `
+      <div class="mt-3 pt-3 border-t border-white/10">
+        <div class="text-[10px] uppercase tracking-widest text-amber-200/70 font-semibold">In plain words</div>
+        <p class="mt-1 text-sm leading-6 text-white/80">${p.plain}</p>
+        ${p.analogy ? `<p class="mt-1.5 text-xs leading-5 text-white/45 italic">Think of it as: ${p.analogy}</p>` : ''}
+      </div>`;
+}
+
 function renderAgentGrid(forcedQuery){
   const input = document.getElementById('agentSearch');
   if(forcedQuery !== undefined && input) {
@@ -326,6 +341,7 @@ function renderAgentGrid(forcedQuery){
       <div class="mt-3 font-mono text-sm font-semibold text-white group-hover:text-amber-100 transition-colors">${id}</div>
       <div class="text-xs text-white/50">${role}</div>
       <div class="mt-1 text-sm text-white/60 leading-5">${desc}</div>
+      ${plainAgentBlockHtml(id)}
     </a>`;
   }).join('');
 }
