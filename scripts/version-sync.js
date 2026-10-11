@@ -65,6 +65,15 @@ function walkFiles(dir, base = dir, out = {}) {
  * about a skill's description.
  */
 
+/**
+ * Read every skill's name and description from its SKILL.md frontmatter.
+ *
+ * Sorted by name for a stable catalog. Used by the site sync and the version
+ * gate's catalog diff, so the order it returns is what the published
+ * site/skills.json is compared against.
+ *
+ * @returns {{name: string, desc: string}[]} Skills with their descriptions.
+ */
 export function extractSkillsData() {
   const list = [];
   const entries = fs.readdirSync(SKILLS_DIR).sort();
