@@ -246,6 +246,16 @@ Restore file-by-file, never `stash pop` the whole entry: the entry usually carri
 
 When the working tree holds a change you did not make, do not bundle it silently and do not silently drop it either. State in one or two plain sentences what it does to the running system and where it lands, then ask whether it belongs in this push. "I'll include everything in the tree" hides a stranger's edit inside your commit; discarding it loses work someone may still need. Report any file you deliberately left untracked or uncommitted so the operator knows it is still there.
 
+**Stage by explicit path when the tree is mixed.** With pre-existing modifications or untracked files present, `git add -A` / `git commit -a` sweeps them into your commit. Stage only the paths your change owns, then confirm the staged set is exactly your change:
+
+```bash
+git status --porcelain       # everything dirty, before staging
+git add path/a path/b        # explicit paths only
+git diff --cached --stat     # the staged set must be exactly your change
+```
+
+Name in the closeout which files were deliberately left unstaged or untracked.
+
 ### Restoring a bad restore: scope the pathspec to the damage
 
 `git checkout HEAD -- <path>` restores every tracked file under that path from HEAD — it is not "undo my last mistake", it is "revert this whole tree to the last commit". Running it to undo a deletion of `evals/` will also silently revert every uncommitted skill edit sitting in the same tree, and you will not notice until the sync check reports hash mismatches you thought you had fixed.

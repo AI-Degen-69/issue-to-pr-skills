@@ -1,8 +1,8 @@
 {
-  "version": "14.1",
-  "label": "Version: 14.1",
-  "contentHash": "40df61c1fe",
+  "version": "15.1",
+  "label": "Version: 15.1",
+  "contentHash": "f974270e22",
   "skillsCount": 47,
-  "lastUpdated": "2026-10-11T14:37:03.469Z",
-  "lastChangeType": "--doc"
+  "lastUpdated": "2026-10-11T20:12:25.270Z",
+  "lastChangeType": "skill"
 }
