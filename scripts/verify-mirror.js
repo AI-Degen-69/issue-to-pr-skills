@@ -5,6 +5,7 @@ import os from "node:os";
 import crypto from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { contentViolation, stripLocalOnly, neutralizeLanguage } from "./content-rules.js";
+import { TEXT_REWRITE, applyRewrites } from "./rewrites.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const TARGET_DIR = path.join(ROOT, "skills");
@@ -101,23 +102,11 @@ if (!fs.existsSync(TARGET_DIR)) {
 }
 
 // Mirror-specific rewrites. Canonical is authoritative for content, but this
-// pack is public and portable, so a few paths are renamed on the way in (see
-// scripts/sync-from-canonical.js, which applies the same table). Compare against
-// the rewritten form, otherwise every rewritten file is a false hash mismatch.
-const REWRITE = [
-  // Canonical: docs/issue-to-pr-skill-workflow.md. This pack: docs/pipeline.md.
-  [/docs\/issue-to-pr-skill-workflow\.md/g, "docs/pipeline.md"],
-  // Home persona install (~/.agents/agents/) becomes this repo's agents/
-  // directory - same 17 personas in both places (see sync-from-canonical.js,
-  // which applies the same table; the local copy keeps its home path).
-  [/`\.agents\/agents\/`,\s*`~\/\.agents\/agents\/`/g, "this repo's `agents/` directory"],
-  [/`~\/\.agents\/agents\/`/g, "this repo's `agents/` directory"],
-  // Home skill install (~/.agents/skills/<name>) becomes the pack path.
-  [/`~\/\.agents\/skills\//g, "`skills/"],
-  // Absolute Windows pointer at a canonical skill becomes the pack skill.
-  [/`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`\s*\(global copy is the single source of truth\)\.?/g, "the `$1` skill in this pack."],
-  [/`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`/g, "`skills/$1` in this pack"],
-];
+// pack is public and portable, so a few paths are renamed on the way in. The
+// table and the text-extension predicate live in scripts/rewrites.js, shared
+// with the writer (sync-from-canonical.js), so the gate and the verifier can
+// never disagree about what gets published. Compare against the rewritten
+// form, otherwise every rewritten file is a false hash mismatch.
 
 function sha256(filePath, rel = "") {
   // The same strip + neutralize the writer applies to text files, or every
@@ -126,9 +115,8 @@ function sha256(filePath, rel = "") {
   // rather than found in the content. Non-text extensions are byte-copied, so
   // compare them raw (normalized line endings only).
   let content = fs.readFileSync(filePath, "utf8").replace(/\r\n/g, "\n");
-  if (/\.(md|json|ya?ml)$/i.test(rel)) {
-    content = neutralizeLanguage(stripLocalOnly(content));
-    for (const [re, to] of REWRITE) content = content.replace(re, to);
+  if (TEXT_REWRITE.test(rel)) {
+    content = applyRewrites(neutralizeLanguage(stripLocalOnly(content)));
   }
   return crypto.createHash("sha256").update(content).digest("hex");
 }

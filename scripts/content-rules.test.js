@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { contentViolation, blocksSync, blocksPublication, stripLocalOnly, localizeToEnglish, neutralizeLanguage } from './content-rules.js';
+import { REWRITE } from './rewrites.js';
 
 test('plain English passes', () => {
   assert.equal(contentViolation('Nothing wrong here.\n'), null);
@@ -307,24 +308,25 @@ test('neutralizeLanguage is a no-op without a language mention', () => {
 });
 
 test('the writer and the mirror gate apply the same rewrite table', () => {
-  // The home-to-portable renames live in two files by hand (sync writes with
-  // its table, the gate hashes with its own). If they ever disagree, every
-  // renamed file becomes a false mismatch, so the tables must be identical.
+  // The home-to-portable renames USED to live in two files by hand (sync wrote
+  // with its table, the gate hashed with its own), and this test scraped both
+  // tables by regex and compared them - fragile, and only able to catch a
+  // mismatch after someone edited one copy. The table now lives once in
+  // scripts/rewrites.js, shared by both, so disagreement is structurally
+  // impossible. This test keeps the intent by asserting the single source and
+  // that neither consumer re-declares its own table.
   const here = path.resolve(import.meta.dirname);
-  const table = (file) => {
-    const text = fs.readFileSync(path.join(here, file), 'utf8');
-    const block = text.match(/const REWRITE = \[([\s\S]*?)\n\];/);
-    assert.ok(block, `${file} no longer declares a REWRITE table`);
-    // Compare (pattern, replacement) pairs, not formatting: the two files lay
-    // the same table out differently (expanded vs compact entries).
-    const pairs = [...block[1].matchAll(/\[\s*(\/(?:[^/\n\\]|\\.)+\/[a-z]*)\s*,\s*("(?:[^"\n\\]|\\.)*")\s*,?\s*\]/g)]
-      .map((m) => [m[1], JSON.parse(m[2])]);
-    assert.ok(pairs.length > 0, `${file} REWRITE table parsed to zero entries`);
-    return pairs;
-  };
-  assert.deepEqual(
-    table('verify-mirror.js'),
-    table('sync-from-canonical.js'),
-    'REWRITE tables disagree - copy the change to both files'
-  );
+  const read = (f) => fs.readFileSync(path.join(here, f), 'utf8');
+
+  // The shared module is the single source of the pairs.
+  assert.ok(Array.isArray(REWRITE) && REWRITE.length > 0, 'rewrites.js exports no REWRITE table');
+
+  // Neither consumer declares its own table anymore.
+  for (const file of ['sync-from-canonical.js', 'verify-mirror.js']) {
+    assert.doesNotMatch(
+      read(file),
+      /const\s+REWRITE\s*=/,
+      `${file} re-declares its own REWRITE table - it must import from scripts/rewrites.js`
+    );
+  }
 });
