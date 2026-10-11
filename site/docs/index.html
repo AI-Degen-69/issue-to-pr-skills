@@ -66,26 +66,46 @@
   </div>
 </section>
 <section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
-  <h2 class="text-[24px] font-bold">Why it works: 3 failures it prevents</h2>
+  <h2 class="text-[24px] font-bold">Why it works: 3 mistakes it stops</h2>
+  <p class="mt-1 text-white/60 text-sm max-w-[720px]">A normal AI tends to take the shortcut. Each of these is a checkpoint that makes it stop and prove itself first.</p>
   <div class="mt-4 grid lg:grid-cols-3 gap-4 text-sm">
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">No spec → the AI guesses</div><div class="mt-1 text-white/60">Station II writes the plan before any code, so the agent builds what you asked.</div></div>
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">No proof → “seems right” ships</div><div class="mt-1 text-white/60">Stations III and IV demand passing tests or live browser proof. Nothing merges on vibes.</div></div>
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Rubber-stamp review</div><div class="mt-1 text-white/60">Station IV brings a panel of specialists, and checks the spec separately from style.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Building the wrong thing</div><div class="mt-1 text-white/60">Before any code, the AI writes down the plan and the rules it must not break — so it builds what you actually asked for, not what it guessed.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Shipping something broken</div><div class="mt-1 text-white/60">The AI has to <em class="text-white not-italic">show</em> it works — a passing check or a real look in the browser — before anything can be merged. No "looks fine to me".</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">A review that approves everything</div><div class="mt-1 text-white/60">Instead of one rubber stamp, several specialists each check their own angle, and the "did we build the right thing" check is kept separate from the "is it built well" check.</div></div>
   </div>
   <h2 class="mt-10 text-[24px] font-bold">Your first 10 minutes</h2>
-  <div class="mt-4 rounded-xl bg-white/5 border border-white/10 p-4 text-sm text-white/60">1. Install with one command → 2. Open a repo and type <code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code> → 3. Follow the stations. Each one ends with the single next step.</div>
+  <p class="mt-1 text-white/60 text-sm max-w-[720px]">Three steps. You do not need to read any code.</p>
+  <ol class="mt-4 grid lg:grid-cols-3 gap-4 text-sm list-none">
+    <li class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="text-amber-200/70 font-semibold">Step 1</div><div class="mt-1 font-semibold">Install</div><div class="mt-1 text-white/60">Run one command (see "3 ways in" above). It gives your AI all 47 skills at once.</div></li>
+    <li class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="text-amber-200/70 font-semibold">Step 2</div><div class="mt-1 font-semibold">Open a project and start</div><div class="mt-1 text-white/60">Open any project folder, then type <code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code>. The AI lists the open tasks and suggests which to do first.</div></li>
+    <li class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="text-amber-200/70 font-semibold">Step 3</div><div class="mt-1 font-semibold">Let it run, step by step</div><div class="mt-1 text-white/60">Follow the stations. Each one finishes with a short report — what it did, proof it works, and the one next step. Nothing is guessed.</div></li>
+  </ol>
   <p class="mt-4 text-sm text-white/50">Changes land in <a href="https://github.com/AI-Degen-69/issue-to-pr-skills/blob/main/CHANGELOG.md" target="_blank" class="underline hover:text-white">CHANGELOG.md</a>, one line per fix.</p>
 </section>
 <section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
   <h2 class="text-[24px] font-bold">Tutorials: pick your path</h2>
+  <p class="mt-1 text-white/60 text-sm max-w-[720px]">What to type, depending on what you are trying to do.</p>
   <div class="mt-4 grid lg:grid-cols-3 gap-4 text-sm">
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">New app</div><div class="mt-1 text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/create-issue</code> your idea → plan → build → showcase.</div></div>
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Add a feature</div><div class="mt-1 text-white/60"><code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code> → <code class="px-1 py-0.5 rounded bg-white/10">/ii-plan-issue</code> → build → merge.</div></div>
-    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Fix a bug</div><div class="mt-1 text-white/60">Plan the reproduction → fix with tests → review → close.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Start something new</div><div class="mt-1 text-white/60">You have an idea, not a task yet. Type <code class="px-1 py-0.5 rounded bg-white/10">/create-issue</code> and describe it in a sentence. The AI researches it and writes it up as a proper task, then plans, builds, and shows you the result.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Add a feature</div><div class="mt-1 text-white/60">There is already a task for it. Type <code class="px-1 py-0.5 rounded bg-white/10">/i-pick-issue</code>, pick it, and the AI plans it, builds it in small steps, gets it reviewed, and merges it once everything passes.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Fix something broken</div><div class="mt-1 text-white/60">Describe what is going wrong. The AI first reproduces the problem, fixes the actual cause (not just the symptom), adds a check so it cannot come back, then reviews and closes.</div></div>
   </div>
   <h2 class="mt-10 text-[24px] font-bold">How it compares</h2>
+  <p class="mt-1 text-white/60 text-sm max-w-[720px]">What you get here versus dropping a single generic skill into your AI.</p>
   <div class="mt-4 overflow-x-auto">
-    <table class="w-full text-sm"><thead class="text-white/50"><tr><th class="text-left font-medium pb-2"></th><th class="text-left font-medium pb-2">Generic skills</th><th class="text-left font-medium pb-2">This pipeline</th></tr></thead><tbody class="divide-y divide-white/5"><tr><td class="py-2 font-semibold">Scope</td><td class="py-2 text-white/60">Single tasks</td><td class="py-2 text-white/60">Whole issue, idea to merge</td></tr><tr><td class="py-2 font-semibold">Proof</td><td class="py-2 text-white/60">Optional</td><td class="py-2 text-white/60">Gate before every review</td></tr><tr><td class="py-2 font-semibold">Review</td><td class="py-2 text-white/60">One pass</td><td class="py-2 text-white/60">Panel, spec split from style</td></tr><tr><td class="py-2 font-semibold">Closeout</td><td class="py-2 text-white/60">Up to you</td><td class="py-2 text-white/60">Station VI prunes and hands off</td></tr></tbody></table>
+    <table class="w-full text-sm"><thead class="text-white/50"><tr><th class="text-left font-medium pb-2"></th><th class="text-left font-medium pb-2">A single generic skill</th><th class="text-left font-medium pb-2">This full pipeline</th></tr></thead><tbody class="divide-y divide-white/5"><tr><td class="py-2 font-semibold">How much it handles</td><td class="py-2 text-white/60">One small task at a time</td><td class="py-2 text-white/60">The whole job, from idea to finished and merged</td></tr><tr><td class="py-2 font-semibold">Proof it works</td><td class="py-2 text-white/60">Optional, often skipped</td><td class="py-2 text-white/60">Required before every review — it must show you</td></tr><tr><td class="py-2 font-semibold">Who checks it</td><td class="py-2 text-white/60">One quick pass</td><td class="py-2 text-white/60">Several specialists, and a separate "right thing?" check</td></tr><tr><td class="py-2 font-semibold">After it finishes</td><td class="py-2 text-white/60">You clean up the leftovers</td><td class="py-2 text-white/60">It tidies up and marks everything done for you</td></tr></tbody></table>
+  </div>
+</section>
+<section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
+  <h2 class="text-[24px] font-bold">Common worries, answered plainly</h2>
+  <p class="mt-1 text-white/60 text-sm max-w-[720px]">The questions first-timers ask before trusting an AI with their project.</p>
+  <div class="mt-4 grid md:grid-cols-2 gap-4 text-sm">
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">What if the AI gets it wrong?</div><div class="mt-1 text-white/60">It is not allowed to guess past a gate. If it cannot prove a step works, it stops and tells you what is missing instead of carrying on. Every change is reversible, and it never pushes anything without showing you first.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">What if it changes something I did not ask for?</div><div class="mt-1 text-white/60">The plan is written and agreed before any change is made, so it works to that plan. If a change turns out to be outside it, it flags it rather than quietly doing it.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Can I stop partway and come back?</div><div class="mt-1 text-white/60">Yes. Nothing is lost if you stop. When you return, type <code class="px-1 py-0.5 rounded bg-white/10">/pipeline-triage</code> and it checks exactly where things left off and points to the next step — no re-explaining needed.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Does it need anything installed?</div><div class="mt-1 text-white/60">Just <code class="px-1 py-0.5 rounded bg-white/10">git</code> and <code class="px-1 py-0.5 rounded bg-white/10">gh</code> (GitHub's tool). Everything else is optional — if the extra reviewer is not set up, the AI does the review itself instead.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">Is it going to cost me anything?</div><div class="mt-1 text-white/60">No. It is free and open-source forever. You only pay for the AI you already use to run it.</div></div>
+    <div class="rounded-xl bg-white/5 border border-white/10 p-4"><div class="font-semibold">What if I just have a tiny fix?</div><div class="mt-1 text-white/60">You do not have to run the full process. Type <code class="px-1 py-0.5 rounded bg-white/10">/quick-fix</code> for a one-line change like a typo. It double-checks the change is safe to do quickly, then does it.</div></div>
   </div>
 </section>
 <section class="mx-auto max-w-[1200px] px-5 lg:px-8 pb-12">
@@ -94,7 +114,7 @@
     <table class="w-full text-sm"><thead class="text-white/50"><tr><th class="text-left font-medium pb-2">Layer</th><th class="text-left font-medium pb-2">Paths</th><th class="text-left font-medium pb-2">Purpose</th></tr></thead><tbody class="divide-y divide-white/5"><tr><td class="py-2 font-mono">Shared core</td><td class="py-2 font-mono">skills/ (47)</td><td class="py-2 text-white/60">Workflows</td></tr><tr><td class="py-2 font-mono">Reviewers</td><td class="py-2 font-mono">agents/ (17)</td><td class="py-2 text-white/60">Specialists</td></tr><tr><td class="py-2 font-mono">Docs</td><td class="py-2 font-mono">docs/</td><td class="py-2 text-white/60">Guides</td></tr><tr><td class="py-2 font-mono">Site</td><td class="py-2 font-mono">site/</td><td class="py-2 text-white/60">This website</td></tr></tbody></table>
   </div>
 </section>
-<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · <span id="siteVersionFooter">Version: 14.0</span> · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
+<footer class="border-t border-white/10"><div class="mx-auto max-w-[1200px] px-5 lg:px-8 py-6 text-sm text-white/50 flex justify-between"><span>© 2026 issue-to-pr-skills · <span id="siteVersionFooter">Version: 14.1</span> · MIT</span><a href="../" class="hover:text-white">← Home</a></div></footer>
 <script src="../shared-interactions.js"></script>
 </body>
 </html>
