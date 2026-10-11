@@ -15,47 +15,12 @@
 // distinct tokens are not skill or agent names at all (main, open, name,
 // pytest, curl, master...), so turning it back on would be noise, not a gate.
 // See scripts/validate-coverage.test.js for what guards this file now.
-import fs from "node:fs";
-import path from "node:path";
+import fs from 'node:fs';
+import path from 'node:path';
+import { parseFrontmatter } from './frontmatter.js';
 
-const ROOT = path.resolve(import.meta.dirname, "..");
-const SKILLS_DIR = path.join(ROOT, "skills");
-
-function readFrontmatter(file) {
-  const text = fs.readFileSync(file, "utf8");
-  if (!text.startsWith("---")) return null;
-  const end = text.indexOf("\n---", 3);
-  if (end === -1) return null;
-  const fm = text.slice(3, end);
-  const obj = {};
-  const lines = fm.split("\n");
-  for (let i = 0; i < lines.length; i++) {
-    const m = parseLine(lines[i]);
-    if (m) {
-      let val = m[2].trim().replace(/^["']|["']$/g, "");
-      // YAML folded/literal: description on next indented lines
-      if (!val || /^(\||>)[+-]?$/.test(val)) {
-        const buf = [];
-        for (let j = i + 1; j < lines.length; j++) {
-          const nxt = lines[j];
-          if (/^\s{2,}\S/.test(nxt) || /^\t+\S/.test(nxt)) buf.push(nxt.trim());
-          else break;
-        }
-        if (buf.length) val = buf.join(" ");
-      }
-      obj[m[1]] = val;
-    }
-  }
-  // multiline description: keep first line is enough for validation
-  return obj;
-}
-
-function parseLine(line) {
-  // handle CRLF: strip trailing \r
-  const clean = line.replace(/\r$/, "");
-  const m = clean.match(/^(\w+):\s*(.*)$/);
-  return m;
-}
+const ROOT = path.resolve(import.meta.dirname, '..');
+const SKILLS_DIR = path.join(ROOT, 'skills');
 
 function fail(msg) {
   console.error(`✗ ${msg}`);
@@ -83,8 +48,12 @@ for (const dir of skillDirs) {
     errors++;
     continue;
   }
-  const fm = readFrontmatter(md);
-  if (!fm) {
+  // The shared parser returns {} for absent or unterminated frontmatter, where
+  // the old local copy returned null. Treat the empty object as "missing"
+  // explicitly — `!fm` is truthy for {} and would turn every malformed
+  // SKILL.md into a silent pass.
+  const fm = parseFrontmatter(fs.readFileSync(md, 'utf8'));
+  if (Object.keys(fm).length === 0) {
     fail(`${folder}: missing or malformed frontmatter`);
     errors++;
     continue;
