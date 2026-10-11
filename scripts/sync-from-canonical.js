@@ -26,6 +26,7 @@ import path from "node:path";
 import { classifyDrift, driftExitCode } from "./drift-policy.js";
 import { blocksPublication, contentViolation, stripLocalOnly, neutralizeLanguage } from "./content-rules.js";
 import { walkFiles as walk } from "./walk.js";
+import { TEXT_REWRITE, applyRewrites } from "./rewrites.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const CANONICAL = process.env.AGENTS_HOME
@@ -98,44 +99,9 @@ const EXCLUDE = [
 // Mirror-specific rewrites applied AFTER copying. Canonical is authoritative for
 // content, but this pack is public and portable, so a few paths are renamed
 // here. Without these, every sync would revert them and re-break the links.
-const REWRITE = [
-  // Canonical: docs/issue-to-pr-skill-workflow.md. This pack: docs/pipeline.md.
-  [
-    /docs\/issue-to-pr-skill-workflow\.md/g,
-    "docs/pipeline.md",
-  ],
-  // Canonical points personas at the operator home (~/.agents/agents/), which
-  // is correct where the skill runs locally. This pack is portable (AGENTS.md
-  // rule 1: no machine specifics), so the pointer is rewritten to this repo's
-  // agents/ directory - the same 17 personas live in both places. The local
-  // copy keeps working; only the published copy is renamed. Paired list first
-  // (Station IV names both the project dir and the home), then standalones.
-  [
-    /`\.agents\/agents\/`,\s*`~\/\.agents\/agents\/`/g,
-    "this repo's `agents/` directory",
-  ],
-  [
-    /`~\/\.agents\/agents\/`/g,
-    "this repo's `agents/` directory",
-  ],
-  // Same idea for skill installs: ~/.agents/skills/<name> is home-local, the
-  // pack path is skills/<name>.
-  [
-    /`~\/\.agents\/skills\//g,
-    "`skills/",
-  ],
-  // Absolute Windows pointer at a canonical skill (the "Skill pointer"
-  // sections in evals/intake.md): home-local, rewritten to the pack skill.
-  // Specific shape first, generic fallback second.
-  [
-    /`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`\s*\(global copy is the single source of truth\)\.?/g,
-    "the `$1` skill in this pack.",
-  ],
-  [
-    /`[A-Za-z]:[\\/]Users[\\/][^`]*?\.agents[\\/]skills[\\/]([^`\\/]+)`/g,
-    "`skills/$1` in this pack",
-  ],
-];
+// The table and the text-extension predicate live in scripts/rewrites.js, shared
+// with the gate (verify-mirror.js) so the writer and the verifier can never
+// disagree about what gets published.
 
 // --- Hebrew guard -----------------------------------------------------------
 // The local canonical home (~/.agents) runs Hebrew reporting contracts. This
@@ -231,15 +197,14 @@ const read = (f) => fs.readFileSync(f, "utf8").replace(/\r\n/g, "\n");
 // Reporting-language orders ("Answer in Hebrew", "report in everyday Hebrew")
 // are neutralized at the same time: the pack carries no language choice, the
 // only difference from canonical is the stripped local template pointer.
-const rewrite = (text) =>
-  REWRITE.reduce((acc, [re, to]) => acc.replace(re, to), neutralizeLanguage(stripLocalOnly(text)));
+const rewrite = (text) => applyRewrites(neutralizeLanguage(stripLocalOnly(text)));
 
 // What this pack SHOULD contain for a file, after rewrites. Text rewrites
 // (marker strip, language neutralize, path rename) apply only to the files
 // the writer rewrites (.md/.json/.yaml); other extensions are byte-copied,
 // so comparing them against a neutralized expectation would invent drift
-// (e.g. a .js comment mentioning the Hebrew template).
-const TEXT_REWRITE = /\.(md|json|ya?ml)$/i;
+// (e.g. a .js comment mentioning the Hebrew template). TEXT_REWRITE is imported
+// from scripts/rewrites.js so the writer and the gate agree on the extension set.
 const expected = (src, rel) => (rel && !TEXT_REWRITE.test(rel) ? read(src) : rewrite(read(src)));
 const same = (src, dest, rel) => read(dest) === expected(src, rel);
 
