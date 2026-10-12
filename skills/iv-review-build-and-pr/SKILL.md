@@ -250,7 +250,7 @@ sleep 10; gh pr view <pr_number> --comments 2>&1 | grep -iE "Action performed|Re
 
 ```bash
 gh api repos/:owner/:repo/issues/<pr_number>/comments --jq '.[] | select(.body | contains("@coderabbitai review")) | {trigger: .html_url}'
-gh api repos/:owner/:repo/issues/<pr_number>/comments --jq '[.[] | select(.user.login == "coderabbitai")] | last | {reply: .html_url, body: .body[0:300]}'
+gh api repos/:owner/:repo/issues/<pr_number>/comments --jq '[.[] | select(.user.login | test("coderabbitai"))] | last | {reply: .html_url, body: .body[0:300]}'
 ```
 
   Report shape: `Trigger: <html_url>` / `CodeRabbit reply: <html_url>` (e.g. `https://github.com/<owner>/<repo>/pull/<n>#issuecomment-<id>`). For the no-reply case, post the trigger-comment link alone.
